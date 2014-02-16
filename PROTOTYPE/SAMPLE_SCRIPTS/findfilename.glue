@@ -1,0 +1,3 @@
+main word dir:
+	find dir 
+	grep word
