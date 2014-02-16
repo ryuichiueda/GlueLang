@@ -1,4 +1,5 @@
 The MIT License
+================
 
 Copyright (C) 2014 Ryuichi UEDA
 
