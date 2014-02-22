@@ -10,7 +10,7 @@ import LangStructure
 showUsage :: IO ()
 showUsage = do hPutStr stderr
                 ("Usage    : langToBash <file>\n" ++
-		"Sun Feb 16 15:55:08 JST 2014\n" )
+		"Sat Feb 22 13:08:28 JST 2014\n" )
 
 main :: IO()
 main = do args <- getArgs
