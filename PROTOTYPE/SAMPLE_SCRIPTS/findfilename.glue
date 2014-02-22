@@ -1,3 +1,8 @@
 filter main word dir:
 	find dir 
 	grep word
+	tacrev
+
+filter tacrev:
+	tail -r
+	rev

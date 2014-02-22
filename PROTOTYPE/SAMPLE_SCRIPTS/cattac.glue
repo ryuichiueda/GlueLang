@@ -1,0 +1,3 @@
+filter main file:
+	cat file
+	tail -r

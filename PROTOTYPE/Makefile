@@ -1,5 +1,5 @@
 all:
-	ghc -O2 langToBash.hs
+	ghc --make -O2 langToBash.hs -o langToBash
 
 clean:
 	rm -f *.o *.hi langToBash

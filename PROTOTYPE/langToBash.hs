@@ -1,52 +1,41 @@
 import System.Environment
+import System.Process
 import System.IO
 import Text.Parsec
 import Text.Parsec.String
 import qualified Data.Text as D
---import Text.ParserCombinators.Parsec
+import qualified ToBash as Bash
+import LangStructure
 
 showUsage :: IO ()
-showUsage = do System.IO.hPutStr stderr
+showUsage = do hPutStr stderr
                 ("Usage    : langToBash <file>\n" ++
 		"Sun Feb 16 15:55:08 JST 2014\n" )
-
-
-type FilterName = String
-type FilterArgs = (Int,String)
-type FilterCode = String
-data Filter = Filter FilterName [FilterArgs] [FilterCode] deriving Show
-data Script = Script [Filter] | Err String deriving Show
 
 main :: IO()
 main = do args <- getArgs
           case args of
                []  -> showUsage
-               [f] -> readF f >>= putStr . toBash . parseGlueLang
-               _   -> showUsage
+               _   -> main' args
 
-toBash :: Script -> String
-toBash (Script fs) = unlines (header:(map toOneLiner fs) ++ [footer])
-    where header = "#!/bin/bash -e\n"
-          footer = "main " ++ mainArgs fs
-
-mainArgs :: [Filter] -> String
-mainArgs ((Filter "main" args _):fs) = unwords $ [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..len]]
-    where len = length args
-mainArgs _ = ""
-
-toOneLiner :: Filter -> String
-toOneLiner (Filter fname opts codes) = func fname ++ "\n"
-                                       ++ (pipeCon $ map (convArgs opts) codes) ++ "}"
-         where func fname = "function " ++ fname ++ "(){"
-
-pipeCon :: [String] -> String
-pipeCon [s] = s ++ "\n"
-pipeCon (s:ss) = s ++ " | " ++ pipeCon ss
-
-convArgs :: [FilterArgs] -> FilterCode -> String
-convArgs [] str = str
-convArgs ((n,op):ops) str = convArgs ops $ D.unpack (D.replace (D.pack op) (D.pack $ ('$':show n)) (D.pack str))
-
+main' :: [String] -> IO ()
+main' (scr:as) = do cs <- readF scr
+                    pn <- getProgName
+                    let scrname = scr ++ ".bash"
+                    writeFile scrname $ (Bash.toBash . parseGlueLang) cs
+{--
+an attempt of automatic execution of the generated bash script
+This function doesn't work well since
+the standard input is buffered before on memory. 
+The amount of buffer is small.
+                    let opts = ["-evx",scrname] ++ as
+                    (stdin, stdout, stderr ,procHandle) <- runInteractiveProcess  "bash" opts Nothing Nothing
+                    hPutStr stdin =<< getContents
+                    hFlush stdin
+                    hClose stdin
+                    putStr =<< hGetContents stdout
+--}
+                
 readF :: String -> IO String
 readF "-" = getContents
 readF f   = readFile f
@@ -65,6 +54,7 @@ langFilter = do string "filter "
                 char ':'
                 many1 ( char '\n' )
                 lns <- many1 langFilterCode
+                langBlankLines
                 return $ Filter nm (zip [1..] args) lns
 
 langWord = do w <- many1 (noneOf " :\n\t")
@@ -73,6 +63,9 @@ langWord = do w <- many1 (noneOf " :\n\t")
 
 langSpace = oneOf " \t"
 
-langFilterCode = do ln <- many (noneOf "\n")
+langBlankLines = many (oneOf "\t\n")
+
+langFilterCode = do char '\t'
+                    ln <- many (noneOf "\n")
                     char '\n'
                     return ln
