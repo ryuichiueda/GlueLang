@@ -10,10 +10,11 @@ ERROR_CHECK(){
 	exit 1
 }
 
-$dir/langToBash $dir/SAMPLE_SCRIPTS/countgrepfile.glue
-
-bash -vxe $dir/SAMPLE_SCRIPTS/countgrepfile.glue.bash 'countgrepfile\.glue'	$dir/SAMPLE_SCRIPTS	|
+$dir/gluelang $dir/SAMPLE_SCRIPTS/countgrepfile.glue 'countgrepfile\.glue' $dir/SAMPLE_SCRIPTS |
 sort > $tmp-out
+
+#bash -vxe $dir/SAMPLE_SCRIPTS/countgrepfile.glue.bash 'countgrepfile\.glue'	$dir/SAMPLE_SCRIPTS	|
+#sort > $tmp-out
 
 cat <<FIN > $tmp-ans
 2

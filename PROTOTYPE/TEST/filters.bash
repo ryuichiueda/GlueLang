@@ -10,10 +10,9 @@ ERROR_CHECK(){
 	exit 1
 }
 
-$dir/langToBash $dir/SAMPLE_SCRIPTS/cattac.glue
 
 seq 1 10					|
-bash -xve $dir/SAMPLE_SCRIPTS/cattac.glue.bash	> $tmp-out
+$dir/gluelang $dir/SAMPLE_SCRIPTS/cattac.glue	> $tmp-out
 
 seq 1 10				|
 tail -r					> $tmp-ans

@@ -20,19 +20,8 @@ main' (scr:as) = do cs <- readF scr
                     pn <- getProgName
                     let scrname = scr ++ ".bash"
                     writeFile scrname $ (Bash.toBash . P.parseGlueLang) cs
-{--
-an attempt of automatic execution of the generated bash script
-This function doesn't work well since
-the standard input is buffered before on memory. 
-The amount of buffer is small.
-                    let opts = ["-evx",scrname] ++ as
-                    (stdin, stdout, stderr ,procHandle) <- runInteractiveProcess  "bash" opts Nothing Nothing
-                    hPutStr stdin =<< getContents
-                    hFlush stdin
-                    hClose stdin
-                    putStr =<< hGetContents stdout
---}
                 
 readF :: String -> IO String
 readF "-" = getContents
 readF f   = readFile f
+

@@ -6,7 +6,7 @@ import LangStructure
 import qualified Data.Text as D
 
 toBash :: Script -> String
-toBash (Script is fs) = unlines ((map (filterToFunc is) fs) ++ [footer])
+toBash (Script is fs) = unlines ((map (blockToFunc is) fs) ++ [footer])
     where footer = mainArgs fs
 
 {--
@@ -17,15 +17,23 @@ header is = (getpath $ head $ filter def is) ++ "\n"
 --}
 
 mainArgs :: [Block] -> String
-mainArgs ((Filter "main" args _):fs) = unwords ("main" :opts)
+mainArgs ((Io "main" args _):fs) = unwords ("main" :opts) ++ " < /dev/stdin"
     where opts = [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..(length args)]]
 mainArgs _ = ""
 
-filterToFunc :: [Import] -> Block -> String
-filterToFunc is (Filter fname opts stats) = "function " ++ fname ++ "(){\n\t"
-                                            ++ (pipeCon $ arg_stats) ++ "}\n"
+blockToFunc :: [Import] -> Block -> String
+blockToFunc is (Io fname opts stats) = ioToFunc is fname opts stats
+blockToFunc is (Filter fname opts stats) = filterToFunc is fname opts stats
+
+ioToFunc :: [Import] -> Name -> [Args] -> [Statement] -> String
+ioToFunc is name opts stats = "function " ++ name ++ "(){\n\t" ++ contents ++ "}\n"
     where path_stats = map (solvePath is) stats
-          arg_stats = map (convArgs opts) path_stats
+          contents = pipeCon $ map (convArgs opts) path_stats
+
+filterToFunc :: [Import] -> Name -> [Args] -> [Statement] -> String
+filterToFunc is name opts stats = "function " ++ name ++ "(){\n\t" ++ contents ++ "}\n"
+    where path_stats = map (solvePath is) stats
+          contents = pipeCon $ map (convArgs opts) path_stats
 
 solvePath :: [Import] -> Statement -> Statement
 solvePath [] s     = s

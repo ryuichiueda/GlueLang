@@ -11,7 +11,7 @@ parseGlueLang str = case parse code "" str of
 
 code = do is <- many1 langImport
           many1 (string "\n")
-          fs <- many1 langFilter
+          fs <- many1 (try(langFilter) <|> try(langIo))
           return $ Script is fs
 
 {--
@@ -29,6 +29,16 @@ langImport = do string "import "
                 a <- langWord
                 char '\n'
                 return $ Import p a
+
+langIo     = do string "io "
+                nm <- langWord
+		args <- many langWord
+                many langSpace
+                char ':'
+                many1 ( char '\n' )
+                lns <- many1 langStatement
+                many (oneOf "\t\n")
+                return $ Io nm (zip [1..] args) lns
 
 langFilter = do string "filter "
                 nm <- langWord
