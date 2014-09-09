@@ -1,9 +1,10 @@
 import /bin/ as b
 import /usr/bin/ as ub
 
-filter main file:
-	mainfilter $file
+io main file:
+	file f = cattac $file
+	b.cat $f
 
-filter mainfilter file:
+filter cattac file:
 	b.cat $file
 	ub.tail -r

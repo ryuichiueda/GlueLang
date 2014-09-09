@@ -1,7 +1,15 @@
-#!/bin/bash -xv
+#!/bin/bash
+
+OPT=""
+[ "${1:0:1}" = "-" ] && OPT="$1" && shift
 
 dir=$(dirname $0)
 SCR="$1"
 shift
 $dir/langToBash "$SCR"
-bash "$SCR".bash $@
+
+if [ "$OPT" = "" ] ;then
+	bash "$SCR".bash "$@"
+else 
+	bash "$OPT" "$SCR".bash "$@"
+fi
