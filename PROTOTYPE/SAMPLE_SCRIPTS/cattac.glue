@@ -1,6 +1,6 @@
-import /bin/ as bin
-import /usr/local/bin/ as tuk
+import /bin/ as b
+import /usr/bin/ as ub
 
 filter main file:
-	cat file
-	tail -r
+	b.cat $file
+	ub.tail -r

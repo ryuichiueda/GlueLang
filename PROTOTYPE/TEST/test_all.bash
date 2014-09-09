@@ -2,4 +2,5 @@
 
 dir=$(dirname $0)
 
-$dir/fiters.bash
+$dir/filters.bash
+$dir/countgrepfile.bash

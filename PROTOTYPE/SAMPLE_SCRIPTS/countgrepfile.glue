@@ -1,0 +1,8 @@
+import /bin/ as b
+import /usr/bin/ as ub
+import /usr/local/bin/ as ulb
+
+filter main word dir:
+	ub.find $dir 
+	ub.grep $word
+	ulb.gyo

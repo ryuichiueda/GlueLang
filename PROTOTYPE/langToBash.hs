@@ -1,12 +1,8 @@
 import System.Environment
 import System.Process
 import System.IO
-import Text.Parsec
-import Text.Parsec.String
-import qualified Data.Text as D
 import qualified ToBash as Bash
 import qualified LangParser as P
-import LangStructure
 
 showUsage :: IO ()
 showUsage = do hPutStr stderr

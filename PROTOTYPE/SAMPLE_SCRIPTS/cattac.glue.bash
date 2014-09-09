@@ -1,7 +1,5 @@
-#!/bin/bash -evx
-
 function main(){
-	cat $1 | tail -r
+	/bin/cat $1 | /usr/bin/tail -r
 }
 
 main "$1"

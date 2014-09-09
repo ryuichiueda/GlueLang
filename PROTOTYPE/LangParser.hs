@@ -1,12 +1,7 @@
 module LangParser( parseGlueLang ) where
 
-import System.Environment
-import System.Process
-import System.IO
 import Text.Parsec
 import Text.Parsec.String
-import qualified Data.Text as D
-import qualified ToBash as Bash
 import LangStructure
 
 parseGlueLang :: String -> Script
@@ -18,6 +13,15 @@ code = do is <- many1 langImport
           many1 (string "\n")
           fs <- many1 langFilter
           return $ Script is fs
+
+{--
+langImportDefault = do string "import "
+                       p <- langWord
+                       string "as"
+                       many1 (char ' ')
+                       string "default\n"
+                       return $ Import p ""
+--}
 
 langImport = do string "import "
                 p <- langWord
@@ -32,7 +36,7 @@ langFilter = do string "filter "
                 many langSpace
                 char ':'
                 many1 ( char '\n' )
-                lns <- many1 langFilterCode
+                lns <- many1 langStatement
                 many (oneOf "\t\n")
                 return $ Filter nm (zip [1..] args) lns
 
@@ -42,8 +46,7 @@ langWord = do w <- many1 (noneOf " :\n\t")
 
 langSpace = oneOf " \t"
 
-
-langFilterCode = do char '\t'
-                    ln <- many (noneOf "\n")
-                    char '\n'
-                    return ln
+langStatement = do char '\t'
+                   ln <- many1 langWord
+                   char '\n'
+                   return $ Statement ln
