@@ -1,13 +1,19 @@
 module LangStructure
-( FilterName
-, FilterArgs
-, FilterCode
-, Filter(..)
+( Name
+, Args
+, Code
+, Block(..)
+, Import(..)
+--, Filter(..)
 , Script(..)
 ) where
 
-type FilterName = String
-type FilterArgs = (Int,String)
-type FilterCode = String
-data Filter = Filter FilterName [FilterArgs] [FilterCode] deriving Show
-data Script = Script [Filter] | Err String deriving Show
+type Name = String
+type Args = (Int,String)
+type Code = String
+type Path = String
+type Alias = String
+
+data Import = Import Path Alias deriving Show
+data Block = Filter Name [Args] [Code] | Procedure Name [Args] [Code] deriving Show
+data Script = Script [Import] [Block] | Err String deriving Show

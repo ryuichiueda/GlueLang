@@ -45,7 +45,17 @@ parseGlueLang str = case parse code "" str of
                           Right scr    -> scr 
                           Left err     -> Err ( show err )
 
-code = many1 langFilter >>= return . Script
+code = do is <- many1 langImport
+          many1 (string "\n")
+          fs <- many1 langFilter
+          return $ Script is fs
+
+langImport = do string "import "
+                p <- langWord
+                string "as "
+                a <- langWord
+                char '\n'
+                return $ Import p a
 
 langFilter = do string "filter "
                 nm <- langWord
@@ -54,7 +64,7 @@ langFilter = do string "filter "
                 char ':'
                 many1 ( char '\n' )
                 lns <- many1 langFilterCode
-                langBlankLines
+                many (oneOf "\t\n")
                 return $ Filter nm (zip [1..] args) lns
 
 langWord = do w <- many1 (noneOf " :\n\t")
@@ -63,7 +73,6 @@ langWord = do w <- many1 (noneOf " :\n\t")
 
 langSpace = oneOf " \t"
 
-langBlankLines = many (oneOf "\t\n")
 
 langFilterCode = do char '\t'
                     ln <- many (noneOf "\n")

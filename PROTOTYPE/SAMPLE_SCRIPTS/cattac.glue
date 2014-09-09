@@ -1,3 +1,6 @@
+import /bin/ as bin
+import /usr/local/bin/ as tuk
+
 filter main file:
 	cat file
 	tail -r
