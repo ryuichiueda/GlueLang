@@ -5,8 +5,21 @@ module ToBash
 import LangStructure
 import qualified Data.Text as D
 
+error_exit  = "ERROR_EXIT(){\n" ++ 
+              "\trm -f /tmp/$$-*\n" ++
+              "\texit 1\n" ++
+              "}\n\n"
+
+error_check = "ERROR_CHECK(){\n" ++ 
+              "\t[ \"$(tr -d ' 0' <<< ${PIPESTATUS[@]})\" = \"\" ] && return\n" ++ 
+              "\tERROR_EXIT\n" ++ 
+              "}\n\n"
+
+trap = "trap ERROR_EXIT 2\n\n"
+
 toBash :: Script -> String
-toBash (Script is fs) = unlines ((subblocks) ++ [mainblock] ++ [footer])
+toBash (Script is fs) =  error_exit ++ error_check ++ trap ++
+                         unlines (subblocks ++ [mainblock] ++ [footer])
     where footer = head $ filter (/= "") $ map mainArgs fs
           isMain (Io "main" _ _) = True
           isMain (Filter "main" _ _) = True
@@ -22,34 +35,65 @@ mainArgs (Filter "main" args _) = unwords ("main" :opts) ++ " < /dev/stdin"
 mainArgs _ = ""
 
 blockToFunc :: [Import] -> Block -> String
-blockToFunc is (Io fname opts stats) = ioToFunc is fname opts stats
+blockToFunc is (Io fname opts sbs) = ioToFunc is fname opts sbs
 blockToFunc is (Filter fname opts stats) = filterToFunc is fname opts stats
 
-ioToFunc :: [Import] -> Name -> [Args] -> [CommandLine] -> String
-ioToFunc is name opts coms = "function " ++ name ++ "(){\n" ++ (unlines contents) ++ "}\n"
-    where contents =  map ((\x -> ('\t':x)) . comToString is opts) coms
+--data SubBlock = IfBlock CommandLine [CommandLine] | SubBlock [CommandLine] deriving Show
+ioToFunc :: [Import] -> Name -> [Args] -> [SubBlock] -> String
+ioToFunc is name args [SubBlock coms] = name ++ "(){\n"
+                                         ++ (unlines $ map (comToString is args) coms)
+                                         ++ "}\n"
+ioToFunc is name opts (sb:sbs) = "function " ++ name ++ "(){\n"
+                                 ++ (ifBlock is opts sb)
+                                 ++ (elifBlock is opts sbs)
+                                 ++ "}\n"
+
+ifBlock :: [Import] -> [Args] -> SubBlock -> String
+ifBlock is args (IfBlock cond coms) = "if " ++ (comToString is args cond) ++ " ; then\n\t"
+                                            ++ (unlines $ map (comToString is args) coms)
+
+elifBlock :: [Import] -> [Args] -> [SubBlock] -> String
+elifBlock is args ((IfBlock (CommandLine _ ("othewise":[])) coms):[]) = "else\n\t"
+                                               ++ (unlines $ map (comToString is args) coms)
+                                               ++ "fi\n"
+elifBlock is args ((IfBlock cond coms):[]) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
+                                               ++ (unlines $ map (comToString is args) coms)
+                                               ++ "fi\n"
+elifBlock is args ((IfBlock cond coms):sbs) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
+                                               ++ (unlines $ map (comToString is args) coms)
+                                               ++ (elifBlock is args sbs)
+
 
 filterToFunc :: [Import] -> Name -> [Args] -> [CommandLine] -> String
-filterToFunc is name opts coms = "function " ++ name ++ "(){\n\t" ++ contents ++ "}\n"
-    where path_coms = map (solvePath is) coms
-          contents = pipeCon $ map (convArgs opts) path_coms
+filterToFunc is name opts coms = name ++ "(){\n\t" 
+                                 ++ contents
+                                 ++ "\tERROR_CHECK\n"
+                                 ++ "}\n"
+    where contents = pipeCon $ map (comToString is opts) coms
 
 solvePath :: [Import] -> CommandLine -> CommandLine
-solvePath [] s     = s
-solvePath ((Import path alias):is) (CommandLine fs (w:ws)) = if hit alias w 
-                                                             then CommandLine fs ((path++com):ws)
-                                                             else solvePath is (CommandLine fs (w:ws))
-    where hit alias w = (alias ++ ".") == take (1 + length alias) w
+solvePath [] s                    = s
+solvePath is (CommandLine ios ws) = CommandLine ios $ map (solvePath' is) ws
+
+-- conversion from b.cat to /bin/cat
+solvePath' :: [Import] -> String -> String
+solvePath' [] w = w
+solvePath' ((Import path alias):is) w = if hit alias w then (path++com) else solvePath' is w
+    where hit a s = (a ++ ".") == take (1 + length a) s
           com = drop (1 + length alias) w
 
+
 comToString :: [Import] -> [Args] -> CommandLine -> String
+comToString is as (Heredoc (Write,name) s) = name ++ "=" ++ file ++ "\n"
+                                             ++ "cat << \'EOF\' >> " ++ file ++ "\n" ++ s ++ "EOF"
+    where file = "/tmp/$$-" ++ name
 comToString is as com = (convArgs as) . (solvePath is) . attachIo $ com
 
 attachIo :: CommandLine -> CommandLine
 attachIo (CommandLine [] ws) = CommandLine [] ws
-attachIo (CommandLine ((Write,name):fs) ws) = CommandLine fs $ (var:(ws ++ [ "> /tmp/$$-" ++ name]))
+attachIo (CommandLine ((Write,name):fs) ws) = attachIo $ CommandLine fs $ (var:(ws ++ [ "> /tmp/$$-" ++ name]))
     where var = name ++ "=/tmp/$$-" ++ name ++ "\n\t"
-attachIo (CommandLine ((Str,name):fs) ws) = CommandLine fs $ ((name++"=$("):ws ++ [")"])
+attachIo (CommandLine ((Str,name):fs) ws) = attachIo $ CommandLine fs $ [name++"=$("] ++ ws ++ [")"]
 
 pipeCon :: [String] -> String
 pipeCon [s]    = s ++ "\n"

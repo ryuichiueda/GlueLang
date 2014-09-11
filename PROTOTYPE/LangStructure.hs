@@ -5,7 +5,7 @@ module LangStructure
 , Block(..)
 , Import(..)
 , InOut(..)
---, Filter(..)
+, SubBlock(..)
 , Script(..)
 ) where
 
@@ -20,6 +20,7 @@ data InOut = Read | Write | Append | Str deriving Show
 type Io = (InOut,Name) 
 
 data Import = Import Path Alias deriving Show
-data Block = Filter Name [Args] [CommandLine] | Io Name [Args] [CommandLine] deriving Show
+data Block = Filter Name [Args] [CommandLine] | Io Name [Args] [SubBlock] deriving Show
+data SubBlock = IfBlock CommandLine [CommandLine] | SubBlock [CommandLine] deriving Show
 data Script = Script [Import] [Block] | Err String deriving Show
-data CommandLine = CommandLine [Io] [String] deriving Show
+data CommandLine = CommandLine [Io] [String] | Heredoc Io String deriving Show

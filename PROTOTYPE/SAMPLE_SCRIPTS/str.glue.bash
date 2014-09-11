@@ -1,10 +1,23 @@
-function main(){
-	s=$( cattac )
-	echo $s
+ERROR_EXIT(){
+	rm -f /tmp/$$-*
+	exit 1
 }
 
-function cattac(){
+ERROR_CHECK(){
+	[ "$(tr -d ' 0' <<< ${PIPESTATUS[@]})" = "" ] && return
+	ERROR_EXIT
+}
+
+trap ERROR_EXIT 2
+
+cattac(){
 	/bin/cat $1 | /usr/bin/tail -r
+	ERROR_CHECK
+}
+
+main(){
+s=$( cattac )
+echo $s
 }
 
 main < /dev/stdin

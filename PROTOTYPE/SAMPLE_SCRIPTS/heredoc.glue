@@ -1,0 +1,16 @@
+import /bin/ as b
+import /usr/bin/ as ub
+import /usr/local/bin/ as ulb
+
+io main:
+	file awk = """
+		{print $2,$1}
+		END{print "aho"}
+	"""
+
+	file data = """
+		1 2 3
+		あいう えお
+	"""
+
+	ulb.awk -f $awk $data
