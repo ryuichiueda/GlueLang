@@ -1,0 +1,15 @@
+import /bin/ as b
+import /usr/bin/ as ub
+import /usr/local/bin/ as ulb
+
+filter oneproc file:
+	ulb.awk '{if($1>$2){a=$1;b=$2}else{a=$2;b=$1};if(b==0){print a}else{c=a;a=b;b=c%b;print a,b}}' $file
+
+io lp file:
+	file out = oneproc $file
+	mv $out $file
+
+io main n1 n2:
+	file num = echo $n1 $n2
+	lp $num
+	b.cat $num

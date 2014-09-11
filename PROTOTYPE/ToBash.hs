@@ -6,13 +6,18 @@ import LangStructure
 import qualified Data.Text as D
 
 toBash :: Script -> String
-toBash (Script is fs) = unlines ((map (blockToFunc is) fs) ++ [footer])
-    where footer = mainArgs fs
+toBash (Script is fs) = unlines ((subblocks) ++ [mainblock] ++ [footer])
+    where footer = head $ filter (/= "") $ map mainArgs fs
+          isMain (Io "main" _ _) = True
+          isMain (Filter "main" _ _) = True
+          isMain _ = False
+          subblocks = map (blockToFunc is) $ filter (\x -> isMain x == False) fs
+          mainblock = blockToFunc is $ head $ filter isMain fs
 
-mainArgs :: [Block] -> String
-mainArgs ((Io "main" args _):fs) = unwords ("main" :opts) ++ " < /dev/stdin"
+mainArgs :: Block -> String
+mainArgs (Io "main" args _) = unwords ("main" :opts) ++ " < /dev/stdin"
     where opts = [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..(length args)]]
-mainArgs ((Filter "main" args _):fs) = unwords ("main" :opts) ++ " < /dev/stdin"
+mainArgs (Filter "main" args _) = unwords ("main" :opts) ++ " < /dev/stdin"
     where opts = [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..(length args)]]
 mainArgs _ = ""
 
