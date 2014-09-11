@@ -2,6 +2,6 @@
 
 dir=$(dirname $0)
 
-$dir/filters.bash
-$dir/countgrepfile.bash
+$dir/filter.bash
 $dir/io.bash
+$dir/str.bash

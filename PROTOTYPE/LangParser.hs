@@ -28,7 +28,7 @@ langIo     = do string "io "
                 many langSpace
                 char ':'
                 many1 ( char '\n' )
-                lns <- many1 (try(langCommandLineOutfile) <|> try(langCommandLine))
+                lns <- many1 langCommandLine
                 many (oneOf "\t\n")
                 return $ Io nm (zip [1..] args) lns
 
@@ -38,7 +38,7 @@ langFilter = do string "filter "
                 many langSpace
                 char ':'
                 many1 ( char '\n' )
-                lns <- many1 langCommandLine
+                lns <- many1 langCommandLineNoIo
                 many (oneOf "\t\n")
                 return $ Filter nm (zip [1..] args) lns
 
@@ -47,6 +47,8 @@ langWord = do w <- many1 (noneOf " :\n\t")
               return w
 
 langSpace = oneOf " \t"
+
+langCommandLine = try(langCommandLineOutfile) <|> try(langCommandLineOutstr) <|> try(langCommandLineNoIo)
 
 langCommandLineOutfile = do string "\tfile "
                             many $ char ' '
@@ -58,7 +60,17 @@ langCommandLineOutfile = do string "\tfile "
                             char '\n'
                             return $ CommandLine [(Write,f)] ln
 
-langCommandLine = do char '\t'
-                     ln <- many1 langWord
-                     char '\n'
-                     return $ CommandLine [] ln
+langCommandLineOutstr  = do string "\tstr "
+                            many $ char ' '
+                            f <- langWord
+                            many $ char ' '
+                            char '='
+                            many $ char ' '
+                            ln <- many1 langWord
+                            char '\n'
+                            return $ CommandLine [(Str,f)] ln
+
+langCommandLineNoIo = do char '\t'
+                         ln <- many1 langWord
+                         char '\n'
+                         return $ CommandLine [] ln

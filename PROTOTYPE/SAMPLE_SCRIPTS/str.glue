@@ -1,0 +1,10 @@
+import /bin/ as b
+import /usr/bin/ as ub
+
+io main:
+	str s = cattac
+	echo $s
+
+filter cattac file:
+	b.cat $file
+	ub.tail -r

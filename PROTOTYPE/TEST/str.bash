@@ -12,10 +12,11 @@ ERROR_CHECK(){
 
 
 seq 1 10					|
-$dir/gluelang $dir/SAMPLE_SCRIPTS/cattac.glue	> $tmp-out
+$dir/gluelang $dir/SAMPLE_SCRIPTS/str.glue	> $tmp-out
 
 seq 1 10				|
-tail -r					> $tmp-ans
+tail -r					|
+xargs 	> $tmp-ans
 
 diff $tmp-out $tmp-ans ; ERROR_CHECK
 

@@ -42,8 +42,9 @@ comToString is as com = (convArgs as) . (solvePath is) . attachIo $ com
 
 attachIo :: CommandLine -> CommandLine
 attachIo (CommandLine [] ws) = CommandLine [] ws
-attachIo (CommandLine ((Write,name):fs) ws) = CommandLine fs $(var:(ws ++ [ "> /tmp/$$-" ++ name]))
+attachIo (CommandLine ((Write,name):fs) ws) = CommandLine fs $ (var:(ws ++ [ "> /tmp/$$-" ++ name]))
     where var = name ++ "=/tmp/$$-" ++ name ++ "\n\t"
+attachIo (CommandLine ((Str,name):fs) ws) = CommandLine fs $ ((name++"=$("):ws ++ [")"])
 
 pipeCon :: [String] -> String
 pipeCon [s]    = s ++ "\n"
