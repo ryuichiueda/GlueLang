@@ -10,6 +10,15 @@ ERROR_CHECK(){
 
 trap ERROR_EXIT 2
 
+foreach(){
+
+	while read line ; do
+		"$1" $line
+		ERROR_CHECK
+	done
+	ERROR_CHECK
+}
+
 cattac(){
 	/bin/cat $1 | /usr/bin/tail -r
 	ERROR_CHECK
@@ -21,4 +30,4 @@ f=/tmp/$$-f
 /bin/cat $f
 }
 
-main "$1" < /dev/stdin
+main "$1"

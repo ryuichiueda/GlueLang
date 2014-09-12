@@ -10,6 +10,15 @@ ERROR_CHECK(){
 
 trap ERROR_EXIT 2
 
+foreach(){
+
+	while read line ; do
+		"$1" $line
+		ERROR_CHECK
+	done
+	ERROR_CHECK
+}
+
 checkColnum(){
 c=$( /usr/local/bin/retu $1 )
 /bin/test "$c" = "$2"
@@ -23,4 +32,4 @@ else
 fi
 }
 
-main "$1" "$2" < /dev/stdin
+main "$1" "$2"

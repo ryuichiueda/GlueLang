@@ -17,8 +17,16 @@ error_check = "ERROR_CHECK(){\n" ++
 
 trap = "trap ERROR_EXIT 2\n\n"
 
+eachline = "foreach(){\n\n" ++
+    "\twhile read line ; do\n" ++
+    "\t\t\"$1\" $line\n" ++
+    "\t\tERROR_CHECK\n" ++
+    "\tdone\n" ++
+    "\tERROR_CHECK\n" ++
+    "}\n\n"
+
 toBash :: Script -> String
-toBash (Script is fs) =  error_exit ++ error_check ++ trap ++
+toBash (Script is fs) =  error_exit ++ error_check ++ trap ++ eachline ++
                          unlines (subblocks ++ [mainblock] ++ [footer])
     where footer = head $ filter (/= "") $ map mainArgs fs
           isMain (Io "main" _ _) = True
@@ -28,7 +36,7 @@ toBash (Script is fs) =  error_exit ++ error_check ++ trap ++
           mainblock = blockToFunc is $ head $ filter isMain fs
 
 mainArgs :: Block -> String
-mainArgs (Io "main" args _) = unwords ("main" :opts) ++ " < /dev/stdin"
+mainArgs (Io "main" args _) = unwords ("main" :opts) -- ++ " < /dev/stdin"
     where opts = [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..(length args)]]
 mainArgs (Filter "main" args _) = unwords ("main" :opts) ++ " < /dev/stdin"
     where opts = [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..(length args)]]

@@ -10,6 +10,15 @@ ERROR_CHECK(){
 
 trap ERROR_EXIT 2
 
+foreach(){
+
+	while read line ; do
+		"$1" $line
+		ERROR_CHECK
+	done
+	ERROR_CHECK
+}
+
 main(){
 awk=/tmp/$$-awk
 cat << 'EOF' >> /tmp/$$-awk
@@ -24,4 +33,4 @@ EOF
 /usr/local/bin/awk -f $awk $data
 }
 
-main < /dev/stdin
+main
