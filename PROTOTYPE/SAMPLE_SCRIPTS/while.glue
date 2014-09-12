@@ -1,0 +1,11 @@
+import /bin/ as b
+import /usr/bin/ as ub
+import /usr/local/bin/ as ulb
+
+filter plus n:
+	echo $n
+	ulb.awk '{print $1+1}'
+
+io main file:
+	file f = eachline plus < $file
+
