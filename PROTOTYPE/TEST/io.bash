@@ -12,7 +12,7 @@ ERROR_CHECK(){
 
 
 seq 1 10					|
-$dir/gluelang $dir/SAMPLE_SCRIPTS/io.glue	> $tmp-out
+glue $dir/SAMPLE_SCRIPTS/io.glue	> $tmp-out
 
 seq 1 10				|
 tail -r					> $tmp-ans

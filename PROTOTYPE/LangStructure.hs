@@ -2,10 +2,10 @@ module LangStructure
 ( Name
 , Args
 , CommandLine(..)
-, Block(..)
+, InlineCmd(..)
 , Import(..)
 , InOut(..)
-, SubBlock(..)
+, SubInlineCmd(..)
 , Script(..)
 ) where
 
@@ -20,7 +20,7 @@ data InOut = Read | Write | Append | Str deriving Show
 type Proc = (InOut,Name) 
 
 data Import = Import Path Alias deriving Show
-data Block = Func Name [Args] [CommandLine] | Proc Name [Args] [SubBlock] deriving Show
-data SubBlock = IfBlock CommandLine [CommandLine] | SubBlock [CommandLine] deriving Show
-data Script = Script [Import] [Block] | Err String deriving Show
+data InlineCmd = Func Name [Args] [CommandLine] | Proc Name [Args] [SubInlineCmd] deriving Show
+data SubInlineCmd = IfInlineCmd CommandLine [CommandLine] | SubInlineCmd [CommandLine] deriving Show
+data Script = Script [Import] [InlineCmd] | Err String deriving Show
 data CommandLine = CommandLine [Proc] [String] | Heredoc Proc String deriving Show

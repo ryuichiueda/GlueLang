@@ -12,7 +12,7 @@ ERROR_CHECK(){
 
 
 seq 1 10					|
-$dir/gluelang $dir/SAMPLE_SCRIPTS/heredoc.glue	> $tmp-out
+glue $dir/SAMPLE_SCRIPTS/heredoc.glue	> $tmp-out
 ERROR_CHECK
 
 cat << EOF > $tmp-ans

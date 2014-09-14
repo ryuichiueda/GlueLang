@@ -35,41 +35,41 @@ toBash (Script is fs) =  error_exit ++ error_check ++ trap ++ eachline ++
           subblocks = map (blockToFunc is) $ filter (\x -> isMain x == False) fs
           mainblock = blockToFunc is $ head $ filter isMain fs
 
-mainArgs :: Block -> String
+mainArgs :: InlineCmd -> String
 mainArgs (Proc "main" args _) = unwords ("main" :opts) -- ++ " < /dev/stdin"
     where opts = [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..(length args)]]
 mainArgs (Func "main" args _) = unwords ("main" :opts) ++ " < /dev/stdin"
     where opts = [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..(length args)]]
 mainArgs _ = ""
 
-blockToFunc :: [Import] -> Block -> String
+blockToFunc :: [Import] -> InlineCmd -> String
 blockToFunc is (Proc fname opts sbs) = ioToFunc is fname opts sbs
 blockToFunc is (Func fname opts stats) = filterToFunc is fname opts stats
 
---data SubBlock = IfBlock CommandLine [CommandLine] | SubBlock [CommandLine] deriving Show
-ioToFunc :: [Import] -> Name -> [Args] -> [SubBlock] -> String
-ioToFunc is name args [SubBlock coms] = name ++ "(){\n"
+--data SubInlineCmd = IfInlineCmd CommandLine [CommandLine] | SubInlineCmd [CommandLine] deriving Show
+ioToFunc :: [Import] -> Name -> [Args] -> [SubInlineCmd] -> String
+ioToFunc is name args [SubInlineCmd coms] = name ++ "(){\n"
                                          ++ (unlines $ map (comToString is args) coms)
                                          ++ "}\n"
 ioToFunc is name opts (sb:sbs) = "function " ++ name ++ "(){\n"
-                                 ++ (ifBlock is opts sb)
-                                 ++ (elifBlock is opts sbs)
+                                 ++ (ifInlineCmd is opts sb)
+                                 ++ (elifInlineCmd is opts sbs)
                                  ++ "}\n"
 
-ifBlock :: [Import] -> [Args] -> SubBlock -> String
-ifBlock is args (IfBlock cond coms) = "if " ++ (comToString is args cond) ++ " ; then\n\t"
+ifInlineCmd :: [Import] -> [Args] -> SubInlineCmd -> String
+ifInlineCmd is args (IfInlineCmd cond coms) = "if " ++ (comToString is args cond) ++ " ; then\n\t"
                                             ++ (unlines $ map (comToString is args) coms)
 
-elifBlock :: [Import] -> [Args] -> [SubBlock] -> String
-elifBlock is args ((IfBlock (CommandLine _ ("othewise":[])) coms):[]) = "else\n\t"
+elifInlineCmd :: [Import] -> [Args] -> [SubInlineCmd] -> String
+elifInlineCmd is args ((IfInlineCmd (CommandLine _ ("othewise":[])) coms):[]) = "else\n\t"
                                                ++ (unlines $ map (comToString is args) coms)
                                                ++ "fi\n"
-elifBlock is args ((IfBlock cond coms):[]) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
+elifInlineCmd is args ((IfInlineCmd cond coms):[]) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
                                                ++ (unlines $ map (comToString is args) coms)
                                                ++ "fi\n"
-elifBlock is args ((IfBlock cond coms):sbs) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
+elifInlineCmd is args ((IfInlineCmd cond coms):sbs) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
                                                ++ (unlines $ map (comToString is args) coms)
-                                               ++ (elifBlock is args sbs)
+                                               ++ (elifInlineCmd is args sbs)
 
 
 filterToFunc :: [Import] -> Name -> [Args] -> [CommandLine] -> String

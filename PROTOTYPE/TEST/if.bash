@@ -12,7 +12,7 @@ ERROR_CHECK(){
 
 
 seq 1 10 > $tmp-tmp
-$dir/gluelang $dir/SAMPLE_SCRIPTS/if.glue $tmp-tmp 1	> $tmp-out
+glue $dir/SAMPLE_SCRIPTS/if.glue $tmp-tmp 1	> $tmp-out
 ERROR_CHECK
 
 echo OK > $tmp-ans

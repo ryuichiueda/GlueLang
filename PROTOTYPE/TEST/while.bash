@@ -13,7 +13,7 @@ ERROR_CHECK(){
 
 seq 1 10		|
 self 1 1 		|
-$dir/gluelang $dir/SAMPLE_SCRIPTS/while.glue	> $tmp-out
+glue $dir/SAMPLE_SCRIPTS/while.glue	> $tmp-out
 ERROR_CHECK
 
 cat << FIN > $tmp-ans

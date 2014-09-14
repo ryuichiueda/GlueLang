@@ -9,7 +9,7 @@ parseGlueLang str = case parse code "" str of
                           Right scr    -> scr 
                           Left err     -> Err ( show err )
 
-code = do is <- many1 langImport
+code = do is <- many langImport
           many blankLine
           fs <- many1 (try(langFunc) <|> try(langProc))
           return $ Script is fs
@@ -27,22 +27,22 @@ langProc      = do string "proc "
 	           args <- many langWord
                    many $ oneOf " \t"
                    colonReturn
-                   sb <- many1 (try(langIfBlock) <|> try(langSubBlock))
+                   sb <- many1 (try(ifInlineCmd) <|> try(subInlineCmd))
                    many $ char '\n'
                    many blankLine
                    return $ Proc nm (zip [1..] args) sb
 
-langSubBlock = do lns <- many1 (char '\t' >> langCommandLineLn)
+subInlineCmd = do lns <- many1 (char '\t' >> langCommandLineLn)
                   many blankLine
-                  return $ SubBlock lns
+                  return $ SubInlineCmd lns
 
-langIfBlock  = do char '|'
+ifInlineCmd  = do char '|'
                   many $ oneOf "\t "
                   c <- langCommandLineNoProc
                   colonReturn
                   lns <- many1 (char '\t' >> langCommandLineLn)
                   many blankLine
-                  return $ IfBlock c lns
+                  return $ IfInlineCmd c lns
 
 colonReturn = char ':' >> (many $ oneOf " \t") >> char '\n'
 

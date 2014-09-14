@@ -1,12 +1,14 @@
 #!/bin/bash
+GLUEPATH=$(readlink $0)
+PATH=$PATH:$(dirname $GLUEPATH)
 
 OPT=""
 [ "${1:0:1}" = "-" ] && OPT="$1" && shift
 
-dir=$(dirname $0)
+#dir=$(dirname $0)
 SCR="$1"
 shift
-$dir/langToBash "$SCR"
+langToBash "$SCR"
 
 if [ "$OPT" = "" ] ;then
 	bash "$SCR".bash "$@"
