@@ -1,12 +1,12 @@
 import /bin/ as b
 import /usr/bin/ as ub
 
-filter mainfilter file:
+func mainfilter file:
 	b.cat $file
 	ub.tail -r
 
    
 		  
 
-filter main file:
+func main file:
 	mainfilter $file

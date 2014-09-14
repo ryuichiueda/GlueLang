@@ -2,10 +2,10 @@ import /bin/ as b
 import /usr/bin/ as ub
 import /usr/local/bin/ as ulb
 
-filter plus n m:
+func plus n m:
 	echo $n $m
 	ulb.awk '{print $1+$2+1}'
 
-io main:
+proc main:
 	file f = foreach plus < /dev/stdin
 	b.cat $f

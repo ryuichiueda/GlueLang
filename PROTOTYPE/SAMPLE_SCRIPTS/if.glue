@@ -2,11 +2,11 @@ import /bin/ as b
 import /usr/bin/ as ub
 import /usr/local/bin/ as ulb
 
-io checkColnum a b:
+proc checkColnum a b:
 	str c = ulb.retu $a
 	b.test "$c" = "$b"
 
-io main file num:
+proc main file num:
 | checkColnum $file $num:
 	b.echo "OK"
 | othewise:

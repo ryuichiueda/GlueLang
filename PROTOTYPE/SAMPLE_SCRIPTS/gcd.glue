@@ -2,22 +2,22 @@ import /bin/ as b
 import /usr/bin/ as ub
 import /usr/local/bin/ as ulb
 
-io oneproc file:
+proc oneproc file:
 | checkColnum $file 2 :
 	file tmp = ulb.awk '{if($1>$2){a=$1;b=$2}else{a=$2;b=$1};if(b==0){print a}else{c=a;a=b;b=c%b;print a,b}}' $file
 	mv $tmp $file
 | otherwise :
 	false
 
-io checkColnum a b:
+proc checkColnum a b:
 	str astr = ulb.gyo $a
 	test $a $b
 
-io lp file:
+proc lp file:
 	file out = repeat oneproc $file
 	mv $out $file
 
-io main n1 n2:
+proc main n1 n2:
 	file num = echo $n1 $n2
 	lp $num
 	b.cat $num

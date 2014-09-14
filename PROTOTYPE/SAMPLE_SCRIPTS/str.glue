@@ -1,10 +1,10 @@
 import /bin/ as b
 import /usr/bin/ as ub
 
-io main:
+proc main:
 	str s = cattac
 	echo $s
 
-filter cattac file:
+func cattac file:
 	b.cat $file
 	ub.tail -r

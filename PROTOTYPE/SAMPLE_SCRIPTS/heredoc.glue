@@ -2,7 +2,7 @@ import /bin/ as b
 import /usr/bin/ as ub
 import /usr/local/bin/ as ulb
 
-io main:
+proc main:
 	file awk = """
 		{print $2,$1}
 		END{print "aho"}

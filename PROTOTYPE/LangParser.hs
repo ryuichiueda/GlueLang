@@ -11,7 +11,7 @@ parseGlueLang str = case parse code "" str of
 
 code = do is <- many1 langImport
           many blankLine
-          fs <- many1 (try(langFilter) <|> try(langIo))
+          fs <- many1 (try(langFunc) <|> try(langProc))
           return $ Script is fs
 
 
@@ -22,7 +22,7 @@ langImport = do string "import "
                 char '\n'
                 return $ Import p a
 
-langIo        = do string "io "
+langProc      = do string "proc "
                    nm <- langWord
 	           args <- many langWord
                    many $ oneOf " \t"
@@ -30,7 +30,7 @@ langIo        = do string "io "
                    sb <- many1 (try(langIfBlock) <|> try(langSubBlock))
                    many $ char '\n'
                    many blankLine
-                   return $ Io nm (zip [1..] args) sb
+                   return $ Proc nm (zip [1..] args) sb
 
 langSubBlock = do lns <- many1 (char '\t' >> langCommandLineLn)
                   many blankLine
@@ -38,7 +38,7 @@ langSubBlock = do lns <- many1 (char '\t' >> langCommandLineLn)
 
 langIfBlock  = do char '|'
                   many $ oneOf "\t "
-                  c <- langCommandLineNoIo
+                  c <- langCommandLineNoProc
                   colonReturn
                   lns <- many1 (char '\t' >> langCommandLineLn)
                   many blankLine
@@ -46,13 +46,13 @@ langIfBlock  = do char '|'
 
 colonReturn = char ':' >> (many $ oneOf " \t") >> char '\n'
 
-langFilter = do string "filter "
-                nm <- langWord
-		args <- many langWord
-                many $ oneOf " \t"
-                colonReturn
-                lns <- many1 (char '\t' >> langCommandLineLn)
-                return $ Filter nm (zip [1..] args) lns
+langFunc = do string "func "
+              nm <- langWord
+              args <- many langWord
+              many $ oneOf " \t"
+              colonReturn
+              lns <- many1 (char '\t' >> langCommandLineLn)
+              return $ Func nm (zip [1..] args) lns
 
 langWord = do w <- many1 (noneOf " :\n\t")
               many $ oneOf " \t"
@@ -65,7 +65,7 @@ langCommandLineLn = do ln <- langCommandLine
                        return ln
 
 langCommandLine = try(heredoc) <|> try(langCommandLineOutfile)  
-                               <|> try(langCommandLineOutstr) <|> try(langCommandLineNoIo)
+                               <|> try(langCommandLineOutstr) <|> try(langCommandLineNoProc)
 
 -- file f = """ (here document)
 heredoc = do string "file"
@@ -101,7 +101,7 @@ langCommandLineOutstr  = do string "str "
                             ln <- many1 langWord
                             return $ CommandLine [(Str,f)] ln
 
-langCommandLineNoIo = many1 langWord >>= return . (CommandLine [])
+langCommandLineNoProc = many1 langWord >>= return . (CommandLine [])
 
 blankLine = try(many (oneOf " \t") >> char '\n')
 --blankLine = char '\n'

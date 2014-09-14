@@ -29,22 +29,22 @@ toBash :: Script -> String
 toBash (Script is fs) =  error_exit ++ error_check ++ trap ++ eachline ++
                          unlines (subblocks ++ [mainblock] ++ [footer])
     where footer = head $ filter (/= "") $ map mainArgs fs
-          isMain (Io "main" _ _) = True
-          isMain (Filter "main" _ _) = True
+          isMain (Proc "main" _ _) = True
+          isMain (Func "main" _ _) = True
           isMain _ = False
           subblocks = map (blockToFunc is) $ filter (\x -> isMain x == False) fs
           mainblock = blockToFunc is $ head $ filter isMain fs
 
 mainArgs :: Block -> String
-mainArgs (Io "main" args _) = unwords ("main" :opts) -- ++ " < /dev/stdin"
+mainArgs (Proc "main" args _) = unwords ("main" :opts) -- ++ " < /dev/stdin"
     where opts = [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..(length args)]]
-mainArgs (Filter "main" args _) = unwords ("main" :opts) ++ " < /dev/stdin"
+mainArgs (Func "main" args _) = unwords ("main" :opts) ++ " < /dev/stdin"
     where opts = [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..(length args)]]
 mainArgs _ = ""
 
 blockToFunc :: [Import] -> Block -> String
-blockToFunc is (Io fname opts sbs) = ioToFunc is fname opts sbs
-blockToFunc is (Filter fname opts stats) = filterToFunc is fname opts stats
+blockToFunc is (Proc fname opts sbs) = ioToFunc is fname opts sbs
+blockToFunc is (Func fname opts stats) = filterToFunc is fname opts stats
 
 --data SubBlock = IfBlock CommandLine [CommandLine] | SubBlock [CommandLine] deriving Show
 ioToFunc :: [Import] -> Name -> [Args] -> [SubBlock] -> String
@@ -95,13 +95,13 @@ comToString :: [Import] -> [Args] -> CommandLine -> String
 comToString is as (Heredoc (Write,name) s) = name ++ "=" ++ file ++ "\n"
                                              ++ "cat << \'EOF\' >> " ++ file ++ "\n" ++ s ++ "EOF"
     where file = "/tmp/$$-" ++ name
-comToString is as com = (convArgs as) . (solvePath is) . attachIo $ com
+comToString is as com = (convArgs as) . (solvePath is) . attachProc $ com
 
-attachIo :: CommandLine -> CommandLine
-attachIo (CommandLine [] ws) = CommandLine [] ws
-attachIo (CommandLine ((Write,name):fs) ws) = attachIo $ CommandLine fs $ (var:(ws ++ [ "> /tmp/$$-" ++ name]))
+attachProc :: CommandLine -> CommandLine
+attachProc (CommandLine [] ws) = CommandLine [] ws
+attachProc (CommandLine ((Write,name):fs) ws) = attachProc $ CommandLine fs $ (var:(ws ++ [ "> /tmp/$$-" ++ name]))
     where var = name ++ "=/tmp/$$-" ++ name ++ "\n\t"
-attachIo (CommandLine ((Str,name):fs) ws) = attachIo $ CommandLine fs $ [name++"=$("] ++ ws ++ [")"]
+attachProc (CommandLine ((Str,name):fs) ws) = attachProc $ CommandLine fs $ [name++"=$("] ++ ws ++ [")"]
 
 pipeCon :: [String] -> String
 pipeCon [s]    = s ++ "\n"

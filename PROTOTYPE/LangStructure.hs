@@ -17,10 +17,10 @@ type Type = String
 type Entity = String
 
 data InOut = Read | Write | Append | Str deriving Show
-type Io = (InOut,Name) 
+type Proc = (InOut,Name) 
 
 data Import = Import Path Alias deriving Show
-data Block = Filter Name [Args] [CommandLine] | Io Name [Args] [SubBlock] deriving Show
+data Block = Func Name [Args] [CommandLine] | Proc Name [Args] [SubBlock] deriving Show
 data SubBlock = IfBlock CommandLine [CommandLine] | SubBlock [CommandLine] deriving Show
 data Script = Script [Import] [Block] | Err String deriving Show
-data CommandLine = CommandLine [Io] [String] | Heredoc Io String deriving Show
+data CommandLine = CommandLine [Proc] [String] | Heredoc Proc String deriving Show
