@@ -16,7 +16,6 @@ foreach(){
 		"$1" $line
 		ERROR_CHECK
 	done
-	ERROR_CHECK
 }
 
 cattac(){

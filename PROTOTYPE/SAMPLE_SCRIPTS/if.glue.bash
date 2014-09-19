@@ -16,11 +16,10 @@ foreach(){
 		"$1" $line
 		ERROR_CHECK
 	done
-	ERROR_CHECK
 }
 
 checkColnum(){
-	c=$( /usr/local/bin/retu $1 )
+	c=$( /usr/local/bin/retu < $1 )
 ERROR_CHECK
 
 	/bin/test "$c" = "$2"

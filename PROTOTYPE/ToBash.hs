@@ -20,7 +20,7 @@ eachline = "foreach(){\n\n" ++
     "\t\t\"$1\" $line\n" ++
     "\t\tERROR_CHECK\n" ++
     "\tdone\n" ++
-    "\tERROR_CHECK\n" ++
+    --"\tERROR_CHECK\n" ++
     "}\n\n"
 
 mktemp var = var ++"=$(mktemp /tmp/$$-" ++ var ++ ")\nERROR_CHECK\n"

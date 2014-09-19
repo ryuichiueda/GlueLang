@@ -3,7 +3,7 @@ import /usr/bin/ as ub
 import /usr/local/bin/ as ulb
 
 proc checkColnum a b:
-	str c = ulb.retu $a
+	str c = ulb.retu < $a
 	b.test "$c" = "$b"
 
 proc main file num:

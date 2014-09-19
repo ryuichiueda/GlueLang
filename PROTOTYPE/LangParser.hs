@@ -59,9 +59,7 @@ langWord = do w <- many1 (noneOf " :\n\t")
               return w
 
 langCommandLineLn = do ln <- langCommandLine
-                       --char '\n'
                        many blankLine
-                       --error $ show ln
                        return ln
 
 langCommandLine = try(heredoc) <|> try(langCommandLineOutfile)  

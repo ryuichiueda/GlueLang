@@ -1,10 +1,26 @@
-#!/bin/bash -e
+#!/bin/bash
 
+tmp=/tmp/$$
 dir=$(dirname $0)
 
-$dir/filter.bash
-$dir/io.bash
-$dir/str.bash
-$dir/if.bash
-$dir/heredoc.bash
-$dir/while.bash
+ERROR_CHECK(){
+	[ $(plus ${PIPESTATUS[@]} ) -eq 0 ] && return
+	rm -f $tmp-*
+	exit 1
+}
+
+cat << FIN > $tmp-list
+filter
+io
+str
+if
+heredoc
+while
+FIN
+
+cat $tmp-list 	|
+while read i ; do
+	echo -en $i "\t"
+	$dir/$i.bash
+	ERROR_CHECK
+done
