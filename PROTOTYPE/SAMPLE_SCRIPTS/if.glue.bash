@@ -22,11 +22,13 @@ foreach(){
 checkColnum(){
 	c=$( /usr/local/bin/retu $1 )
 ERROR_CHECK
+
 	/bin/test "$c" = "$2"
 ERROR_CHECK
+
 }
 
-function main(){
+main(){
 if checkColnum $1 $2 ; then
 	/bin/echo "OK"
 else

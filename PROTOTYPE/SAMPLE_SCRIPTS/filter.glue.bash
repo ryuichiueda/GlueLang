@@ -20,16 +20,16 @@ foreach(){
 }
 
 mainfilter(){
-	/bin/cat $1 | /usr/bin/tail -r
+/bin/cat $1 | /usr/bin/tail -r
 	ERROR_CHECK
 }
 
 main(){
-	mainfilter $1
+mainfilter $1
 	ERROR_CHECK
 }
 
-main "$1" < /dev/stdin
+main "$1"
 ERROR_CHECK
 
 rm -f /tmp/$$-*

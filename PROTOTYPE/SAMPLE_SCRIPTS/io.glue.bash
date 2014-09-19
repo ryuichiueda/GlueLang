@@ -20,16 +20,19 @@ foreach(){
 }
 
 cattac(){
-	/bin/cat $1 | /usr/bin/tail -r
+/bin/cat $1 | /usr/bin/tail -r
 	ERROR_CHECK
 }
 
 main(){
-	f=/tmp/$$-f
-	 cattac $1 > /tmp/$$-f
+	f=$(mktemp /tmp/$$-f)
 ERROR_CHECK
+ cattac $1 > $f
+ERROR_CHECK
+
 	/bin/cat $f
 ERROR_CHECK
+
 }
 
 main "$1"

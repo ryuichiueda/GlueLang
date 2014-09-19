@@ -5,6 +5,7 @@ module LangStructure
 , InlineCmd(..)
 , Import(..)
 , InOut(..)
+, IoObj
 , SubInlineCmd(..)
 , Script(..)
 ) where
@@ -17,10 +18,10 @@ type Type = String
 type Entity = String
 
 data InOut = Read | Write | Append | Str deriving Show
-type Proc = (InOut,Name) 
+type IoObj = (InOut,Name) 
 
 data Import = Import Path Alias deriving Show
 data InlineCmd = Func Name [Args] [CommandLine] | Proc Name [Args] [SubInlineCmd] deriving Show
 data SubInlineCmd = IfInlineCmd CommandLine [CommandLine] | SubInlineCmd [CommandLine] deriving Show
 data Script = Script [Import] [InlineCmd] | Err String deriving Show
-data CommandLine = CommandLine [Proc] [String] | Heredoc Proc String deriving Show
+data CommandLine = CommandLine [IoObj] [String] | Heredoc IoObj String deriving Show

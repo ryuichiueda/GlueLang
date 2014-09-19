@@ -20,23 +20,28 @@ foreach(){
 }
 
 main(){
-	awk=/tmp/$$-awk
-cat << 'EOF' >> /tmp/$$-awk
+	awk=$(mktemp /tmp/$$-awk)
+ERROR_CHECK
+cat << 'EOF' >> $awk
 {print $2,$1}
 END{print "aho"}
 EOF
 ERROR_CHECK
-	data=/tmp/$$-data
-cat << 'EOF' >> /tmp/$$-data
+
+	data=$(mktemp /tmp/$$-data)
+ERROR_CHECK
+cat << 'EOF' >> $data
 1 2 3
 あいう えお
 EOF
 ERROR_CHECK
+
 	/usr/local/bin/awk -f $awk $data
 ERROR_CHECK
+
 }
 
-main
+main 
 ERROR_CHECK
 
 rm -f /tmp/$$-*

@@ -20,18 +20,20 @@ foreach(){
 }
 
 cattac(){
-	/bin/cat $1 | /usr/bin/tail -r
+/bin/cat $1 | /usr/bin/tail -r
 	ERROR_CHECK
 }
 
 main(){
 	s=$( cattac )
 ERROR_CHECK
+
 	echo $s
 ERROR_CHECK
+
 }
 
-main
+main 
 ERROR_CHECK
 
 rm -f /tmp/$$-*

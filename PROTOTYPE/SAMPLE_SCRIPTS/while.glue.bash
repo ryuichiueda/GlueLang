@@ -20,19 +20,22 @@ foreach(){
 }
 
 plus(){
-	echo $1 $2 | /usr/local/bin/awk '{print $1+$2+1}'
+echo $1 $2 | /usr/local/bin/awk '{print $1+$2+1}'
 	ERROR_CHECK
 }
 
 main(){
-	f=/tmp/$$-f
-	 foreach plus < /dev/stdin > /tmp/$$-f
+	f=$(mktemp /tmp/$$-f)
 ERROR_CHECK
+ foreach plus < /dev/stdin > $f
+ERROR_CHECK
+
 	/bin/cat $f
 ERROR_CHECK
+
 }
 
-main
+main 
 ERROR_CHECK
 
 rm -f /tmp/$$-*
