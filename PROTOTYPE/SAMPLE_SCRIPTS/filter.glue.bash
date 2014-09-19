@@ -8,7 +8,7 @@ ERROR_CHECK(){
 	ERROR_EXIT
 }
 
-trap ERROR_EXIT 2
+trap ERROR_EXIT 1 2 3 15
 
 foreach(){
 
@@ -30,3 +30,6 @@ main(){
 }
 
 main "$1" < /dev/stdin
+ERROR_CHECK
+
+rm -f /tmp/$$-*

@@ -8,7 +8,7 @@ ERROR_CHECK(){
 	ERROR_EXIT
 }
 
-trap ERROR_EXIT 2
+trap ERROR_EXIT 1 2 3 15
 
 foreach(){
 
@@ -25,9 +25,14 @@ plus(){
 }
 
 main(){
-f=/tmp/$$-f
+	f=/tmp/$$-f
 	 foreach plus < /dev/stdin > /tmp/$$-f
-/bin/cat $f
+ERROR_CHECK
+	/bin/cat $f
+ERROR_CHECK
 }
 
 main
+ERROR_CHECK
+
+rm -f /tmp/$$-*

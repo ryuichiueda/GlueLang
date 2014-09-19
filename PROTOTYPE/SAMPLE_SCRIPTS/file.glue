@@ -1,0 +1,3 @@
+proc main:
+	file f = echo "abc"
+	rev $f

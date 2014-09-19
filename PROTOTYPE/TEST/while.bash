@@ -2,6 +2,7 @@
 
 tmp=/tmp/$$
 dir=$(dirname $0)/../
+PATH=$PATH:$dir
 
 ERROR_CHECK(){
 	[ "$(echo ${PIPESTATUS[@]} | tr -d ' 0')" = "" ] && return

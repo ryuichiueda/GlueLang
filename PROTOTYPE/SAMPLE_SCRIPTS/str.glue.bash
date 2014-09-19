@@ -8,7 +8,7 @@ ERROR_CHECK(){
 	ERROR_EXIT
 }
 
-trap ERROR_EXIT 2
+trap ERROR_EXIT 1 2 3 15
 
 foreach(){
 
@@ -25,8 +25,13 @@ cattac(){
 }
 
 main(){
-s=$( cattac )
-echo $s
+	s=$( cattac )
+ERROR_CHECK
+	echo $s
+ERROR_CHECK
 }
 
 main
+ERROR_CHECK
+
+rm -f /tmp/$$-*

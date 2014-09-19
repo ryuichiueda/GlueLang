@@ -8,7 +8,7 @@ ERROR_CHECK(){
 	ERROR_EXIT
 }
 
-trap ERROR_EXIT 2
+trap ERROR_EXIT 1 2 3 15
 
 foreach(){
 
@@ -20,8 +20,10 @@ foreach(){
 }
 
 checkColnum(){
-c=$( /usr/local/bin/retu $1 )
-/bin/test "$c" = "$2"
+	c=$( /usr/local/bin/retu $1 )
+ERROR_CHECK
+	/bin/test "$c" = "$2"
+ERROR_CHECK
 }
 
 function main(){
@@ -33,3 +35,6 @@ fi
 }
 
 main "$1" "$2"
+ERROR_CHECK
+
+rm -f /tmp/$$-*

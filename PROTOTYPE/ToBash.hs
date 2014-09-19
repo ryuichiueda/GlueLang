@@ -15,7 +15,7 @@ error_check = "ERROR_CHECK(){\n" ++
               "\tERROR_EXIT\n" ++ 
               "}\n\n"
 
-trap = "trap ERROR_EXIT 2\n\n"
+trap = "trap ERROR_EXIT 1 2 3 15\n\n"
 
 eachline = "foreach(){\n\n" ++
     "\twhile read line ; do\n" ++
@@ -27,13 +27,14 @@ eachline = "foreach(){\n\n" ++
 
 toBash :: Script -> String
 toBash (Script is fs) =  error_exit ++ error_check ++ trap ++ eachline ++
-                         unlines (subblocks ++ [mainblock] ++ [footer])
-    where footer = head $ filter (/= "") $ map mainArgs fs
+                         unlines (subblocks ++ (mainblock:maincall:footer:[]))
+    where footer = "rm -f /tmp/$$-*"
           isMain (Proc "main" _ _) = True
           isMain (Func "main" _ _) = True
           isMain _ = False
-          subblocks = map (blockToFunc is) $ filter (\x -> isMain x == False) fs
-          mainblock = blockToFunc is $ head $ filter isMain fs
+          subblocks = map (blockToBashFunc is) $ filter (\x -> isMain x == False) fs
+          mainblock = blockToBashFunc is $ head $ filter isMain fs
+          maincall = (head $ filter (/= "") $ map mainArgs fs) ++ "\nERROR_CHECK\n"
 
 mainArgs :: InlineCmd -> String
 mainArgs (Proc "main" args _) = unwords ("main" :opts) -- ++ " < /dev/stdin"
@@ -42,16 +43,16 @@ mainArgs (Func "main" args _) = unwords ("main" :opts) ++ " < /dev/stdin"
     where opts = [ "\"" ++ ('$':(show n)) ++ "\"" | n <- [1..(length args)]]
 mainArgs _ = ""
 
-blockToFunc :: [Import] -> InlineCmd -> String
-blockToFunc is (Proc fname opts sbs) = ioToFunc is fname opts sbs
-blockToFunc is (Func fname opts stats) = filterToFunc is fname opts stats
+blockToBashFunc :: [Import] -> InlineCmd -> String
+blockToBashFunc is (Proc fname opts sbs) = procToBashFunc is fname opts sbs
+blockToBashFunc is (Func fname opts stats) = filterToFunc is fname opts stats
 
 --data SubInlineCmd = IfInlineCmd CommandLine [CommandLine] | SubInlineCmd [CommandLine] deriving Show
-ioToFunc :: [Import] -> Name -> [Args] -> [SubInlineCmd] -> String
-ioToFunc is name args [SubInlineCmd coms] = name ++ "(){\n"
-                                         ++ (unlines $ map (comToString is args) coms)
+procToBashFunc :: [Import] -> Name -> [Args] -> [SubInlineCmd] -> String
+procToBashFunc is name args [SubInlineCmd coms] = name ++ "(){\n"
+                                         ++ (unlines $ map (\x -> '\t':x ++ "\nERROR_CHECK") $ map (comToString is args) coms)
                                          ++ "}\n"
-ioToFunc is name opts (sb:sbs) = "function " ++ name ++ "(){\n"
+procToBashFunc is name opts (sb:sbs) = "function " ++ name ++ "(){\n"
                                  ++ (ifInlineCmd is opts sb)
                                  ++ (elifInlineCmd is opts sbs)
                                  ++ "}\n"

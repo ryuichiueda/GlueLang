@@ -8,7 +8,7 @@ ERROR_CHECK(){
 	ERROR_EXIT
 }
 
-trap ERROR_EXIT 2
+trap ERROR_EXIT 1 2 3 15
 
 foreach(){
 
@@ -20,17 +20,23 @@ foreach(){
 }
 
 main(){
-awk=/tmp/$$-awk
+	awk=/tmp/$$-awk
 cat << 'EOF' >> /tmp/$$-awk
 {print $2,$1}
 END{print "aho"}
 EOF
-data=/tmp/$$-data
+ERROR_CHECK
+	data=/tmp/$$-data
 cat << 'EOF' >> /tmp/$$-data
 1 2 3
 あいう えお
 EOF
-/usr/local/bin/awk -f $awk $data
+ERROR_CHECK
+	/usr/local/bin/awk -f $awk $data
+ERROR_CHECK
 }
 
 main
+ERROR_CHECK
+
+rm -f /tmp/$$-*
