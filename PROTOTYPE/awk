@@ -1,2 +1,0 @@
-{print $2,$1}
-END{print "aho"}
