@@ -23,7 +23,7 @@ eachline = "foreach(){\n\n" ++
     --"\tERROR_CHECK\n" ++
     "}\n\n"
 
-mktemp var = var ++"=$(mktemp /tmp/$$-" ++ var ++ ")\nERROR_CHECK\n"
+mktemp var = var ++"=$(mktemp /tmp/$$-" ++ var ++ "-XXXXXX" ++ ")\nERROR_CHECK\n"
 rmfiles = "rm -f /tmp/$$-*"
 coverBashFunc name code = name ++ "(){\n" ++ code ++ "}\n"
 
