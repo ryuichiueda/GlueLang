@@ -1,2 +1,4 @@
 proc main:
 	echo "Content-Type: text/html"
+	echo ""
+	echo abc

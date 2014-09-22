@@ -22,6 +22,12 @@ main(){
 	echo Content-Type: text/html
 ERROR_CHECK
 
+	echo 
+ERROR_CHECK
+
+	echo abc
+ERROR_CHECK
+
 }
 
 main 

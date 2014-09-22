@@ -22,14 +22,14 @@ checkColnum(){
 	c=$( /usr/local/bin/retu < $1 )
 ERROR_CHECK
 
-	/bin/test "$c" = "$2"
+	/bin/test $c = $2
 ERROR_CHECK
 
 }
 
 main(){
 if checkColnum $1 $2 ; then
-	/bin/echo "OK"
+	/bin/echo OK
 else
 	/bin/false
 fi

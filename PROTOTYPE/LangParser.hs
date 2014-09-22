@@ -57,7 +57,7 @@ langFunc = do string "func "
 langWord = try(langWordNoQuot) <|> try(langWordQuot)
 
 langWordQuot = do char '"'
-                  w <- many1 (noneOf "\"")
+                  w <- many (noneOf "\"")
                   char '"'
                   many $ oneOf " \t"
                   return w
