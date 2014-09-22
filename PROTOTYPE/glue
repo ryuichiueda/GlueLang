@@ -1,5 +1,6 @@
-#!/bin/bash
+#!/bin/bash 
 
+tmp=/tmp/$$
 dir=$(dirname $0)
 
 OPT=""
@@ -8,10 +9,10 @@ OPT=""
 #dir=$(dirname $0)
 SCR="$1"
 shift
-$dir/langToBash "$SCR"
+$dir/langToBash "$SCR" > $tmp-scr
 
 if [ "$OPT" = "" ] ;then
-	bash "$SCR".bash "$@"
+	bash $tmp-scr "$@"
 else 
-	bash "$OPT" "$SCR".bash "$@"
+	bash "$OPT" $tmp-scr "$@"
 fi

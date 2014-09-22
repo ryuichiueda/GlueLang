@@ -19,7 +19,7 @@ main' :: [String] -> IO ()
 main' (scr:as) = do cs <- readF scr
                     pn <- getProgName
                     let scrname = scr ++ ".bash"
-                    writeFile scrname $ (Bash.toBash . P.parseGlueLang) cs
+                    putStr $ (Bash.toBash . P.parseGlueLang) cs
                 
 readF :: String -> IO String
 readF "-" = getContents
