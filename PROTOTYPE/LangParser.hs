@@ -54,15 +54,22 @@ langFunc = do string "func "
               lns <- many1 (char '\t' >> langCommandLineLn)
               return $ Func nm (zip [1..] args) lns
 
-langWord = try(langWordNoQuot) <|> try(langWordQuot)
+langWord = try(langWordNoQuot) <|> try(langWordSQuot) <|> try(langWordDQuot)
 
-langWordQuot = do char '"'
-                  w <- many (noneOf "\"")
-                  char '"'
-                  many $ oneOf " \t"
-                  return w
+langWordSQuot = do char '\''
+                   w <- many (noneOf "\'")
+                   char '\''
+                   many $ oneOf " \t"
+                   return $ ('\'':w) ++ "\'"
 
-langWordNoQuot = do w <- many1 (noneOf "\" :\n\t")
+
+langWordDQuot = do char '"'
+                   w <- many (noneOf "\"")
+                   char '"'
+                   many $ oneOf " \t"
+                   return $ ('\"':w) ++ "\"" 
+
+langWordNoQuot = do w <- many1 (noneOf "\'\" :\n\t")
                     many $ oneOf " \t"
                     return w
 
