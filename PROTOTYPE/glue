@@ -16,3 +16,5 @@ if [ "$OPT" = "" ] ;then
 else 
 	bash "$OPT" $tmp-scr "$@"
 fi
+
+rm -f $tmp-*
