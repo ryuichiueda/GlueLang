@@ -1,0 +1,2 @@
+proc main:
+	echo "Content-Type: text/html"
