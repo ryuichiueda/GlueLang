@@ -26,27 +26,35 @@ int main(int argc, char const* argv[])
 		exit(127); 
 	}
 
-	fcntl(fd[0], F_SETFL, O_NONBLOCK);
-	const int bsize = 256;
+	//fcntl(fd[0], F_SETFL, O_NONBLOCK);
+	const int bsize = 257;
 	char buf[bsize];
 /*
 	int status;
 	waitpid(pid,&status,WUNTRACED);
 */
+	int n = 0;
 	while(1){
-		int n = read(fd[0],buf,bsize);
-		if(n == EOF){
-			buf[0] = '\0';
-		//	printf("%d\n",errno);
-			continue;
+		n = read(fd[0],buf,bsize-1);
+		if(n != bsize-1){
+			break;
 		}
+		buf[n] = '\0';
 /*
 		if(errno == EAGAIN)
 			break;
 */
-		printf("parents: %d,%d: %s\n",n,errno, buf);
-		buf[0] = '\0';
+		write(1,buf,n);
+		//puts(buf);
+		//printf("parents: %d,%d: %s\n",n,errno, buf);
 	}
+	if(n >= 0){
+		buf[n] = '\0';
+		write(1,buf,n);
+	}
+	//printf("parents: %d,%d: %s\n",n,errno, buf);
+	int status;
+	wait(&status);
 	close(fd[0]);
 	return 0;
 }
