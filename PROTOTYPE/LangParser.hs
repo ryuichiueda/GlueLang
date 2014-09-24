@@ -3,6 +3,7 @@ module LangParser( parseGlueLang ) where
 import Text.Parsec
 import Text.Parsec.String
 import LangStructure
+import Control.Monad
 
 parseGlueLang :: String -> Script
 parseGlueLang str = case parse code "" str of
@@ -64,7 +65,8 @@ langWordSQuot = do char '\''
 
 
 langWordDQuot = do char '"'
-                   w <- many ( (try escDQuot) <|> (many1 $ noneOf "\"") )
+                   w <- many $ liftM (\x->[x]) (noneOf "\"\\") <|> try escDQuot <|> string "\\"
+                   --w <- many ( try(escDQuot) <|> try (many1 $ noneOf "\"") )
                    char '"'
                    many $ oneOf " \t"
                    return $ ('\"':(concat w)) ++ "\"" 
