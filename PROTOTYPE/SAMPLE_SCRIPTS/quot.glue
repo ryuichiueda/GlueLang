@@ -3,3 +3,4 @@ proc main:
 	echo ""
 	echo abc
 	echo '"""'
+	echo "\""
