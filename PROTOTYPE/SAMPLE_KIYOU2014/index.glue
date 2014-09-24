@@ -1,6 +1,3 @@
-import /bin/ as b
-import /usr/bin/ as ub
-
 func mkNavi page:
 	grep -B 1 -A 1 "$page"
 	tr '\n' ' '                           
@@ -29,12 +26,6 @@ proc mkHeader page list:
 | othewise :
 	true
 
-proc mkHeader page:
-| grep -Eq "^[0-9]{14}_" <<< "$page" :
-	getDay "$page"
-| othewise :
-	true
-	
 func getDay page:
 	self -d 1.1.14 "$page"
 	dayslash "yyyy年m月d日H時M分" 1
@@ -57,7 +48,6 @@ func trackBackSub id p ok :
 	sed 's/^[^=]*=//'
 	LANG=C sort
 	yarr
-
 
 func outHTTP page navi category trackback upload host :
 	sed 's/^/\t\t\t/'
