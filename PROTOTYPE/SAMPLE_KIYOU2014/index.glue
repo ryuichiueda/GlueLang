@@ -74,6 +74,12 @@ func outHTTP page navi category trackback upload host :
 	sed "s/@UPLOAD/$upload/"
 	sed "s/@TITLE/$(self 2 $dir/cache/$page.title)/"
 
+func titleCache page:
+	head -n 1 
+	sed -e 's;<h1>;;' -e 's;</h1>;;'
+	sed 's;_;\\_;g'
+	sed 's; ;_;g'
+	awk -v f="$page" '{gsub(/_/,"\\_",f);print f,$0}'
 
 proc main:
 	str dir = echo /var/www/bashcms
@@ -95,3 +101,7 @@ proc main:
 	echo "Content-Type: text/html"
 	echo ""
 	outHTTP $pagename $navi $category $trackback $upload $host < "$dir/pages/$pagename/html"
+
+	file tcache = titleCache $pagename < "$dir/pages/$pagename/html"
+	mv $tcache "$dir/cache/$pagename.title"
+	echo -n 1 >> "$dir/cache/$pagename.counter"
