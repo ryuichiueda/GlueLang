@@ -3,3 +3,4 @@ proc main:
 	echo ""
 	echo あいうえお
 	echo '"""'
+	echo "\""
