@@ -64,10 +64,10 @@ langWordSQuot = do char '\''
 
 
 langWordDQuot = do char '"'
-                   w <- many (noneOf "\"")
+                   w <- many ( (try escDQuot) <|> (many1 $ noneOf "\"") )
                    char '"'
                    many $ oneOf " \t"
-                   return $ ('\"':w) ++ "\"" 
+                   return $ ('\"':(concat w)) ++ "\"" 
 
 langWordNoQuot = do w <- many1 (noneOf "\'\" :\n\t")
                     many $ oneOf " \t"
@@ -118,3 +118,5 @@ langCommandLineNoProc = many1 langWord >>= return . (CommandLine [])
 
 blankLine = try(many (oneOf " \t") >> char '\n')
 --blankLine = char '\n'
+--
+escDQuot = string "\\\""
