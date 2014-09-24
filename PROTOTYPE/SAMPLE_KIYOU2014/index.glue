@@ -56,13 +56,27 @@ func trackBackSub id p ok :
 	grep -E '^(url|title|blog_name)='
 	sed 's/^[^=]*=//'
 	LANG=C sort
+	yarr
 
-func outHTTP page navi category trackback upload :
+
+func outHTTP page navi category trackback upload host :
 	sed 's/^/\t\t\t/'
-	sed "s;\(href\|src\)=\";/&/pages/$page/;g"
+	sed "s;\(href\|src\)=\";&/pages/$page/;g"
+	sed "s;\"/pages/$page/\([^:\"]*\)://;\"\1://;g"
+	sed "s;\"/pages/$page//;\"?p=;g"
+	filehame -lDOCUMENT $dir/template.html -
+	mojihame -lNAVI_HEADER - $navi
+	mojihame -lNAVI_FOOTER - $navi
+	mojihame -lCATEGORIES - $category
+	mojihame -lTRACKBACK - $trackback
+	sed "s/@HTTP_HOST/$host/"
+	sed "s/@PAGE/$page/"
+	sed "s/@UPLOAD/$upload/"
+	sed "s/@TITLE/$(self 2 $dir/cache/$page.title)/"
+
 
 proc main:
-	str dir = b.echo /var/www/bashcms
+	str dir = echo /var/www/bashcms
 	exec 2> $dir/../www-data/$(basename $0).$(date +%Y%m%d%H%M%S).$$
 
 	str raw_page = tr -dc 'a-zA-Z0-9_' <<< "${QUERY_STRING:2}"
@@ -76,6 +90,8 @@ proc main:
 	file ttmp = trackBack "$pagename" < "$dir/trackback/accept"
 	file trackback = foreach trackBackSub < $ttmp
 
-	b.echo "Content-Type: text/html"
-	b.echo ""
-	outHTTP $pagename $navi $category $trackback $day < "$dir/pages/$pagename/html"
+	str host = echo $HTTP_HOST
+
+	echo "Content-Type: text/html"
+	echo ""
+	outHTTP $pagename $navi $category $trackback $upload $host < "$dir/pages/$pagename/html"
