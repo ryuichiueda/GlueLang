@@ -74,7 +74,7 @@ funcToBashFunc :: [Import] -> Name -> [Args] -> [CommandLine] -> String
 funcToBashFunc is name opts coms = coverBashFunc name (contents ++ "\tERROR_CHECK\n")
     where contents = f $ map (comToString is opts) coms
           f [s]    = s ++ "\n"
-          f (s:ss) = s ++ " | " ++ f ss
+          f (s:ss) = s ++ " |\n" ++ f ss
 
 -- conversion from b.cat to /bin/cat
 solvePath :: [Import] -> CommandLine -> CommandLine

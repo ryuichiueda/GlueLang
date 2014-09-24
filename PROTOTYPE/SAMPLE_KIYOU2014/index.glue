@@ -1,0 +1,81 @@
+import /bin/ as b
+import /usr/bin/ as ub
+
+func mkNavi page:
+	grep -B 1 -A 1 "$page"
+	tr '\n' ' '                           
+	awk '{print $1,$NF}'                  
+	tr ' ' '\n'                           
+	awk 'NR==1{print "前の記事",$1}NR==2{print "後の記事",$1}'
+	grep -v "$page"
+	sed 's/_/\\_/g'
+
+proc fixPage dir page:
+| test "$page" = "" :
+	tail -n 1 
+| test -d "$dir/pages/$page" :
+	echo $page
+| othewise :
+	tail -n 1
+
+func diaryList dir:
+	ls -f $dir/pages/
+	grep -E "^[0-9]{14}_"
+	sort
+
+proc mkHeader page list:
+| grep -Eq "^[0-9]{14}_" <<< "$page" :
+	mkNavi $page < "$list"
+| othewise :
+	true
+
+proc mkHeader page:
+| grep -Eq "^[0-9]{14}_" <<< "$page" :
+	getDay "$page"
+| othewise :
+	true
+	
+func getDay page:
+	self -d 1.1.14 "$page"
+	dayslash "yyyy年m月d日H時M分" 1
+
+func getCategory dir page:
+	sed 's/_/\\_/g' "$dir/pages/$page/categories"
+	sed 's/ /_/g'
+
+func trackBack page :
+	awk -v p=$page '$2=p'
+	sort -s -k1,1
+	getlast 1 1
+	awk '$3=="OK"'
+
+func trackBackSub id p ok :
+	nkf --url-input $dir/trackback/$id.$p
+	tr '&' '\n'
+	tr -d '<>"'
+	grep -E '^(url|title|blog_name)='
+	sed 's/^[^=]*=//'
+	LANG=C sort
+
+func outHTTP page navi category trackback upload :
+	sed 's/^/\t\t\t/'
+	sed "s;\(href\|src\)=\";/&/pages/$page/;g"
+
+proc main:
+	str dir = b.echo /var/www/bashcms
+	exec 2> $dir/../www-data/$(basename $0).$(date +%Y%m%d%H%M%S).$$
+
+	str raw_page = tr -dc 'a-zA-Z0-9_' <<< "${QUERY_STRING:2}"
+	file diarylist = diaryList $dir
+	str pagename = fixPage $dir $raw_page < $diarylist
+
+	file navi = mkHeader $pagename $diarylist
+	str day = getDay $pagename
+	file category = getCategory $dir $pagename
+
+	file ttmp = trackBack "$pagename" < "$dir/trackback/accept"
+	file trackback = foreach trackBackSub < $ttmp
+
+	b.echo "Content-Type: text/html"
+	b.echo ""
+	outHTTP $pagename $navi $category $trackback $day < "$dir/pages/$pagename/html"
