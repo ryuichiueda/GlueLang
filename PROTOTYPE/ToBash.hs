@@ -33,6 +33,7 @@ toBash (Script is fs) =  error_exit ++ error_check ++ trap ++ eachline ++
                          unlines (subblocks ++ (mainblock:maincall:rmfiles:[]))
     where isMain (Proc "main" _ _) = True
           isMain (Func "main" _ _) = True
+          isMain (Test "main" _ _) = True
           isMain _ = False
           subblocks = map (blockToBashFunc is) $ filter (\x -> isMain x == False) fs
           mainblock = blockToBashFunc is $ head $ filter isMain fs
@@ -41,6 +42,7 @@ toBash (Script is fs) =  error_exit ++ error_check ++ trap ++ eachline ++
 mainLine :: InlineCmd -> String
 mainLine (Proc "main" args _) = mainLine' (length args)
 mainLine (Func "main" args _) = mainLine' (length args)
+mainLine (Test "main" args _) = mainLine' (length args)
 mainLine _ = ""
 
 mainLine' :: Int -> String
@@ -49,14 +51,18 @@ mainLine' ns = "main " ++ (unwords $ map f [1..ns])
 
 blockToBashFunc :: [Import] -> InlineCmd -> String
 blockToBashFunc is (Proc fname opts sbs) = procToBashFunc is fname opts sbs
+blockToBashFunc is (Test fname opts sbs) = testToBashFunc is fname opts sbs
 blockToBashFunc is (Func fname opts stats) = funcToBashFunc is fname opts stats
-
 
 procToBashFunc :: [Import] -> Name -> [Args] -> [SubInlineCmd] -> String
 procToBashFunc is name args [SubInlineCmd coms] = coverBashFunc name code
     where code = unlines $ map (\x -> '\t':x ++ "\nERROR_CHECK\n") $ map (comToString is args) coms
 procToBashFunc is name opts (sb:sbs) = coverBashFunc name code
     where code = (ifInlineCmd is opts sb) ++ (elifInlineCmd is opts sbs)
+
+testToBashFunc :: [Import] -> Name -> [Args] -> [SubInlineCmd] -> String
+testToBashFunc is name args [SubInlineCmd coms] = coverBashFunc name code
+    where code = unlines $ map (\x -> '\t':x) $ map (comToString is args) coms
 
 ifInlineCmd :: [Import] -> [Args] -> SubInlineCmd -> String
 ifInlineCmd is args (IfInlineCmd cond coms) = "if " ++ (comToString is args cond) ++ " ; then\n\t"
