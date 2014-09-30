@@ -72,26 +72,26 @@ func titleCache page:
 	awk -v f="$page" '{gsub(/_/,"\\_",f);print f,$0}'
 
 proc main:
-	str dir = echo /var/www/bashcms
+	str dir        = echo /var/www/bashcms
 	exec 2> $dir/../www-data/$(basename $0).$(date +%Y%m%d%H%M%S).$$
 
-	str raw_page = tr -dc 'a-zA-Z0-9_' <<< "${QUERY_STRING:2}"
+	str raw_page   = tr -dc 'a-zA-Z0-9_' <<< "${QUERY_STRING:2}"
 	file diarylist = diaryList $dir
-	str pagename = fixPage $dir $raw_page < $diarylist
+	str pagename   = fixPage $dir $raw_page < $diarylist
 
-	file navi = mkHeader $pagename $diarylist
-	str day = getDay $pagename
-	file category = getCategory $dir $pagename
+	file navi      = mkHeader $pagename $diarylist
+	str day        = getDay $pagename
+	file category  = getCategory $dir $pagename
 
-	file ttmp = trackBack "$pagename" < "$dir/trackback/accept"
+	file ttmp      = trackBack "$pagename" < "$dir/trackback/accept"
 	file trackback = foreach trackBackSub < $ttmp
 
-	str host = echo $HTTP_HOST
+	str host       = echo $HTTP_HOST
 
 	echo "Content-Type: text/html"
 	echo ""
 	outHTTP $pagename $navi $category $trackback $upload $host < "$dir/pages/$pagename/html"
 
-	file tcache = titleCache $pagename < "$dir/pages/$pagename/html"
+	file tcache    = titleCache $pagename < "$dir/pages/$pagename/html"
 	mv $tcache "$dir/cache/$pagename.title"
-	echo -n 1 >> "$dir/cache/$pagename.counter"
+	echo -n 1      >> "$dir/cache/$pagename.counter"
