@@ -1,0 +1,9 @@
+test checkLineNum file num:
+	str c = wc -l < $file 
+	test "$c" -eq "$num"
+
+proc main file num:
+| checkLineNum $file $num:
+	echo "OK"
+| othewise:
+	echo "NG"
