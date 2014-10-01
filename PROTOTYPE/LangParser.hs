@@ -28,7 +28,7 @@ langProc      = do string "proc "
 	           args <- many langWord
                    many $ oneOf " \t"
                    colonReturn
-                   sb <- many1 (try(ifInlineCmd) <|> try(subInlineCmd))
+                   sb <- many1 (try(ifSubCmd) <|> try(subSubCmd))
                    many $ char '\n'
                    many blankLine
                    return $ Proc nm (zip [1..] args) sb
@@ -38,22 +38,22 @@ langTest      = do string "test "
 	           args <- many langWord
                    many $ oneOf " \t"
                    colonReturn
-                   sb <- many1 (try(ifInlineCmd) <|> try(subInlineCmd))
+                   sb <- many1 (try(ifSubCmd) <|> try(subSubCmd))
                    many $ char '\n'
                    many blankLine
                    return $ Test nm (zip [1..] args) sb
 
-subInlineCmd = do lns <- many1 (char '\t' >> langCommandLineLn)
-                  many blankLine
-                  return $ SubInlineCmd lns
+subSubCmd = do lns <- many1 (char '\t' >> langCommandLineLn)
+               many blankLine
+               return $ SubSubCmd lns
 
-ifInlineCmd  = do char '|'
-                  many $ oneOf "\t "
-                  c <- langCommandLineNoProc
-                  colonReturn
-                  lns <- many1 (char '\t' >> langCommandLineLn)
-                  many blankLine
-                  return $ IfInlineCmd c lns
+ifSubCmd  = do char '|'
+               many $ oneOf "\t "
+               c <- langCommandLineNoProc
+               colonReturn
+               lns <- many1 (char '\t' >> langCommandLineLn)
+               many blankLine
+               return $ IfSubCmd c lns
 
 colonReturn = char ':' >> (many $ oneOf " \t") >> char '\n'
 

@@ -39,7 +39,7 @@ toBash (Script is fs) =  error_exit ++ error_check ++ trap ++ eachline ++
           mainblock = blockToBashFunc is $ head $ filter isMain fs
           maincall = (head $ filter (/= "") $ map mainLine fs) ++ "\nERROR_CHECK\n"
 
-mainLine :: InlineCmd -> String
+mainLine :: SubCmd -> String
 mainLine (Proc "main" args _) = mainLine' (length args)
 mainLine (Func "main" args _) = mainLine' (length args)
 mainLine (Test "main" args _) = mainLine' (length args)
@@ -49,32 +49,32 @@ mainLine' :: Int -> String
 mainLine' ns = "main " ++ (unwords $ map f [1..ns])
     where f n = "\"" ++ ('$':(show n)) ++ "\""
 
-blockToBashFunc :: [Import] -> InlineCmd -> String
+blockToBashFunc :: [Import] -> SubCmd -> String
 blockToBashFunc is (Proc fname opts sbs) = procToBashFunc is fname opts sbs
 blockToBashFunc is (Test fname opts sbs) = testToBashFunc is fname opts sbs
 blockToBashFunc is (Func fname opts stats) = funcToBashFunc is fname opts stats
 
-procToBashFunc :: [Import] -> Name -> [Args] -> [SubInlineCmd] -> String
-procToBashFunc is name args [SubInlineCmd coms] = coverBashFunc name code
+procToBashFunc :: [Import] -> Name -> [Args] -> [SubSubCmd] -> String
+procToBashFunc is name args [SubSubCmd coms] = coverBashFunc name code
     where code = unlines $ map (\x -> '\t':x ++ "\nERROR_CHECK\n") $ map (comToString is args) coms
 procToBashFunc is name opts (sb:sbs) = coverBashFunc name code
-    where code = (ifInlineCmd is opts sb) ++ (elifInlineCmd is opts sbs)
+    where code = (ifSubCmd is opts sb) ++ (elifSubCmd is opts sbs)
 
-testToBashFunc :: [Import] -> Name -> [Args] -> [SubInlineCmd] -> String
-testToBashFunc is name args [SubInlineCmd coms] = coverBashFunc name code
+testToBashFunc :: [Import] -> Name -> [Args] -> [SubSubCmd] -> String
+testToBashFunc is name args [SubSubCmd coms] = coverBashFunc name code
     where code = unlines $ map (\x -> '\t':x) $ map (comToString is args) coms
 
-ifInlineCmd :: [Import] -> [Args] -> SubInlineCmd -> String
-ifInlineCmd is args (IfInlineCmd cond coms) = "if " ++ (comToString is args cond) ++ " ; then\n\t"
+ifSubCmd :: [Import] -> [Args] -> SubSubCmd -> String
+ifSubCmd is args (IfSubCmd cond coms) = "if " ++ (comToString is args cond) ++ " ; then\n\t"
                                             ++ (unlines $ map (comToString is args) coms)
 
-elifInlineCmd :: [Import] -> [Args] -> [SubInlineCmd] -> String
-elifInlineCmd is args ((IfInlineCmd (CommandLine _ ("othewise":[])) coms):[]) = "else\n\t"
+elifSubCmd :: [Import] -> [Args] -> [SubSubCmd] -> String
+elifSubCmd is args ((IfSubCmd (CommandLine _ ("othewise":[])) coms):[]) = "else\n\t"
     ++ (unlines $ map (comToString is args) coms) ++ "fi\n"
-elifInlineCmd is args ((IfInlineCmd cond coms):[]) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
+elifSubCmd is args ((IfSubCmd cond coms):[]) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
     ++ (unlines $ map (comToString is args) coms) ++ "fi\n"
-elifInlineCmd is args ((IfInlineCmd cond coms):sbs) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
-    ++ (unlines $ map (comToString is args) coms) ++ (elifInlineCmd is args sbs)
+elifSubCmd is args ((IfSubCmd cond coms):sbs) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
+    ++ (unlines $ map (comToString is args) coms) ++ (elifSubCmd is args sbs)
 
 funcToBashFunc :: [Import] -> Name -> [Args] -> [CommandLine] -> String
 funcToBashFunc is name opts coms = coverBashFunc name (contents ++ "\tERROR_CHECK\n")
