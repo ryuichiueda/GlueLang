@@ -1,27 +1,35 @@
 module LangStructure
 ( Name
-, Args
-, CommandLine(..)
+, Arg
+, CmdLine(..)
 , SubCmd(..)
 , Import(..)
 , InOut(..)
-, IoObj
+, Io
 , SubSubCmd(..)
 , Script(..)
 ) where
 
 type Name = String
-type Args = (Int,String)
+type Arg = (Int,String)
 type Path = String
 type Alias = String
 type Type = String
 type Entity = String
-
+type Io = (InOut,Name) 
 data InOut = Read | Write | Append | Str deriving Show
-type IoObj = (InOut,Name) 
+
+data Script = Script [Import] [SubCmd] 
+            | Err String deriving Show
 
 data Import = Import Path Alias deriving Show
-data SubCmd = Func Name [Args] [CommandLine] | Proc Name [Args] [SubSubCmd] | Test Name [Args] [SubSubCmd] deriving Show
-data SubSubCmd = IfSubCmd CommandLine [CommandLine] | SubSubCmd [CommandLine] deriving Show
-data Script = Script [Import] [SubCmd] | Err String deriving Show
-data CommandLine = CommandLine [IoObj] [String] | Heredoc IoObj String deriving Show
+
+data SubCmd = Func Name [Arg] [CmdLine] 
+            | Proc Name [Arg] [SubSubCmd] 
+            | Test Name [Arg] [SubSubCmd] deriving Show
+
+data SubSubCmd = IfSubCmd CmdLine [CmdLine] 
+               | SubSubCmd [CmdLine] deriving Show
+
+data CmdLine = CmdLine [Io] [String] 
+                 | Heredoc Io String deriving Show

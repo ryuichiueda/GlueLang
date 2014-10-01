@@ -54,38 +54,38 @@ blockToBashFunc is (Proc fname opts sbs) = procToBashFunc is fname opts sbs
 blockToBashFunc is (Test fname opts sbs) = testToBashFunc is fname opts sbs
 blockToBashFunc is (Func fname opts stats) = funcToBashFunc is fname opts stats
 
-procToBashFunc :: [Import] -> Name -> [Args] -> [SubSubCmd] -> String
+procToBashFunc :: [Import] -> Name -> [Arg] -> [SubSubCmd] -> String
 procToBashFunc is name args [SubSubCmd coms] = coverBashFunc name code
     where code = unlines $ map (\x -> '\t':x ++ "\nERROR_CHECK\n") $ map (comToString is args) coms
 procToBashFunc is name opts (sb:sbs) = coverBashFunc name code
     where code = (ifSubCmd is opts sb) ++ (elifSubCmd is opts sbs)
 
-testToBashFunc :: [Import] -> Name -> [Args] -> [SubSubCmd] -> String
+testToBashFunc :: [Import] -> Name -> [Arg] -> [SubSubCmd] -> String
 testToBashFunc is name args [SubSubCmd coms] = coverBashFunc name code
     where code = unlines $ map (\x -> '\t':x) $ map (comToString is args) coms
 
-ifSubCmd :: [Import] -> [Args] -> SubSubCmd -> String
+ifSubCmd :: [Import] -> [Arg] -> SubSubCmd -> String
 ifSubCmd is args (IfSubCmd cond coms) = "if " ++ (comToString is args cond) ++ " ; then\n\t"
                                             ++ (unlines $ map (comToString is args) coms)
 
-elifSubCmd :: [Import] -> [Args] -> [SubSubCmd] -> String
-elifSubCmd is args ((IfSubCmd (CommandLine _ ("othewise":[])) coms):[]) = "else\n\t"
+elifSubCmd :: [Import] -> [Arg] -> [SubSubCmd] -> String
+elifSubCmd is args ((IfSubCmd (CmdLine _ ("othewise":[])) coms):[]) = "else\n\t"
     ++ (unlines $ map (comToString is args) coms) ++ "fi\n"
 elifSubCmd is args ((IfSubCmd cond coms):[]) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
     ++ (unlines $ map (comToString is args) coms) ++ "fi\n"
 elifSubCmd is args ((IfSubCmd cond coms):sbs) = "elif " ++ (comToString is args cond) ++ " ; then\n\t"
     ++ (unlines $ map (comToString is args) coms) ++ (elifSubCmd is args sbs)
 
-funcToBashFunc :: [Import] -> Name -> [Args] -> [CommandLine] -> String
+funcToBashFunc :: [Import] -> Name -> [Arg] -> [CmdLine] -> String
 funcToBashFunc is name opts coms = coverBashFunc name (contents ++ "\tERROR_CHECK\n")
     where contents = f $ map (comToString is opts) coms
           f [s]    = s ++ "\n"
           f (s:ss) = s ++ " |\n" ++ f ss
 
 -- conversion from b.cat to /bin/cat
-solvePath :: [Import] -> CommandLine -> CommandLine
-solvePath [] s                    = s
-solvePath is (CommandLine ios ws) = CommandLine ios $ map (solvePath' is) ws
+solvePath :: [Import] -> CmdLine -> CmdLine
+solvePath [] s                = s
+solvePath is (CmdLine ios ws) = CmdLine ios $ map (solvePath' is) ws
 
 solvePath' :: [Import] -> String -> String
 solvePath' [] w = w
@@ -94,25 +94,25 @@ solvePath' ((Import path alias):is) w = if hit alias w then (path++com) else sol
           com = drop (1 + length  alias) w
 
 
-comToString :: [Import] -> [Args] -> CommandLine -> String
+comToString :: [Import] -> [Arg] -> CmdLine -> String
 comToString is as (Heredoc (Write,name) s) = heredoc name s
-comToString is as com = (convArgs as) . (solvePath is) $ addIo com
+comToString is as com = (convArg as) . (solvePath is) $ addIo com
 
 heredoc :: String -> String -> String
 heredoc name contents = (mktemp name) ++ header ++ contents ++ "EOF"
     where header = "cat << \'EOF\' >> " ++ "$" ++ name ++ "\n"
 
-addIo :: CommandLine -> CommandLine
-addIo (CommandLine [] ws) = CommandLine [] ws
-addIo (CommandLine (f:fs) ws) = addIo ( CommandLine fs (addIo' f ws) )
+addIo :: CmdLine -> CmdLine
+addIo (CmdLine [] ws) = CmdLine [] ws
+addIo (CmdLine (f:fs) ws) = addIo ( CmdLine fs (addIo' f ws) )
 
-addIo' :: IoObj -> [String] -> [String]
+addIo' :: Io -> [String] -> [String]
 addIo' (Write,name) ws = (mktemp name):(ws ++ [ "> $" ++ name])
 addIo' (Str,name)   ws = [name++"=$("] ++ ws ++ [")"]
 
-convArgs :: [Args] -> CommandLine -> String
-convArgs [] (CommandLine fs ss) = unwords ss
-convArgs as (CommandLine fs ss) = unwords $ map (f as) ss
+convArg :: [Arg] -> CmdLine -> String
+convArg [] (CmdLine fs ss) = unwords ss
+convArg as (CmdLine fs ss) = unwords $ map (f as) ss
     where f [] str           = str
           f ((n,op):ops) str = f ops $ D.unpack  
                                $ D.replace (D.pack ('$':op)) (D.pack $ ('$':show n)) (D.pack str)

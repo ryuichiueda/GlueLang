@@ -43,15 +43,15 @@ langTest      = do string "test "
                    many blankLine
                    return $ Test nm (zip [1..] args) sb
 
-subSubCmd = do lns <- many1 (char '\t' >> langCommandLineLn)
+subSubCmd = do lns <- many1 (char '\t' >> langCmdLineLn)
                many blankLine
                return $ SubSubCmd lns
 
 ifSubCmd  = do char '|'
                many $ oneOf "\t "
-               c <- langCommandLineNoProc
+               c <- langCmdLineNoProc
                colonReturn
-               lns <- many1 (char '\t' >> langCommandLineLn)
+               lns <- many1 (char '\t' >> langCmdLineLn)
                many blankLine
                return $ IfSubCmd c lns
 
@@ -62,7 +62,7 @@ langFunc = do string "func "
               args <- many langWord
               many $ oneOf " \t"
               colonReturn
-              lns <- many1 (char '\t' >> langCommandLineLn)
+              lns <- many1 (char '\t' >> langCmdLineLn)
               return $ Func nm (zip [1..] args) lns
 
 langWord = try(langWordNoQuot) <|> try(langWordSQuot) <|> try(langWordDQuot)
@@ -85,12 +85,12 @@ langWordNoQuot = do w <- many1 (noneOf "\'\" :\n\t")
                     many $ oneOf " \t"
                     return w
 
-langCommandLineLn = do ln <- langCommandLine
-                       many blankLine
-                       return ln
+langCmdLineLn = do ln <- langCmdLine
+                   many blankLine
+                   return ln
 
-langCommandLine = try(heredoc) <|> try(langCommandLineOutfile)  
-                               <|> try(langCommandLineOutstr) <|> try(langCommandLineNoProc)
+langCmdLine = try(heredoc) <|> try(langCmdLineOutfile)  
+              <|> try(langCmdLineOutstr) <|> try(langCmdLineNoProc)
 
 -- file f = """ (here document)
 heredoc = do string "file"
@@ -110,23 +110,23 @@ heredocLine = do tt <- string "\t\t"
 
 
 -- file f = command args 
-langCommandLineOutfile = do (string "file " >> (many $ char ' ') )
-                            f <- langWord
-                            ((many $ char ' ') >> (char '=') >> (many $ char ' ' ))
-                            ln <- many1 langWord
-                            return $ CommandLine [(Write,f)] ln
+langCmdLineOutfile = do (string "file " >> (many $ char ' ') )
+                        f <- langWord
+                        ((many $ char ' ') >> (char '=') >> (many $ char ' ' ))
+                        ln <- many1 langWord
+                        return $ CmdLine [(Write,f)] ln
 
 -- str f = command args 
-langCommandLineOutstr  = do string "str "
-                            many $ char ' '
-                            f <- langWord
-                            many $ char ' '
-                            char '='
-                            many $ char ' '
-                            ln <- many1 langWord
-                            return $ CommandLine [(Str,f)] ln
+langCmdLineOutstr  = do string "str "
+                        many $ char ' '
+                        f <- langWord
+                        many $ char ' '
+                        char '='
+                        many $ char ' '
+                        ln <- many1 langWord
+                        return $ CmdLine [(Str,f)] ln
 
-langCommandLineNoProc = many1 langWord >>= return . (CommandLine [])
+langCmdLineNoProc = many1 langWord >>= return . (CmdLine [])
 
 blankLine = try(many (oneOf " \t") >> char '\n')
 --blankLine = char '\n'
