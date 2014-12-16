@@ -1,0 +1,7 @@
+ファイルに行と列の指定機能をつけて自動チェックする仕組み
+
+# 3列のスペース区切り
+file tmp[,3,ssv] = command arg1 arg2...
+
+# 10行以内、3列のスペース区切り
+file tmp[<=4,3,ssv] = command arg1 arg2...
