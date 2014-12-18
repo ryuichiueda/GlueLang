@@ -27,3 +27,7 @@ the result of the func block.
 Then the contents of this temporary file is
 released to the stdout by the cat command.
 
+Licence
+========
+
+MIT Licence is applied to. See LICENSE.md.
