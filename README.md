@@ -25,11 +25,32 @@ func cattac file:
 In the "cattac func" block, a pipeline of two commands
 "cat $file | tail -r" is implemented.
 
+## Temporary files
+
 In the "main proc" block,
 a temporary file "f" is used and it stores
 the result of the func block. 
 Then the contents of this temporary file is
 released to the stdout by the cat command.
+
+Temporary files are removed at the end of the program.
+
+## import
+
+An import statement is used for indicating the directory 
+in which commands exist explicitly. 
+Commands in the directory are accessed with the prefix
+that is written after "as."
+
+When we omit the prefix, we can use commands
+in the directories that are designated in PATH,
+which s the shell environment variable.
+
+## other specification
+
+Please join the discussion in issues. 
+You can use Japanese. I will translate to English
+if necessary.
 
 Licence
 ========
