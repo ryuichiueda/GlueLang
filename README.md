@@ -1,7 +1,9 @@
-GlueLang
-========
+# GlueLang
 
 A programming language that has a strong nature to be a glue of commands.
+
+
+# Language Specification
 
 The following code is a sample script of GlueLang.
 
@@ -17,6 +19,8 @@ func cattac file:
 	b.cat $file
 	ub.tail -r
 ```
+
+## Pipeline
 
 In the "cattac func" block, a pipeline of two commands
 "cat $file | tail -r" is implemented.
