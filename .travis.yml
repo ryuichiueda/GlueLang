@@ -13,4 +13,4 @@ before_script:
  - make
 
 script: 
- - sh -e ./TEST/test.all
+ - sh -e ./TEST/test_all.sh
