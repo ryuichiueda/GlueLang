@@ -1,7 +1,7 @@
 #include "Command.h"
 #include "Arg.h"
 #include <unistd.h>
-//#include <sys/wait.h>
+#include <sys/wait.h>
 #include "Feeder.h"
 using namespace std;
 

@@ -46,19 +46,19 @@ void Feeder::close(void)
 
 bool Feeder::getToken(string *ans)
 {
-	if(m_cur_line >= m_lines.size())
+	if(m_cur_line >= (int)m_lines.size())
 		return false;
 
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
-	for(;i < p->length();i++){
+	for(;i < (int)p->length();i++){
 		if(p->at(i) == ' '){
 			break;
 		}
 	}
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i+1;
-	if(m_cur_char >= p->length()){
+	if(m_cur_char >= (int)p->length()){
 		m_cur_char = 0;
 		m_cur_line++;
 	}
