@@ -10,10 +10,11 @@ class Feeder;
 class Arg : public Node
 {
 public:
-	Arg(Feeder *f);
+	Arg(string *str,Feeder *f);
 	virtual ~Arg();
 	virtual void print(int indent_level = 0);
 	virtual void parser(vector<char> *script,int pos);
+	const char *getString(void){return m_text.c_str();}
 protected:
 	string m_text;
 };

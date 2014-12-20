@@ -1,14 +1,15 @@
 #include "Arg.h"
 using namespace std;
 
-Arg::Arg(Feeder *f) : Node(f)
+Arg::Arg(string *str,Feeder *f) : Node(f)
 {
 //	parser(script,pos);
+	m_text = *str;
 }
 
 Arg::~Arg()
 {
-	cerr << "arg deleted" << endl;
+//	cerr << "arg deleted" << endl;
 }
 
 void Arg::print(int indent_level)

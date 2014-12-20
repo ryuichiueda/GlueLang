@@ -9,14 +9,21 @@ using namespace std;
 class Feeder
 {
 private:
-	ifstream * m_ifs;
+	ifstream* m_ifs;
 	vector<string> m_lines;
+	bool readLine(void);	
+
+	int m_cur_line;
+	int m_cur_char;
 public:
 	Feeder(ifstream *ifs);
 	~Feeder();
 
-	bool readLine(void);	
+	void readAll(void);
 
+	void close(void);
 	void print(void);
+
+	bool getToken(string *p);
 };
 #endif
