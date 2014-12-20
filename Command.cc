@@ -50,8 +50,8 @@ int Command::exec(void)
 		execCommand();
 
 	/* parent */
-	int status;
-	wait(&status);
+	int child_status;
+	wait(&child_status);
 
 	return pid;
 }
