@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ryuichiueda/GlueLang.svg?branch=master)](https://travis-ci.org/ryuichiueda/GlueLang)
+
 # GlueLang
 
 A programming language that has a strong nature to be a glue of commands.
