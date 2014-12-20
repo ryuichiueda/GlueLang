@@ -1,0 +1,10 @@
+language: cpp
+ - gcc
+ - clang
+
+before_script:
+ - make clean
+ - make
+
+script: 
+ - sh -e ./TEST/test.all

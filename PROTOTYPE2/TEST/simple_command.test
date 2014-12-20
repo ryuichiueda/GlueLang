@@ -1,0 +1,35 @@
+#!/bin/bash 
+
+tmp=/tmp/$$
+
+ERROR_CHECK(){
+	[ "$(tr -d '0 ' <<< ${PIPESTATUS[@]} )" = "" ] && return
+	rm -f $tmp-*
+	echo "$1"
+	exit 1
+}
+
+### TEST1: cat ###
+cat << FIN > $tmp-in
+a
+b
+c
+FIN
+
+cat << FIN > $tmp-out
+a
+b
+c
+FIN
+
+cat << FIN > ./simple_command.glue
+/bin/cat $tmp-in
+FIN
+
+../main ./simple_command.glue > $tmp-out
+ERROR_CHECK "TEST1 error 1"
+
+diff $tmp-in $tmp-out
+ERROR_CHECK "TEST1 error 2"
+
+rm -f $tmp-*
