@@ -2,6 +2,8 @@
 #include "Arg.h"
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/types.h>
+#include <signal.h>
 #include "Feeder.h"
 using namespace std;
 
@@ -42,18 +44,21 @@ void Command::parse(void)
 
 int Command::exec(void)
 {
+	cout << flush;
+
 	int pid = fork();
 	if(pid < 0)/* error */
 		exit(1);
 
-	if (pid == 0)/* child */
+	if (pid == 0){/* child */
 		execCommand();
+		_exit(127);
+	}
 
 	/* parent */
-	// !!! NG !!! this wait can't wait the child
-	int child_status;
+	int status;
 	int options = 0;
-	waitpid(pid,&child_status,options);
+	waitpid(pid,&status,options);
 
 	return pid;
 }
@@ -65,6 +70,8 @@ void Command::execCommand(void)
 	auto **argv = new const char* [m_args.size()];
 	for (int i=0;i < m_args.size();i++)
 		argv[i] = m_args[i].getString();
+
+	argv[m_args.size()] = NULL;
 
 	execve(argv[0],(char **)argv,NULL);
 }
