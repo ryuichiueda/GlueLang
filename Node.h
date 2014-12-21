@@ -26,5 +26,8 @@ public:
 
 	bool isSet(void){return m_set;}
 */
+
+	virtual bool isNum(char c);
+	virtual bool isAlphabet(char c);
 };
 #endif

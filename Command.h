@@ -26,5 +26,7 @@ protected:
 	vector<Arg> m_args;
 
 	void execCommand(void);
+
+	bool isCommand(string *str);
 };
 #endif
