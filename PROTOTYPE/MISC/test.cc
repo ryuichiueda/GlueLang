@@ -1,8 +1,10 @@
 #include <iostream>
 #include <unistd.h>
 #include <stdlib.h>
+#include <memory.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <sys/wait.h>
 using namespace std;
 
 bool s_chld = false;

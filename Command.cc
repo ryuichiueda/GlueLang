@@ -50,6 +50,7 @@ int Command::exec(void)
 		execCommand();
 
 	/* parent */
+	// !!! NG !!! this wait can't wait the child
 	int child_status;
 	int options = 0;
 	waitpid(pid,&child_status,options);
