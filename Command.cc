@@ -51,7 +51,8 @@ int Command::exec(void)
 
 	/* parent */
 	int child_status;
-	wait(&child_status);
+	int options = 0;
+	waitpid(pid,&child_status,options);
 
 	return pid;
 }
