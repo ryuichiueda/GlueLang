@@ -24,6 +24,7 @@ public:
 	void close(void);
 	void print(void);
 
-	bool getToken(string *p);
+	bool getToken(string *ans);
+	bool ungetToken(string *str);
 };
 #endif

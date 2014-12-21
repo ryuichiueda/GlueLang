@@ -33,13 +33,17 @@ void Command::appendArg(string a){
 	m_args.push_back(arg);
 }
 
-void Command::parse(void)
+bool Command::parse(void)
 {
 	string com,arg;
-	m_feeder->getToken(&com);
+	if(! m_feeder->getToken(&com))
+		return false;
+
 	setName(com);
 	m_feeder->getToken(&arg);
 	appendArg(arg);
+
+	return true;
 }
 
 int Command::exec(void)

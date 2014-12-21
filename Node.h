@@ -2,6 +2,7 @@
 #define __NODE_H_
 
 #include <vector>
+#include <string>
 using namespace std;
 
 class Feeder;
@@ -13,6 +14,7 @@ protected:
 //	vector<Node *> m_node;
 //	bool m_set;
 
+	vector<string> m_error_messages;
 public:
 	Node(Feeder *f);
 	virtual ~Node();

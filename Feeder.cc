@@ -52,16 +52,31 @@ bool Feeder::getToken(string *ans)
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 	for(;i < (int)p->length();i++){
-		if(p->at(i) == ' '){
+		if(p->at(i) == ' ')
 			break;
-		}
 	}
+
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i+1;
 	if(m_cur_char >= (int)p->length()){
 		m_cur_char = 0;
 		m_cur_line++;
 	}
+	return true;
+}
+
+bool Feeder::ungetToken(string *str)// false: should be stop
+{
+	if(m_cur_char == 0)
+		m_cur_line--;
+
+	if(m_cur_line < 0)
+		return false;
+		
+	m_cur_char -= str->length() + 1;
+	if(m_cur_char < 0)
+		return false;
+
 	return true;
 }
 

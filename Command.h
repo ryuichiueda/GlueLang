@@ -15,7 +15,7 @@ public:
 	Command(Feeder *f);
 	virtual ~Command();
 	virtual void print(int indent_level = 0);
-	void parse(void);
+	bool parse(void);
 
 	void setName(string s);
 	void appendArg(string a);
