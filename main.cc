@@ -9,9 +9,11 @@ int main(int argc, char const* argv[])
 	ifstream ifs(argv[1]);
 	Feeder feeder(&ifs);
 
-	// attempt to parse as a command
+	// We want to implement Parsec like LL parser by ourselves
+	
 	Command c(&feeder);
-	if( ! c.parse() ){
+
+	if( ! c.parse() ){// attempt to parse as a command
 		exit(1);
 	}
 		
