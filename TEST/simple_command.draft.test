@@ -1,0 +1,17 @@
+#!/bin/bash 
+
+tmp=/tmp/$$
+scr=$(basename $0)
+
+ERROR_CHECK(){
+	[ "$(tr -d '0 ' <<< ${PIPESTATUS[@]} )" = "" ] && return
+	rm -f $tmp-*
+	echo "$scr" "$1"
+	exit 1
+}
+
+[ "$(../main ./two_coms.glue | wc -l | tr -d ' ')" = 2 ] 
+ERROR_CHECK "error"
+
+
+rm -f $tmp-*

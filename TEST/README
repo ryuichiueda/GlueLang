@@ -1,0 +1,9 @@
+test_all.sh is the scripts that contains
+all of the tests that should be fulfilled
+when a modification is pushed.
+
+Scripts whose names are *.draft.sh indicate
+the specifications that are not implemented.
+When one of them is implemented, the draft
+test should be erased and the test in the draft
+should be moved to the tests in test_all.sh.
