@@ -9,13 +9,13 @@ int main(int argc, char const* argv[])
 	ifstream ifs(argv[1]);
 	Feeder feeder(&ifs);
 
+	// attempt to parse as a command
 	Command c(&feeder);
-	c.parse();
-/*
-	c.setName(com);
-	c.appendArg(arg);
-*/
+	if( ! c.parse() ){
+		exit(1);
+	}
+		
 	c.exec();
 
-	return 0;
+	exit(0);
 }

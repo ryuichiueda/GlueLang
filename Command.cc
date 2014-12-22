@@ -95,11 +95,11 @@ bool Command::isCommand(string *str)
 	}
 
 	for(int i=1; i < str->length() ; i++){
-		char c = str->at(1);
+		char c = str->at(i);
 		if(!isAlphabet(c) && !isNum(c) &&
-			c != '/' && c != '_' && c != '-')
-		return false;
+			c != '/' && c != '_' && c != '-'){
+			return false;
+		}
 	}
-
 	return true;
 }
