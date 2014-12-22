@@ -11,10 +11,8 @@ int main(int argc, char const* argv[])
 	Feeder feeder(&ifs);
 
 	// We want to implement Parsec like LL parser by ourselves
-	
 	Script s(&feeder);
-	
-	if( ! s.parse() ){// attempt to parse as a command
+	if( ! s.parse() ){
 		exit(1);
 	}
 		

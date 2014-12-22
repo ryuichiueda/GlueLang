@@ -1,1 +1,3 @@
 /bin/cat /etc/passwd
+/bin/date
+/bin/cat /etc/passwd
