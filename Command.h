@@ -21,6 +21,7 @@ public:
 	void appendArg(string a);
 
 	int exec(void);
+
 protected:
 	string m_name;
 	vector<Arg> m_args;

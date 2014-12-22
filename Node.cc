@@ -56,3 +56,10 @@ bool Node::isAlphabet(char c)
 
 	return false;
 }
+
+void Node::printErrorMessages(void)
+{
+	for(auto e : m_error_messages){
+		cerr << e << endl;
+	}
+}

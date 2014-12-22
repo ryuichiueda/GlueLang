@@ -10,7 +10,9 @@ ERROR_CHECK(){
 	exit 1
 }
 
-### TEST1: cat ###
+#########################################
+# TEST1: cat
+#########################################
 cat << FIN > $tmp-in
 a
 b
@@ -28,9 +30,25 @@ cat << FIN > ./simple_command.glue
 FIN
 
 ../main ./simple_command.glue > $tmp-out
-ERROR_CHECK "TEST1 error 1"
+ERROR_CHECK "TEST1.2 error"
 
 diff $tmp-in $tmp-out
-ERROR_CHECK "TEST1 error 2"
+ERROR_CHECK "TEST1.2 error"
+
+
+#########################################
+# TEST2: invalid character in the command name
+#########################################
+../main ./invalid_command_name.glue > /dev/null
+[ "$?" = 1 ]
+ERROR_CHECK "TEST2 error"
+
+#########################################
+# TEST3: non-existent command
+#########################################
+../main ./non_existent_command.glue > /dev/null
+[ "$?" != 0 ]
+ERROR_CHECK "TEST3 error"
+
 
 rm -f $tmp-*

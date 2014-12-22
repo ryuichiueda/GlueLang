@@ -15,7 +15,7 @@ int main(int argc, char const* argv[])
 		exit(1);
 	}
 		
-	c.exec();
+	int status = c.exec();
 
-	exit(0);
+	exit(status);
 }

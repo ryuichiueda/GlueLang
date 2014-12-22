@@ -67,7 +67,11 @@ int Command::exec(void)
 	int options = 0;
 	waitpid(pid,&status,options);
 
-	return pid;
+	if(WIFEXITED(status)){
+		return WEXITSTATUS(status);
+	}
+
+	return -1;
 }
 
 void Command::execCommand(void)
@@ -86,8 +90,9 @@ void Command::execCommand(void)
 
 bool Command::isCommand(string *str)
 {
-	if(str->length() <= 0)
+	if(str->length() <= 0){
 		return false;
+	}
 
 	char c = str->at(0);
 	if(!isAlphabet(c) && !isNum(c) && c != '/' && c != '_'){
