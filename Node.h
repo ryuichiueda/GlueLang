@@ -21,5 +21,7 @@ public:
 
 	virtual bool isNum(char c);
 	virtual bool isAlphabet(char c);
+
+	virtual int exec(void) = 0;
 };
 #endif

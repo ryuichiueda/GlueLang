@@ -84,3 +84,13 @@ void Feeder::readAll(void)
 {
 	while(readLine()){};
 }
+
+bool Feeder::atNewLine(void)
+{
+	return m_cur_char == 0;
+}
+
+bool Feeder::atEnd(void)
+{
+	return (m_cur_line == m_lines.size()) && m_cur_char == 0;
+}

@@ -19,7 +19,7 @@ Command::~Command()
 
 void Command::print(int indent_level)
 {
-
+	cout << m_name << endl;
 }
 
 void Command::setName(string s){
@@ -43,8 +43,11 @@ bool Command::parse(void)
 		return false;
 
 	setName(com);
-	m_feeder->getToken(&arg);
-	appendArg(arg);
+
+	while(!m_feeder->atNewLine()){
+		m_feeder->getToken(&arg);
+		appendArg(arg);
+	}
 
 	return true;
 }

@@ -6,6 +6,7 @@
 #include <vector>
 using namespace std;
 
+class Node;
 class Feeder;
 class Arg;
 
@@ -20,8 +21,7 @@ public:
 	void setName(string s);
 	void appendArg(string a);
 
-	int exec(void);
-
+	virtual int exec(void);
 protected:
 	string m_name;
 	vector<Arg> m_args;

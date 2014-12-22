@@ -16,6 +16,7 @@ public:
 	virtual void parser(vector<char> *script,int pos);
 	const char *getString(void){return m_text.c_str();}
 
+	virtual int exec(void);
 protected:
 	string m_text;
 };

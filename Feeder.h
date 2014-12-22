@@ -26,5 +26,9 @@ public:
 
 	bool getToken(string *ans);
 	bool ungetToken(string *str);
+
+	bool atNewLine(void);
+
+	bool atEnd(void);
 };
 #endif

@@ -10,34 +10,7 @@ Node::Node(Feeder *f)
 
 Node::~Node()
 {
-/*
-	for(auto p : m_node){
-		cerr << "!" << endl;
-		delete p;
-	}
-*/
 }
-
-/*
-void Node::print(int indent_level) 
-{
-	for(auto &p : m_node){
-		p->print(indent_level++);
-	}
-}
-
-Node *Node::getNode(int at)
-{
-	return m_node.at(at);
-}
-
-void Node::pushNode(Node *n)
-{
-	m_node.push_back(n);
-}
-
-
-*/
 
 bool Node::isNum(char c)
 {

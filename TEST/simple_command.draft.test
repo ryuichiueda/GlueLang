@@ -10,8 +10,8 @@ ERROR_CHECK(){
 	exit 1
 }
 
-[ "$(../main ./two_coms.glue | wc -l | tr -d ' ')" = 2 ] 
-ERROR_CHECK "error"
+#[ "$(../main ./two_coms.glue | wc -l | tr -d ' ')" = 2 ] 
+#ERROR_CHECK "error"
 
 
 rm -f $tmp-*

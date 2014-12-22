@@ -30,7 +30,7 @@ cat << FIN > ./simple_command.glue
 FIN
 
 ../main ./simple_command.glue > $tmp-out
-ERROR_CHECK "TEST1.2 error"
+ERROR_CHECK "TEST1.1 error"
 
 diff $tmp-in $tmp-out
 ERROR_CHECK "TEST1.2 error"
@@ -50,5 +50,10 @@ ERROR_CHECK "TEST2 error"
 [ "$?" != 0 ]
 ERROR_CHECK "TEST3 error"
 
+#########################################
+# TEST4: execution of two commands 
+#########################################
+[ "$(../main ./two_coms.glue | wc -l | tr -d ' ')" = 2 ] 
+ERROR_CHECK "TEST4 error"
 
 rm -f $tmp-*
