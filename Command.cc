@@ -51,11 +51,6 @@ bool Command::parse(void)
 	if(! m_feeder->getCommand(&com))
 		return false;
 
-/*
-	if(! isCommand(&com) )
-		return false;
-*/
-
 	setName(com);
 
 	while(!m_feeder->atNewLine()){
@@ -134,25 +129,3 @@ void Command::execCommand(void)
 	execve(argv[0],(char **)argv,NULL);
 }
 
-/*
-bool Command::isCommand(string *str)
-{
-	if(str->length() <= 0){
-		return false;
-	}
-
-	char c = str->at(0);
-	if(!isAlphabet(c) && !isNum(c) && c != '/' && c != '_'){
-		return false;
-	}
-
-	for(int i=1; i < str->length() ; i++){
-		char c = str->at(i);
-		if(!isAlphabet(c) && !isNum(c) &&
-			c != '/' && c != '_' && c != '-'){
-			return false;
-		}
-	}
-	return true;
-}
-*/
