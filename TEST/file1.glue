@@ -1,0 +1,2 @@
+file f = /bin/cat '/tmp/9516-in'
+/bin/grep 'b' f
