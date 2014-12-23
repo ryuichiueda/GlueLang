@@ -161,7 +161,6 @@ bool Feeder::literalString(string *ans)
 		m_cur_char = 0;
 		m_cur_line++;
 	}
-	cerr << *ans << " " << m_cur_char << endl;
 	return true;
 }
 
