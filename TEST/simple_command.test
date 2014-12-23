@@ -23,18 +23,19 @@ cat << FIN > $tmp-out
 a
 b
 c
+That's OK
 FIN
 
 cat << FIN > ./simple_command.glue
-/bin/cat $tmp-in
+/bin/cat '$tmp-in'
+/bin/echo 'That\'s OK'
 FIN
 
-../main ./simple_command.glue > $tmp-out
+../main ./simple_command.glue > $tmp-ans
 ERROR_CHECK "TEST1.1 error"
 
-diff $tmp-in $tmp-out
+diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
-
 
 #########################################
 # TEST2: invalid character in the command name

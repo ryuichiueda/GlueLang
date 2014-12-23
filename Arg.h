@@ -13,11 +13,15 @@ public:
 	Arg(string *str,Feeder *f);
 	virtual ~Arg();
 	virtual void print(int indent_level = 0);
-	virtual void parser(vector<char> *script,int pos);
-	const char *getString(void){return m_text.c_str();}
+	const char *getOriginalString(void){return m_text.c_str();}
+	const char *getEvaledString(void){return m_evaled_text.c_str();}
 
 	virtual int exec(void);
+
+	bool eval(void);
 protected:
 	string m_text;
+	string m_evaled_text;
+
 };
 #endif

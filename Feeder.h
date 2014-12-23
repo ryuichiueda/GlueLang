@@ -19,6 +19,8 @@ public:
 	Feeder(ifstream *ifs);
 	~Feeder();
 
+	bool getArg(string *ans);
+
 	void readAll(void);
 
 	void close(void);

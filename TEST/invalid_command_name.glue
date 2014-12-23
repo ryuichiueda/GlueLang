@@ -1,1 +1,1 @@
-/bin/ca?t /etc/passwd
+/bin/ca?t '/etc/passwd'

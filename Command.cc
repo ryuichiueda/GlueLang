@@ -45,7 +45,7 @@ bool Command::parse(void)
 	setName(com);
 
 	while(!m_feeder->atNewLine()){
-		m_feeder->getToken(&arg);
+		m_feeder->getArg(&arg);
 		appendArg(arg);
 	}
 
@@ -83,8 +83,10 @@ void Command::execCommand(void)
 	m_feeder->close();
 
 	auto **argv = new const char* [m_args.size()];
-	for (int i=0;i < m_args.size();i++)
-		argv[i] = m_args[i].getString();
+	for (int i=0;i < m_args.size();i++){
+		m_args[i].eval();
+		argv[i] = m_args[i].getEvaledString();
+	}
 
 	argv[m_args.size()] = NULL;
 

@@ -18,8 +18,16 @@ void Arg::print(int indent_level)
 	cout << m_text << endl;
 }
 
-void Arg::parser(vector<char> *script, int pos)
+bool Arg::eval(void)
 {
+	m_evaled_text = m_text;
+	//evaled escaped characters 
+	auto pos = m_evaled_text.find("\\\'"); // \'
+	while(pos != string::npos){
+		m_evaled_text.replace(pos, 2, "\'");
+		pos = m_evaled_text.find("\\\'", pos + 1);
+	}
+	return true;
 }
 
 int Arg::exec(void)

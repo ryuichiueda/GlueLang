@@ -1,1 +1,2 @@
-/bin/cat /tmp/5043-in
+/bin/cat '/tmp/6256-in'
+/bin/echo 'That\'s OK'
