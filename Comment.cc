@@ -13,5 +13,5 @@ Comment::~Comment()
 
 bool Comment::parse(void)
 {
-	return m_feeder->getComment(&m_text);
+	return m_feeder->comment(&m_text);
 }

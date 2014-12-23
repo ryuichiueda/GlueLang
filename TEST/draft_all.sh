@@ -2,4 +2,4 @@
 
 cd `dirname $0`
 
-bash ./file.test
+#bash ./file.test

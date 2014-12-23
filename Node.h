@@ -18,5 +18,10 @@ public:
 	virtual ~Node();
 	virtual void printErrorMessages(void);
 	virtual int exec(void) = 0;
+
+/*
+	void setFileList(string *filepath);
+	void removeFiles(void);
+*/
 };
 #endif

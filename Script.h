@@ -18,5 +18,6 @@ public:
 	virtual int exec(void);
 protected:
 	vector<Node *> m_nodes;
+
 };
 #endif

@@ -44,10 +44,11 @@ void Feeder::close(void)
 	m_ifs = NULL;
 }
 
-bool Feeder::getCommand(string *ans)
+bool Feeder::command(string *ans)
 {
-	if(m_cur_line >= (int)m_lines.size())
+	if(m_cur_line >= (int)m_lines.size()){
 		return false;
+	}
 
 	bool comment = false;
 
@@ -79,27 +80,43 @@ bool Feeder::getCommand(string *ans)
 	return true;
 }
 
-/*
-bool Feeder::ungetToken(string *str)// false: should be stop
+bool Feeder::variable(string *ans)
 {
-	if(m_cur_char == 0)
-		m_cur_line--;
-
-	if(m_cur_line < 0)
-		return false;
-		
-	m_cur_char -= str->length() + 1;
-	if(m_cur_char < 0)
+	if(m_cur_line >= (int)m_lines.size())
 		return false;
 
+	bool comment = false;
+
+	string *p = &m_lines[m_cur_line];
+	int i = m_cur_char;
+	for(;i < (int)p->length();i++){
+		char c = p->at(i);
+		if(c == ' ')
+			break;
+		if(c == '#'){
+			comment = true;
+			break;
+		}
+
+		if(! isAlphabet(c) && ! isNum(c) && c != '_' && c != '-')
+			return false;
+	}
+
+	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+	m_cur_char = i+1;
+	if(comment)
+		m_cur_char--;
+
+	if(m_cur_char >= (int)p->length()){
+		m_cur_char = 0;
+		m_cur_line++;
+	}
 	return true;
 }
-*/
-
 // arg should be a string that is quoted by '.
 // This function gives escaped characters as
 // they are escaped.
-bool Feeder::getArg(string *ans)
+bool Feeder::literalString(string *ans)
 {
 	if(m_cur_line >= (int)m_lines.size())
 		return false;
@@ -158,7 +175,7 @@ bool Feeder::atEnd(void)
 	return (m_cur_line == m_lines.size()) && m_cur_char == 0;
 }
 
-bool Feeder::getComment(string *ans)
+bool Feeder::comment(string *ans)
 {
 	if(m_cur_line >= (int)m_lines.size())
 		return false;
@@ -193,7 +210,7 @@ bool Feeder::getComment(string *ans)
 }
 
 // file f = command ...
-bool Feeder::getTmpFile(string *ans)
+bool Feeder::tmpFile(string *ans)
 {
 	if(m_cur_line >= (int)m_lines.size())
 		return false;
@@ -245,4 +262,39 @@ bool Feeder::isNum(char c)
 		return true;
 
 	return false;
+}
+
+bool Feeder::setVariable(string *key, string *value)
+{
+	if(m_variables.find(*key) != m_variables.end())
+		return false;
+
+	m_variables[*key] = *value;
+	return true;
+}
+
+bool Feeder::getVariable(string *key, string *value)
+{
+	if(m_variables.find(*key) == m_variables.end())
+		return false;
+
+	*value = m_variables[*key];
+	return true;
+}
+
+void Feeder::setFileList(string *filepath)
+{
+	m_file_list.push_back(*filepath);
+/*
+	for(auto f : m_file_list){
+		cerr << f << endl;
+	}
+*/
+}
+
+void Feeder::removeFiles(void)
+{
+	for(auto f : m_file_list){
+		remove(f.c_str());
+	}
 }

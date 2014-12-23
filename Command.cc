@@ -41,21 +41,34 @@ bool Command::parse(void)
 {
 	//file
 	string filename;
-	if(m_feeder->getTmpFile(&filename)){
+	if(m_feeder->tmpFile(&filename)){
 		string pid = to_string(getpid());
 		m_file_to_write = "/tmp/" + pid + "-" + filename;
+		m_feeder->setVariable(&filename,&m_file_to_write);
+		m_feeder->setFileList(&m_file_to_write);
 	}
 	
 	//command
 	string com,arg;
-	if(! m_feeder->getCommand(&com))
+	if(! m_feeder->command(&com))
 		return false;
 
 	setName(com);
 
+	string value;
 	while(!m_feeder->atNewLine()){
-		m_feeder->getArg(&arg);
-		appendArg(arg);
+		if(m_feeder->literalString(&arg)){
+			appendArg(arg);
+		}else if(m_feeder->variable(&arg)){
+			if(m_feeder->getVariable(&arg,&value)){
+				appendArg(value);
+			}else{
+				m_error_messages.push_back(arg + "is not declared.");
+				return false;
+			}
+		}else{
+			break;
+		}
 	}
 
 	return true;

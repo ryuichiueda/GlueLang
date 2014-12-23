@@ -5,6 +5,7 @@
 #include <fstream>
 using namespace std;
 
+
 int main(int argc, char const* argv[])
 {
 	ifstream ifs(argv[1]);
@@ -13,10 +14,13 @@ int main(int argc, char const* argv[])
 	// We want to implement Parsec like LL parser by ourselves
 	Script s(&feeder);
 	if( ! s.parse() ){
+		s.printErrorMessages();
 		exit(1);
 	}
 		
 	int status = s.exec();
+	feeder.removeFiles();
+
 	if(status != 0)
 		exit(status);
 

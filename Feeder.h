@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 using namespace std;
 
 class Feeder
@@ -15,20 +16,24 @@ private:
 
 	int m_cur_line;
 	int m_cur_char;
+
+	map<string,string> m_variables;
+	vector<string> m_file_list;
 public:
 	Feeder(ifstream *ifs);
 	~Feeder();
 
-	bool getArg(string *ans);
-	bool getComment(string *ans);
-	bool getTmpFile(string *ans);
+	bool literalString(string *ans);
+	bool variable(string *ans);
+	bool comment(string *ans);
+	bool tmpFile(string *ans);
+	bool command(string *ans);
 
 	void readAll(void);
 
 	void close(void);
 	void print(void);
 
-	bool getCommand(string *ans);
 	//bool ungetToken(string *str);
 
 	bool atNewLine(void);
@@ -37,5 +42,11 @@ public:
 
 	bool isAlphabet(char c);
 	bool isNum(char c);
+
+	bool setVariable(string *key, string *value);
+	bool getVariable(string *key, string *value);
+
+	void setFileList(string *filepath);
+	void removeFiles(void);
 };
 #endif

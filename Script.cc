@@ -29,6 +29,10 @@ bool Script::parse(void)
 		Command *cmd = new Command(m_feeder);
 		if( ! cmd->parse() ){
 			delete cmd;
+
+			if(m_error_messages.size() != 0)
+				return false;
+
 			break;
 		}
 		m_nodes.push_back(cmd);
@@ -44,3 +48,5 @@ int Script::exec(void)
 	}
 	return exit_status;
 }
+
+

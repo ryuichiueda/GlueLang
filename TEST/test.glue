@@ -1,1 +1,2 @@
-/bin/echo 'That\'s OK'
+file f = /bin/echo 'That\'s OK'
+/bin/cat f
