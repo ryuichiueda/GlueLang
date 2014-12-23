@@ -28,7 +28,7 @@ protected:
 
 	void execCommand(void);
 
-	bool isCommand(string *str);
+	//bool isCommand(string *str);
 
 	string m_file_to_write;
 

@@ -44,7 +44,7 @@ void Feeder::close(void)
 	m_ifs = NULL;
 }
 
-bool Feeder::getToken(string *ans)
+bool Feeder::getCommand(string *ans)
 {
 	if(m_cur_line >= (int)m_lines.size())
 		return false;
@@ -54,12 +54,17 @@ bool Feeder::getToken(string *ans)
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 	for(;i < (int)p->length();i++){
-		if(p->at(i) == ' ')
+		char c = p->at(i);
+		if(c == ' ')
 			break;
-		if(p->at(i) == '#'){
+		if(c == '#'){
 			comment = true;
 			break;
 		}
+
+		if(! isAlphabet(c) && ! isNum(c) 
+			&& c != '_' && c != '-' && c != '/')
+			return false;
 	}
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
@@ -74,6 +79,7 @@ bool Feeder::getToken(string *ans)
 	return true;
 }
 
+/*
 bool Feeder::ungetToken(string *str)// false: should be stop
 {
 	if(m_cur_char == 0)
@@ -88,6 +94,7 @@ bool Feeder::ungetToken(string *str)// false: should be stop
 
 	return true;
 }
+*/
 
 // arg should be a string that is quoted by '.
 // This function gives escaped characters as
@@ -183,4 +190,59 @@ bool Feeder::getComment(string *ans)
 	m_cur_char = 0;
 	m_cur_line++;
 	return true;
+}
+
+// file f = command ...
+bool Feeder::getTmpFile(string *ans)
+{
+	if(m_cur_line >= (int)m_lines.size())
+		return false;
+
+	string *p = &m_lines[m_cur_line];
+
+	if(p->substr(0,5) != "file "){
+		return false;
+	}
+
+	int i = m_cur_char + 5;
+	for( ; i < p->length() ;i++){
+		if( ! isAlphabet(p->at(i)) ){
+			break;
+		}
+	}
+	int last = i;
+	while(p->at(i) == ' ' || p->at(i) == '\t'){
+		i++;
+	}
+	if(p->at(i++) != '=')
+		return false;
+	while(p->at(i) == ' ' || p->at(i) == '\t'){
+		i++;
+	}
+
+	*ans = string(p->c_str()+m_cur_char+5,last-m_cur_char-5);
+	m_cur_char = i;
+	if(m_cur_char >= (int)p->length()){
+		m_cur_char = 0;
+		m_cur_line++;
+	}
+	return true;
+}
+
+bool Feeder::isAlphabet(char c)
+{
+	if(c >= 'a' && c <= 'z')
+		return true;
+	if(c >= 'A' && c <= 'Z')
+		return true;
+
+	return false;
+}
+
+bool Feeder::isNum(char c)
+{
+	if(c >= '0' && c <= '9')
+		return true;
+
+	return false;
 }

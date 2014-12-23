@@ -12,6 +12,7 @@ Node::~Node()
 {
 }
 
+/*
 bool Node::isNum(char c)
 {
 	if(c >= '0' && c <= '9')
@@ -29,6 +30,7 @@ bool Node::isAlphabet(char c)
 
 	return false;
 }
+*/
 
 void Node::printErrorMessages(void)
 {

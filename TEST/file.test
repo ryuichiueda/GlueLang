@@ -25,7 +25,7 @@ FIN
 
 cat << FIN > ./file1.glue
 file f = /bin/cat '$tmp-in'
-/bin/grep 'b' f
+#/bin/grep 'b' f
 FIN
 
 ../main ./file1.glue > $tmp-ans

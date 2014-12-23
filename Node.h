@@ -19,8 +19,8 @@ public:
 
 	virtual void printErrorMessages(void);
 
-	virtual bool isNum(char c);
-	virtual bool isAlphabet(char c);
+//	virtual bool isNum(char c);
+//	virtual bool isAlphabet(char c);
 
 	virtual int exec(void) = 0;
 };

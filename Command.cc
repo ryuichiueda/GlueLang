@@ -35,14 +35,26 @@ void Command::appendArg(string a){
 	m_args.push_back(arg);
 }
 
+// file f = command ...
+// command ...
 bool Command::parse(void)
 {
+	//file
+	string filename;
+	if(m_feeder->getTmpFile(&filename)){
+		string pid = to_string(getpid());
+		m_file_to_write = "/tmp/" + pid + "-" + filename;
+	}
+	
+	//command
 	string com,arg;
-	if(! m_feeder->getToken(&com))
+	if(! m_feeder->getCommand(&com))
 		return false;
 
+/*
 	if(! isCommand(&com) )
 		return false;
+*/
 
 	setName(com);
 
@@ -122,6 +134,7 @@ void Command::execCommand(void)
 	execve(argv[0],(char **)argv,NULL);
 }
 
+/*
 bool Command::isCommand(string *str)
 {
 	if(str->length() <= 0){
@@ -142,3 +155,4 @@ bool Command::isCommand(string *str)
 	}
 	return true;
 }
+*/

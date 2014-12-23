@@ -20,19 +20,22 @@ public:
 	~Feeder();
 
 	bool getArg(string *ans);
-
 	bool getComment(string *ans);
+	bool getTmpFile(string *ans);
 
 	void readAll(void);
 
 	void close(void);
 	void print(void);
 
-	bool getToken(string *ans);
-	bool ungetToken(string *str);
+	bool getCommand(string *ans);
+	//bool ungetToken(string *str);
 
 	bool atNewLine(void);
 
 	bool atEnd(void);
+
+	bool isAlphabet(char c);
+	bool isNum(char c);
 };
 #endif

@@ -17,6 +17,7 @@ Script::~Script()
 bool Script::parse(void)
 {
 	while(1){
+		// comments -> command -> comments -> command ...
 		while(1){
 			Comment *cmt = new Comment(m_feeder);
 			if( ! cmt->parse() ){
