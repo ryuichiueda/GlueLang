@@ -49,15 +49,24 @@ bool Feeder::getToken(string *ans)
 	if(m_cur_line >= (int)m_lines.size())
 		return false;
 
+	bool comment = false;
+
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 	for(;i < (int)p->length();i++){
 		if(p->at(i) == ' ')
 			break;
+		if(p->at(i) == '#'){
+			comment = true;
+			break;
+		}
 	}
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i+1;
+	if(comment)
+		m_cur_char--;
+
 	if(m_cur_char >= (int)p->length()){
 		m_cur_char = 0;
 		m_cur_line++;
@@ -140,4 +149,38 @@ bool Feeder::atNewLine(void)
 bool Feeder::atEnd(void)
 {
 	return (m_cur_line == m_lines.size()) && m_cur_char == 0;
+}
+
+bool Feeder::getComment(string *ans)
+{
+	if(m_cur_line >= (int)m_lines.size())
+		return false;
+
+	string *p = &m_lines[m_cur_line];
+
+	// a blank line is considered as a comment
+	if(p->length() == 0){
+		*ans = "";
+		m_cur_char = 0;
+		m_cur_line++;
+
+		while(m_cur_line < (int)m_lines.size()){
+			if(m_lines[m_cur_line].length() != 0)
+				break;
+
+			*ans += "\n";
+			m_cur_line++;
+		}
+		return true;
+	}
+
+	// #... is a comment
+	if(p->at(m_cur_char) != '#')
+		return false;
+
+	*ans = string(p->c_str()+m_cur_char,p->length()-m_cur_char);
+
+	m_cur_char = 0;
+	m_cur_line++;
+	return true;
 }

@@ -21,6 +21,8 @@ public:
 
 	bool getArg(string *ans);
 
+	bool getComment(string *ans);
+
 	void readAll(void);
 
 	void close(void);

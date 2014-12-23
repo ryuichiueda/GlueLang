@@ -1,0 +1,24 @@
+#!/bin/bash 
+
+tmp=/tmp/$$
+scr=$(basename $0)
+
+ERROR_CHECK(){
+	[ "$(tr -d '0 ' <<< ${PIPESTATUS[@]} )" = "" ] && return
+	rm -f $tmp-*
+	echo "$scr" "$1"
+	exit 1
+}
+
+#########################################
+# TEST1:
+#########################################
+
+cat << FIN > $tmp-out
+That's OK
+FIN
+
+../main ./comment1.glue > $tmp-ans
+ERROR_CHECK "TEST1 error"
+
+rm -f $tmp-*

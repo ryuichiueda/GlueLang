@@ -1,5 +1,6 @@
 #include "Script.h"
 #include "Command.h"
+#include "Comment.h"
 using namespace std;
 
 Script::Script(Feeder *f) : Node(f)
@@ -16,12 +17,20 @@ Script::~Script()
 bool Script::parse(void)
 {
 	while(1){
-		Command *c = new Command(m_feeder);
-		if( ! c->parse() ){
-			delete c;
+		while(1){
+			Comment *cmt = new Comment(m_feeder);
+			if( ! cmt->parse() ){
+				delete cmt;
+				break;
+			}
+		}
+
+		Command *cmd = new Command(m_feeder);
+		if( ! cmd->parse() ){
+			delete cmd;
 			break;
 		}
-		m_nodes.push_back(c);
+		m_nodes.push_back(cmd);
 	}
 	return true;
 }
