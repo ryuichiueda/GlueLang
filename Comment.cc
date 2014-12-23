@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-Comment::Comment(Feeder *f) : Node(f)
+Comment::Comment(Feeder *f) : Element(f)
 {
 }
 

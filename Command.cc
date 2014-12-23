@@ -9,7 +9,7 @@
 #include "Feeder.h"
 using namespace std;
 
-Command::Command(Feeder *f) : Node(f)
+Command::Command(Feeder *f) : Element(f)
 {
 	m_file_to_write = "";
 }

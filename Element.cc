@@ -1,18 +1,18 @@
-#include "Node.h"
+#include "Element.h"
 #include <stdio.h>
 #include <iostream>
 using namespace std;
 
-Node::Node(Feeder *f)
+Element::Element(Feeder *f)
 {
 	m_feeder = f;	
 }
 
-Node::~Node()
+Element::~Element()
 {
 }
 
-void Node::printErrorMessages(void)
+void Element::printErrorMessages(void)
 {
 	for(auto e : m_error_messages){
 		cerr << e << endl;

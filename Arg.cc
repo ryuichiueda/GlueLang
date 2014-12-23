@@ -1,7 +1,7 @@
 #include "Arg.h"
 using namespace std;
 
-Arg::Arg(string *str,Feeder *f) : Node(f)
+Arg::Arg(string *str,Feeder *f) : Element(f)
 {
 	m_text = *str;
 }

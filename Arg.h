@@ -1,13 +1,13 @@
 #ifndef __ARG_H_
 #define __ARG_H_
 
-#include "Node.h"
+#include "Element.h"
 #include <iostream>
 using namespace std;
 
 class Feeder;
 
-class Arg : public Node
+class Arg : public Element
 {
 public:
 	Arg(string *str,Feeder *f);

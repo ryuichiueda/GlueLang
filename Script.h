@@ -1,14 +1,14 @@
 #ifndef __SCRIPT_H_
 #define __SCRIPT_H_
 
-#include "Node.h"
+#include "Element.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
 class Feeder;
 
-class Script : public Node
+class Script : public Element
 {
 public:
 	Script(Feeder *f);
@@ -17,7 +17,7 @@ public:
 	bool parse(void);
 	virtual int exec(void);
 protected:
-	vector<Node *> m_nodes;
+	vector<Element *> m_nodes;
 
 };
 #endif

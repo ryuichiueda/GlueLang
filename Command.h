@@ -1,16 +1,16 @@
 #ifndef __COMMAND_H_
 #define __COMMAND_H_
 
-#include "Node.h"
+#include "Element.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
-class Node;
+class Element;
 class Feeder;
 class Arg;
 
-class Command : public Node
+class Command : public Element
 {
 public:
 	Command(Feeder *f);

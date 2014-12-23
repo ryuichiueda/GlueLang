@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Feeder.h"
 #include "Script.h"
-#include "Command.h"
 #include <fstream>
 using namespace std;
 

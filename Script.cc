@@ -3,7 +3,7 @@
 #include "Comment.h"
 using namespace std;
 
-Script::Script(Feeder *f) : Node(f)
+Script::Script(Feeder *f) : Element(f)
 {
 }
 
