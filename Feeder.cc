@@ -153,10 +153,15 @@ bool Feeder::literalString(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char+1,i-m_cur_char-1);
 	m_cur_char = i+1;
+	while(m_cur_char < (int)p->length() && p->at(m_cur_char) == ' '){
+		m_cur_char++;
+	}
+
 	if(m_cur_char >= (int)p->length()){
 		m_cur_char = 0;
 		m_cur_line++;
 	}
+	cerr << *ans << " " << m_cur_char << endl;
 	return true;
 }
 
