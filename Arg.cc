@@ -1,9 +1,11 @@
 #include "Arg.h"
+#include "Feeder.h"
 using namespace std;
 
-Arg::Arg(string *str,Feeder *f) : Element(f)
+Arg::Arg(Feeder *f) : Element(f)
 {
-	m_text = *str;
+	m_is_variable = false;
+//	m_text = *str;
 }
 
 Arg::~Arg()
@@ -20,6 +22,10 @@ void Arg::print(int indent_level)
 
 bool Arg::eval(void)
 {
+	if(m_is_variable){
+		return m_feeder->getVariable(&m_text,&m_evaled_text);
+	}
+
 	m_evaled_text = m_text;
 	//evaled escaped characters 
 	auto pos = m_evaled_text.find("\\\'"); // \'
@@ -33,4 +39,25 @@ bool Arg::eval(void)
 int Arg::exec(void)
 {
 	return 0;
+}
+
+bool Arg::parse(void)
+{
+	if(m_feeder->literalString(&m_text)){
+		m_is_variable = false;
+		return true;
+	}
+
+	if(m_feeder->variable(&m_text)){
+		m_is_variable = true;
+		return true;
+	}
+
+
+/*
+	string ans;
+	m_feeder->literalString(&ans);
+	cerr << ans << endl;
+*/
+	return false;
 }

@@ -3,12 +3,9 @@
 
 #include "Element.h"
 #include <iostream>
-#include <vector>
 using namespace std;
 
-class Element;
 class Feeder;
-class Arg;
 
 class Command : public Element
 {
@@ -16,22 +13,18 @@ public:
 	Command(Feeder *f);
 	virtual ~Command();
 	virtual void print(int indent_level = 0);
-	bool parse(void);
+/*
+	const char *getOriginalString(void){return m_text.c_str();}
+	const char *getEvaledString(void){return m_evaled_text.c_str();}
+*/
+	const char *getStr(void);
 
-	void setName(string s);
-	void appendArg(string a);
-
+	virtual bool eval(void);
 	virtual int exec(void);
+	virtual bool parse(void);
+
 protected:
-	string m_name;
-	vector<Arg> m_args;
-
-	void execCommand(void);
-
-	//bool isCommand(string *str);
-
-	string m_file_to_write;
-
-	bool setRedirectTo(void);
+	string m_text;
+//	string m_evaled_text;
 };
 #endif

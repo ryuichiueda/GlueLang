@@ -69,10 +69,37 @@ bool Feeder::command(string *ans)
 	}
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
-	m_cur_char = i+1;
+	m_cur_char = i;
+/*
 	if(comment)
 		m_cur_char--;
 
+*/
+	if(m_cur_char >= (int)p->length()){
+		m_cur_char = 0;
+		m_cur_line++;
+	}
+	return true;
+}
+
+bool Feeder::blank(string *ans)
+{
+	if(m_cur_line >= (int)m_lines.size())
+		return false;
+
+	string *p = &m_lines[m_cur_line];
+	int i = m_cur_char;
+
+	if( p->at(i) != ' ')
+		return false;
+
+	for(;i < (int)p->length();i++){
+		char c = p->at(i);
+		if( c != ' ' || c != '\t')
+			break;
+	}
+	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+	m_cur_char = i+1;
 	if(m_cur_char >= (int)p->length()){
 		m_cur_char = 0;
 		m_cur_line++;
@@ -103,9 +130,11 @@ bool Feeder::variable(string *ans)
 	}
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
-	m_cur_char = i+1;
+	m_cur_char = i;
+/*
 	if(comment)
 		m_cur_char--;
+*/
 
 	if(m_cur_char >= (int)p->length()){
 		m_cur_char = 0;
@@ -124,8 +153,9 @@ bool Feeder::literalString(string *ans)
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 
-	if(p->at(i) != '\'')
+	if(p->at(i) != '\''){
 		return false;
+	}
 
 	i++;
 
@@ -153,9 +183,11 @@ bool Feeder::literalString(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char+1,i-m_cur_char-1);
 	m_cur_char = i+1;
+/*
 	while(m_cur_char < (int)p->length() && p->at(m_cur_char) == ' '){
 		m_cur_char++;
 	}
+*/
 
 	if(m_cur_char >= (int)p->length()){
 		m_cur_char = 0;
@@ -289,11 +321,6 @@ bool Feeder::getVariable(string *key, string *value)
 void Feeder::setFileList(string *filepath)
 {
 	m_file_list.push_back(*filepath);
-/*
-	for(auto f : m_file_list){
-		cerr << f << endl;
-	}
-*/
 }
 
 void Feeder::removeFiles(void)
@@ -301,4 +328,9 @@ void Feeder::removeFiles(void)
 	for(auto f : m_file_list){
 		remove(f.c_str());
 	}
+}
+
+void Feeder::debugOut(void)
+{
+	cerr << m_cur_line << " " << m_cur_char << endl;
 }

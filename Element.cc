@@ -18,3 +18,13 @@ void Element::printErrorMessages(void)
 		cerr << e << endl;
 	}
 }
+
+bool Element::add(Element *n)
+{
+	if( n->parse() ){
+		m_nodes.push_back(n);
+		return true;
+	}
+	delete n;
+	return false;
+}

@@ -28,11 +28,14 @@ public:
 	bool comment(string *ans);
 	bool tmpFile(string *ans);
 	bool command(string *ans);
+	bool blank(string *ans);
 
 	void readAll(void);
 
 	void close(void);
 	void print(void);
+
+	void debugOut(void);
 
 	//bool ungetToken(string *str);
 

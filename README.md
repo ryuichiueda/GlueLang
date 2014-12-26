@@ -15,10 +15,10 @@ import /usr/bin/ as ub
 
 proc main file:
 	file f = cattac $file
-	b.cat $f
+	b.cat f
 
 func cattac file:
-	b.cat $file
+	b.cat file
 	ub.tail -r
 ```
 

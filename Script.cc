@@ -1,5 +1,7 @@
+#include "Element.h"
+#include "Feeder.h"
 #include "Script.h"
-#include "Command.h"
+#include "CommandLine.h"
 #include "Comment.h"
 using namespace std;
 
@@ -14,29 +16,36 @@ Script::~Script()
 	}
 }
 
+/*
+bool Script::tryElement(Element *n)
+{
+	if( n->parse() ){
+		m_nodes.push_back(n);
+		return true;
+	}
+	delete n;
+	return false;
+}
+*/
+
 bool Script::parse(void)
 {
 	while(1){
 		// comments -> pipeline or command -> comments -> pipeline or command ...
-		while(1){
-			Comment *cmt = new Comment(m_feeder);
-			if( ! cmt->parse() ){
-				delete cmt;
-				break;
-			}
-			m_nodes.push_back(cmt);
+		bool repeat = false;
+		while(add(new Comment(m_feeder))){
 		}
 
-		Command *cmd = new Command(m_feeder);
-		if( ! cmd->parse() ){
-			delete cmd;
+		if(add(new CommandLine(m_feeder))){
+			repeat = true;
+		}else if(m_error_messages.size() != 0){
+			return false;
+		}else{
+			return true;
+		}
 
-			if(m_error_messages.size() != 0)
-				return false;
-
+		if(! repeat)
 			break;
-		}
-		m_nodes.push_back(cmd);
 	}
 	return true;
 }
