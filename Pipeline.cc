@@ -65,30 +65,43 @@ bool Pipeline::eval(void)
 	return true;
 }
 
+//int Pipeline::fork
+
 int Pipeline::exec(void)
 {
-	exit(1);//cannot execute now
 	cout << flush;
 
-	int pid = fork();
-	if(pid < 0)/* error */
-		exit(1);
+	vector<int> pids;
 
-	if (pid == 0){/* child */
-		execPipeline();
-		_exit(127);
+	int pip[2];
+	int prevfd = -1;
+	int n = 1;
+	for(auto c : m_nodes){
+		auto *p = (CommandLine *)c;
+		//p->printOriginalString();
+		pip[1] = -1;
+		if (n != m_nodes.size() && pipe(pip) < 0) {
+			close(prevfd);
+			m_error_messages.push_back("Pipe call failed");
+		}
+		p->setPipe(pip,prevfd);
+		pids.push_back( p->exec() );
+		prevfd = p->getPrevPipe();
+
+		n++;
 	}
 
-	/* parent */
-	int status;
-	int options = 0;
-	waitpid(pid,&status,options);
-
-	if(WIFEXITED(status)){
-		return WEXITSTATUS(status);
+	for(auto pid : pids){
+		int status;
+		int options = 0;
+		waitpid(pid,&status,options);
+		if(WIFEXITED(status)){
+			int e = WEXITSTATUS(status);
+			if(e != 0)
+				return e;
+		}
 	}
-
-	return -1;
+	return 0;
 }
 
 bool Pipeline::setRedirectTo(void)

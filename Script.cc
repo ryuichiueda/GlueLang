@@ -17,18 +17,6 @@ Script::~Script()
 	}
 }
 
-/*
-bool Script::tryElement(Element *n)
-{
-	if( n->parse() ){
-		m_nodes.push_back(n);
-		return true;
-	}
-	delete n;
-	return false;
-}
-*/
-
 bool Script::parse(void)
 {
 	while(1){
@@ -39,6 +27,7 @@ bool Script::parse(void)
 
 		if(add(new Pipeline(m_feeder))){
 			repeat = true;
+			continue;
 		}else if(m_error_messages.size() != 0){
 			return false;
 		}

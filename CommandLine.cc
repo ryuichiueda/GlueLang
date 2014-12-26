@@ -13,6 +13,10 @@ using namespace std;
 CommandLine::CommandLine(Feeder *f) : Element(f)
 {
 	m_file_to_write = "";
+	m_pipe[0] = -1;
+	m_pipe[1] = -1;
+	m_pipe_prev = -1;
+	m_is_piped = false;
 }
 
 CommandLine::~CommandLine()
@@ -85,17 +89,44 @@ int CommandLine::exec(void)
 	cout << flush;
 
 	int pid = fork();
-	if(pid < 0)/* error */
+	if(pid < 0)
 		exit(1);
 
-	if (pid == 0){/* child */
+	if (pid == 0){//child
+		if(m_is_piped){
+			if(m_pipe[1] >= 0){
+				close(m_pipe[0]);
+			}
+			if(m_pipe_prev > 0) {
+				dup2(m_pipe_prev, 0);
+				close(m_pipe_prev);
+			}
+			if(m_pipe[1] > 1){
+				dup2(m_pipe[1], 1);
+				close(m_pipe[1]);
+			}
+		}
+
 		execCommandLine();
 		_exit(127);
 	}
 
-	/* parent */
+	/*parent*/
+
+	if(m_is_piped){
+		if(m_pipe_prev >= 0)
+			close(m_pipe_prev);
+
+		m_pipe_prev = m_pipe[0];
+		close(m_pipe[1]);
+	}
+
 	int status;
 	int options = 0;
+
+	if(m_is_piped)
+		return pid;
+
 	waitpid(pid,&status,options);
 
 	if(WIFEXITED(status)){
@@ -144,7 +175,6 @@ void CommandLine::execCommandLine(void)
 		argv[i] = ((Arg *)m_nodes[i])->getEvaledString();
 	}
 
-
 	argv[m_nodes.size()] = NULL;
 
 	execve(argv[0],(char **)argv,NULL);
@@ -156,4 +186,12 @@ void CommandLine::printOriginalString(void)
 		s->printOriginalString();
 	}
 	cerr << endl;
+}
+
+void CommandLine::setPipe(int *pip,int prev)
+{
+	m_pipe[0] = pip[0];
+	m_pipe[1] = pip[1];
+	m_pipe_prev = prev;
+	m_is_piped = true;
 }

@@ -64,6 +64,8 @@ bool Feeder::command(string *ans)
 			&& c != '_' && c != '-' && c != '/')
 			return false;
 	}
+	if(i == m_cur_char)
+		return false;
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;

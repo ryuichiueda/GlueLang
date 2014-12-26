@@ -25,6 +25,9 @@ public:
 	virtual bool eval(void){return true;}
 
 	virtual void printOriginalString(void);
+
+	void setPipe(int *pip,int prev);
+	int getPrevPipe(void){return m_pipe_prev;};
 protected:
 /*
 	string m_name;
@@ -38,5 +41,9 @@ protected:
 	string m_file_to_write;
 
 	bool setRedirectTo(void);
+
+	int m_pipe[2];
+	int m_pipe_prev;
+	bool m_is_piped;
 };
 #endif
