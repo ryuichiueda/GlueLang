@@ -50,8 +50,6 @@ bool Feeder::command(string *ans)
 		return false;
 	}
 
-	bool comment = false;
-
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 	for(;i < (int)p->length();i++){
@@ -59,7 +57,6 @@ bool Feeder::command(string *ans)
 		if(c == ' ')
 			break;
 		if(c == '#'){
-			comment = true;
 			break;
 		}
 
@@ -107,8 +104,6 @@ bool Feeder::variable(string *ans)
 	if(m_cur_line >= (int)m_lines.size())
 		return false;
 
-	bool comment = false;
-
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 	for(;i < (int)p->length();i++){
@@ -118,7 +113,6 @@ bool Feeder::variable(string *ans)
 		if(c == ' ')
 			break;
 		if(c == '#'){
-			comment = true;
 			break;
 		}
 
@@ -128,10 +122,6 @@ bool Feeder::variable(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
-/*
-	if(comment)
-		m_cur_char--;
-*/
 
 	if(m_cur_char >= (int)p->length()){
 		m_cur_char = 0;
