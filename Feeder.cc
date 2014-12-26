@@ -70,11 +70,6 @@ bool Feeder::command(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
-/*
-	if(comment)
-		m_cur_char--;
-
-*/
 	if(m_cur_char >= (int)p->length()){
 		m_cur_char = 0;
 		m_cur_line++;
@@ -210,7 +205,7 @@ bool Feeder::atNewLine(void)
 
 bool Feeder::atEnd(void)
 {
-	return (m_cur_line == m_lines.size()) && m_cur_char == 0;
+	return (m_cur_line == (int)m_lines.size()) && m_cur_char == 0;
 }
 
 bool Feeder::comment(string *ans)
@@ -260,7 +255,7 @@ bool Feeder::tmpFile(string *ans)
 	}
 
 	int i = m_cur_char + 5;
-	for( ; i < p->length() ;i++){
+	for( ; i < (int)p->length() ;i++){
 		if( ! isAlphabet(p->at(i)) ){
 			break;
 		}

@@ -135,7 +135,7 @@ void CommandLine::execCommandLine(void)
 
 	auto **argv = new const char* [m_nodes.size()];
 	argv[0] = ((Command *)m_nodes[0])->getStr();
-	for (int i=1;i < m_nodes.size();i++){
+	for (int i=1;i < (int)m_nodes.size();i++){
 		m_nodes[i]->eval();
 		argv[i] = ((Arg *)m_nodes[i])->getEvaledString();
 	}
