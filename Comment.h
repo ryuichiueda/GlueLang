@@ -16,6 +16,8 @@ public:
 	bool parse(void);
 	int exec(void){return 0;};
 	virtual bool eval(void){return true;};
+
+	void printOriginalString(void);
 protected:
 	string m_text;
 };

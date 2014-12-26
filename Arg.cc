@@ -61,3 +61,8 @@ bool Arg::parse(void)
 */
 	return false;
 }
+
+void Arg::printOriginalString(void)
+{
+	cerr << m_text << " ";
+}

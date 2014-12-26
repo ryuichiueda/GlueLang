@@ -2,12 +2,26 @@
 #include "Feeder.h"
 #include "Script.h"
 #include <fstream>
+#include <unistd.h>
 using namespace std;
 
 
 int main(int argc, char const* argv[])
 {
-	ifstream ifs(argv[1]);
+	if(argc == 1)
+		exit(1);
+
+	bool v_opt = false;
+	int result = 0;
+	while((result = getopt(argc,(char**)argv,"v"))!=-1){
+		switch(result){
+		case 'v':
+			v_opt = true;
+			break;
+		}
+	}
+
+	ifstream ifs(argv[argc-1]);
 	Feeder feeder(&ifs);
 
 	// We want to implement Parsec like LL parser by ourselves
@@ -16,6 +30,9 @@ int main(int argc, char const* argv[])
 		s.printErrorMessages();
 		exit(1);
 	}
+
+	if(v_opt)
+		s.printOriginalString();
 		
 	int status = s.exec();
 	feeder.removeFiles();

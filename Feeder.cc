@@ -118,6 +118,8 @@ bool Feeder::variable(string *ans)
 	int i = m_cur_char;
 	for(;i < (int)p->length();i++){
 		char c = p->at(i);
+		if(c == ',' || c == '.')
+			break;
 		if(c == ' ')
 			break;
 		if(c == '#'){

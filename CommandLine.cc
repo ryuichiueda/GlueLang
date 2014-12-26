@@ -140,14 +140,16 @@ void CommandLine::execCommandLine(void)
 		argv[i] = ((Arg *)m_nodes[i])->getEvaledString();
 	}
 
-/*
-	for (int i=0;i < m_nodes.size();i++){
-		cerr << argv[i]<< endl;
-	}
-*/
 
 	argv[m_nodes.size()] = NULL;
 
 	execve(argv[0],(char **)argv,NULL);
 }
 
+void CommandLine::printOriginalString(void)
+{
+	for(auto s : m_nodes){
+		s->printOriginalString();
+	}
+	cerr << endl;
+}

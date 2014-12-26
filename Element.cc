@@ -28,3 +28,11 @@ bool Element::add(Element *n)
 	delete n;
 	return false;
 }
+
+void Element::printOriginalString(void)
+{
+	for(auto s : m_nodes){
+		s->printOriginalString();
+	}
+	cerr << flush;
+}

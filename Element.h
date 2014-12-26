@@ -22,6 +22,8 @@ public:
 	virtual int exec(void) = 0;
 	virtual bool parse(void) = 0;
 
+	virtual void printOriginalString(void);
+
 	bool add(Element *n);
 
 /*

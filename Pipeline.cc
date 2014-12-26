@@ -24,24 +24,30 @@ void Pipeline::print(int indent_level)
 {
 }
 
-/*
-void Pipeline::setName(string s){
-	m_name = s;
-	Arg arg(&m_name,m_feeder);
-	m_args.push_back(arg);
-}
-
-void Pipeline::appendArg(string a){
-	Arg arg(&a,m_feeder);
-	m_args.push_back(arg);
-}
-*/
-
 // file f = command ...
 // command ...
 bool Pipeline::parse(void)
 {
+	while(1){
+		bool repeat = false;
 
+		if(add(new CommandLine(m_feeder))){
+			repeat = true;
+		}else if(m_error_messages.size() != 0){
+			return false;
+		}else{
+			return true;
+		}
+	
+		if(! repeat)
+			break;
+	}
+
+	return true;
+}
+
+bool Pipeline::eval(void)
+{
 	return true;
 }
 

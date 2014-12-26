@@ -23,6 +23,8 @@ public:
 
 	virtual int exec(void);
 	virtual bool eval(void){return true;}
+
+	virtual void printOriginalString(void);
 protected:
 /*
 	string m_name;

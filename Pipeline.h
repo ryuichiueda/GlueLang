@@ -17,12 +17,13 @@ public:
 	Pipeline(Feeder *f);
 	virtual ~Pipeline();
 	virtual void print(int indent_level = 0);
-	bool parse(void);
 
 //	void setName(string s);
 //	void appendArg(string a);
 
 	virtual int exec(void);
+	virtual bool eval(void);
+	virtual bool parse(void);
 protected:
 	vector<CommandLine> m_commands;
 
