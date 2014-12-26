@@ -29,14 +29,10 @@ public:
 	void setPipe(int *pip,int prev);
 	int getPrevPipe(void){return m_pipe_prev;};
 protected:
-/*
-	string m_name;
-	vector<Arg> m_args;
-*/
-
 	void execCommandLine(void);
 
-	//bool isCommandLine(string *str);
+	void childPipeProc(void);
+	void parentPipeProc(void);
 
 	string m_file_to_write;
 

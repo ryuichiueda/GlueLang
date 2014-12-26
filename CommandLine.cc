@@ -57,15 +57,8 @@ bool CommandLine::parse(void)
 		m_feeder->setFileList(&m_file_to_write);
 	}
 
-/*
-	string com;
-	add(new CommandLine(m_feeder));
-*/
 	if(!add(new Command(m_feeder)))
 		return false;
-
-//	cerr << ((Command *)m_nodes[0])->getStr() << endl;
-//	exit(1);
 
 	string tmp;
 	m_feeder->blank(&tmp);
@@ -75,13 +68,39 @@ bool CommandLine::parse(void)
 		m_feeder->blank(&tmp);
 		if(m_feeder->atNewLine())
 			return true;
-/*
-		if(tmp.length() == 0)
-			return true;
-*/
 	}
 
 	return true;
+}
+
+void CommandLine::parentPipeProc(void)
+{
+	if(!m_is_piped)
+		return;
+
+	if(m_pipe_prev >= 0)
+		close(m_pipe_prev);
+
+	m_pipe_prev = m_pipe[0];
+	close(m_pipe[1]);
+}
+
+void CommandLine::childPipeProc(void)
+{
+	if(!m_is_piped)
+		return;
+
+	if(m_pipe[1] >= 0){
+		close(m_pipe[0]);
+	}
+	if(m_pipe_prev > 0) {
+		dup2(m_pipe_prev, 0);
+		close(m_pipe_prev);
+	}
+	if(m_pipe[1] > 1){
+		dup2(m_pipe[1], 1);
+		close(m_pipe[1]);
+	}
 }
 
 int CommandLine::exec(void)
@@ -93,33 +112,13 @@ int CommandLine::exec(void)
 		exit(1);
 
 	if (pid == 0){//child
-		if(m_is_piped){
-			if(m_pipe[1] >= 0){
-				close(m_pipe[0]);
-			}
-			if(m_pipe_prev > 0) {
-				dup2(m_pipe_prev, 0);
-				close(m_pipe_prev);
-			}
-			if(m_pipe[1] > 1){
-				dup2(m_pipe[1], 1);
-				close(m_pipe[1]);
-			}
-		}
-
+		childPipeProc();
 		execCommandLine();
 		_exit(127);
 	}
 
 	/*parent*/
-
-	if(m_is_piped){
-		if(m_pipe_prev >= 0)
-			close(m_pipe_prev);
-
-		m_pipe_prev = m_pipe[0];
-		close(m_pipe[1]);
-	}
+	parentPipeProc();
 
 	int status;
 	int options = 0;
