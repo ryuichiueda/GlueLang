@@ -17,13 +17,14 @@ Script::~Script()
 bool Script::parse(void)
 {
 	while(1){
-		// comments -> command -> comments -> command ...
+		// comments -> pipeline or command -> comments -> pipeline or command ...
 		while(1){
 			Comment *cmt = new Comment(m_feeder);
 			if( ! cmt->parse() ){
 				delete cmt;
 				break;
 			}
+			m_nodes.push_back(cmt);
 		}
 
 		Command *cmd = new Command(m_feeder);
