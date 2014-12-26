@@ -37,17 +37,11 @@ bool Script::parse(void)
 		while(add(new Comment(m_feeder))){
 		}
 
-//new!!!
-/*
 		if(add(new Pipeline(m_feeder))){
 			repeat = true;
 		}else if(m_error_messages.size() != 0){
 			return false;
-		}else{
-			return true;
 		}
-*/
-//
 
 		if(add(new CommandLine(m_feeder))){
 			repeat = true;

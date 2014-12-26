@@ -28,21 +28,35 @@ void Pipeline::print(int indent_level)
 // command ...
 bool Pipeline::parse(void)
 {
+	int prev_ln,prev_ch;
+	m_feeder->getCurPos(&prev_ln, &prev_ch);
+
+	int comnum = 0;
+	string tmp;
 	while(1){
 		bool repeat = false;
 
 		if(add(new CommandLine(m_feeder))){
 			repeat = true;
+			comnum++;
 		}else if(m_error_messages.size() != 0){
-			return false;
+			return false; // error exit
 		}else{
-			return true;
+			break;
 		}
-	
+
+		if(! m_feeder->pipe(&tmp)){
+			break;
+		}
+
 		if(! repeat)
 			break;
 	}
 
+	if(comnum < 2 || ! m_feeder->pipeEnd(&tmp) ){
+		m_feeder->rewind(prev_ln,prev_ch);
+		return false;
+	}
 	return true;
 }
 
@@ -53,6 +67,7 @@ bool Pipeline::eval(void)
 
 int Pipeline::exec(void)
 {
+	exit(1);//cannot execute now
 	cout << flush;
 
 	int pid = fork();

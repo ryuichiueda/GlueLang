@@ -23,12 +23,17 @@ public:
 	Feeder(ifstream *ifs);
 	~Feeder();
 
+	void getCurPos(int *ln,int *ch);
+	void rewind(int ln,int ch);
+
 	bool literalString(string *ans);
 	bool variable(string *ans);
 	bool comment(string *ans);
 	bool tmpFile(string *ans);
 	bool command(string *ans);
 	bool blank(string *ans);
+	bool pipe(string *ans);
+	bool pipeEnd(string *ans);
 
 	void readAll(void);
 

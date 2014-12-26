@@ -99,6 +99,74 @@ bool Feeder::blank(string *ans)
 	return true;
 }
 
+bool Feeder::pipe(string *ans)
+{
+	if(m_cur_line >= (int)m_lines.size())
+		return false;
+
+	bool comma = false;
+	string *p = &m_lines[m_cur_line];
+	int i = m_cur_char;
+	for( ;i < (int)p->length();i++){
+		char c = p->at(i);
+		if(c == ','){
+			if(comma){
+				return false; //more than one commas
+			}else{
+				comma = true;
+				continue;
+			}
+		}else if(c != ' ' && c != '\t'){
+			break;
+		}
+	}
+	if(! comma)
+		return false;
+
+	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+	m_cur_char = i;
+
+	if(m_cur_char >= (int)p->length()){
+		m_cur_char = 0;
+		m_cur_line++;
+	}
+	return true;
+}
+
+bool Feeder::pipeEnd(string *ans)
+{
+	if(m_cur_line >= (int)m_lines.size())
+		return false;
+
+	bool comma = false;
+	string *p = &m_lines[m_cur_line];
+	int i = m_cur_char;
+	for( ;i < (int)p->length();i++){
+		char c = p->at(i);
+		if(c == '.'){
+			if(comma){
+				return false; //more than one commas
+			}else{
+				comma = true;
+				continue;
+			}
+		}else if(c != ' ' && c != '\t'){
+			break;
+		}
+	}
+	if(! comma)
+		return false;
+
+	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+	m_cur_char = i;
+
+	if(m_cur_char >= (int)p->length()){
+		m_cur_char = 0;
+		m_cur_line++;
+	}
+	return true;
+}
+
 bool Feeder::variable(string *ans)
 {
 	if(m_cur_line >= (int)m_lines.size())
@@ -106,6 +174,9 @@ bool Feeder::variable(string *ans)
 
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
+	if(p->at(i) == ',' || p->at(i) == '.')
+		return false;
+
 	for(;i < (int)p->length();i++){
 		char c = p->at(i);
 		if(c == ',' || c == '.')
@@ -170,6 +241,7 @@ bool Feeder::literalString(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char+1,i-m_cur_char-1);
 	m_cur_char = i+1;
+
 /*
 	while(m_cur_char < (int)p->length() && p->at(m_cur_char) == ' '){
 		m_cur_char++;
@@ -320,4 +392,16 @@ void Feeder::removeFiles(void)
 void Feeder::debugOut(void)
 {
 	cerr << m_cur_line << " " << m_cur_char << endl;
+}
+
+void Feeder::getCurPos(int *ln,int *ch)
+{
+	*ln = m_cur_line;
+	*ch = m_cur_char;
+}
+
+void Feeder::rewind(int ln,int ch)
+{
+	m_cur_line = ln;
+	m_cur_char = ch;
 }

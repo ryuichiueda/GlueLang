@@ -69,8 +69,12 @@ bool CommandLine::parse(void)
 
 	while(add(new Arg(m_feeder))){
 		m_feeder->blank(&tmp);
+		if(m_feeder->atNewLine())
+			return true;
+/*
 		if(tmp.length() == 0)
 			return true;
+*/
 	}
 
 	return true;
