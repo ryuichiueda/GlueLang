@@ -139,7 +139,7 @@ bool Feeder::pipe(string *ans)
 	for( ;i < (int)p->length();i++){
 		char c = p->at(i);
 		if(c == '>'){
-			if(i >= p->length()-2)
+			if(i >= (int)p->length()-2)
 				return false;
 			if(p->at(i+1) == '>' && p->at(i+2) == '='){
 				exist = true;

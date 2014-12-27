@@ -82,7 +82,7 @@ int Pipeline::exec(void)
 		auto *p = (CommandLine *)c;
 		//p->printOriginalString();
 		pip[1] = -1;
-		if (n != m_nodes.size() && pipe(pip) < 0) {
+		if (n != (int)m_nodes.size() && pipe(pip) < 0) {
 			close(prevfd);
 			m_error_messages.push_back("Pipe call failed");
 		}
