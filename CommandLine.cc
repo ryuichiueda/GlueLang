@@ -137,6 +137,14 @@ void CommandLine::execCommandLine(void)
 	}
 
 	auto argv = makeArgv(file_num);
+/*
+	printOriginalString();
+	for(int i = 0; i < 10;i++){
+		if( argv[i] == NULL)
+			break;
+		cerr << argv[i] << endl;
+	}
+*/
 	execve(argv[0],(char **)argv,NULL);
 }
 

@@ -1,4 +1,5 @@
 import /usr/bin/ as ub
 
 ub.seq '1' '5' >>= ub.tac
+#ub.seq '1' '5' >>= ub.tail '-r'
 

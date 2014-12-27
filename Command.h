@@ -21,7 +21,9 @@ public:
 
 	void printOriginalString(void);
 protected:
-	string m_text;
-//	string m_evaled_text;
+	string m_prefix;
+	string m_name;
+	string m_path;
+	string m_full_path;
 };
 #endif

@@ -7,3 +7,4 @@ bash ./comment.test
 bash ./file.test
 bash ./v_opt.test
 bash ./pipeline.test
+bash ./import.test

@@ -23,6 +23,8 @@ bool Script::parse(void)
 	//import
 	while(add(new Import(m_feeder,m_env))){
 	}
+	for(auto n : m_nodes)
+		n->eval();
 
 	while(1){
 		// comments -> pipeline or command -> comments -> pipeline or command ...
