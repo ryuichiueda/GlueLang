@@ -20,7 +20,7 @@ A programming language that has a strong nature to be a glue of commands.
 
 # Language Specification
 
-The following code is a sample script of GlueLang.
+The following code is a (future) sample script of GlueLang.
 
 ```io.glue
 import /bin/ as b
