@@ -10,14 +10,6 @@ Command::~Command()
 {
 }
 
-void Command::print(int indent_level)
-{
-	for(int i=0;i<indent_level;i++)
-		cout << '\t';
-
-	cout << m_text << endl;
-}
-
 bool Command::eval(void)
 {
 	return true;

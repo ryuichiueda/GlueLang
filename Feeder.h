@@ -19,6 +19,9 @@ private:
 
 	map<string,string> m_variables;
 	vector<string> m_file_list;
+
+	bool outOfRange(void);
+	void tryNextLine(string *p);
 public:
 	Feeder(ifstream *ifs);
 	~Feeder();
@@ -33,7 +36,12 @@ public:
 	bool command(string *ans);
 	bool blank(string *ans);
 	bool pipe(string *ans);
+	bool path(string *ans);
 	bool pipeEnd(string *ans);
+	bool import(string *ans);
+	bool smallCaps(string *ans);
+
+	bool str(string s);
 
 	void readAll(void);
 

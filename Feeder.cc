@@ -46,9 +46,8 @@ void Feeder::close(void)
 
 bool Feeder::command(string *ans)
 {
-	if(m_cur_line >= (int)m_lines.size()){
+	if(outOfRange())
 		return false;
-	}
 
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
@@ -69,24 +68,43 @@ bool Feeder::command(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
-	if(m_cur_char >= (int)p->length()){
-		m_cur_char = 0;
-		m_cur_line++;
+	tryNextLine(p);
+	return true;
+}
+
+bool Feeder::smallCaps(string *ans)
+{
+	if(outOfRange())
+		return false;
+
+	string *p = &m_lines[m_cur_line];
+
+	int i = m_cur_char;
+	for(;i < (int)p->length();i++){
+		char c = p->at(i);
+		if( c < '0' && c > '9')
+			break;
 	}
+
+	if(i == m_cur_char)
+		return false;
+
+	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+	m_cur_char = i;
+	tryNextLine(p);
 	return true;
 }
 
 bool Feeder::blank(string *ans)
 {
-	if(m_cur_line >= (int)m_lines.size())
+	if(outOfRange())
 		return false;
 
 	string *p = &m_lines[m_cur_line];
-	if(m_cur_char >= (int)p->length()){
-		m_cur_char = 0;
-		m_cur_line++;
-	}
-	if(m_cur_line >= (int)m_lines.size())
+	tryNextLine(p);
+	p = &m_lines[m_cur_line];
+
+	if(outOfRange())
 		return false;
 
 	int i = m_cur_char;
@@ -100,16 +118,19 @@ bool Feeder::blank(string *ans)
 	}
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i+1;
-	if(m_cur_char >= (int)p->length()){
-		m_cur_char = 0;
-		m_cur_line++;
-	}
+	tryNextLine(p);
 	return true;
+}
+
+bool Feeder::path(string *ans)
+{
+	return command(ans);
+
 }
 
 bool Feeder::pipe(string *ans)
 {
-	if(m_cur_line >= (int)m_lines.size())
+	if(outOfRange())
 		return false;
 
 	//bool comma = false;
@@ -127,39 +148,19 @@ bool Feeder::pipe(string *ans)
 				break;
 			}
 		}
-/*
-		if(c == ','){
-			if(comma){
-				return false; //more than one commas
-			}else{
-				comma = true;
-				continue;
-			}
-		}else if(c != ' ' && c != '\t'){
-			break;
-		}
-*/
 	}
-/*
-	if(! comma)
-		return false;
-*/
 	if(! exist)
 		return false;
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
-
-	if(m_cur_char >= (int)p->length()){
-		m_cur_char = 0;
-		m_cur_line++;
-	}
+	tryNextLine(p);
 	return true;
 }
 
 bool Feeder::pipeEnd(string *ans)
 {
-	if(m_cur_line >= (int)m_lines.size())
+	if(outOfRange())
 		return false;
 
 	bool comma = false;
@@ -183,17 +184,13 @@ bool Feeder::pipeEnd(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
-
-	if(m_cur_char >= (int)p->length()){
-		m_cur_char = 0;
-		m_cur_line++;
-	}
+	tryNextLine(p);
 	return true;
 }
 
 bool Feeder::variable(string *ans)
 {
-	if(m_cur_line >= (int)m_lines.size())
+	if(outOfRange())
 		return false;
 
 	string *p = &m_lines[m_cur_line];
@@ -218,11 +215,7 @@ bool Feeder::variable(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
-
-	if(m_cur_char >= (int)p->length()){
-		m_cur_char = 0;
-		m_cur_line++;
-	}
+	tryNextLine(p);
 	return true;
 }
 // arg should be a string that is quoted by '.
@@ -230,7 +223,7 @@ bool Feeder::variable(string *ans)
 // they are escaped.
 bool Feeder::literalString(string *ans)
 {
-	if(m_cur_line >= (int)m_lines.size())
+	if(outOfRange())
 		return false;
 
 	string *p = &m_lines[m_cur_line];
@@ -266,17 +259,7 @@ bool Feeder::literalString(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char+1,i-m_cur_char-1);
 	m_cur_char = i+1;
-
-/*
-	while(m_cur_char < (int)p->length() && p->at(m_cur_char) == ' '){
-		m_cur_char++;
-	}
-*/
-
-	if(m_cur_char >= (int)p->length()){
-		m_cur_char = 0;
-		m_cur_line++;
-	}
+	tryNextLine(p);
 	return true;
 }
 
@@ -295,9 +278,14 @@ bool Feeder::atEnd(void)
 	return (m_cur_line == (int)m_lines.size()) && m_cur_char == 0;
 }
 
+bool Feeder::outOfRange(void)
+{
+	return (m_cur_line >= (int)m_lines.size());
+}
+
 bool Feeder::comment(string *ans)
 {
-	if(m_cur_line >= (int)m_lines.size())
+	if(outOfRange())
 		return false;
 
 	string *p = &m_lines[m_cur_line];
@@ -329,10 +317,32 @@ bool Feeder::comment(string *ans)
 	return true;
 }
 
+bool Feeder::str(string s)
+{
+	if(outOfRange())
+		return false;
+
+	bool ans = false;
+	
+	string *p = &m_lines[m_cur_line];
+	if(p->substr(m_cur_char,s.length()) == s){
+		ans = true;
+		m_cur_char += s.length();
+	}
+
+	tryNextLine(p);
+	return ans;
+}
+
+bool Feeder::import(string *ans)
+{
+	return true;
+}
+
 // file f = command ...
 bool Feeder::tmpFile(string *ans)
 {
-	if(m_cur_line >= (int)m_lines.size())
+	if(outOfRange())
 		return false;
 
 	string *p = &m_lines[m_cur_line];
@@ -359,11 +369,17 @@ bool Feeder::tmpFile(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char+5,last-m_cur_char-5);
 	m_cur_char = i;
-	if(m_cur_char >= (int)p->length()){
-		m_cur_char = 0;
-		m_cur_line++;
-	}
+	tryNextLine(p);
 	return true;
+}
+
+void Feeder::tryNextLine(string *p)
+{
+	if(m_cur_char < (int)p->length())
+		return;
+
+	m_cur_char = 0;
+	m_cur_line++;
 }
 
 bool Feeder::isAlphabet(char c)

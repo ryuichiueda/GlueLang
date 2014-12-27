@@ -1,6 +1,7 @@
 #include "Element.h"
 #include "Feeder.h"
 #include "Script.h"
+#include "Import.h"
 #include "Pipeline.h"
 #include "CommandLine.h"
 #include "Comment.h"
@@ -19,6 +20,10 @@ Script::~Script()
 
 bool Script::parse(void)
 {
+	//import
+	while(add(new Import(m_feeder))){
+	}
+
 	while(1){
 		// comments -> pipeline or command -> comments -> pipeline or command ...
 		bool repeat = false;

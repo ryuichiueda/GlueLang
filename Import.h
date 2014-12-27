@@ -1,5 +1,5 @@
-#ifndef __COMMAND_H_
-#define __COMMAND_H_
+#ifndef __IMPORT_H_
+#define __IMPORT_H_
 
 #include "Element.h"
 #include <iostream>
@@ -7,12 +7,11 @@ using namespace std;
 
 class Feeder;
 
-class Command : public Element
+class Import : public Element
 {
 public:
-	Command(Feeder *f);
-	virtual ~Command();
-	const char *getStr(void);
+	Import(Feeder *f);
+	virtual ~Import();
 
 	virtual bool eval(void);
 	virtual int exec(void);
@@ -20,7 +19,7 @@ public:
 
 	void printOriginalString(void);
 protected:
-	string m_text;
-//	string m_evaled_text;
+	string m_path;
+	string m_prefix;
 };
 #endif
