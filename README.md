@@ -22,14 +22,14 @@ cattac file = b.cat file >>= ub.tail '-r'
 
 ## Pipeline
 
-In the "cattac func" block, a pipeline of two commands
+In the "cattac func", a pipeline of two commands
 "cat $file | tail -r" is implemented.
 
 ## Temporary files
 
-In the "main proc" block,
+In the "main" block,
 a temporary file "f" is used and it stores
-the result of the func block. 
+the result of the function. 
 Then the contents of this temporary file is
 released to the stdout by the cat command.
 
