@@ -1,6 +1,7 @@
 #include "CommandLine.h"
 #include "Command.h"
 #include "Arg.h"
+#include "TmpFile.h"
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
@@ -12,7 +13,7 @@ using namespace std;
 
 CommandLine::CommandLine(Feeder *f) : Element(f)
 {
-	m_file_to_write = "";
+	m_file_to_write = false;
 	m_pipe[0] = -1;
 	m_pipe[1] = -1;
 	m_pipe_prev = -1;
@@ -48,14 +49,8 @@ void CommandLine::appendArg(string a){
 // command ...
 bool CommandLine::parse(void)
 {
-	//file
-	string filename;
-	if(m_feeder->tmpFile(&filename)){
-		string pid = to_string(getpid());
-		m_file_to_write = "/tmp/" + pid + "-" + filename;
-		m_feeder->setVariable(&filename,&m_file_to_write);
-		m_feeder->setFileList(&m_file_to_write);
-	}
+	if(add(new TmpFile(m_feeder)))
+		m_file_to_write = true;
 
 	if(!add(new Command(m_feeder)))
 		return false;
@@ -68,6 +63,7 @@ bool CommandLine::parse(void)
 		if(m_feeder->atNewLine())
 			return true;
 	}
+
 
 	return true;
 }
@@ -134,22 +130,22 @@ int CommandLine::exec(void)
 	return -1;
 }
 
-bool CommandLine::setRedirectTo(void)
+bool CommandLine::setRedirectTo(TmpFile *f)
 {
-	int fd = open(m_file_to_write.c_str(),O_WRONLY | O_CREAT,0700);
+	int fd = open( f->actualFileName() ,O_WRONLY | O_CREAT,0700);
 	if(fd < 3){
 		m_error_messages.push_back(
-			"file: " + m_file_to_write + " does not open.");
+			"file: " + string(f->virtualFileName()) + " does not open.");
 		return false;
 	}
 	if(dup2(fd,1) < 0){
 		m_error_messages.push_back(
-			"file: " + m_file_to_write + "  redirect error");
+			"file: " + string(f->virtualFileName()) + "  redirect error");
 		return false;
 	}
 	if( close(fd) < 0){
 		m_error_messages.push_back(
-			"file: " + m_file_to_write + "  redirect error");
+			"file: " + string(f->virtualFileName()) + "  redirect error");
 		return false;
 	}
 
@@ -161,19 +157,21 @@ void CommandLine::execCommandLine(void)
 	//The child process should not access to the source code.
 	m_feeder->close();
 
-	if(m_file_to_write != ""){
-		if(! setRedirectTo() )
+	int org = 0;
+	if(m_file_to_write == true){
+		org++;
+		if(! setRedirectTo((TmpFile *)m_nodes[0]) )
 			return;
 	}
 
-	auto **argv = new const char* [m_nodes.size()];
-	argv[0] = ((Command *)m_nodes[0])->getStr();
-	for (int i=1;i < (int)m_nodes.size();i++){
-		m_nodes[i]->eval();
-		argv[i] = ((Arg *)m_nodes[i])->getEvaledString();
+	auto **argv = new const char* [m_nodes.size()-org];
+	argv[0] = ((Command *)m_nodes[org])->getStr();
+	for (int i=1;i < (int)m_nodes.size()-org;i++){
+		m_nodes[org+i]->eval();
+		argv[i] = ((Arg *)m_nodes[org+i])->getEvaledString();
 	}
 
-	argv[m_nodes.size()] = NULL;
+	argv[m_nodes.size()-org] = NULL;
 
 	execve(argv[0],(char **)argv,NULL);
 }

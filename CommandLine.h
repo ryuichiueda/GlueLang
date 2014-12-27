@@ -9,6 +9,7 @@ using namespace std;
 class Element;
 class Feeder;
 class Arg;
+class TmpFile;
 
 class CommandLine : public Element
 {
@@ -34,9 +35,11 @@ protected:
 	void childPipeProc(void);
 	void parentPipeProc(void);
 
-	string m_file_to_write;
+	bool m_file_to_write;
 
-	bool setRedirectTo(void);
+	//TmpFile *m_file_to_write;
+
+	bool setRedirectTo(TmpFile *f);
 
 	int m_pipe[2];
 	int m_pipe_prev;
