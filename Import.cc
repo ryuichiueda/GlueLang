@@ -11,9 +11,9 @@ Import::~Import()
 {
 }
 
-bool Import::eval(void)
+bool Import::eval(void)//nothing to do here
 {
-	return m_env->setImportPaths(&m_prefix,&m_path);
+	return true;
 }
 
 int Import::exec(void)
@@ -47,7 +47,8 @@ bool Import::parse(void)
 	if(! m_feeder->smallCaps(&m_prefix))
 		return false;
 
-	return true;
+	//evaluate beforehand
+	return m_env->setImportPaths(&m_prefix,&m_path);
 }
 
 void Import::printOriginalString(void)

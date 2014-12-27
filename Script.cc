@@ -20,17 +20,14 @@ Script::~Script()
 
 bool Script::parse(void)
 {
-	//import
+	// import
 	while(add(new Import(m_feeder,m_env))){
 	}
-	for(auto n : m_nodes)
-		n->eval();
 
 	while(1){
 		// comments -> pipeline or command -> comments -> pipeline or command ...
 		bool repeat = false;
-		while(add(new Comment(m_feeder,m_env))){
-		}
+		while(add(new Comment(m_feeder,m_env))){ }
 
 		if(add(new Pipeline(m_feeder,m_env))){
 			repeat = true;
@@ -61,5 +58,3 @@ int Script::exec(void)
 	}
 	return exit_status;
 }
-
-
