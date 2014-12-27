@@ -49,11 +49,13 @@ bool Pipeline::parse(void)
 			break;
 		}
 
+		m_feeder->blank(&tmp);
+
 		if(! repeat)
 			break;
 	}
 
-	if(comnum < 2 || ! m_feeder->pipeEnd(&tmp) ){
+	if(comnum < 2 /*|| ! m_feeder->pipeEnd(&tmp)*/ ){
 		m_feeder->rewind(prev_ln,prev_ch);
 		return false;
 	}

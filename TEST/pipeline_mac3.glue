@@ -1,4 +1,4 @@
-/usr/bin/seq '1' '5',
-/usr/bin/tail '-r' ,
-/usr/bin/tail '-r' .
+/usr/bin/seq '1' '5' >>=
+/usr/bin/tail '-r' >>=
+/usr/bin/tail '-r'
 

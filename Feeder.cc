@@ -82,8 +82,14 @@ bool Feeder::blank(string *ans)
 		return false;
 
 	string *p = &m_lines[m_cur_line];
-	int i = m_cur_char;
+	if(m_cur_char >= (int)p->length()){
+		m_cur_char = 0;
+		m_cur_line++;
+	}
+	if(m_cur_line >= (int)m_lines.size())
+		return false;
 
+	int i = m_cur_char;
 	if( p->at(i) != ' ')
 		return false;
 
@@ -106,11 +112,22 @@ bool Feeder::pipe(string *ans)
 	if(m_cur_line >= (int)m_lines.size())
 		return false;
 
-	bool comma = false;
+	//bool comma = false;
+	bool exist = false;
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 	for( ;i < (int)p->length();i++){
 		char c = p->at(i);
+		if(c == '>'){
+			if(i >= p->length()-2)
+				return false;
+			if(p->at(i+1) == '>' && p->at(i+2) == '='){
+				exist = true;
+				i += 3;
+				break;
+			}
+		}
+/*
 		if(c == ','){
 			if(comma){
 				return false; //more than one commas
@@ -121,8 +138,13 @@ bool Feeder::pipe(string *ans)
 		}else if(c != ' ' && c != '\t'){
 			break;
 		}
+*/
 	}
+/*
 	if(! comma)
+		return false;
+*/
+	if(! exist)
 		return false;
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
@@ -176,12 +198,13 @@ bool Feeder::variable(string *ans)
 
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
-	if(p->at(i) == ',' || p->at(i) == '.')
+	if(p->at(i) == '>' /*|| p->at(i) == '.'*/)
 		return false;
 
 	for(;i < (int)p->length();i++){
 		char c = p->at(i);
-		if(c == ',' || c == '.')
+		//if(c == ',' || c == '.')
+		if(c == '>')
 			break;
 		if(c == ' ')
 			break;

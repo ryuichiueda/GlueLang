@@ -62,7 +62,6 @@ bool CommandLine::parse(void)
 
 	string tmp;
 	m_feeder->blank(&tmp);
-	
 
 	while(add(new Arg(m_feeder))){
 		m_feeder->blank(&tmp);
