@@ -18,7 +18,7 @@ cat << FIN > $tmp-out
 That's OK
 FIN
 
-../main ./comment1.glue > $tmp-ans
+../glue ./comment1.glue > $tmp-ans
 ERROR_CHECK "TEST1 error"
 
 rm -f $tmp-*

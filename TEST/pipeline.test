@@ -21,7 +21,7 @@ cat << FIN > $tmp-out
 1
 FIN
 
-../main ./pipeline.glue > $tmp-ans
+../glue ./pipeline.glue > $tmp-ans
 ERROR_CHECK "TEST1.1 error"
 
 diff $tmp-out $tmp-ans
@@ -38,7 +38,7 @@ cat << FIN > $tmp-out
 5
 FIN
 
-../main ./pipeline3.glue > $tmp-ans
+../glue ./pipeline3.glue > $tmp-ans
 ERROR_CHECK "TEST2.1 error"
 
 diff $tmp-out $tmp-ans

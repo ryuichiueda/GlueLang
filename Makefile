@@ -1,5 +1,5 @@
 CXX = g++
-TARGET = main
+TARGET = glue
 CXXFLAGS = -Wall -O3 --static -std=c++11
 LDFLAGS = -lm
 SRCS := $(wildcard *.cc)

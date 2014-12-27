@@ -31,7 +31,7 @@ cat << FIN > ./simple_command.glue
 /bin/echo 'That\'s OK'
 FIN
 
-../main ./simple_command.glue > $tmp-ans
+../glue ./simple_command.glue > $tmp-ans
 ERROR_CHECK "TEST1.1 error"
 
 diff $tmp-out $tmp-ans
@@ -40,21 +40,21 @@ ERROR_CHECK "TEST1.2 error"
 #########################################
 # TEST2: invalid character in the command name
 #########################################
-../main ./invalid_command_name.glue > /dev/null
+../glue ./invalid_command_name.glue > /dev/null
 [ "$?" = 1 ]
 ERROR_CHECK "TEST2 error"
 
 #########################################
 # TEST3: non-existent command
 #########################################
-../main ./non_existent_command.glue > /dev/null
+../glue ./non_existent_command.glue > /dev/null
 [ "$?" != 0 ]
 ERROR_CHECK "TEST3 error"
 
 #########################################
 # TEST4: execution of two commands 
 #########################################
-[ "$(../main ./two_coms.glue | wc -l | tr -d ' ')" = 2 ] 
+[ "$(../glue ./two_coms.glue | wc -l | tr -d ' ')" = 2 ] 
 ERROR_CHECK "TEST4 error"
 
 rm -f $tmp-*

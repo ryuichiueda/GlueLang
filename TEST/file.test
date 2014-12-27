@@ -32,7 +32,7 @@ file faoeoahgre = /bin/cat '$tmp-in'
 /bin/cat faoeoahgre 
 FIN
 
-../main ./file1.glue > $tmp-ans
+../glue ./file1.glue > $tmp-ans
 ERROR_CHECK "TEST1.1 error"
 
 diff $tmp-out $tmp-ans
