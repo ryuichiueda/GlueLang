@@ -34,7 +34,7 @@ public:
 	bool blank(string *ans);
 	bool pipe(string *ans);
 	bool path(string *ans);
-	bool pipeEnd(string *ans);
+//	bool pipeEnd(string *ans);
 	bool import(string *ans);
 	bool smallCaps(string *ans);
 

@@ -157,6 +157,7 @@ bool Feeder::pipe(string *ans)
 	return true;
 }
 
+/*
 bool Feeder::pipeEnd(string *ans)
 {
 	if(outOfRange())
@@ -186,6 +187,7 @@ bool Feeder::pipeEnd(string *ans)
 	tryNextLine(p);
 	return true;
 }
+*/
 
 bool Feeder::variable(string *ans)
 {
