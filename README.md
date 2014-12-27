@@ -4,6 +4,19 @@
 
 A programming language that has a strong nature to be a glue of commands.
 
+# Quick trial
+
+```
+~/GIT/GlueLang$ make
+~/GIT/GlueLang$ ./glue TEST/pipeline.glue 
+5
+4
+3
+2
+1
+~/GIT/GlueLang$ cat TEST/pipeline.glue 
+/usr/bin/seq '1' '5' >>= /usr/bin/tac
+```
 
 # Language Specification
 
