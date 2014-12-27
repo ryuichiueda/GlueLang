@@ -26,12 +26,7 @@ public:
 	virtual bool eval(void);
 	virtual bool parse(void);
 protected:
-	vector<CommandLine> m_commands;
-
-	void execPipeline(void);
-
-	string m_file_to_write;
-
-	bool setRedirectTo(void);
+	//vector<CommandLine> m_commands;
+	bool m_file_to_write;
 };
 #endif

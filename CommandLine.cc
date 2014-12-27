@@ -137,14 +137,6 @@ void CommandLine::execCommandLine(void)
 	}
 
 	auto argv = makeArgv(file_num);
-/*
-	printOriginalString();
-	for(int i = 0; i < 10;i++){
-		if( argv[i] == NULL)
-			break;
-		cerr << argv[i] << endl;
-	}
-*/
 	execve(argv[0],(char **)argv,NULL);
 }
 
@@ -171,4 +163,10 @@ void CommandLine::setPipe(int *pip,int prev)
 	m_pipe[1] = pip[1];
 	m_pipe_prev = prev;
 	m_is_piped = true;
+}
+
+void CommandLine::pushOutFile(Element *e)
+{
+	m_nodes.insert(m_nodes.begin(),e);
+	m_file_to_write = true;
 }

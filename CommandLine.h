@@ -29,6 +29,8 @@ public:
 
 	void setPipe(int *pip,int prev);
 	int getPrevPipe(void){return m_pipe_prev;};
+
+	void pushOutFile(Element *e);
 protected:
 	void execCommandLine(void);
 
@@ -38,8 +40,6 @@ protected:
 	const char** makeArgv(int file_num);
 
 	bool m_file_to_write;
-
-	//TmpFile *m_file_to_write;
 
 	bool setRedirectTo(TmpFile *f);
 

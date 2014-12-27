@@ -6,13 +6,14 @@
 #include <unistd.h>
 #include "Pipeline.h"
 #include "CommandLine.h"
+#include "TmpFile.h"
 #include "Arg.h"
 #include "Feeder.h"
 using namespace std;
 
 Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_file_to_write = "";
+	m_file_to_write = false;
 }
 
 Pipeline::~Pipeline()
@@ -30,6 +31,12 @@ bool Pipeline::parse(void)
 {
 	int prev_ln,prev_ch;
 	m_feeder->getCurPos(&prev_ln, &prev_ch);
+
+	Element *outfile = NULL;
+	if(add(new TmpFile(m_feeder,m_env))){
+		outfile = m_nodes[0];	
+		m_file_to_write = true;
+	}
 
 	int comnum = 0;
 	string tmp;
@@ -55,9 +62,13 @@ bool Pipeline::parse(void)
 			break;
 	}
 
-	if(comnum < 2 /*|| ! m_feeder->pipeEnd(&tmp)*/ ){
+	if(comnum < 2){
 		m_feeder->rewind(prev_ln,prev_ch);
 		return false;
+	}
+
+	if(outfile != NULL){
+		((CommandLine *)m_nodes.back())->pushOutFile(outfile);
 	}
 	return true;
 }
@@ -77,20 +88,21 @@ int Pipeline::exec(void)
 
 	int pip[2];
 	int prevfd = -1;
-	int n = 1;
-	for(auto c : m_nodes){
-		auto *p = (CommandLine *)c;
-		//p->printOriginalString();
+	int n = 0;
+	if(m_file_to_write)
+		n++;
+
+	for(int i=n;i<m_nodes.size();i++){
+		auto *p = (CommandLine *)m_nodes[i];
 		pip[1] = -1;
-		if (n != (int)m_nodes.size() && pipe(pip) < 0) {
+		if ( i+1 != (int)m_nodes.size() && pipe(pip) < 0) {
 			close(prevfd);
 			m_error_messages.push_back("Pipe call failed");
 		}
+
 		p->setPipe(pip,prevfd);
 		pids.push_back( p->exec() );
 		prevfd = p->getPrevPipe();
-
-		n++;
 	}
 
 	for(auto pid : pids){
@@ -105,30 +117,3 @@ int Pipeline::exec(void)
 	}
 	return 0;
 }
-
-bool Pipeline::setRedirectTo(void)
-{
-	int fd = open(m_file_to_write.c_str(),O_WRONLY | O_CREAT,0700);
-	if(fd < 3){
-		m_error_messages.push_back(
-			"file: " + m_file_to_write + " does not open.");
-		return false;
-	}
-	if(dup2(fd,1) < 0){
-		m_error_messages.push_back(
-			"file: " + m_file_to_write + "  redirect error");
-		return false;
-	}
-	if( close(fd) < 0){
-		m_error_messages.push_back(
-			"file: " + m_file_to_write + "  redirect error");
-		return false;
-	}
-
-	return true;
-}
-
-void Pipeline::execPipeline(void)
-{
-}
-

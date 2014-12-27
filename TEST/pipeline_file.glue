@@ -1,0 +1,6 @@
+file aaa = /usr/bin/seq '1' '5' >>=
+/usr/bin/tac >>=
+/usr/bin/tac
+
+/bin/cat aaa
+
