@@ -13,13 +13,11 @@ The following code is a sample script of GlueLang.
 import /bin/ as b
 import /usr/bin/ as ub
 
-proc main file:
-	file f = cattac $file
-	b.cat f
+main infile = do
+	file tmp = cattac infile 
+	b.cat tmp
 
-func cattac file:
-	b.cat file
-	ub.tail -r
+cattac file = b.cat file >>= ub.tail '-r'
 ```
 
 ## Pipeline
