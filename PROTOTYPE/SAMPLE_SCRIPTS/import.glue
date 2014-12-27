@@ -1,6 +1,0 @@
-import /bin/ as b
-import /usr/bin/ as ub
-
-func main:
-	b.echo "abc"
-	ub.rev

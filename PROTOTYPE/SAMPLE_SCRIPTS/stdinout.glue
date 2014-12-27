@@ -1,4 +1,0 @@
-import /bin/ as b
-
-proc main:
-	b.cat

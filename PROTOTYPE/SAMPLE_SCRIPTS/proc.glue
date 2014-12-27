@@ -1,4 +1,0 @@
-proc main:
-	echo "abc" > /tmp/out
-	rev "/tmp/out"
-	rm "/tmp/out"

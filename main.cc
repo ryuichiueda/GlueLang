@@ -4,8 +4,9 @@
 #include "Script.h"
 #include <fstream>
 #include <unistd.h>
+#include <signal.h>
+#include <sys/wait.h>
 using namespace std;
-
 
 int main(int argc, char const* argv[])
 {

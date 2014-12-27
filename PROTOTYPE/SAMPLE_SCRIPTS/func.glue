@@ -1,3 +1,0 @@
-func main:
-	echo "abc"
-	rev

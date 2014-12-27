@@ -1,6 +1,0 @@
-proc main:
-	echo "Content-Type: text/html"
-	echo ""
-	echo あいうえお
-	echo '"""'
-	echo "a\"b"
