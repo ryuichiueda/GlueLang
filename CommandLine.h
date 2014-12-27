@@ -23,7 +23,7 @@ public:
 	void appendArg(string a);
 
 	virtual int exec(void);
-	virtual bool eval(void){return true;}
+	virtual bool eval(void);
 
 	virtual void printOriginalString(void);
 

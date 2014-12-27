@@ -1,2 +1,2 @@
-file faoeoahgre = /bin/cat '/tmp/38600-in'
+file faoeoahgre = /bin/cat '/tmp/40756-in'
 /bin/cat faoeoahgre 
