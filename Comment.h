@@ -10,7 +10,7 @@ class Feeder;
 class Comment : public Element
 {
 public:
-	Comment(Feeder *f);
+	Comment(Feeder *f, Environment *env);
 	virtual ~Comment();
 
 	bool parse(void);

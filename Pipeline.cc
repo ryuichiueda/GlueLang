@@ -10,7 +10,7 @@
 #include "Feeder.h"
 using namespace std;
 
-Pipeline::Pipeline(Feeder *f) : Element(f)
+Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_file_to_write = "";
 }
@@ -36,7 +36,7 @@ bool Pipeline::parse(void)
 	while(1){
 		bool repeat = false;
 
-		if(add(new CommandLine(m_feeder))){
+		if(add(new CommandLine(m_feeder,m_env))){
 			repeat = true;
 			comnum++;
 		}else if(m_error_messages.size() != 0){

@@ -1,9 +1,10 @@
 #include "Comment.h"
 #include "Feeder.h"
+#include "Environment.h"
 #include <iostream>
 using namespace std;
 
-Comment::Comment(Feeder *f) : Element(f)
+Comment::Comment(Feeder *f, Environment *env) : Element(f,env)
 {
 }
 

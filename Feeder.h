@@ -7,6 +7,27 @@
 #include <map>
 using namespace std;
 
+/*
+class Environment
+{
+private:
+	map<string,string> m_variables;
+	map<string,string> m_import_paths;
+	vector<string> m_file_list;
+
+public:
+	Environment(){}
+	bool setVariable(string *key, string *value);
+	bool getVariable(string *key, string *value);
+
+	bool setImportPaths(string *key, string *value);
+	bool getImportPaths(string *key, string *value);
+
+	void setFileList(string *filepath);
+	void removeFiles(void);
+};
+*/
+
 class Feeder
 {
 private:
@@ -16,9 +37,6 @@ private:
 
 	int m_cur_line;
 	int m_cur_char;
-
-	map<string,string> m_variables;
-	vector<string> m_file_list;
 
 	bool outOfRange(void);
 	void tryNextLine(string *p);
@@ -59,10 +77,5 @@ public:
 	bool isAlphabet(char c);
 	bool isNum(char c);
 
-	bool setVariable(string *key, string *value);
-	bool getVariable(string *key, string *value);
-
-	void setFileList(string *filepath);
-	void removeFiles(void);
 };
 #endif

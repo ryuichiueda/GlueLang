@@ -6,11 +6,12 @@
 using namespace std;
 
 class Feeder;
+class Environment;
 
 class Import : public Element
 {
 public:
-	Import(Feeder *f);
+	Import(Feeder *f, Environment *env);
 	virtual ~Import();
 
 	virtual bool eval(void);

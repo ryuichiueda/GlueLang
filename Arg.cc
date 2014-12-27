@@ -1,8 +1,9 @@
 #include "Arg.h"
 #include "Feeder.h"
+#include "Environment.h"
 using namespace std;
 
-Arg::Arg(Feeder *f) : Element(f)
+Arg::Arg(Feeder *f,Environment *env) : Element(f,env)
 {
 	m_is_variable = false;
 //	m_text = *str;
@@ -23,7 +24,7 @@ void Arg::print(int indent_level)
 bool Arg::eval(void)
 {
 	if(m_is_variable){
-		return m_feeder->getVariable(&m_text,&m_evaled_text);
+		return m_env->getVariable(&m_text,&m_evaled_text);
 	}
 
 	m_evaled_text = m_text;

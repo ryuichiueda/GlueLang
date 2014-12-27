@@ -8,12 +8,13 @@ using namespace std;
 
 class Element;
 class Feeder;
+class Environment;
 class Arg;
 
 class TmpFile : public Element
 {
 public:
-	TmpFile(Feeder *f);
+	TmpFile(Feeder *f, Environment *env);
 	virtual ~TmpFile();
 	virtual bool parse(void);
 

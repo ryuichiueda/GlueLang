@@ -3,9 +3,10 @@
 #include <iostream>
 using namespace std;
 
-Element::Element(Feeder *f)
+Element::Element(Feeder *f, Environment *env)
 {
 	m_feeder = f;	
+	m_env = env;
 }
 
 Element::~Element()

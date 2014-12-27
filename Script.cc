@@ -7,7 +7,7 @@
 #include "Comment.h"
 using namespace std;
 
-Script::Script(Feeder *f) : Element(f)
+Script::Script(Feeder *f, Environment *env) : Element(f,env)
 {
 }
 
@@ -21,23 +21,23 @@ Script::~Script()
 bool Script::parse(void)
 {
 	//import
-	while(add(new Import(m_feeder))){
+	while(add(new Import(m_feeder,m_env))){
 	}
 
 	while(1){
 		// comments -> pipeline or command -> comments -> pipeline or command ...
 		bool repeat = false;
-		while(add(new Comment(m_feeder))){
+		while(add(new Comment(m_feeder,m_env))){
 		}
 
-		if(add(new Pipeline(m_feeder))){
+		if(add(new Pipeline(m_feeder,m_env))){
 			repeat = true;
 			continue;
 		}else if(m_error_messages.size() != 0){
 			return false;
 		}
 
-		if(add(new CommandLine(m_feeder))){
+		if(add(new CommandLine(m_feeder,m_env))){
 			repeat = true;
 		}else if(m_error_messages.size() != 0){
 			return false;

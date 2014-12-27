@@ -11,7 +11,7 @@
 #include "Feeder.h"
 using namespace std;
 
-CommandLine::CommandLine(Feeder *f) : Element(f)
+CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_file_to_write = false;
 	m_pipe[0] = -1;
@@ -29,16 +29,16 @@ CommandLine::~CommandLine()
 // command ...
 bool CommandLine::parse(void)
 {
-	if(add(new TmpFile(m_feeder)))
+	if(add(new TmpFile(m_feeder,m_env)))
 		m_file_to_write = true;
 
-	if(!add(new Command(m_feeder)))
+	if(!add(new Command(m_feeder,m_env)))
 		return false;
 
 	string tmp;
 	m_feeder->blank(&tmp);
 
-	while(add(new Arg(m_feeder))){
+	while(add(new Arg(m_feeder,m_env))){
 		m_feeder->blank(&tmp);
 		if(m_feeder->atNewLine())
 			return true;

@@ -6,11 +6,12 @@
 using namespace std;
 
 class Feeder;
+class Environment;
 
 class Arg : public Element
 {
 public:
-	Arg(Feeder *f);
+	Arg(Feeder *f,Environment *env);
 	virtual ~Arg();
 	virtual void print(int indent_level = 0);
 	const char *getOriginalString(void){return m_text.c_str();}

@@ -6,16 +6,18 @@
 using namespace std;
 
 class Feeder;
+class Environment;
 
 class Element
 {
 protected:
 	Feeder *m_feeder;
+	Environment *m_env;
 
 	vector<string> m_error_messages;
 	vector<Element *> m_nodes;
 public:
-	Element(Feeder *f);
+	Element(Feeder *f, Environment *env);
 	virtual ~Element();
 	virtual void printErrorMessages(void);
 	virtual bool eval(void) = 0;

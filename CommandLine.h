@@ -10,11 +10,12 @@ class Element;
 class Feeder;
 class Arg;
 class TmpFile;
+class Environment;
 
 class CommandLine : public Element
 {
 public:
-	CommandLine(Feeder *f);
+	CommandLine(Feeder *f, Environment *env);
 	virtual ~CommandLine();
 	bool parse(void);
 

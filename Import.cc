@@ -1,8 +1,9 @@
 #include "Import.h"
 #include "Feeder.h"
+#include "Environment.h"
 using namespace std;
 
-Import::Import(Feeder *f) : Element(f)
+Import::Import(Feeder *f, Environment *env) : Element(f,env)
 {
 }
 
@@ -12,7 +13,7 @@ Import::~Import()
 
 bool Import::eval(void)
 {
-	return true;
+	return m_env->setImportPaths(&m_prefix,&m_path);
 }
 
 int Import::exec(void)

@@ -6,11 +6,12 @@
 using namespace std;
 
 class Feeder;
+class Envrionment;
 
 class Command : public Element
 {
 public:
-	Command(Feeder *f);
+	Command(Feeder *f, Environment *env);
 	virtual ~Command();
 	const char *getStr(void);
 

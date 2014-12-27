@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Feeder.h"
+#include "Environment.h"
 #include "Script.h"
 #include <fstream>
 #include <unistd.h>
@@ -23,9 +24,11 @@ int main(int argc, char const* argv[])
 
 	ifstream ifs(argv[argc-1]);
 	Feeder feeder(&ifs);
+	Environment env;
 
 	// We want to implement Parsec like LL parser by ourselves
-	Script s(&feeder);
+	Script s(&feeder,&env);
+
 	if( ! s.parse() ){
 		s.printErrorMessages();
 		exit(1);
@@ -35,7 +38,7 @@ int main(int argc, char const* argv[])
 		s.printOriginalString();
 		
 	int status = s.exec();
-	feeder.removeFiles();
+	env.removeFiles();
 
 	if(status != 0)
 		exit(status);

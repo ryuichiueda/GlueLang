@@ -8,11 +8,12 @@ using namespace std;
 
 class Element;
 class Feeder;
+class Environment;
 
 class Script : public Element
 {
 public:
-	Script(Feeder *f);
+	Script(Feeder *f, Environment *env);
 	virtual ~Script();
 	//virtual void print(int indent_level = 0);
 	bool parse(void);

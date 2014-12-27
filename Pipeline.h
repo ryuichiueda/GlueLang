@@ -8,13 +8,14 @@ using namespace std;
 
 class Element;
 class Feeder;
+class Environment;
 class Arg;
 class CommandLine;
 
 class Pipeline : public Element
 {
 public:
-	Pipeline(Feeder *f);
+	Pipeline(Feeder *f, Environment *env);
 	virtual ~Pipeline();
 	virtual void print(int indent_level = 0);
 

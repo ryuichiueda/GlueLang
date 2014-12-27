@@ -1,8 +1,9 @@
 #include "Command.h"
 #include "Feeder.h"
+#include "Environment.h"
 using namespace std;
 
-Command::Command(Feeder *f) : Element(f)
+Command::Command(Feeder *f, Environment *env) : Element(f,env)
 {
 }
 
