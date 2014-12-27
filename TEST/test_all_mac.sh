@@ -7,5 +7,6 @@ bash ./comment.test
 bash ./file.test
 bash ./v_opt.test
 bash ./pipeline_mac.test
+bash ./import_mac.test
 
 echo OK
