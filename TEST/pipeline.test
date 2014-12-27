@@ -27,4 +27,21 @@ ERROR_CHECK "TEST1.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
 
+#########################################
+# TEST2: three commands
+#########################################
+cat << FIN > $tmp-out
+1
+2
+3
+4
+5
+FIN
+
+../main ./pipeline3.glue > $tmp-ans
+ERROR_CHECK "TEST2.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST2.2 error"
+
 rm -f $tmp-*
