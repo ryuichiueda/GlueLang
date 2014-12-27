@@ -25,26 +25,6 @@ CommandLine::~CommandLine()
 
 }
 
-void CommandLine::print(int indent_level)
-{
-}
-
-/*
-void CommandLine::setName(string s){
-	//m_name = s;
-	Arg arg(&m_name,m_feeder);
-	//m_args.push_back(arg);
-	m_nodes.push_back(arg);
-}
-*/
-
-/*
-void CommandLine::appendArg(string a){
-	Arg arg(&a,m_feeder);
-	m_args.push_back(arg);
-}
-*/
-
 // file f = command ...
 // command ...
 bool CommandLine::parse(void)
@@ -116,14 +96,13 @@ int CommandLine::exec(void)
 	}
 
 	/*parent*/
-	parentPipeProc();
+	if(m_is_piped){
+		parentPipeProc();
+		return pid;
+	}
 
 	int status;
 	int options = 0;
-
-	if(m_is_piped)
-		return pid;
-
 	waitpid(pid,&status,options);
 
 	if(WIFEXITED(status)){
@@ -133,26 +112,31 @@ int CommandLine::exec(void)
 	return -1;
 }
 
+const char** CommandLine::makeArgv(int file_num)
+{
+	auto argv = new const char* [m_nodes.size() - file_num];
+	argv[0] = ((Command *)m_nodes[file_num])->getStr();
+	for (int i=1;i < (int)m_nodes.size()-file_num;i++){
+		argv[i] = ((Arg *)m_nodes[file_num+i])->getEvaledString();
+	}
+
+	argv[m_nodes.size()-file_num] = NULL;
+	return argv;
+}
+
 void CommandLine::execCommandLine(void)
 {
 	//The child process should not access to the source code.
 	m_feeder->close();
 
-	int org = 0;
+	int file_num = 0;
 	if(m_file_to_write == true){
-		org++;
+		file_num++;
 		if(m_nodes[0]->exec() != 0)
 			return;
 	}
 
-	auto **argv = new const char* [m_nodes.size()-org];
-	argv[0] = ((Command *)m_nodes[org])->getStr();
-	for (int i=1;i < (int)m_nodes.size()-org;i++){
-		argv[i] = ((Arg *)m_nodes[org+i])->getEvaledString();
-	}
-
-	argv[m_nodes.size()-org] = NULL;
-
+	auto argv = makeArgv(file_num);
 	execve(argv[0],(char **)argv,NULL);
 }
 

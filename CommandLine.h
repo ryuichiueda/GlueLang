@@ -16,7 +16,6 @@ class CommandLine : public Element
 public:
 	CommandLine(Feeder *f);
 	virtual ~CommandLine();
-	virtual void print(int indent_level = 0);
 	bool parse(void);
 
 	void setName(string s);
@@ -34,6 +33,8 @@ protected:
 
 	void childPipeProc(void);
 	void parentPipeProc(void);
+
+	const char** makeArgv(int file_num);
 
 	bool m_file_to_write;
 
