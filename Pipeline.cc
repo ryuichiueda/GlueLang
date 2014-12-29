@@ -40,7 +40,7 @@ void Pipeline::print(int indent_level)
 bool Pipeline::parse(void)
 {
 	int prev_ln,prev_ch;
-	m_feeder->getCurPos(&prev_ln, &prev_ch);
+	m_feeder->getPos(&prev_ln, &prev_ch);
 
 	// scanning of file name 
 	// If `file <filename> =` is found, 
@@ -72,7 +72,7 @@ bool Pipeline::parse(void)
 	}
 
 	if(comnum < 2){
-		m_feeder->rewind(prev_ln,prev_ch);
+		m_feeder->setPos(prev_ln,prev_ch);
 		return false;
 	}
 

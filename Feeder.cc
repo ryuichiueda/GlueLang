@@ -68,7 +68,7 @@ bool Feeder::command(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
-	tryNextLine(p);
+	checkEol(p);
 	return true;
 }
 
@@ -91,7 +91,7 @@ bool Feeder::smallCaps(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
-	tryNextLine(p);
+	checkEol(p);
 	return true;
 }
 
@@ -101,7 +101,7 @@ bool Feeder::blank(string *ans)
 		return false;
 
 	string *p = &m_lines[m_cur_line];
-	tryNextLine(p);
+	checkEol(p);
 	p = &m_lines[m_cur_line];
 
 	if(outOfRange())
@@ -121,7 +121,7 @@ bool Feeder::blank(string *ans)
 		*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 
 	m_cur_char = i+1;
-	tryNextLine(p);
+	checkEol(p);
 	return true;
 }
 
@@ -157,7 +157,7 @@ bool Feeder::pipe(string *ans)
 		*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 
 	m_cur_char = i;
-	tryNextLine(p);
+	checkEol(p);
 	return true;
 }
 
@@ -188,7 +188,7 @@ bool Feeder::pipeEnd(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
-	tryNextLine(p);
+	checkEol(p);
 	return true;
 }
 */
@@ -220,7 +220,7 @@ bool Feeder::variable(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
-	tryNextLine(p);
+	checkEol(p);
 	return true;
 }
 // arg should be a string that is quoted by '.
@@ -264,7 +264,7 @@ bool Feeder::literalString(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char+1,i-m_cur_char-1);
 	m_cur_char = i+1;
-	tryNextLine(p);
+	checkEol(p);
 	return true;
 }
 
@@ -335,7 +335,7 @@ bool Feeder::str(string s)
 		m_cur_char += s.length();
 	}
 
-	tryNextLine(p);
+	checkEol(p);
 	return ans;
 }
 
@@ -374,11 +374,11 @@ bool Feeder::tmpFile(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char+5,last-m_cur_char-5);
 	m_cur_char = i;
-	tryNextLine(p);
+	checkEol(p);
 	return true;
 }
 
-void Feeder::tryNextLine(string *p)
+void Feeder::checkEol(string *p)
 {
 	if(m_cur_char < (int)p->length())
 		return;
@@ -410,13 +410,13 @@ void Feeder::debugOut(void)
 	cerr << m_cur_line << " " << m_cur_char << endl;
 }
 
-void Feeder::getCurPos(int *ln,int *ch)
+void Feeder::getPos(int *ln,int *ch)
 {
 	*ln = m_cur_line;
 	*ch = m_cur_char;
 }
 
-void Feeder::rewind(int ln,int ch)
+void Feeder::setPos(int ln,int ch)
 {
 	m_cur_line = ln;
 	m_cur_char = ch;

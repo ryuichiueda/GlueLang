@@ -26,13 +26,13 @@ int Command::exec(void)
 bool Command::parse(void)
 {
 	int prev_ln,prev_ch;
-	m_feeder->getCurPos(&prev_ln, &prev_ch);
+	m_feeder->getPos(&prev_ln, &prev_ch);
 
 	if( ! m_feeder->smallCaps(&m_prefix))
 		return m_feeder->command(&m_name);
 
  	if(! m_feeder->str(".") || ! m_env->getImportPaths(&m_prefix, &m_path)){
-		m_feeder->rewind(prev_ln,prev_ch);
+		m_feeder->setPos(prev_ln,prev_ch);
 	}
 
 	return m_feeder->command(&m_name);

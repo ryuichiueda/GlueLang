@@ -24,7 +24,7 @@ int Import::exec(void)
 bool Import::parse(void)
 {
 	int prev_ln,prev_ch;
-	m_feeder->getCurPos(&prev_ln, &prev_ch);
+	m_feeder->getPos(&prev_ln, &prev_ch);
 
 	if(! m_feeder->str(string("import")))
 		return false;
@@ -32,7 +32,7 @@ bool Import::parse(void)
 	m_feeder->blank(NULL);
 
 	if(! m_feeder->path(&m_path)){
-		m_feeder->rewind(prev_ln,prev_ch);
+		m_feeder->setPos(prev_ln,prev_ch);
 		return false;
 	}
 

@@ -2,3 +2,4 @@
 .DS_Store
 glue
 TEST/file1.glue
+TEST/simple_command.glue

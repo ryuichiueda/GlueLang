@@ -4,27 +4,28 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <map>
 using namespace std;
 
 class Feeder
 {
 private:
-	ifstream* m_ifs;
-	vector<string> m_lines;
-	bool readLine(void);	
+	ifstream* m_ifs; // related to the script file
+	vector<string> m_lines; // in which the script is stored
 
+	bool readLine(void);
+
+	// They points the position where parsers are scanning 
 	int m_cur_line;
 	int m_cur_char;
 
 	bool outOfRange(void);
-	void tryNextLine(string *p);
+	void checkEol(string *p);
 public:
 	Feeder(ifstream *ifs);
 	~Feeder();
 
-	void getCurPos(int *ln,int *ch);
-	void rewind(int ln,int ch);
+	void getPos(int *ln,int *ch);
+	void setPos(int ln,int ch);
 
 	bool literalString(string *ans);
 	bool variable(string *ans);
@@ -34,7 +35,6 @@ public:
 	bool blank(string *ans);
 	bool pipe(string *ans);
 	bool path(string *ans);
-//	bool pipeEnd(string *ans);
 	bool import(string *ans);
 	bool smallCaps(string *ans);
 
@@ -45,16 +45,11 @@ public:
 	void close(void);
 	void print(void);
 
-	void debugOut(void);
-
-	//bool ungetToken(string *str);
-
 	bool atNewLine(void);
-
 	bool atEnd(void);
-
 	bool isAlphabet(char c);
 	bool isNum(char c);
 
+	void debugOut(void);
 };
 #endif
