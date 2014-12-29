@@ -19,7 +19,6 @@ protected:
 public:
 	Element(Feeder *f, Environment *env);
 	virtual ~Element();
-	//virtual void printErrorMessages(void);
 	virtual bool eval(void) = 0;
 	virtual int exec(void) = 0;
 	virtual bool parse(void) = 0;

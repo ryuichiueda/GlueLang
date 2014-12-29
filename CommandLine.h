@@ -42,10 +42,6 @@ protected:
 
 	TmpFile *m_outfile;
 
-	//bool m_file_to_write;
-
-	//bool setRedirectTo(TmpFile *f);
-
 	int m_pipe[2];
 	int m_pipe_prev;
 	bool m_is_piped;

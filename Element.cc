@@ -13,15 +13,6 @@ Element::~Element()
 {
 }
 
-/*
-void Element::printErrorMessages(void)
-{
-	for(auto e : m_error_messages){
-		cerr << e << endl;
-	}
-}
-*/
-
 bool Element::add(Element *n)
 {
 	if( n->parse() ){
@@ -39,13 +30,6 @@ void Element::printOriginalString(void)
 	}
 	cerr << flush;
 }
-
-/*
-bool Element::errorExist(void)
-{
-	return m_error_messages.size() != 0;
-}
-*/
 
 void Element::errorCheck(void)
 {

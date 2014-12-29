@@ -59,16 +59,8 @@ bool Pipeline::parse(void)
 			repeat = true;
 			comnum++;
 		}else{
-
-			errorCheck();
+			errorCheck();//exit if errors exit
 			break;
-/*
-			if(errorExist()){
-				return false; // error exit
-			}else{
-				break;
-			}
-*/
 		}
 
 		if(! m_feeder->pipe(&tmp))
@@ -95,8 +87,6 @@ bool Pipeline::eval(void)
 {
 	return true;
 }
-
-//int Pipeline::fork
 
 int Pipeline::exec(void)
 {
