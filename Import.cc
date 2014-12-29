@@ -29,20 +29,19 @@ bool Import::parse(void)
 	if(! m_feeder->str(string("import")))
 		return false;
 
-	string tmp;
-	m_feeder->blank(&tmp);
+	m_feeder->blank(NULL);
 
 	if(! m_feeder->path(&m_path)){
 		m_feeder->rewind(prev_ln,prev_ch);
 		return false;
 	}
 
-	m_feeder->blank(&tmp);
+	m_feeder->blank(NULL);
 
 	if(! m_feeder->str(string("as")))
 		return false;
 
-	m_feeder->blank(&tmp);
+	m_feeder->blank(NULL);
 
 	if(! m_feeder->smallCaps(&m_prefix))
 		return false;

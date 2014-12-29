@@ -51,7 +51,6 @@ bool Pipeline::parse(void)
 	}
 
 	int comnum = 0;
-	string tmp;
 	while(1){
 		bool repeat = false;
 
@@ -63,10 +62,10 @@ bool Pipeline::parse(void)
 			break;
 		}
 
-		if(! m_feeder->pipe(&tmp))
+		if(! m_feeder->pipe(NULL))
 			break;
 
-		m_feeder->blank(&tmp);
+		m_feeder->blank(NULL);
 
 		if(! repeat)
 			break;

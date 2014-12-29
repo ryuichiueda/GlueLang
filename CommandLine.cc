@@ -45,11 +45,10 @@ bool CommandLine::parse(void)
 	if(!add(new Command(m_feeder,m_env)))
 		return false;
 
-	string tmp;
-	m_feeder->blank(&tmp);
+	m_feeder->blank(NULL);
 
 	while(add(new Arg(m_feeder,m_env))){
-		m_feeder->blank(&tmp);
+		m_feeder->blank(NULL);
 		if(m_feeder->atNewLine())
 			return true;
 	}

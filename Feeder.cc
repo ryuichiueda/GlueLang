@@ -116,7 +116,10 @@ bool Feeder::blank(string *ans)
 		if( c != ' ' || c != '\t')
 			break;
 	}
-	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+
+	if(ans != NULL)
+		*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+
 	m_cur_char = i+1;
 	tryNextLine(p);
 	return true;
@@ -132,7 +135,6 @@ bool Feeder::pipe(string *ans)
 	if(outOfRange())
 		return false;
 
-	//bool comma = false;
 	bool exist = false;
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
@@ -151,7 +153,9 @@ bool Feeder::pipe(string *ans)
 	if(! exist)
 		return false;
 
-	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+	if(ans != NULL)
+		*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+
 	m_cur_char = i;
 	tryNextLine(p);
 	return true;
@@ -291,7 +295,7 @@ bool Feeder::comment(string *ans)
 
 	string *p = &m_lines[m_cur_line];
 
-	// a blank line is considered as a comment
+	// a blank line is treated as a comment
 	if(p->length() == 0){
 		*ans = "";
 		m_cur_char = 0;
