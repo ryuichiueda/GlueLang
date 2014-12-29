@@ -47,9 +47,17 @@ ERROR_CHECK "TEST2 error"
 #########################################
 # TEST3: non-existent command
 #########################################
-../glue ./non_existent_command.glue > /dev/null
-[ "$?" != 0 ]
-ERROR_CHECK "TEST3 error"
+cat << FIN > $tmp-ans
+ERROR: exec() failed: No such file or directory
+Failed to execute command: /bin/caaaaaaaaaaaaaaaaaaaaaaat /etc/passwd 
+FIN
+
+../glue ./non_existent_command.glue > /dev/null 2> $tmp-out
+[ "$?" == 127 ]
+ERROR_CHECK "TEST3.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST1.2 error"
 
 #########################################
 # TEST4: execution of two commands 
