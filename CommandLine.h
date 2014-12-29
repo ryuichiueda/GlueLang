@@ -41,7 +41,7 @@ protected:
 
 	bool m_file_to_write;
 
-	bool setRedirectTo(TmpFile *f);
+	//bool setRedirectTo(TmpFile *f);
 
 	int m_pipe[2];
 	int m_pipe_prev;
