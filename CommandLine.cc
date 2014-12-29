@@ -92,6 +92,9 @@ int CommandLine::exec(void)
 	if (pid == 0){//child
 		childPipeProc();
 		execCommandLine();
+		perror("ERROR: exec() filed");
+		cerr << "Failed to execute command: ";
+		this->printOriginalString();
 		_exit(127);
 	}
 
