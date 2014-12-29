@@ -58,15 +58,21 @@ bool Pipeline::parse(void)
 		if(add(new CommandLine(m_feeder,m_env))){
 			repeat = true;
 			comnum++;
-		}else if(m_error_messages.size() != 0){
-			return false; // error exit
 		}else{
+
+			errorCheck();
 			break;
+/*
+			if(errorExist()){
+				return false; // error exit
+			}else{
+				break;
+			}
+*/
 		}
 
-		if(! m_feeder->pipe(&tmp)){
+		if(! m_feeder->pipe(&tmp))
 			break;
-		}
 
 		m_feeder->blank(&tmp);
 

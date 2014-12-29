@@ -27,13 +27,10 @@ int main(int argc, char const* argv[])
 	Feeder feeder(&ifs);
 	Environment env;
 
-	// We want to implement Parsec like LL parser by ourselves
 	Script s(&feeder,&env);
-
-	if( ! s.parse() ){
-		s.printErrorMessages();
-		exit(1);
-	}
+	s.parse();
+	s.errorCheck();
+	// exit if s.parse() returns one or some errors
 
 	if(v_opt)
 		s.printOriginalString();

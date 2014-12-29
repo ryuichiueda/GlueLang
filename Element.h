@@ -19,7 +19,7 @@ protected:
 public:
 	Element(Feeder *f, Environment *env);
 	virtual ~Element();
-	virtual void printErrorMessages(void);
+	//virtual void printErrorMessages(void);
 	virtual bool eval(void) = 0;
 	virtual int exec(void) = 0;
 	virtual bool parse(void) = 0;
@@ -28,9 +28,6 @@ public:
 
 	bool add(Element *n);
 
-/*
-	void setFileList(string *filepath);
-	void removeFiles(void);
-*/
+	void errorCheck(void);
 };
 #endif

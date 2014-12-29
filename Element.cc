@@ -13,12 +13,14 @@ Element::~Element()
 {
 }
 
+/*
 void Element::printErrorMessages(void)
 {
 	for(auto e : m_error_messages){
 		cerr << e << endl;
 	}
 }
+*/
 
 bool Element::add(Element *n)
 {
@@ -36,4 +38,22 @@ void Element::printOriginalString(void)
 		s->printOriginalString();
 	}
 	cerr << flush;
+}
+
+/*
+bool Element::errorExist(void)
+{
+	return m_error_messages.size() != 0;
+}
+*/
+
+void Element::errorCheck(void)
+{
+	if(m_error_messages.size() == 0)
+		return;
+
+	for(auto e : m_error_messages){
+		cerr << e << endl;
+	}
+	exit(1);
 }
