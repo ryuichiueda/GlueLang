@@ -25,8 +25,17 @@ CommandLine::~CommandLine()
 
 }
 
-// file f = command ...
-// command ...
+/* parse of command line, where command line means
+ * the combination of one command, args, and files.
+ * We assume two patterns of commandline now:
+
+	file f = command ...
+	command ...
+
+* to do:
+	to implement file redirection for standard error, like
+	file f1 f2 = command ... 
+*/
 bool CommandLine::parse(void)
 {
 	if(add(new TmpFile(m_feeder,m_env)))
@@ -78,6 +87,14 @@ void CommandLine::childPipeProc(void)
 	}
 }
 
+void CommandLine::execErrorExit(void)
+{
+	perror("ERROR: exec() filed");
+	cerr << "Failed to execute command: ";
+	printOriginalString();
+	_exit(127);
+}
+
 int CommandLine::exec(void)
 {
 	cout << flush;
@@ -92,10 +109,7 @@ int CommandLine::exec(void)
 	if (pid == 0){//child
 		childPipeProc();
 		execCommandLine();
-		perror("ERROR: exec() filed");
-		cerr << "Failed to execute command: ";
-		this->printOriginalString();
-		_exit(127);
+		execErrorExit();
 	}
 
 	/*parent*/

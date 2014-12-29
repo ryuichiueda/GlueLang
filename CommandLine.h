@@ -33,6 +33,7 @@ public:
 	void pushOutFile(Element *e);
 protected:
 	void execCommandLine(void);
+	void execErrorExit(void);
 
 	void childPipeProc(void);
 	void parentPipeProc(void);

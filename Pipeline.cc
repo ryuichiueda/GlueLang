@@ -13,7 +13,7 @@ using namespace std;
 
 Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_file_to_write = false;
+	m_outfile = NULL;
 }
 
 Pipeline::~Pipeline()
@@ -25,17 +25,29 @@ void Pipeline::print(int indent_level)
 {
 }
 
-// file f = command ...
-// command ...
+/* parse of a pipe line, which is more than one command lines.
+
+	file f = command ... >>= command ... >>= ...
+	command ... >>= command ... >>= ...
+
+* to do:
+	to implement file redirection for standard error, like
+	file f1 f2 = command ... 
+
+	The way of writting for redirection of standard error
+	toward one command line will be an issue.
+*/
 bool Pipeline::parse(void)
 {
 	int prev_ln,prev_ch;
 	m_feeder->getCurPos(&prev_ln, &prev_ch);
 
-	Element *outfile = NULL;
+	// scanning of file name 
+	// If `file <filename> =` is found, 
+	// the TmpFile object is pushed as the first element of m_nodes.
+	// This node is also given to the last command line.
 	if(add(new TmpFile(m_feeder,m_env))){
-		outfile = m_nodes[0];	
-		m_file_to_write = true;
+		m_outfile = m_nodes[0];	
 	}
 
 	int comnum = 0;
@@ -67,8 +79,8 @@ bool Pipeline::parse(void)
 		return false;
 	}
 
-	if(outfile != NULL){
-		((CommandLine *)m_nodes.back())->pushOutFile(outfile);
+	if(m_outfile != NULL){
+		((CommandLine *)m_nodes.back())->pushOutFile(m_outfile);
 	}
 	return true;
 }
@@ -89,7 +101,7 @@ int Pipeline::exec(void)
 	int pip[2];
 	int prevfd = -1;
 	int n = 0;
-	if(m_file_to_write)
+	if(m_outfile != NULL)
 		n++;
 
 	for(int i=n;i<m_nodes.size();i++){
