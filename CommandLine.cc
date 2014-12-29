@@ -89,7 +89,7 @@ void CommandLine::childPipeProc(void)
 
 void CommandLine::execErrorExit(void)
 {
-	perror("ERROR: exec() filed");
+	perror("ERROR: exec() failed");
 	cerr << "Failed to execute command: ";
 	printOriginalString();
 	_exit(127);
