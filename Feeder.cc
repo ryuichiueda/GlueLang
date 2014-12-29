@@ -28,13 +28,6 @@ bool Feeder::readLine(void)
 	return true;
 }
 
-void Feeder::print(void)
-{
-	for(auto ln : m_lines){
-		cout << ln << endl;
-	}
-}
-
 void Feeder::close(void)
 {
 	if(m_ifs == NULL)

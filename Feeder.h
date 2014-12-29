@@ -14,7 +14,7 @@ private:
 
 	bool readLine(void);
 
-	// They points the position where parsers are scanning 
+	// cursor for pointing the position of scanning
 	int m_cur_line;
 	int m_cur_char;
 
@@ -24,9 +24,12 @@ public:
 	Feeder(ifstream *ifs);
 	~Feeder();
 
+	// procedures for handling the position
 	void getPos(int *ln,int *ch);
 	void setPos(int ln,int ch);
 
+	// they scan the script, move the cursor
+	// and return the string on matching
 	bool literalString(string *ans);
 	bool variable(string *ans);
 	bool comment(string *ans);
@@ -43,7 +46,6 @@ public:
 	void readAll(void);
 
 	void close(void);
-	void print(void);
 
 	bool atNewLine(void);
 	bool atEnd(void);
