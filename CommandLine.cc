@@ -13,7 +13,8 @@ using namespace std;
 
 CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_file_to_write = false;
+// m_file_to_write = false;
+	m_outfile = NULL;
 	m_pipe[0] = -1;
 	m_pipe[1] = -1;
 	m_pipe_prev = -1;
@@ -39,7 +40,7 @@ CommandLine::~CommandLine()
 bool CommandLine::parse(void)
 {
 	if(add(new TmpFile(m_feeder,m_env)))
-		m_file_to_write = true;
+		m_outfile = (TmpFile *)m_nodes[0];
 
 	if(!add(new Command(m_feeder,m_env)))
 		return false;
@@ -52,7 +53,6 @@ bool CommandLine::parse(void)
 		if(m_feeder->atNewLine())
 			return true;
 	}
-
 
 	return true;
 }
@@ -74,9 +74,9 @@ void CommandLine::childPipeProc(void)
 	if(!m_is_piped)
 		return;
 
-	if(m_pipe[1] >= 0){
+	if(m_pipe[1] >= 0)
 		close(m_pipe[0]);
-	}
+
 	if(m_pipe_prev > 0) {
 		dup2(m_pipe_prev, 0);
 		close(m_pipe_prev);
@@ -147,9 +147,9 @@ void CommandLine::execCommandLine(void)
 	m_feeder->close();
 
 	int file_num = 0;
-	if(m_file_to_write == true){
+	if(m_outfile != NULL){
 		file_num++;
-		if(m_nodes[0]->exec() != 0)
+		if(m_outfile->exec() != 0)
 			return;
 	}
 
@@ -182,8 +182,8 @@ void CommandLine::setPipe(int *pip,int prev)
 	m_is_piped = true;
 }
 
-void CommandLine::pushOutFile(Element *e)
+void CommandLine::pushOutFile(TmpFile *e)
 {
 	m_nodes.insert(m_nodes.begin(),e);
-	m_file_to_write = true;
+	m_outfile = e;
 }

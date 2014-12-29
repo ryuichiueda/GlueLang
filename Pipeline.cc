@@ -47,7 +47,7 @@ bool Pipeline::parse(void)
 	// the TmpFile object is pushed as the first element of m_nodes.
 	// This node is also given to the last command line.
 	if(add(new TmpFile(m_feeder,m_env))){
-		m_outfile = m_nodes[0];	
+		m_outfile = (TmpFile *)m_nodes[0];	
 	}
 
 	int comnum = 0;

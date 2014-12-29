@@ -11,6 +11,7 @@ class Feeder;
 class Environment;
 class Arg;
 class CommandLine;
+class TmpFile;
 
 class Pipeline : public Element
 {
@@ -23,6 +24,6 @@ public:
 	virtual bool eval(void);
 	virtual bool parse(void);
 protected:
-	Element *m_outfile;
+	TmpFile *m_outfile;
 };
 #endif
