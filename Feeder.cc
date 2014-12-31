@@ -101,6 +101,10 @@ bool Feeder::blank(string *ans)
 		return false;
 
 	int i = m_cur_char;
+	if( p->size() < 1 ) {
+		*ans = string("");
+		return true;
+	}
 	if( p->at(i) != ' ')
 		return false;
 
