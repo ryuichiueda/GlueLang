@@ -101,11 +101,7 @@ bool Feeder::blank(string *ans)
 		return false;
 
 	int i = m_cur_char;
-	if( p->size() < 1 ) {
-		ans = NULL;
-		return false;
-	}
-	if( p->at(i) != ' ')
+	if( p->size() < 1 || p->at(i) != ' ')
 		return false;
 
 	for(;i < (int)p->length();i++){
@@ -349,25 +345,23 @@ bool Feeder::tmpFile(string *ans)
 
 	string *p = &m_lines[m_cur_line];
 
-	if(p->substr(0,5) != "file "){
+	if(p->substr(0,5) != "file ")
 		return false;
-	}
 
 	int i = m_cur_char + 5;
 	for( ; i < (int)p->length() ;i++){
-		if( ! isAlphabet(p->at(i)) ){
+		if( ! isAlphabet(p->at(i)) )
 			break;
-		}
 	}
 	int last = i;
-	while(p->at(i) == ' ' || p->at(i) == '\t'){
+	while(p->at(i) == ' ' || p->at(i) == '\t')
 		i++;
-	}
+
 	if(p->at(i++) != '=')
 		return false;
-	while(p->at(i) == ' ' || p->at(i) == '\t'){
+
+	while(p->at(i) == ' ' || p->at(i) == '\t')
 		i++;
-	}
 
 	*ans = string(p->c_str()+m_cur_char+5,last-m_cur_char-5);
 	m_cur_char = i;
