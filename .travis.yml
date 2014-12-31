@@ -10,7 +10,7 @@ install:
 
 before_script:
  - make clean
- - make
+ - make testinstall
 
 script: 
  - sh -e ./TEST/test_all.sh

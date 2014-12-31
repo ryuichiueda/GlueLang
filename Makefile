@@ -1,5 +1,6 @@
 CXX = g++
 TARGET = glue
+BINDIR	= /usr/local/bin
 CXXFLAGS = -Wall -O3 --static -std=c++11
 LDFLAGS = -lm
 SRCS := $(wildcard *.cc)
@@ -10,7 +11,13 @@ $(TARGET): $(OBJS)
 
 .PHONY: clean test
 clean:
-	rm -f $(TARGET) $(OBJS)
+	rm -f $(TARGET) $(OBJS) $(BINDIR)/$(TARGET)
 
-test:
+test: $(TARGET)
 	sh -e ./TEST/test_all.sh
+
+install: $(TARGET)
+	cp $(CURDIR)/$(TARGET) $(BINDIR)/$(TARGET)
+
+uninstall:
+	rm $(BINDIR)/$(TARGET)
