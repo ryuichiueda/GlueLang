@@ -99,7 +99,7 @@ int Pipeline::exec(void)
 	if(m_outfile != NULL)
 		n++;
 
-	for(int i=n;i<m_nodes.size();i++){
+	for(int i=n;i<(int)m_nodes.size();i++){
 		auto *p = (CommandLine *)m_nodes[i];
 		pip[1] = -1;
 		if ( i+1 != (int)m_nodes.size() && pipe(pip) < 0) {
