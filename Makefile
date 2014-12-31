@@ -8,10 +8,9 @@ OBJS := $(SRCS:.cc=.o)
 $(TARGET): $(OBJS)
 	$(CXX) -o $@ $(OBJS)
 
+.PHONY: clean test
 clean:
 	rm -f $(TARGET) $(OBJS)
 
 test:
 	sh -e ./TEST/test_all.sh
-
-.PHONY: clean test
