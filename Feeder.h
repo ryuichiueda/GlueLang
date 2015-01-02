@@ -33,7 +33,8 @@ public:
 	bool literalString(string *ans);
 	bool variable(string *ans);
 	bool comment(string *ans);
-	bool tmpFile(string *ans);
+	//bool tmpFile(string *ans);
+	bool declare(string *ans, string reserved);
 	bool command(string *ans);
 	bool blank(string *ans);
 	bool pipe(string *ans);

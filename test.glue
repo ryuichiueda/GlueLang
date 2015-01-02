@@ -1,1 +1,2 @@
-/usr/bin/seq '1' '10000000' >>= /bin/cat
+str tmp = /usr/bin/seq '1' '10'
+/bin/echo tmp

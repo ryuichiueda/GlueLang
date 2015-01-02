@@ -337,6 +337,41 @@ bool Feeder::import(string *ans)
 	return true;
 }
 
+// <reserved> variable = ...
+bool Feeder::declare(string *ans, string reserved)
+{
+	if(outOfRange())
+		return false;
+
+	string *p = &m_lines[m_cur_line];
+
+	int len = reserved.size();
+
+	if(p->substr(0,len+1) != reserved + " ")
+		return false;
+
+	int i = m_cur_char + len + 1;
+	for( ; i < (int)p->length() ;i++){
+		if( ! isAlphabet(p->at(i)) )
+			break;
+	}
+	int last = i;
+	while(p->at(i) == ' ' || p->at(i) == '\t')
+		i++;
+
+	if(p->at(i++) != '=')
+		return false;
+
+	while(p->at(i) == ' ' || p->at(i) == '\t')
+		i++;
+
+	*ans = string(p->c_str()+m_cur_char+5,last-m_cur_char-5);
+	m_cur_char = i;
+	checkEol(p);
+	return true;
+}
+
+/*
 // file f = command ...
 bool Feeder::tmpFile(string *ans)
 {
@@ -368,6 +403,7 @@ bool Feeder::tmpFile(string *ans)
 	checkEol(p);
 	return true;
 }
+*/
 
 void Feeder::checkEol(string *p)
 {
