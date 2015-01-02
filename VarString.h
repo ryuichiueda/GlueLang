@@ -25,13 +25,15 @@ public:
 
 	virtual void printOriginalString(void);
 
-	const char *actualFileName(void){return m_file_name.c_str();}
 	const char *virtualFileName(void){return m_var_name.c_str();}
 
 	int getFd(void){return m_fd;}
+
+	bool readFiFo(void);
 protected:
 	string m_var_name;
 	string m_file_name;
+	string m_value;
 
 	int m_fd;
 };

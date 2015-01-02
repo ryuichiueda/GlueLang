@@ -10,6 +10,7 @@ class Element;
 class Feeder;
 class Arg;
 class TmpFile;
+class VarString;
 class Environment;
 
 class CommandLine : public Element
@@ -41,6 +42,7 @@ protected:
 	const char** makeArgv(int file_num);
 
 	TmpFile *m_outfile;
+	VarString *m_outstr;
 
 	int m_pipe[2];
 	int m_pipe_prev;

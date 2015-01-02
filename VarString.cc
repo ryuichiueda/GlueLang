@@ -31,13 +31,19 @@ bool VarString::parse(void)
 // open the file
 bool VarString::eval(void)
 {
-	m_env->setVariable(&m_var_name,&m_file_name);
-	m_env->setFileList(&m_file_name);
-	m_fd = open( m_file_name.c_str() ,O_WRONLY | O_CREAT,0700);
-	if(m_fd < 3){
-		m_error_messages.push_back("file: " + m_var_name + " does not open.");
+	if(mkfifo(m_file_name.c_str(),0700) != 0){
+		m_error_messages.push_back("str: " + m_var_name + " " 
+				+ "(named pipe " + m_file_name.c_str() + ") does not prepared.");
 		return false;
 	}
+
+/*
+	if(m_fd < 3){
+		m_error_messages.push_back("str: " + m_var_name + " " 
+				+ "(named pipe " + m_file_name.c_str() + ") does not prepared.");
+		return false;
+	}
+*/
 
 	return true;
 }
@@ -45,12 +51,13 @@ bool VarString::eval(void)
 // joint the redirect
 int VarString::exec(void)
 {
+	m_fd = open( m_file_name.c_str() ,O_WRONLY ,0700);
 	if(dup2(m_fd,1) < 0){
-		m_error_messages.push_back("file: " + m_var_name + "  redirect error");
+		m_error_messages.push_back("str: " + m_var_name + "  redirect error");
 		return -1;
 	}
 	if( close(m_fd) < 0){
-		m_error_messages.push_back("file: " + m_var_name + "  redirect error");
+		m_error_messages.push_back("str: " + m_var_name + "  redirect error");
 		return -1;
 	}
 
@@ -60,4 +67,29 @@ int VarString::exec(void)
 void VarString::printOriginalString(void)
 {
 	cerr << m_var_name;
+}
+
+/*
+ * This function reads a named pipe and append the output to
+ * the value of this variable.
+ * This procedure is not optimized. Very slow.
+ * However, It's not critical because this string
+ * should not contain a long string.
+ */
+bool VarString::readFiFo(void)
+{
+	ifstream ifs(m_file_name.c_str());
+	string tmp;
+	bool isfirst = true;
+	while(ifs && getline(ifs, tmp)){
+		if(isfirst){
+			m_value += tmp;
+			isfirst = false;
+		}else
+			m_value += "\n" + tmp;
+	}
+	m_env->setVariable(&m_var_name,&m_value);
+	m_env->setFileList(&m_file_name);
+
+	return true;
 }

@@ -2,6 +2,7 @@
 #include "Command.h"
 #include "Arg.h"
 #include "TmpFile.h"
+#include "VarString.h"
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
@@ -13,8 +14,8 @@ using namespace std;
 
 CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 {
-// m_file_to_write = false;
 	m_outfile = NULL;
+	m_outstr = NULL;
 	m_pipe[0] = -1;
 	m_pipe[1] = -1;
 	m_pipe_prev = -1;
@@ -41,9 +42,12 @@ bool CommandLine::parse(void)
 {
 	if(add(new TmpFile(m_feeder,m_env)))
 		m_outfile = (TmpFile *)m_nodes[0];
+	else if(add(new VarString(m_feeder,m_env)))
+		m_outstr = (VarString *)m_nodes[0];
 
 	if(!add(new Command(m_feeder,m_env)))
 		return false;
+
 
 	m_feeder->blank(NULL);
 
@@ -117,6 +121,10 @@ int CommandLine::exec(void)
 		return pid;
 	}
 
+	if(m_outstr != NULL){
+		m_outstr->readFiFo();
+	}
+
 	int status;
 	int options = 0;
 	waitpid(pid,&status,options);
@@ -145,14 +153,20 @@ void CommandLine::execCommandLine(void)
 	//The child process should not access to the source code.
 	m_feeder->close();
 
-	int file_num = 0;
+	int io_num = 0;
 	if(m_outfile != NULL){
-		file_num++;
 		if(m_outfile->exec() != 0)
 			return;
+
+		io_num++;
+	}else if(m_outstr != NULL){
+		if(m_outstr->exec() != 0)
+			return;
+
+		io_num++;
 	}
 
-	auto argv = makeArgv(file_num);
+	auto argv = makeArgv(io_num);
 	execve(argv[0],(char **)argv,NULL);
 }
 

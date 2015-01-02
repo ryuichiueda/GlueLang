@@ -30,7 +30,7 @@ bool Environment::setVariable(string *key, string *value)
 	return true;
 }
 
-bool Environment::getVariable(string *key, string *value)
+bool Environment::getVariable(string *key,string *value)
 {
 	if(m_variables.find(*key) == m_variables.end())
 		return false;
