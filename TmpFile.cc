@@ -34,11 +34,6 @@ bool TmpFile::eval(void)
 {
 	m_env->setVariable(&m_var_name,&m_file_name);
 	m_env->setFileList(&m_file_name);
-	m_fd = open( m_file_name.c_str() ,O_WRONLY | O_CREAT,0700);
-	if(m_fd < 3){
-		m_error_messages.push_back("file: " + m_var_name + " does not open.");
-		return false;
-	}
 
 	return true;
 }
@@ -46,6 +41,11 @@ bool TmpFile::eval(void)
 // joint the redirect
 int TmpFile::exec(void)
 {
+	m_fd = open( m_file_name.c_str() ,O_WRONLY | O_CREAT,0700);
+	if(m_fd < 3){
+		m_error_messages.push_back("file: " + m_var_name + " does not open.");
+		return false;
+	}
 	if(dup2(m_fd,1) < 0){
 		m_error_messages.push_back("file: " + m_var_name + "  redirect error");
 		return -1;
