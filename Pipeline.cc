@@ -7,6 +7,7 @@
 #include "Pipeline.h"
 #include "CommandLine.h"
 #include "TmpFile.h"
+#include "VarString.h"
 #include "Arg.h"
 #include "Feeder.h"
 using namespace std;
@@ -48,6 +49,8 @@ bool Pipeline::parse(void)
 	// This node is also given to the last command line.
 	if(add(new TmpFile(m_feeder,m_env))){
 		m_outfile = (TmpFile *)m_nodes[0];	
+	}else if(add(new VarString(m_feeder,m_env))){
+		m_outstr = (VarString *)m_nodes[0];	
 	}
 
 	int comnum = 0;
@@ -78,6 +81,8 @@ bool Pipeline::parse(void)
 
 	if(m_outfile != NULL){
 		((CommandLine *)m_nodes.back())->pushOutFile(m_outfile);
+	}else if(m_outstr != NULL){
+		((CommandLine *)m_nodes.back())->pushVarString(m_outstr);
 	}
 	return true;
 }
@@ -96,7 +101,7 @@ int Pipeline::exec(void)
 	int pip[2];
 	int prevfd = -1;
 	int n = 0;
-	if(m_outfile != NULL)
+	if(m_outfile != NULL || m_outstr != NULL)
 		n++;
 
 	for(int i=n;i<(int)m_nodes.size();i++){
@@ -112,6 +117,9 @@ int Pipeline::exec(void)
 		prevfd = p->getPrevPipe();
 	}
 
+	if(m_outstr != NULL){
+		m_outstr->readFiFo();
+	}
 	for(auto pid : pids){
 		int status;
 		int options = 0;

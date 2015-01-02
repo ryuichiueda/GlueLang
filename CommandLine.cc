@@ -102,8 +102,9 @@ int CommandLine::exec(void)
 {
 	cout << flush;
 
-	if(! eval())
+	if(! eval()){
 		return -1;
+	}
 
 	int pid = fork();
 	if(pid < 0)
@@ -173,8 +174,10 @@ void CommandLine::execCommandLine(void)
 bool CommandLine::eval(void)
 {
 	for(auto s : m_nodes){
-		if( ! s->eval() )
+		if( ! s->eval() ){
+			m_error_messages.push_back("evaluation of args failed");
 			return false;
+		}
 	}
 	return true;
 }
@@ -199,4 +202,10 @@ void CommandLine::pushOutFile(TmpFile *e)
 {
 	m_nodes.insert(m_nodes.begin(),e);
 	m_outfile = e;
+}
+
+void CommandLine::pushVarString(VarString *e)
+{
+	m_nodes.insert(m_nodes.begin(),e);
+	m_outstr = e;
 }

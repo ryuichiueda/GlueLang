@@ -12,6 +12,7 @@ class Environment;
 class Arg;
 class CommandLine;
 class TmpFile;
+class VarString;
 
 class Pipeline : public Element
 {
@@ -25,5 +26,6 @@ public:
 	virtual bool parse(void);
 protected:
 	TmpFile *m_outfile;
+	VarString *m_outstr;
 };
 #endif

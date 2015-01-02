@@ -32,6 +32,7 @@ public:
 	int getPrevPipe(void){return m_pipe_prev;};
 
 	void pushOutFile(TmpFile *e);
+	void pushVarString(VarString *e);
 protected:
 	void execCommandLine(void);
 	void execErrorExit(void);

@@ -36,15 +36,6 @@ bool VarString::eval(void)
 				+ "(named pipe " + m_file_name.c_str() + ") does not prepared.");
 		return false;
 	}
-
-/*
-	if(m_fd < 3){
-		m_error_messages.push_back("str: " + m_var_name + " " 
-				+ "(named pipe " + m_file_name.c_str() + ") does not prepared.");
-		return false;
-	}
-*/
-
 	return true;
 }
 
