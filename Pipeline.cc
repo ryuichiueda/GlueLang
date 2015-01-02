@@ -15,6 +15,7 @@ using namespace std;
 Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_outfile = NULL;
+	m_outstr = NULL;
 }
 
 Pipeline::~Pipeline()
