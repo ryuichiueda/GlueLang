@@ -24,7 +24,8 @@ void Arg::print(int indent_level)
 bool Arg::eval(void)
 {
 	if(m_is_variable){
-		return m_env->getVariable(&m_text,&m_evaled_text);
+		m_env->getVariable(&m_text,&m_evaled_text);
+		return true;
 	}
 
 	m_evaled_text = m_text;

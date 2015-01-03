@@ -10,8 +10,11 @@ bool Environment::setImportPath(string *key, string *value)
 		return true;
 	}
 
-	if(m_import_paths.find(*key) != m_import_paths.end())
+	if(m_import_paths.find(*key) != m_import_paths.end()){
+		m_error_msg = *key + " is already used" ;
+		throw this;
 		return false;
+	}
 
 	m_import_paths[*key] = *value;
 	return true;
@@ -30,13 +33,6 @@ bool Environment::getImportPath(const char *key, string *value)
 {
 	string k = string(key);
 	return getImportPath(&k,value);
-/*
-	if(m_import_paths.find(k) == m_import_paths.end())
-		return false;
-
-	*value = m_import_paths[k];
-	return true;
-*/
 }
 
 bool Environment::setVariable(string *key, string *value)
@@ -48,26 +44,20 @@ bool Environment::setVariable(string *key, string *value)
 	return true;
 }
 
-bool Environment::getVariable(string *key,string *value)
+void Environment::getVariable(string *key,string *value)
 {
-	if(m_variables.find(*key) == m_variables.end())
-		return false;
+	if(m_variables.find(*key) == m_variables.end()){
+		m_error_msg = "variable " + *key + " not found";
+		throw this;
+	}
 
 	*value = m_variables[*key];
-	return true;
 }
 
-bool Environment::getVariable(const char *key,string *value)
+void Environment::getVariable(const char *key,string *value)
 {
 	string k = string(key);
 	return getVariable(&k,value);
-/*
-	if(m_variables.find(k) == m_variables.end())
-		return false;
-
-	*value = m_variables[k];
-	return true;
-*/
 }
 
 void Environment::setFileList(string *filepath)
@@ -82,6 +72,3 @@ void Environment::removeFiles(void)
 	}
 }
 
-void Environment::debug(void)
-{
-}

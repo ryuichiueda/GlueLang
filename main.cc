@@ -32,21 +32,39 @@ int main(int argc, char const* argv[])
 	env.setImportPath(&tmp_k,&tmp_v);
 
 	Script s(&feeder,&env);
-	s.parse();
-	s.errorCheck();
+	try{
+		s.parse();
+		s.errorCheck();
+	}
+	catch(Environment *e){
+		cerr << e->m_error_msg << endl;
+		env.removeFiles();
+		exit(1);
+	}
 	// exit if s.parse() returns one or some errors
 
 	if(v_opt)
 		s.printOriginalString();
 		
-	int status = s.exec();
-	env.removeFiles();
+	try{
+		int status = s.exec();
+		env.removeFiles();
 
-	if(status != 0)
-		exit(status);
+		if(status != 0)
+			exit(status);
 
-	if(feeder.atEnd())
-		exit(0);
+		if(feeder.atEnd())
+			exit(0);
+	}
+	catch(string e){
+		cerr << e << endl;
+		return false;
+	}
+	catch(Environment *e){
+		cerr << e->m_error_msg << endl;
+		env.removeFiles();
+		exit(1);
+	}
 
 	exit(1);
 }
