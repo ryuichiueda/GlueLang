@@ -1,1 +1,4 @@
-/bin/ca?t '/etc/passwd'
+| /usr/bin/true
+	/bin/echo 'yes'
+| otherwise
+	/bin/echo 'no'

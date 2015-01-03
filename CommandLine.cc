@@ -21,6 +21,8 @@ CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 	m_pipe[1] = -1;
 	m_pipe_prev = -1;
 	m_is_piped = false;
+
+	m_if = false;
 }
 
 CommandLine::~CommandLine()
@@ -140,7 +142,10 @@ int CommandLine::exec(void)
 		int es = WEXITSTATUS(status);
 		if(es != 0){
 			m_exit_status = es;
-			throw this;
+			if(m_if)
+				return es;
+			else
+				throw this;
 		}
 		return 0;
 	}

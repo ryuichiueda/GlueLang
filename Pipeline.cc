@@ -16,6 +16,8 @@ Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_outfile = NULL;
 	m_outstr = NULL;
+
+	m_if = false;
 }
 
 Pipeline::~Pipeline()
@@ -58,6 +60,8 @@ bool Pipeline::parse(void)
 		bool repeat = false;
 
 		if(add(new CommandLine(m_feeder,m_env))){
+			if(m_if)
+				((CommandLine *)m_nodes.back())->setIfFlag();
 			repeat = true;
 			comnum++;
 		}
@@ -125,12 +129,14 @@ int Pipeline::exec(void)
 		waitpid(pid,&status,options);
 		if(WIFEXITED(status)){
 			int e = WEXITSTATUS(status);
-			if(e != 0){
-				m_error_msg = "Pipeline error";
-				m_exit_status = e;
+			if(e == 0)
+				continue;
+
+			m_error_msg = "Pipeline error";
+			m_exit_status = e;
+			if(! m_if)
 				throw this;
-			}
 		}
 	}
-	return 0;
+	return m_exit_status;
 }

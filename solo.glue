@@ -1,0 +1,1 @@
+| /usr/bin/false >>= /bin/echo 'aho'

@@ -11,5 +11,6 @@ bash ./v_opt.test
 bash ./string.test
 bash ./import.test
 bash ./pipeline.test
+bash ./if.test
 
 echo OK

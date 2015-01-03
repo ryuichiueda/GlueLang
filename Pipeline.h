@@ -24,8 +24,12 @@ public:
 	virtual int exec(void);
 	virtual bool eval(void);
 	virtual bool parse(void);
+
+	void setIfFlag(void){m_if = true;}
 protected:
 	TmpFile *m_outfile;
 	VarString *m_outstr;
+
+	bool m_if;
 };
 #endif

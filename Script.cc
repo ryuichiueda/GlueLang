@@ -2,6 +2,7 @@
 #include "Feeder.h"
 #include "Script.h"
 #include "Import.h"
+#include "IfBlock.h"
 #include "Pipeline.h"
 #include "CommandLine.h"
 #include "Comment.h"
@@ -30,8 +31,9 @@ bool Script::parse(void)
 		// comments -> pipeline or command -> comments -> pipeline or command ...
 		while(add(new Comment(m_feeder,m_env))){ }
 
-		if(add(new Pipeline(m_feeder,m_env))
-		 || add(new CommandLine(m_feeder,m_env))){
+		if(	add(new IfBlock(m_feeder,m_env))
+			|| add(new Pipeline(m_feeder,m_env))
+		 	|| add(new CommandLine(m_feeder,m_env))){
 			continue;
 		}
 

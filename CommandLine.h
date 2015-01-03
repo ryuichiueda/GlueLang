@@ -33,6 +33,8 @@ public:
 
 	void pushOutFile(TmpFile *e);
 	void pushVarString(VarString *e);
+
+	void setIfFlag(void){m_if = true;}
 protected:
 	void execCommandLine(void);
 	void execErrorExit(void);
@@ -48,5 +50,7 @@ protected:
 	int m_pipe[2];
 	int m_pipe_prev;
 	bool m_is_piped;
+
+	bool m_if;
 };
 #endif
