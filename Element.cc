@@ -1,4 +1,6 @@
 #include "Element.h"
+#include "Feeder.h"
+#include "Environment.h"
 #include <stdio.h>
 #include <iostream>
 using namespace std;
@@ -7,6 +9,10 @@ Element::Element(Feeder *f, Environment *env)
 {
 	m_feeder = f;	
 	m_env = env;
+
+	m_start_line = m_start_char = -1000;
+	m_end_line = m_end_char = -1000;
+	m_exit_status = 0;
 }
 
 Element::~Element()
@@ -31,15 +37,18 @@ void Element::printOriginalString(void)
 	cerr << flush;
 }
 
-/*
-void Element::errorCheck(void)
+string Element::pos(void)
 {
-	if(m_error_messages.size() == 0)
-		return;
-
-	for(auto e : m_error_messages){
-		cerr << e << endl;
-	}
-	exit(1);
+	return "line " + to_string(m_start_line+1)	
+		+ ", char " + to_string(m_start_char+1);
 }
-*/
+
+void Element::printErrorPart(void)
+{
+	m_feeder->printErrorPart(m_start_line,m_end_line,m_end_char);
+}
+
+int Element::getLevel(void)
+{
+	return m_env->getLevel();
+}

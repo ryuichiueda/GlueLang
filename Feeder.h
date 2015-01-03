@@ -53,5 +53,7 @@ public:
 	bool isNum(char c);
 
 	void debugOut(void);
+
+	void printErrorPart(int from, int to,int to_char);
 };
 #endif

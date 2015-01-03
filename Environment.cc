@@ -3,6 +3,11 @@
 #include <iostream>
 using namespace std;
 
+Environment::Environment()
+{
+	m_level = 0;
+}
+
 void Environment::setImportPath(string *key, string *value)
 {
 	if(*key == "tmpdir"){

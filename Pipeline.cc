@@ -41,8 +41,7 @@ void Pipeline::print(int indent_level)
 */
 bool Pipeline::parse(void)
 {
-	int prev_ln,prev_ch;
-	m_feeder->getPos(&prev_ln, &prev_ch);
+	m_feeder->getPos(&m_start_line, &m_start_char);
 
 	// scanning of file name 
 	// If `file <filename> =` is found, 
@@ -61,14 +60,7 @@ bool Pipeline::parse(void)
 		if(add(new CommandLine(m_feeder,m_env))){
 			repeat = true;
 			comnum++;
-		}/*else{
-			int ln,ch;
-			m_feeder->getPos(&ln, &ch);
-			m_error_msg = "parse error at line: "
-				 + to_string(ln) + ", char: " + to_string(ch);
-			throw this;
-			errorCheck();
-		}*/
+		}
 
 		if(! m_feeder->pipe(NULL))
 			break;
@@ -80,10 +72,11 @@ bool Pipeline::parse(void)
 	}
 
 	if(comnum < 2){
-		m_feeder->setPos(prev_ln,prev_ch);
+		m_feeder->setPos(m_start_line,m_start_char);
 		return false;
 	}
 
+	m_feeder->getPos(&m_end_line, &m_end_char);
 	if(m_outfile != NULL){
 		((CommandLine *)m_nodes.back())->pushOutFile(m_outfile);
 	}else if(m_outstr != NULL){
@@ -132,8 +125,11 @@ int Pipeline::exec(void)
 		waitpid(pid,&status,options);
 		if(WIFEXITED(status)){
 			int e = WEXITSTATUS(status);
-			if(e != 0)
-				return e;
+			if(e != 0){
+				m_error_msg = "Pipeline error";
+				m_exit_status = e;
+				throw this;
+			}
 		}
 	}
 	return 0;

@@ -1,5 +1,6 @@
 #include "CommandLine.h"
 #include "Command.h"
+#include "Environment.h"
 #include "Arg.h"
 #include "TmpFile.h"
 #include "VarString.h"
@@ -40,23 +41,28 @@ CommandLine::~CommandLine()
 */
 bool CommandLine::parse(void)
 {
+	m_feeder->getPos(&m_start_line, &m_start_char);
+
 	if(add(new TmpFile(m_feeder,m_env)))
 		m_outfile = (TmpFile *)m_nodes[0];
 	else if(add(new VarString(m_feeder,m_env)))
 		m_outstr = (VarString *)m_nodes[0];
 
+
 	if(!add(new Command(m_feeder,m_env)))
 		return false;
-
 
 	m_feeder->blank(NULL);
 
 	while(add(new Arg(m_feeder,m_env))){
 		m_feeder->blank(NULL);
-		if(m_feeder->atNewLine())
+		if(m_feeder->atNewLine()){
+			m_feeder->getPos(&m_end_line, &m_end_char);
 			return true;
+		}
 	}
 
+	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }
 
@@ -92,10 +98,13 @@ void CommandLine::childPipeProc(void)
 
 void CommandLine::execErrorExit(void)
 {
-	perror("ERROR: exec() failed");
-	cerr << "Failed to execute command: ";
-	printOriginalString();
-	_exit(127);
+	//perror("ERROR: exec() failed");
+	//m_error_msg =  "Failed to execute command: " +
+//	printOriginalString() + 
+
+	m_error_msg =  "Failed to execute command";
+	m_exit_status = 127;
+	throw this;
 }
 
 int CommandLine::exec(void)
@@ -111,6 +120,7 @@ int CommandLine::exec(void)
 		exit(1);
 
 	if (pid == 0){//child
+		m_env->inclementLevel();
 		childPipeProc();
 		execCommandLine();
 		execErrorExit();
@@ -131,7 +141,12 @@ int CommandLine::exec(void)
 	waitpid(pid,&status,options);
 
 	if(WIFEXITED(status)){
-		return WEXITSTATUS(status);
+		int es = WEXITSTATUS(status);
+		if(es != 0){
+			m_exit_status = es;
+			throw this;
+		}
+		return 0;
 	}
 
 	return -1;
@@ -177,8 +192,6 @@ bool CommandLine::eval(void)
 		if( ! s->eval() ){
 			m_error_msg = "evaluation of args failed";
 			throw this;
-			//m_error_messages.push_back("evaluation of args failed");
-			//return false;
 		}
 	}
 	return true;

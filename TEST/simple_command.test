@@ -60,16 +60,11 @@ cat << 'FIN' > $tmp-glue
 /bin/caaaaaaaaaaaaaaaaaaaaaaat '/etc/passwd'
 FIN
 
-cat << FIN > $tmp-ans
-ERROR: exec() failed: No such file or directory
-Failed to execute command: /bin/caaaaaaaaaaaaaaaaaaaaaaat /etc/passwd 
-FIN
-
 ../glue $tmp-glue > /dev/null 2> $tmp-out
 [ "$?" == 127 ]
 ERROR_CHECK "TEST3.1 error"
 
-diff $tmp-out $tmp-ans
+grep -F 'Execution error at line 1, char 1' $tmp-out
 ERROR_CHECK "TEST1.2 error"
 
 #########################################

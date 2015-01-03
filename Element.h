@@ -14,8 +14,11 @@ protected:
 	Feeder *m_feeder;
 	Environment *m_env;
 
-	//vector<string> m_error_messages;
 	vector<Element *> m_nodes;
+
+	int m_start_line, m_start_char;
+	int m_end_line, m_end_char;
+	int m_exit_status;
 public:
 	Element(Feeder *f, Environment *env);
 	virtual ~Element();
@@ -27,8 +30,13 @@ public:
 
 	bool add(Element *n);
 
-	//void errorCheck(void);
-
 	string m_error_msg;
+
+	string pos(void);
+	int getExitStatus(void){return m_exit_status;};
+
+	void printErrorPart(void);
+
+	int getLevel(void);
 };
 #endif

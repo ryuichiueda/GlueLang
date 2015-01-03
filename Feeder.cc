@@ -414,3 +414,12 @@ void Feeder::setPos(int ln,int ch)
 	m_cur_line = ln;
 	m_cur_char = ch;
 }
+
+void Feeder::printErrorPart(int from, int to, int to_char)
+{
+	for(int i=from;i<to;i++){
+		cerr << "\tline" << i+1 << ": " <<  m_lines[i] << endl;
+	}
+	if(to_char != 0)
+		cerr << "\tline" << to+1 << ": " <<  m_lines[to] << endl;
+}

@@ -12,10 +12,4 @@ bash ./string.test
 bash ./import.test
 bash ./pipeline.test
 
-#if [ "$OS" = Linux ] ; then
-#	bash ./pipeline.test
-#else
-#	bash ./pipeline_mac.test
-#fi
-
 echo OK
