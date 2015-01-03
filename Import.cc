@@ -47,7 +47,8 @@ bool Import::parse(void)
 		return false;
 
 	//evaluate beforehand
-	return m_env->setImportPath(&m_prefix,&m_path);
+	m_env->setImportPath(&m_prefix,&m_path);
+	return true;
 }
 
 void Import::printOriginalString(void)

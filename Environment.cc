@@ -3,45 +3,50 @@
 #include <iostream>
 using namespace std;
 
-bool Environment::setImportPath(string *key, string *value)
+void Environment::setImportPath(string *key, string *value)
 {
 	if(*key == "tmpdir"){
 		m_import_paths[*key] = *value;
-		return true;
+		return;
 	}
 
 	if(m_import_paths.find(*key) != m_import_paths.end()){
 		m_error_msg = *key + " is already used" ;
 		throw this;
-		return false;
 	}
 
 	m_import_paths[*key] = *value;
-	return true;
 }
 
-bool Environment::getImportPath(string *key, string *value)
+void Environment::getImportPath(string *key, string *value)
 {
-	if(m_import_paths.find(*key) == m_import_paths.end())
-		return false;
+	if(m_import_paths.find(*key) == m_import_paths.end()){
+		m_error_msg = *key + " not found" ;
+		throw this;
+	}
 
 	*value = m_import_paths[*key];
-	return true;
 }
 
-bool Environment::getImportPath(const char *key, string *value)
+bool Environment::isImportPath(string *key)
+{
+	return m_import_paths.find(*key) != m_import_paths.end();
+}
+
+void Environment::getImportPath(const char *key, string *value)
 {
 	string k = string(key);
-	return getImportPath(&k,value);
+	getImportPath(&k,value);
 }
 
-bool Environment::setVariable(string *key, string *value)
+void Environment::setVariable(string *key, string *value)
 {
-	if(m_variables.find(*key) != m_variables.end())
-		return false;
+	if(m_variables.find(*key) != m_variables.end()){
+		m_error_msg = *key + " already exist" ;
+		throw this;
+	}
 
 	m_variables[*key] = *value;
-	return true;
 }
 
 void Environment::getVariable(string *key,string *value)

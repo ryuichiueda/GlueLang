@@ -16,18 +16,20 @@ private:
 
 public:
 	Environment(){}
-	bool setVariable(string *key, string *value);
+	void setVariable(string *key, string *value);
 	void getVariable(string *key, string *value);
 	void getVariable(const char *key, string *value);
 
-	bool setImportPath(string *key, string *value);
-	bool getImportPath(string *key, string *value);
-	bool getImportPath(const char *key, string *value);
+	void setImportPath(string *key, string *value);
+	void getImportPath(string *key, string *value);
+	void getImportPath(const char *key, string *value);
 
 	void setFileList(string *filepath);
 	void removeFiles(void);
 
 	string m_error_msg;
+
+	bool isImportPath(string *key);
 };
 
 #endif
