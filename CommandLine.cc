@@ -175,8 +175,10 @@ bool CommandLine::eval(void)
 {
 	for(auto s : m_nodes){
 		if( ! s->eval() ){
-			m_error_messages.push_back("evaluation of args failed");
-			return false;
+			m_error_msg = "evaluation of args failed";
+			throw this;
+			//m_error_messages.push_back("evaluation of args failed");
+			//return false;
 		}
 	}
 	return true;

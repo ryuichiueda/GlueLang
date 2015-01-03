@@ -39,9 +39,10 @@ bool VarString::parse(void)
 bool VarString::eval(void)
 {
 	if(mkfifo(m_file_name.c_str(),0700) != 0){
-		m_error_messages.push_back("str: " + m_var_name + " " 
-				+ "(named pipe " + m_file_name.c_str() + ") does not prepared.");
-		return false;
+		m_error_msg = "str: " + m_var_name + " " 
+				+ "(named pipe " + m_file_name.c_str() + ") does not prepared.";
+		throw this;
+		//return false;
 	}
 	return true;
 }
@@ -51,12 +52,14 @@ int VarString::exec(void)
 {
 	m_fd = open( m_file_name.c_str() ,O_WRONLY ,0700);
 	if(dup2(m_fd,1) < 0){
-		m_error_messages.push_back("str: " + m_var_name + "  redirect error");
-		return -1;
+		m_error_msg = "str: " + m_var_name + "  redirect error";
+		throw this;
+		//return -1;
 	}
 	if( close(m_fd) < 0){
-		m_error_messages.push_back("str: " + m_var_name + "  redirect error");
-		return -1;
+		m_error_msg = "str: " + m_var_name + "  redirect error";
+		throw this;
+		//return -1;
 	}
 
 	return 0;

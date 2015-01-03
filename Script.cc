@@ -32,14 +32,14 @@ bool Script::parse(void)
 		if(add(new Pipeline(m_feeder,m_env))){
 			repeat = true;
 			continue;
-		}else{
+		}/*else{
 			errorCheck();
-		}
+		}*/
 
 		if(add(new CommandLine(m_feeder,m_env))){
 			repeat = true;
 		}else{
-			errorCheck();
+		//	errorCheck();
 
 			return true;
 		}

@@ -14,7 +14,7 @@ protected:
 	Feeder *m_feeder;
 	Environment *m_env;
 
-	vector<string> m_error_messages;
+	//vector<string> m_error_messages;
 	vector<Element *> m_nodes;
 public:
 	Element(Feeder *f, Environment *env);
@@ -27,6 +27,8 @@ public:
 
 	bool add(Element *n);
 
-	void errorCheck(void);
+	//void errorCheck(void);
+
+	string m_error_msg;
 };
 #endif

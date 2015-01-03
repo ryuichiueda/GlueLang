@@ -31,6 +31,7 @@ void Element::printOriginalString(void)
 	cerr << flush;
 }
 
+/*
 void Element::errorCheck(void)
 {
 	if(m_error_messages.size() == 0)
@@ -41,3 +42,4 @@ void Element::errorCheck(void)
 	}
 	exit(1);
 }
+*/

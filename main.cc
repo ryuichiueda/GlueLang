@@ -34,7 +34,7 @@ int main(int argc, char const* argv[])
 	Script s(&feeder,&env);
 	try{
 		s.parse();
-		s.errorCheck();
+		//s.errorCheck();
 	}
 	catch(Environment *e){
 		cerr << e->m_error_msg << endl;
@@ -56,9 +56,10 @@ int main(int argc, char const* argv[])
 		if(feeder.atEnd())
 			exit(0);
 	}
-	catch(string e){
-		cerr << e << endl;
-		return false;
+	catch(Element *e){
+		cerr << e->m_error_msg << endl;
+		env.removeFiles();
+		exit(1);
 	}
 	catch(Environment *e){
 		cerr << e->m_error_msg << endl;

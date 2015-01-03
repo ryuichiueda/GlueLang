@@ -61,10 +61,14 @@ bool Pipeline::parse(void)
 		if(add(new CommandLine(m_feeder,m_env))){
 			repeat = true;
 			comnum++;
-		}else{
-			errorCheck();//exit if errors exit
-			break;
-		}
+		}/*else{
+			int ln,ch;
+			m_feeder->getPos(&ln, &ch);
+			m_error_msg = "parse error at line: "
+				 + to_string(ln) + ", char: " + to_string(ch);
+			throw this;
+			errorCheck();
+		}*/
 
 		if(! m_feeder->pipe(NULL))
 			break;
@@ -110,7 +114,8 @@ int Pipeline::exec(void)
 		pip[1] = -1;
 		if ( i+1 != (int)m_nodes.size() && pipe(pip) < 0) {
 			close(prevfd);
-			m_error_messages.push_back("Pipe call failed");
+			m_error_msg = "Pipe call failed";
+			throw this;
 		}
 
 		p->setPipe(pip,prevfd);
