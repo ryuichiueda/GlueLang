@@ -24,6 +24,8 @@ IfBlock::~IfBlock()
 	commandline3
 | otherwise               <- else
 	commandline4
+                         
+commandline5              <- out of if block
 
 The other purpose to use IfBlock is the cancel of exit statuses
 
@@ -37,7 +39,7 @@ bool IfBlock::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	if(! m_feeder->str("|"))
+	if(! m_feeder->str("?"))
 		return false;
 
 	while(1){

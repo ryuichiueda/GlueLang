@@ -26,7 +26,7 @@ c
 FIN
 
 cat << FIN > $tmp-glue
-| /usr/bin/false
+? /usr/bin/false
 FIN
 
 ../glue $tmp-glue 
@@ -41,7 +41,7 @@ hoge
 FIN
 
 cat << FIN > $tmp-glue
-| /usr/bin/false >>= /bin/echo 'hoge'
+? /usr/bin/false >>= /bin/echo 'hoge'
 FIN
 
 ../glue $tmp-glue > $tmp-ans

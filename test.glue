@@ -1,4 +1,4 @@
-| /usr/bin/true
+? /usr/bin/true
 	/bin/echo 'yes'
-| otherwise
+? otherwise
 	/bin/echo 'no'
