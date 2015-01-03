@@ -3,8 +3,13 @@
 #include <iostream>
 using namespace std;
 
-bool Environment::setImportPaths(string *key, string *value)
+bool Environment::setImportPath(string *key, string *value)
 {
+	if(*key == "tmpdir"){
+		m_import_paths[*key] = *value;
+		return true;
+	}
+
 	if(m_import_paths.find(*key) != m_import_paths.end())
 		return false;
 
@@ -12,12 +17,22 @@ bool Environment::setImportPaths(string *key, string *value)
 	return true;
 }
 
-bool Environment::getImportPaths(string *key, string *value)
+bool Environment::getImportPath(string *key, string *value)
 {
 	if(m_import_paths.find(*key) == m_import_paths.end())
 		return false;
 
 	*value = m_import_paths[*key];
+	return true;
+}
+
+bool Environment::getImportPath(const char *key, string *value)
+{
+	string k = string(key);
+	if(m_import_paths.find(k) == m_import_paths.end())
+		return false;
+
+	*value = m_import_paths[k];
 	return true;
 }
 
@@ -39,6 +54,16 @@ bool Environment::getVariable(string *key,string *value)
 	return true;
 }
 
+bool Environment::getVariable(const char *key,string *value)
+{
+	string k = string(key);
+	if(m_variables.find(k) == m_variables.end())
+		return false;
+
+	*value = m_variables[k];
+	return true;
+}
+
 void Environment::setFileList(string *filepath)
 {
 	m_file_list.push_back(*filepath);
@@ -51,3 +76,6 @@ void Environment::removeFiles(void)
 	}
 }
 
+void Environment::debug(void)
+{
+}

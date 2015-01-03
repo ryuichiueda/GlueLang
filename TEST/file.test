@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -xv
 
 tmp=/tmp/$$
 scr=$(basename $0)
@@ -11,7 +11,7 @@ ERROR_CHECK(){
 }
 
 #########################################
-# TEST1: cat
+# TEST1: use of file
 #########################################
 cat << FIN > $tmp-in
 a
@@ -41,5 +41,31 @@ ERROR_CHECK "TEST1.2 error"
 ls /tmp/*faoeoahgre &> /dev/null
 [ $? -ne 0 ]
 ERROR_CHECK "TEST1.3 error"
+
+#########################################
+# TEST2: change of tmpdir
+#########################################
+cat << FIN > $tmp-in
+a
+b
+c
+FIN
+
+cat << FIN > $tmp-out
+b
+FIN
+
+cat << FIN > $tmp-glue
+import /var/tmp/ as tmpdir
+
+file hoge = /bin/cat '$tmp-in'
+/usr/bin/grep 'b' hoge
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST2.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST2.2 error"
 
 rm -f $tmp-*

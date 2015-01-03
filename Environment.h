@@ -18,9 +18,13 @@ public:
 	Environment(){}
 	bool setVariable(string *key, string *value);
 	bool getVariable(string *key, string *value);
+	bool getVariable(const char *key, string *value);
 
-	bool setImportPaths(string *key, string *value);
-	bool getImportPaths(string *key, string *value);
+	void debug(void);
+
+	bool setImportPath(string *key, string *value);
+	bool getImportPath(string *key, string *value);
+	bool getImportPath(const char *key, string *value);
 
 	void setFileList(string *filepath);
 	void removeFiles(void);

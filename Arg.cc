@@ -54,12 +54,6 @@ bool Arg::parse(void)
 		return true;
 	}
 
-
-/*
-	string ans;
-	m_feeder->literalString(&ans);
-	cerr << ans << endl;
-*/
 	return false;
 }
 
