@@ -23,8 +23,7 @@ int Import::exec(void)
 
 bool Import::parse(void)
 {
-	int prev_ln,prev_ch;
-	m_feeder->getPos(&prev_ln, &prev_ch);
+	m_feeder->getPos(&m_start_line, &m_start_char);
 
 	if(! m_feeder->str(string("import")))
 		return false;
@@ -32,7 +31,7 @@ bool Import::parse(void)
 	m_feeder->blank(NULL);
 
 	if(! m_feeder->path(&m_path)){
-		m_feeder->setPos(prev_ln,prev_ch);
+		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}
 
@@ -46,8 +45,18 @@ bool Import::parse(void)
 	if(! m_feeder->smallCaps(&m_prefix))
 		return false;
 
+	m_feeder->getPos(&m_end_line, &m_end_char);
+
 	//evaluate beforehand
-	m_env->setImportPath(&m_prefix,&m_path);
+	try{
+		m_env->setImportPath(&m_prefix,&m_path);
+	}
+	catch(...){
+		m_error_msg = "Import error: " + m_env->m_error_msg;
+		m_exit_status = 1;
+		throw this;
+	}
+
 	return true;
 }
 

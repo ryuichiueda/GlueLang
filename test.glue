@@ -1,2 +1,5 @@
-/bin/echo 'aho' >>= /bin/s
-/sbin/shutdown 'boke'
+import /bin/ as b
+import /usr/bin/ as b
+
+file f = /bin/echo 'aho'
+/bin/cat fi

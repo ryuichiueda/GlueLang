@@ -44,15 +44,23 @@ int main(int argc, char const* argv[])
 	try{
 		s.parse();
 	}
-	catch(Environment *e){
-		cerr << e->m_error_msg << endl;
-		env.removeFiles();
-		exit(1);
-	}
 	catch(Element *e){
+		cerr << "\nParse error at " ;
 		cerr << e->pos() << endl;
-		cerr << e->m_error_msg << endl;
+		e->printErrorPart();
+		cerr << "\n\t" << e->m_error_msg << endl;
 		env.removeFiles();
+		cerr << "\t";
+
+		int es = e->getExitStatus();
+		cerr << '\n';
+		cerr <<  "\tprocess_level " << e->getLevel() << endl;
+		cerr << "\texit_status " << es << endl;
+		cerr << "\tpid " << getpid() << '\n' << endl;
+		exit(es);
+	}
+	catch(...){
+		cerr << "unknown error" << endl;
 		exit(1);
 	}
 
@@ -79,9 +87,10 @@ int main(int argc, char const* argv[])
 		cerr << "\n\t" << e->m_error_msg << endl;
 		env.removeFiles();
 		cerr << "\t";
-		perror("ERROR: exec() failed");
+		//perror("ERROR: exec() failed");
 
 		int es = e->getExitStatus();
+		cerr << '\n';
 		cerr <<  "\tprocess_level " << e->getLevel() << endl;
 		cerr << "\texit_status " << es << endl;
 		cerr << "\tpid " << getpid() << '\n' << endl;
@@ -90,9 +99,8 @@ int main(int argc, char const* argv[])
 		else
 			exit(es);
 	}
-	catch(Environment *e){
-		cerr << e->m_error_msg << endl;
-		env.removeFiles();
+	catch(...){
+		cerr << "unknown error" << endl;
 		exit(1);
 	}
 

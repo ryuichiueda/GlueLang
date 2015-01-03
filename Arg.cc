@@ -24,7 +24,13 @@ void Arg::print(int indent_level)
 bool Arg::eval(void)
 {
 	if(m_is_variable){
-		m_env->getVariable(&m_text,&m_evaled_text);
+		try{
+			m_env->getVariable(&m_text,&m_evaled_text);
+		}catch(...){
+			m_error_msg = m_env->m_error_msg;
+			m_exit_status = 1;
+			throw this;
+		}
 		return true;
 	}
 
@@ -45,13 +51,17 @@ int Arg::exec(void)
 
 bool Arg::parse(void)
 {
+	m_feeder->getPos(&m_start_line, &m_start_char);
+
 	if(m_feeder->literalString(&m_text)){
 		m_is_variable = false;
+		m_feeder->getPos(&m_end_line, &m_end_char);
 		return true;
 	}
 
 	if(m_feeder->variable(&m_text)){
 		m_is_variable = true;
+		m_feeder->getPos(&m_end_line, &m_end_char);
 		return true;
 	}
 
