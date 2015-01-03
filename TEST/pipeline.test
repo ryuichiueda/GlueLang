@@ -92,7 +92,7 @@ file aaa = /usr/bin/seq '1' '5' >>=
 /bin/cat aaa
 FIN
 
-cat << FIN > $tmp-linux
+cat << FIN > $tmp-mac
 file aaa = /usr/bin/jot '5' >>=
 /usr/bin/tail '-r' >>=
 /usr/bin/tail '-r'

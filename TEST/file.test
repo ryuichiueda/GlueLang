@@ -27,12 +27,12 @@ FIN
 
 rm -f /tmp/*faoeoahgre
 
-cat << FIN > ./file1.glue
+cat << FIN > $tmp-glue
 file faoeoahgre = /bin/cat '$tmp-in'
 /bin/cat faoeoahgre 
 FIN
 
-../glue ./file1.glue > $tmp-ans
+../glue $tmp-glue > $tmp-ans
 ERROR_CHECK "TEST1.1 error"
 
 diff $tmp-out $tmp-ans
@@ -95,8 +95,8 @@ FIN
 [ $? -eq 1 ]               # exit status should be one
 ERROR_CHECK "TEST3.1 error"
 
-ls /tmp/*-abcd               # the tmp file should not exist
-[ $? -eq 1 ]         
+ls /tmp/*-abcd               # the tmp file should not exist (exit status: linux 2, mac 1)
+[ $? -ne 0 ]         
 ERROR_CHECK "TEST3.2 error"
 
 rm -f $tmp-*
