@@ -418,10 +418,11 @@ void Feeder::setPos(int ln,int ch)
 void Feeder::printErrorPart(int from, int from_char, int to, int to_char)
 {
 	for(int i=from;i<to;i++){
-		cerr << "\tline" << i+1 << ": " <<  m_lines[i] << endl;
+		string left = "\tline" + to_string(i+1) + ": ";
+		cerr << left <<  m_lines[i] << endl;
 		if(i == from){
 			cerr << "\t";
-			for(int j=-7;j<from_char;j++)
+			for(int j=1-left.size();j<from_char;j++)
 				cerr << " ";
 			cerr << "^";
 		}
