@@ -20,33 +20,31 @@ Script::~Script()
 
 bool Script::parse(void)
 {
+	m_feeder->getPos(&m_start_line, &m_start_char);
+
 	// import
 	while(add(new Import(m_feeder,m_env))){
 	}
 
 	while(1){
 		// comments -> pipeline or command -> comments -> pipeline or command ...
-		bool repeat = false;
 		while(add(new Comment(m_feeder,m_env))){ }
 
-		if(add(new Pipeline(m_feeder,m_env))){
-			repeat = true;
+		if(add(new Pipeline(m_feeder,m_env))
+		 || add(new CommandLine(m_feeder,m_env))){
 			continue;
-		}/*else{
-			errorCheck();
-		}*/
-
-		if(add(new CommandLine(m_feeder,m_env))){
-			repeat = true;
-		}else{
-		//	errorCheck();
-
-			return true;
 		}
 
-		if(! repeat)
-			break;
+		break;
 	}
+	m_feeder->getPos(&m_end_line, &m_end_char);
+
+	if(!m_feeder->atEnd()){
+		m_error_msg = "Unknown token";
+		m_exit_status = 1;
+		throw this;
+	}
+
 	return true;
 }
 

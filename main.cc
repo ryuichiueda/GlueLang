@@ -74,10 +74,7 @@ int main(int argc, char const* argv[])
 		int status = s.exec();
 		env.removeFiles();
 
-		if(status != 0)
-			exit(status);
-
-		if(feeder.atEnd())
+		if(status == 0)
 			exit(0);
 	}
 	catch(Element *e){
@@ -104,5 +101,6 @@ int main(int argc, char const* argv[])
 		exit(1);
 	}
 
+	cerr << "unknown error (uncatched)" << endl;
 	exit(1);
 }

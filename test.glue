@@ -1,5 +1,1 @@
-import /bin/ as b
-import /usr/bin/ as b
-
-file f = /bin/echo 'aho'
-/bin/cat fi
+/bin/ca?t '/etc/passwd'
