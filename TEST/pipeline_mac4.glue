@@ -1,4 +1,0 @@
-/usr/bin/seq '1' '5' >>=
-/usr/bin/tail '-r' >>=
-/usr/bin/tr '\n' ' ' >>=
-/usr/local/bin/awk '{print}'

@@ -10,6 +10,10 @@ ERROR_CHECK(){
 	exit 1
 }
 
+os=linux
+[ "$(uname)" != "Linux" ] && os=mac
+
+
 #########################################
 # TEST1: two commands
 #########################################
@@ -21,7 +25,17 @@ cat << FIN > $tmp-out
 1
 FIN
 
-../glue ./pipeline.glue > $tmp-ans
+cat << FIN > $tmp-linux
+/usr/bin/seq '1' '5' >>= /usr/bin/tac
+
+FIN
+
+cat << FIN > $tmp-mac
+/usr/bin/seq '1' '5' >>= /usr/bin/tail '-r'
+
+FIN
+
+../glue $tmp-$os > $tmp-ans
 ERROR_CHECK "TEST1.1 error"
 
 diff $tmp-out $tmp-ans
@@ -38,7 +52,22 @@ cat << FIN > $tmp-out
 5
 FIN
 
-../glue ./pipeline3.glue > $tmp-ans
+cat << FIN > $tmp-linux
+/usr/bin/seq '1' '5' >>=
+/usr/bin/tac >>=
+/usr/bin/tac
+
+FIN
+
+cat << FIN > $tmp-mac
+/usr/bin/jot '5' >>=
+/usr/bin/tail '-r' >>=
+/usr/bin/tail '-r'
+
+
+FIN
+
+../glue $tmp-$os > $tmp-ans
 ERROR_CHECK "TEST2.1 error"
 
 diff $tmp-out $tmp-ans
@@ -55,7 +84,23 @@ cat << FIN > $tmp-out
 5
 FIN
 
-../glue ./pipeline_file.glue > $tmp-ans
+cat << FIN > $tmp-linux
+file aaa = /usr/bin/seq '1' '5' >>=
+/usr/bin/tac >>=
+/usr/bin/tac
+
+/bin/cat aaa
+FIN
+
+cat << FIN > $tmp-linux
+file aaa = /usr/bin/jot '5' >>=
+/usr/bin/tail '-r' >>=
+/usr/bin/tail '-r'
+
+/bin/cat aaa
+FIN
+
+../glue $tmp-$os > $tmp-ans
 ERROR_CHECK "TEST3.1 error"
 
 diff $tmp-out $tmp-ans

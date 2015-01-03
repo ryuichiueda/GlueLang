@@ -22,10 +22,42 @@ cat << FIN > $tmp-out
 1
 FIN
 
-../glue ./import.glue > $tmp-ans
-ERROR_CHECK "TEST1.1 error"
+cat << FIN > $tmp-linux
+import /usr/bin/ as ub
+
+ub.seq '1' '5' >>= ub.tac
+FIN
+
+cat << FIN > $tmp-mac
+import /usr/bin/ as ub
+
+ub.seq '1' '5' >>= ub.tail '-r'
+FIN
+
+if [ "$(uname)" = "Linux" ] ;then
+	../glue $tmp-linux > $tmp-ans
+	ERROR_CHECK "TEST1.1 error"
+else
+	../glue $tmp-mac > $tmp-ans
+	ERROR_CHECK "TEST1.1 error"
+fi
 
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
+
+#########################################
+# TEST2: multiple import error
+#########################################
+
+cat << FIN > $tmp-glue
+import /bin/ as b
+import /usr/bin/ as b
+
+/bin/echo 'hoge'
+FIN
+
+../glue $tmp-glue
+[ $? -eq 1 ]
+ERROR_CHECK "TEST2.1 error"
 
 rm -f $tmp-*

@@ -77,4 +77,26 @@ ERROR_CHECK "TEST2.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST2.2 error"
 
+#########################################
+# TEST3: error exit with removal of tmpfiles
+#########################################
+
+echo a > $tmp-in
+
+rm -f /tmp/*abcd
+
+# error occurs when non-existing file "abc" is referred.
+cat << FIN > $tmp-glue
+file abcd = /bin/cat '$tmp-in'
+/bin/cat abc
+FIN
+
+../glue $tmp-glue 
+[ $? -eq 1 ]               # exit status should be one
+ERROR_CHECK "TEST3.1 error"
+
+ls /tmp/*-abcd               # the tmp file should not exist
+[ $? -eq 1 ]         
+ERROR_CHECK "TEST3.2 error"
+
 rm -f $tmp-*

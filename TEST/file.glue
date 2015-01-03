@@ -1,4 +1,0 @@
-import /var/tmp/ as tmpdir
-
-file hoge = /bin/cat '/etc/passwd'
-/usr/bin/tail '-r' hoge

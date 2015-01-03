@@ -14,6 +14,15 @@ ERROR_CHECK(){
 # TEST1:
 #########################################
 
+cat << FIN > $tmp-glue
+#this is a comment
+#あいうえお
+
+
+
+/bin/echo 'That\'s OK'
+FIN
+
 cat << FIN > $tmp-out
 #this is a comment
 #あいうえお
@@ -23,7 +32,7 @@ cat << FIN > $tmp-out
 /bin/echo That\'s OK 
 FIN
 
-../glue -v ./comment1.glue > /dev/null 2> $tmp-ans
+../glue -v $tmp-glue > /dev/null 2> $tmp-ans
 ERROR_CHECK "TEST1.1 error"
 
 diff $tmp-out $tmp-ans > /dev/null
