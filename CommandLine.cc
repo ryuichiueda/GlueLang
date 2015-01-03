@@ -98,11 +98,7 @@ void CommandLine::childPipeProc(void)
 
 void CommandLine::execErrorExit(void)
 {
-	//perror("ERROR: exec() failed");
-	//m_error_msg =  "Failed to execute command: " +
-//	printOriginalString() + 
-
-	m_error_msg =  "Failed to execute command";
+	m_error_msg =  "Command error";
 	m_exit_status = 127;
 	throw this;
 }

@@ -45,7 +45,7 @@ string Element::pos(void)
 
 void Element::printErrorPart(void)
 {
-	m_feeder->printErrorPart(m_start_line,m_end_line,m_end_char);
+	m_feeder->printErrorPart(m_start_line,m_start_char,m_end_line,m_end_char);
 }
 
 int Element::getLevel(void)
