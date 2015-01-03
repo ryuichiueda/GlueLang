@@ -29,11 +29,14 @@ bool Environment::getImportPath(string *key, string *value)
 bool Environment::getImportPath(const char *key, string *value)
 {
 	string k = string(key);
+	return getImportPath(&k,value);
+/*
 	if(m_import_paths.find(k) == m_import_paths.end())
 		return false;
 
 	*value = m_import_paths[k];
 	return true;
+*/
 }
 
 bool Environment::setVariable(string *key, string *value)
@@ -57,11 +60,14 @@ bool Environment::getVariable(string *key,string *value)
 bool Environment::getVariable(const char *key,string *value)
 {
 	string k = string(key);
+	return getVariable(&k,value);
+/*
 	if(m_variables.find(k) == m_variables.end())
 		return false;
 
 	*value = m_variables[k];
 	return true;
+*/
 }
 
 void Environment::setFileList(string *filepath)
