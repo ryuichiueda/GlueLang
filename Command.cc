@@ -52,12 +52,7 @@ bool Command::parse(void)
 
 const char *Command::getStr(void)
 {
-	if(m_path == "")
-		m_full_path = m_name;
-	else
-		m_full_path = m_path + m_name;
-
-	return m_full_path.c_str();	
+	return (m_path + m_name).c_str();	
 }
 
 void Command::printOriginalString(void)
