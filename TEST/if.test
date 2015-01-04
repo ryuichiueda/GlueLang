@@ -28,11 +28,15 @@ b
 c
 FIN
 
-cat << FIN > $tmp-glue
+cat << FIN > $tmp-linux
+? /bin/false
+FIN
+
+cat << FIN > $tmp-mac
 ? /usr/bin/false
 FIN
 
-../glue $tmp-glue 
+../glue $tmp-$os
 ERROR_CHECK "TEST1 error"
 
 #########################################
@@ -43,11 +47,15 @@ cat << FIN > $tmp-out
 hoge
 FIN
 
-cat << FIN > $tmp-glue
+cat << FIN > $tmp-linux
+? /bin/false >>= /bin/echo 'hoge'
+FIN
+
+cat << FIN > $tmp-mac
 ? /usr/bin/false >>= /bin/echo 'hoge'
 FIN
 
-../glue $tmp-glue > $tmp-ans
+../glue $tmp-$os > $tmp-ans
 ERROR_CHECK "TEST2.1 error"
 
 diff $tmp-out $tmp-ans
