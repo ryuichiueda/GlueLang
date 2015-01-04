@@ -88,6 +88,32 @@ bool Feeder::smallCaps(string *ans)
 	return true;
 }
 
+bool Feeder::blankLines(void)
+{
+	if(outOfRange())
+		return false;
+
+	bool flg = false;
+	while(1){
+		if(m_lines[m_cur_line].size() == 0){
+			m_cur_line++;
+			m_cur_char = 0;
+			flg = true;
+		}
+		else if(blank(NULL)){
+			flg = true;
+		}else
+			break;
+
+		if(atEnd())
+			break;
+		if(outOfRange())
+			break;
+	}
+
+	return flg;
+}
+
 bool Feeder::blank(string *ans)
 {
 	if(outOfRange())

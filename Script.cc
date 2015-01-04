@@ -29,6 +29,10 @@ bool Script::parse(void)
 
 	while(1){
 		// comments -> pipeline or command -> comments -> pipeline or command ...
+		m_feeder->blankLines();
+		if(m_feeder->atEnd())
+			break;
+
 		while(add(new Comment(m_feeder,m_env))){ }
 
 		if(	add(new IfBlock(m_feeder,m_env))
