@@ -1,0 +1,20 @@
+# for mac
+# in the case of linux, true and false commands exist in /bin/
+# so it should be replaced.
+
+? /usr/bin/true
+	/bin/echo 'OK'
+| /bin/echo 'a'
+	/bin/echo 'no'
+| otherwise
+	/bin/echo 'ow'
+
+? /usr/bin/false
+	/bin/echo 'NG'
+| /bin/echo 'a'
+	/bin/echo 'OK'
+
+? /usr/bin/false
+	/bin/echo 'NG'
+| otherwise
+	/bin/echo 'OK'
