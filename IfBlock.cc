@@ -66,10 +66,12 @@ bool IfBlock::parse(void)
 
 		m_is_cond_node.push_back(true);
 
+/*
 		if(m_feeder->atEnd()){
 			m_feeder->getPos(&m_end_line, &m_end_char);
 			return true;
 		}
+*/
 
 		//while(add(new Comment(m_feeder,m_env))){ }
 
@@ -101,10 +103,12 @@ bool IfBlock::parse(void)
 
 
 				m_is_cond_node.push_back(false);
+/*
 				if(m_feeder->atEnd()){
 					m_feeder->getPos(&m_end_line, &m_end_char);
 					return true;
 				}
+*/
 				sub_indent = m_feeder->countIndent();
 			}else{
 				m_feeder->setPos(m_start_line, m_start_char);

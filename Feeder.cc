@@ -463,6 +463,9 @@ void Feeder::printErrorPart(int from, int from_char, int to, int to_char)
 
 int Feeder::countIndent(void)
 {
+	if(atEnd())
+		return 0;
+
 	if(m_cur_char != 0)
 		return -1;
 
