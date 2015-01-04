@@ -88,6 +88,7 @@ bool Feeder::smallCaps(string *ans)
 	return true;
 }
 
+/*
 bool Feeder::blankLines(void)
 {
 	if(outOfRange())
@@ -113,6 +114,7 @@ bool Feeder::blankLines(void)
 
 	return flg;
 }
+*/
 
 bool Feeder::blank(string *ans)
 {
