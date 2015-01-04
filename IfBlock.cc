@@ -18,14 +18,14 @@ IfBlock::~IfBlock()
 /* IfBlock means an if-then-else chunk in usual programing languages.
  * ex)
 
-| commandline1            <- if
+| commandline1	    <- if
 	commandline2
-| commandline2            <- else if
+| commandline2	    <- else if
 	commandline3
-| otherwise               <- else
+| otherwise	       <- else
 	commandline4
-                         
-commandline5              <- out of if block
+			 
+commandline5	      <- out of if block
 
 The other purpose to use IfBlock is the cancel of exit statuses
 
@@ -65,6 +65,11 @@ bool IfBlock::parse(void)
 		}
 
 		m_is_cond_node.push_back(true);
+
+		if(m_feeder->atEnd()){
+			m_feeder->getPos(&m_end_line, &m_end_char);
+			return true;
+		}
 
 		//while(add(new Comment(m_feeder,m_env))){ }
 

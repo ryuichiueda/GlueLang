@@ -10,6 +10,9 @@ ERROR_CHECK(){
 	exit 1
 }
 
+os=linux
+[ "$(uname)" != "Linux" ] && os=mac
+
 #########################################
 # TEST1: error cancel
 #########################################
@@ -61,7 +64,26 @@ OK
 OK
 FIN
 
-cat << FIN > $tmp-glue
+cat << FIN > $tmp-linux
+? /bin/true
+	/bin/echo 'OK'
+| /bin/echo 'a'
+	/bin/echo 'no'
+| otherwise
+	/bin/echo 'ow'
+
+? /bin/false
+	/bin/echo 'NG'
+| /bin/echo 'a'
+	/bin/echo 'OK'
+
+? /bin/false
+	/bin/echo 'NG'
+| otherwise
+	/bin/echo 'OK'
+FIN
+
+cat << FIN > $tmp-mac
 ? /usr/bin/true
 	/bin/echo 'OK'
 | /bin/echo 'a'
@@ -80,7 +102,7 @@ cat << FIN > $tmp-glue
 	/bin/echo 'OK'
 FIN
 
-../glue $tmp-glue > $tmp-ans
+../glue $tmp-$os > $tmp-ans
 ERROR_CHECK "TEST3.1 error"
 
 diff $tmp-out $tmp-ans

@@ -39,9 +39,6 @@ bool Script::parse(void)
 			|| add(new Pipeline(m_feeder,m_env))
 		 	|| add(new CommandLine(m_feeder,m_env))){
 
-			if(m_feeder->atEnd())
-				break;
-		
 			continue;
 		}
 
