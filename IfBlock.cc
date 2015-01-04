@@ -99,8 +99,13 @@ bool IfBlock::parse(void)
 				|| add(new Pipeline(m_feeder,m_env))
 			 	|| add(new CommandLine(m_feeder,m_env))){
 
-				sub_indent = m_feeder->countIndent();
+
 				m_is_cond_node.push_back(false);
+				if(m_feeder->atEnd()){
+					m_feeder->getPos(&m_end_line, &m_end_char);
+					return true;
+				}
+				sub_indent = m_feeder->countIndent();
 			}else{
 				m_feeder->setPos(m_start_line, m_start_char);
 				return false;
