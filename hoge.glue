@@ -1,0 +1,2 @@
+file f = /bin/cat '/tmp/83927-in'
+/bin/mv f '/tmp/83927-ans'

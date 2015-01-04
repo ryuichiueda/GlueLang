@@ -28,6 +28,8 @@ public:
 	void getPos(int *ln,int *ch);
 	void setPos(int ln,int ch);
 
+	int countIndent(void);
+
 	// they scan the script, move the cursor
 	// and return the string on matching
 	bool literalString(string *ans);

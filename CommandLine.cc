@@ -54,14 +54,19 @@ bool CommandLine::parse(void)
 	if(!add(new Command(m_feeder,m_env)))
 		return false;
 
+	if(m_feeder->atNewLine()){
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		return true;
+	}
+
 	m_feeder->blank(NULL);
 
 	while(add(new Arg(m_feeder,m_env))){
-		m_feeder->blank(NULL);
 		if(m_feeder->atNewLine()){
 			m_feeder->getPos(&m_end_line, &m_end_char);
 			return true;
 		}
+		m_feeder->blank(NULL);
 	}
 
 	m_feeder->getPos(&m_end_line, &m_end_char);

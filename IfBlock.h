@@ -19,8 +19,7 @@ public:
 	bool parse(void);
 	virtual int exec(void);
 	virtual bool eval(void){return true;};
-protected:
-
-	//bool tryElement(Element *n);
+private:
+	vector<bool> m_is_cond_node;
 };
 #endif

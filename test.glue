@@ -1,4 +1,16 @@
 ? /usr/bin/true
-	/bin/echo 'yes'
-? otherwise
+	/bin/echo 'OK'
+| /bin/echo 'a'
 	/bin/echo 'no'
+| otherwise
+	/bin/echo 'ow'
+
+? /usr/bin/false
+	/bin/echo 'NG'
+| /bin/echo 'a'
+	/bin/echo 'OK'
+
+? /usr/bin/false
+	/bin/echo 'NG'
+| otherwise
+	/bin/echo 'OK'

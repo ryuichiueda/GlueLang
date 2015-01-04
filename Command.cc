@@ -32,8 +32,9 @@ bool Command::parse(void)
 	//it should be parsed as a full-path command.
 	// (this rule should be relaxed since a command can start from
 	// a non small captal letter)
-	if( ! m_feeder->smallCaps(&m_prefix))
+	if( ! m_feeder->smallCaps(&m_prefix)){
 		return m_feeder->command(&m_name);
+	}
 
 	// chech whether m_prefix is a prefix or a command name
  	if( m_feeder->str(".") ){

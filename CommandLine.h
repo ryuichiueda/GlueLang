@@ -35,6 +35,7 @@ public:
 	void pushVarString(VarString *e);
 
 	void setIfFlag(void){m_if = true;}
+	bool getIfFlag(void){return m_if;}
 protected:
 	void execCommandLine(void);
 	void execErrorExit(void);

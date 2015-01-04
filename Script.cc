@@ -34,6 +34,10 @@ bool Script::parse(void)
 		if(	add(new IfBlock(m_feeder,m_env))
 			|| add(new Pipeline(m_feeder,m_env))
 		 	|| add(new CommandLine(m_feeder,m_env))){
+
+			if(m_feeder->atEnd())
+				break;
+		
 			continue;
 		}
 

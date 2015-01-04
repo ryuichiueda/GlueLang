@@ -39,40 +39,118 @@ bool IfBlock::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	if(! m_feeder->str("?"))
+	int indent = m_feeder->countIndent();
+	
+	m_feeder->blank(NULL);
+	// detect the first condition
+	if(! m_feeder->str("?")){
+		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
+	}
 
 	while(1){
-		// | commandline -> many (pipeline or commandline) -> | commandline ->...
-
+		// condition -> many (pipeline or commandline) -> condition ->...
 		m_feeder->blank(NULL);
 		
-		if(add(new Pipeline(m_feeder,m_env))){
+		if(m_feeder->str("otherwise")){
+			m_nodes.push_back(NULL); // dummy
+		}else if(add(new Pipeline(m_feeder,m_env))){
 			((Pipeline *)m_nodes.back())->setIfFlag();
-			break;
 		}
 		else if(add(new CommandLine(m_feeder,m_env))){
 			((CommandLine *)m_nodes.back())->setIfFlag();
+		}else{
+			m_feeder->setPos(m_start_line, m_start_char);
+			return false;
+		}
+
+		m_is_cond_node.push_back(true);
+
+		//while(add(new Comment(m_feeder,m_env))){ }
+
+		int sub_indent = m_feeder->countIndent();
+
+		// end of the if block
+		if(sub_indent < indent){
 			break;
 		}
-		break;
+
+		// found another condition
+		if( indent == sub_indent){
+			m_feeder->blank(NULL);
+			if(m_feeder->str("?")){
+				// another condition
+				continue;
+			}else{
+				break; // end of the if block
+			}
+		}
+
+		// attempt to search procedures related to the condition
+		while(sub_indent > indent){
+			m_feeder->blank(NULL);
+
+			if(	add(new IfBlock(m_feeder,m_env))
+				|| add(new Pipeline(m_feeder,m_env))
+			 	|| add(new CommandLine(m_feeder,m_env))){
+
+				sub_indent = m_feeder->countIndent();
+				m_is_cond_node.push_back(false);
+			}else{
+				m_feeder->setPos(m_start_line, m_start_char);
+				return false;
+			}
+		}
+
+		// after procedures related to the condition
+		if(sub_indent < indent){
+			m_feeder->getPos(&m_end_line, &m_end_char);
+			break;
+		}
+
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		// next condition
+		m_feeder->blank(NULL);
+		// detect the first condition
+		if(! m_feeder->str("|")){
+			m_feeder->setPos(m_end_line, m_end_char);
+			break;
+		}
 	}
 	m_feeder->getPos(&m_end_line, &m_end_char);
-
-	if(!m_feeder->atEnd()){
-		m_error_msg = "Unknown token";
-		m_exit_status = 1;
-		throw this;
-	}
 
 	return true;
 }
 
 int IfBlock::exec(void)
 {
-	int exit_status = 0;
-	for(auto &c : m_nodes){
-		exit_status = c->exec();
+	if(m_nodes.size() != m_is_cond_node.size()){
+		m_error_msg = "BUG: IfBlock internal error";
+		throw this;
 	}
-	return 0;
+
+	int exit_status = 0;
+	bool skip = false;
+	bool match = false;
+	for(int i=0;i<m_nodes.size();i++){
+		if(m_is_cond_node[i]){ // cond node
+			if(match) // already matched
+				break;	
+			
+			if(m_nodes[i] == NULL || m_nodes[i]->exec() == 0){
+				match = true;
+				skip = false;
+			}else
+				skip = true;
+
+		}else{ // other node
+			if(!skip)
+				m_nodes[i]->exec();
+		}
+	}
+/*
+	for(auto &c : m_nodes){
+	}
+*/
+	return exit_status;
 }

@@ -50,4 +50,40 @@ ERROR_CHECK "TEST2.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST2.2 error"
 
+#########################################
+# TEST3: if then else
+#########################################
+
+cat << FIN > $tmp-out
+OK
+a
+OK
+OK
+FIN
+
+cat << FIN > $tmp-glue
+? /usr/bin/true
+	/bin/echo 'OK'
+| /bin/echo 'a'
+	/bin/echo 'no'
+| otherwise
+	/bin/echo 'ow'
+
+? /usr/bin/false
+	/bin/echo 'NG'
+| /bin/echo 'a'
+	/bin/echo 'OK'
+
+? /usr/bin/false
+	/bin/echo 'NG'
+| otherwise
+	/bin/echo 'OK'
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST3.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST3.2 error"
+
 rm -f $tmp-*

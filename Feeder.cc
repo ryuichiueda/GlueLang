@@ -100,20 +100,23 @@ bool Feeder::blank(string *ans)
 	if(outOfRange())
 		return false;
 
+	if( p->size() < 1)
+		return false;
+
 	int i = m_cur_char;
-	if( p->size() < 1 || p->at(i) != ' ')
+ 	if(p->at(i) != ' ' && p->at(i) != '\t')
 		return false;
 
 	for(;i < (int)p->length();i++){
 		char c = p->at(i);
-		if( c != ' ' || c != '\t')
+		if( c != ' ' && c != '\t')
 			break;
 	}
 
 	if(ans != NULL)
 		*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 
-	m_cur_char = i+1;
+	m_cur_char = i;
 	checkEol(p);
 	return true;
 }
@@ -430,4 +433,21 @@ void Feeder::printErrorPart(int from, int from_char, int to, int to_char)
 			cerr << "^";
 		}
 	}
+}
+
+int Feeder::countIndent(void)
+{
+	if(m_cur_char != 0)
+		return -1;
+
+	string *p = &m_lines[m_cur_line];
+	int i = 0;
+	while(i < p->size()){
+		if(p->at(i) == ' ' || p->at(i) == '\t')
+			i++;
+		else
+			break;
+	}
+
+	return i;
 }
