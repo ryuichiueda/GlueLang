@@ -18,7 +18,7 @@ IfBlock::~IfBlock()
 /* IfBlock means an if-then-else chunk in usual programing languages.
  * ex)
 
-| commandline1	    <- if
+? commandline1	    <- if
 	commandline2
 | commandline2	    <- else if
 	commandline3
@@ -29,7 +29,7 @@ commandline5	      <- out of if block
 
 The other purpose to use IfBlock is the cancel of exit statuses
 
-| seq '1' '1000000000' >>= head
+? seq '1' '1000000000' >>= head
 
 Though the head command invokes SIGPIPE error of the seq command,
 "|" cancels this failure in this case.
@@ -66,13 +66,6 @@ bool IfBlock::parse(void)
 
 		m_is_cond_node.push_back(true);
 
-/*
-		if(m_feeder->atEnd()){
-			m_feeder->getPos(&m_end_line, &m_end_char);
-			return true;
-		}
-*/
-
 		//while(add(new Comment(m_feeder,m_env))){ }
 
 		int sub_indent = m_feeder->countIndent();
@@ -103,12 +96,6 @@ bool IfBlock::parse(void)
 
 
 				m_is_cond_node.push_back(false);
-/*
-				if(m_feeder->atEnd()){
-					m_feeder->getPos(&m_end_line, &m_end_char);
-					return true;
-				}
-*/
 				sub_indent = m_feeder->countIndent();
 			}else{
 				m_feeder->setPos(m_start_line, m_start_char);
