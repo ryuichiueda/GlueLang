@@ -13,6 +13,7 @@ Arg::~Arg()
 {
 }
 
+/*
 void Arg::print(int indent_level)
 {
 	for(int i=0;i<indent_level;i++)
@@ -20,6 +21,7 @@ void Arg::print(int indent_level)
 
 	cout << m_text << endl;
 }
+*/
 
 bool Arg::eval(void)
 {
@@ -53,10 +55,6 @@ bool Arg::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-/*
-	if( m_feeder->literalOption(&m_text) ||
-	    m_feeder->literalString(&m_text) ){
-*/
 	if( m_feeder->literal(&m_text)){
 		m_is_variable = false;
 		m_feeder->getPos(&m_end_line, &m_end_char);

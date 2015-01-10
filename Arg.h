@@ -13,7 +13,6 @@ class Arg : public Element
 public:
 	Arg(Feeder *f,Environment *env);
 	virtual ~Arg();
-	virtual void print(int indent_level = 0);
 	const char *getOriginalString(void){return m_text.c_str();}
 	const char *getEvaledString(void){return m_evaled_text.c_str();}
 
