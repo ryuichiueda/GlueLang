@@ -10,6 +10,9 @@ ERROR_CHECK(){
 	exit 1
 }
 
+os=linux
+[ "$(uname)" != "Linux" ] && os=mac
+
 #########################################
 # TEST1: cat
 #########################################
@@ -110,11 +113,15 @@ ERROR_CHECK "TEST5.3 error"
 # TEST6: awk
 #########################################
 
-cat << FIN > $tmp-glue
+cat << FIN > $tmp-mac
 /usr/local/bin/awk 'BEGIN{a=1;print a,a}'
 FIN
 
-../glue $tmp-glue
+cat << FIN > $tmp-linux
+/usr/bin/awk 'BEGIN{a=1;print a,a}'
+FIN
+
+../glue $tmp-$os
 ERROR_CHECK "TEST6.1 error"
 
 rm -f $tmp-*
