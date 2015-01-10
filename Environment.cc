@@ -1,15 +1,32 @@
 #include "Environment.h"
 #include <fstream>
 #include <iostream>
+#include <unistd.h>
+#include <sys/param.h> 
 using namespace std;
 
 Environment::Environment()
 {
 	m_level = 0;
+
+	// set cwd (this directory is never changed)
+	char tmp[MAXPATHLEN];
+	if (getcwd(tmp,sizeof(tmp)) == NULL){
+		cerr << "Initizalization error" << endl;
+		perror ("getcwd");
+		exit(1);
+	}
+
+	m_dir = tmp;	
 }
 
 void Environment::setImportPath(string *key, string *value)
 {
+	if(*value == ""){
+		m_error_msg = "NULL path";
+		throw this;
+	}
+
 	if(*key == "tmpdir"){
 		m_import_paths[*key] = *value;
 		return;
@@ -20,7 +37,13 @@ void Environment::setImportPath(string *key, string *value)
 		throw this;
 	}
 
-	m_import_paths[*key] = *value;
+	if(value->at(0) == '/'){
+		m_import_paths[*key] = *value;
+		return;
+	}
+
+	//resolve relative path (too lazy)
+	m_import_paths[*key] = m_dir + "/" + *value;
 }
 
 void Environment::getImportPath(string *key, string *value)

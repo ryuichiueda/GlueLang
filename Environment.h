@@ -15,6 +15,8 @@ private:
 	vector<string> m_file_list;
 
 	int m_level;
+
+	string m_dir;
 public:
 	Environment();
 	void setVariable(string *key, string *value);

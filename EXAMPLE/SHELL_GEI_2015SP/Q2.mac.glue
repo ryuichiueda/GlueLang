@@ -2,4 +2,4 @@ import /usr/local/bin/ as ulb
 import /usr/bin/ as ub
 
 ub.curl 'http://www.flightradar24.com/_json/airports.php' >>=
-ulb.jq '.' >>= ub.grep '-C' '6' 'HND'
+ulb.jq '.' >>= ub.grep -C 6 'HND'

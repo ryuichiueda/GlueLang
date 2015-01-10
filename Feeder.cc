@@ -46,13 +46,10 @@ bool Feeder::command(string *ans)
 	int i = m_cur_char;
 	for(;i < (int)p->length();i++){
 		char c = p->at(i);
-		if(c == ' ')
+		if(c == ' ' || c == '#')
 			break;
-		if(c == '#'){
-			break;
-		}
 
-		if(! isAlphabet(c) && ! isNum(c) 
+		if(! isAlphabet(c) && ! isNum(c) && c != '.'
 			&& c != '_' && c != '-' && c != '/')
 			return false;
 	}
