@@ -12,5 +12,6 @@ bash ./string.test
 bash ./import.test
 bash ./pipeline.test
 bash ./if.test
+bash ./stdcom.test
 
 echo OK

@@ -11,32 +11,28 @@ ERROR_CHECK(){
 	exit 1
 }
 
+os=linux
+[ "$(uname)" != "Linux" ] && os=mac
+
 #########################################
-# TEST1:
+# TEST1: cat
 #########################################
-
-cat << FIN > $tmp-glue
-#this is a comment
-#あいうえお
-
-
-
-/bin/echo 'That\'s OK'
-FIN
 
 cat << FIN > $tmp-out
-#this is a comment
-#あいうえお
-
-
-
-/bin/echo That\'s OK 
+9
 FIN
 
-../glue -v $tmp-glue > /dev/null 2> $tmp-ans
+cat << 'FIN' > $tmp-glue
+import ../stdcom/ as std
+
+/bin/echo 1 >>=
+std.loop-serial '/usr/bin/awk' '{print ++$1;if($1==10){exit 1}}'
+FIN
+
+../glue $tmp-glue > $tmp-ans
 ERROR_CHECK "TEST1.1 error"
 
-diff $tmp-out $tmp-ans > /dev/null
+diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
 
 rm -f $tmp-*

@@ -1,1 +1,4 @@
-/bin/date
+import ./stdcom/ as std
+
+/bin/echo 1 >>=
+std.loop-serial '/usr/bin/awk' '{print ++$1;if($1==10){exit 1}}'
