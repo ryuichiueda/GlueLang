@@ -106,4 +106,15 @@ ERROR_CHECK "TEST5.2 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST5.3 error"
 
+#########################################
+# TEST6: awk
+#########################################
+
+cat << FIN > $tmp-glue
+/usr/local/bin/awk 'BEGIN{a=1;print a,a}'
+FIN
+
+../glue $tmp-glue
+ERROR_CHECK "TEST6.1 error"
+
 rm -f $tmp-*

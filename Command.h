@@ -24,5 +24,6 @@ protected:
 	string m_prefix;
 	string m_name;
 	string m_path;
+	string m_fullpath;
 };
 #endif

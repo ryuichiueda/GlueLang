@@ -53,7 +53,8 @@ bool Command::parse(void)
 
 const char *Command::getStr(void)
 {
-	return (m_path + m_name).c_str();	
+	m_fullpath = m_path + m_name;
+	return m_fullpath.c_str();
 }
 
 void Command::printOriginalString(void)
