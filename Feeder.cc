@@ -247,10 +247,48 @@ bool Feeder::variable(string *ans)
 	checkEol(p);
 	return true;
 }
-// arg should be a string that is quoted by '.
+
+bool Feeder::literal(string *ans)
+{
+	if(literalNoEsc(ans))
+		return true;
+	if(literalEsc(ans))
+		return true;
+
+	return false;
+}
+
+// an arg that starts from - (a hyphen)
+bool Feeder::literalNoEsc(string *ans)
+{
+	if(outOfRange())
+		return false;
+
+	string *p = &m_lines[m_cur_line];
+	int i = m_cur_char;
+
+	if(p->at(i) != '-' && (p->at(i) < '0' || p->at(i) > '9'))
+		return false;
+
+	i++;
+
+	for(;i < (int)p->length();i++){
+		char c = p->at(i);
+		if(c == ' ' || c == '\t')
+			break;
+	}
+
+	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+	m_cur_char = i;
+	checkEol(p);
+	return true;
+}
+
+// An arg whose initial character is '-' or '0-9'
+// should be a string that is quoted by '.
 // This function gives escaped characters as
 // they are escaped.
-bool Feeder::literalString(string *ans)
+bool Feeder::literalEsc(string *ans)
 {
 	if(outOfRange())
 		return false;

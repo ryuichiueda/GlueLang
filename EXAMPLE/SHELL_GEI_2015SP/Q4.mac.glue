@@ -1,0 +1,7 @@
+import /usr/bin/ as ub
+import /bin/ as b
+import /Users/ueda/GIT/GlueLang/stdcom/ as std
+
+ub.curl 'http://blog.ueda.asia/misc/message2015.txt' >>=
+std.loop-serial '/usr/bin/base64' '-D'
+

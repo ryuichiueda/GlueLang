@@ -1,0 +1,1 @@
+/usr/local/bin/awk -v 'a=100' 'BEGIN{print a}'

@@ -20,6 +20,9 @@ private:
 
 	bool outOfRange(void);
 	void checkEol(string *p);
+
+	bool literalEsc(string *ans);
+	bool literalNoEsc(string *ans);
 public:
 	Feeder(ifstream *ifs);
 	~Feeder();
@@ -30,9 +33,9 @@ public:
 
 	int countIndent(void);
 
+	bool literal(string *ans);
 	// they scan the script, move the cursor
 	// and return the string on matching
-	bool literalString(string *ans);
 	bool variable(string *ans);
 	bool comment(string *ans);
 	bool declare(string *ans, string reserved);

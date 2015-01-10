@@ -1,0 +1,12 @@
+import /usr/local/bin/ as ulb
+import /usr/bin/ as ub
+
+ub.seq '1' '1000'        >>=
+ulb.awk '{for(i=1;i<=$1;i++){printf("%d ",i)}{print ""}}' >>=
+ub.tr ' ' '*'            >>=
+ub.sed 's/\*$/)/'        >>=
+ub.sed 's:^:1/(:'        >>=
+ub.bc '-l'               >>= 
+ub.tr '\n' '+'           >>=
+ub.sed 's/$/1/'          >>=
+ub.bc '-l' 

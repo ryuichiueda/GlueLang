@@ -112,7 +112,6 @@ ERROR_CHECK "TEST5.3 error"
 #########################################
 # TEST6: awk
 #########################################
-
 cat << FIN > $tmp-mac
 /usr/local/bin/awk 'BEGIN{a=1;print a,a}'
 FIN
@@ -123,5 +122,23 @@ FIN
 
 ../glue $tmp-$os
 ERROR_CHECK "TEST6.1 error"
+
+#########################################
+# TEST7: permit no quote for strings that start from a hyphen or a number
+#########################################
+cat << FIN > $tmp-glue
+/usr/bin/seq -w 9 10
+FIN
+
+cat << FIN > $tmp-out
+09
+10
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST7.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST7.2 error"
 
 rm -f $tmp-*

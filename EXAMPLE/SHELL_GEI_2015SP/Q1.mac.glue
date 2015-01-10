@@ -1,0 +1,9 @@
+import /usr/bin/ as ub
+import /usr/local/bin/ as ulb
+
+ub.find '/Users/ueda/' '-type' 'f'                  >>=
+ub.grep '-i' '\.jpg$'                               >>=
+ub.sed 's/.*/"&"/'                                  >>=
+ub.xargs '-n' '1' '/usr/local/bin/gmd5sum'          >>=
+ub.sort '-s' '-k1,1'                                >>=
+ulb.awk '{if(a==$1){print b;print $0}a=$1;b=$0}'

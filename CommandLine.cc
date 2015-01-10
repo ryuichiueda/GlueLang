@@ -187,7 +187,6 @@ void CommandLine::execCommandLine(void)
 
 		io_num++;
 	}
-
 	auto argv = makeArgv(io_num);
 	execve(argv[0],(char **)argv,NULL);
 }
