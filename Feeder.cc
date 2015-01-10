@@ -88,34 +88,6 @@ bool Feeder::smallCaps(string *ans)
 	return true;
 }
 
-/*
-bool Feeder::blankLines(void)
-{
-	if(outOfRange())
-		return false;
-
-	bool flg = false;
-	while(1){
-		if(m_lines[m_cur_line].size() == 0){
-			m_cur_line++;
-			m_cur_char = 0;
-			flg = true;
-		}
-		else if(blank(NULL)){
-			flg = true;
-		}else
-			break;
-
-		if(atEnd())
-			break;
-		if(outOfRange())
-			break;
-	}
-
-	return flg;
-}
-*/
-
 bool Feeder::blank(string *ans)
 {
 	if(outOfRange())
@@ -125,10 +97,7 @@ bool Feeder::blank(string *ans)
 	checkEol(p);
 	p = &m_lines[m_cur_line];
 
-	if(outOfRange())
-		return false;
-
-	if( p->size() < 1)
+	if(outOfRange() || p->size() < 1)
 		return false;
 
 	int i = m_cur_char;
@@ -185,38 +154,6 @@ bool Feeder::pipe(string *ans)
 	return true;
 }
 
-/*
-bool Feeder::pipeEnd(string *ans)
-{
-	if(outOfRange())
-		return false;
-
-	bool comma = false;
-	string *p = &m_lines[m_cur_line];
-	int i = m_cur_char;
-	for( ;i < (int)p->length();i++){
-		char c = p->at(i);
-		if(c == '.'){
-			if(comma){
-				return false; //more than one commas
-			}else{
-				comma = true;
-				continue;
-			}
-		}else if(c != ' ' && c != '\t'){
-			break;
-		}
-	}
-	if(! comma)
-		return false;
-
-	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
-	m_cur_char = i;
-	checkEol(p);
-	return true;
-}
-*/
-
 bool Feeder::variable(string *ans)
 {
 	if(outOfRange())
@@ -224,19 +161,13 @@ bool Feeder::variable(string *ans)
 
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
-	if(p->at(i) == '>' /*|| p->at(i) == '.'*/)
+	if(p->at(i) == '>')
 		return false;
 
 	for(;i < (int)p->length();i++){
 		char c = p->at(i);
-		//if(c == ',' || c == '.')
-		if(c == '>')
+		if(c == '>' || c == ' ' || c == '#')
 			break;
-		if(c == ' ')
-			break;
-		if(c == '#'){
-			break;
-		}
 
 		if(! isAlphabet(c) && ! isNum(c) && c != '_' && c != '-')
 			return false;
@@ -250,12 +181,7 @@ bool Feeder::variable(string *ans)
 
 bool Feeder::literal(string *ans)
 {
-	if(literalNoEsc(ans))
-		return true;
-	if(literalEsc(ans))
-		return true;
-
-	return false;
+	return literalNoEsc(ans) || literalEsc(ans);
 }
 
 // an arg that starts from - (a hyphen)
@@ -401,11 +327,6 @@ bool Feeder::str(string s)
 	return ans;
 }
 
-bool Feeder::import(string *ans)
-{
-	return true;
-}
-
 // <reserved> variable = ...
 bool Feeder::declare(string *ans, string reserved)
 {
@@ -461,10 +382,7 @@ bool Feeder::isAlphabet(char c)
 
 bool Feeder::isNum(char c)
 {
-	if(c >= '0' && c <= '9')
-		return true;
-
-	return false;
+	return c >= '0' && c <= '9';
 }
 
 void Feeder::debugOut(void)

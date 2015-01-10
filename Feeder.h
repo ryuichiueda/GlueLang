@@ -41,10 +41,8 @@ public:
 	bool declare(string *ans, string reserved);
 	bool command(string *ans);
 	bool blank(string *ans);
-	//bool blankLines(void);
 	bool pipe(string *ans);
 	bool path(string *ans);
-	bool import(string *ans);
 	bool smallCaps(string *ans);
 
 	bool str(string s);
