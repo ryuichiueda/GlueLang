@@ -201,12 +201,14 @@ void CommandLine::execCommandLine(void)
 		io_num++;
 	}
 
-	// send the shell level for the case where the child is glue.
-	string lv = "GLUELEVEL=" + to_string(m_env->m_level);
-	if(putenv((char *)lv.c_str()) != 0){
-		m_error_msg = "putenv error";
-		m_exit_status = 1;
-		throw this;
+	// send the shell level to the child glue process
+	if(m_env->m_is_proc){
+		string lv = "GLUELEVEL=" + to_string(m_env->m_level);
+		if(putenv((char *)lv.c_str()) != 0){
+			m_error_msg = "putenv error";
+			m_exit_status = 1;
+			throw this;
+		}
 	}
 
 	auto argv = makeArgv(io_num);

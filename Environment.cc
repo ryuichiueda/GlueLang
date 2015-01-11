@@ -8,7 +8,22 @@ using namespace std;
 
 Environment::Environment(int argc, char const* argv[],int script_pos)
 {
-	m_level = 0;
+	char *lv = getenv("GLUELEVEL");
+	if(lv == NULL){
+		m_level = 0;
+	}else{
+		char *e = NULL;
+		m_level = (int)std::strtol(lv, &e, 10);
+		if(errno != ERANGE && *e != '\0'){
+			cerr << "***FATAL: STRANGE GLUELEVEL***" << endl;
+			exit(1);
+		}
+
+		if(m_level >= INT_MAX || m_level < 0){
+			cerr << "***FATAL: STRANGE GLUELEVEL***" << endl;
+			exit(1);
+		}
+	}
 
 	// set cwd (this directory is never changed)
 	char tmp[MAXPATHLEN];

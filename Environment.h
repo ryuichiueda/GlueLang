@@ -15,7 +15,6 @@ private:
 	map<string,string> m_import_paths;
 	vector<string> m_file_list;
 
-	int m_level;
 	int m_pid;
 	string m_dir;
 
@@ -38,11 +37,12 @@ public:
 
 	bool isImportPath(string *key);
 
-	void inclementLevel(void){m_level++;}
+	//void inclementLevel(void){m_level++;}
 	int getLevel(void){return m_level;}
 
 	void init(void);
 
+	int m_level;
 	string m_glue_path;
 	string m_tmpdir;
 };

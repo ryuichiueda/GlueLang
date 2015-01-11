@@ -1,3 +1,3 @@
-proc hoge = /bin/echo 'hoge'
+proc hoge = /bin/ech 'hoge'
 
 this.hoge
