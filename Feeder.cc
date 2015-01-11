@@ -1,6 +1,7 @@
 #include "Feeder.h"
 #include <fstream>
 #include <iostream>
+#include <limits.h>
 using namespace std;
 
 Feeder::Feeder(ifstream *ifs){
