@@ -34,4 +34,27 @@ ERROR_CHECK "TEST1.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
 
+#########################################
+# TEST2: two line proc
+#########################################
+
+cat << FIN > $tmp-out
+cba
+OK
+FIN
+
+cat << 'FIN' > $tmp-glue
+proc hoge =
+      /bin/echo argv[1] >>= /usr/bin/rev
+      /bin/echo 'OK'
+
+this.hoge 'abc'
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST2.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST2.2 error"
+
 rm -f $tmp-*
