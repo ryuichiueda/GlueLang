@@ -1,0 +1,50 @@
+#!/bin/bash -xv
+
+tmp=/tmp/$$
+scr=$(basename $0)
+cd $(dirname $0) || exit 1
+
+ERROR_CHECK(){
+	[ "$(tr -d '0 ' <<< ${PIPESTATUS[@]} )" = "" ] && return
+	rm -f $tmp-*
+	echo "$scr" "$1"
+	exit 1
+}
+
+#########################################
+# TEST1: use of file
+#########################################
+cat << FIN > $tmp-out
+abc def あ あ
+FIN
+
+cat << FIN > $tmp-glue
+/bin/echo argv[2] argv[1]
+FIN
+
+../glue $tmp-glue "あ あ" "abc def" > $tmp-ans
+ERROR_CHECK "TEST1.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST1.2 error"
+
+#########################################
+# TEST2: error 
+#########################################
+cat << FIN > $tmp-glue
+/bin/echo argv[3]
+FIN
+
+../glue $tmp-glue "あ あ" "abc def" &> /dev/null
+[ $? -eq 1 ]
+ERROR_CHECK "TEST2.1 error"
+
+cat << FIN > $tmp-glue
+/bin/echo argv[-1]
+FIN
+
+../glue $tmp-glue "あ あ" "abc def" &> /dev/null
+[ $? -eq 1 ]
+ERROR_CHECK "TEST2.2 error"
+
+rm -f $tmp-*

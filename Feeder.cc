@@ -151,6 +151,55 @@ bool Feeder::pipe(string *ans)
 	return true;
 }
 
+bool Feeder::arrayElem(string *name,long *pos)
+{
+	if(outOfRange())
+		return false;
+
+	int bl = m_cur_line;
+	int bc = m_cur_char;
+
+	if(!variable(name))
+		return false;
+
+	if(atNewLine()){
+		setPos(bl,bc);
+		return false;
+	}
+
+	string *p = &m_lines[m_cur_line];
+	int i = m_cur_char;
+	if(p->at(i) != '['){
+		setPos(bl,bc);
+		return false;
+	}
+
+	m_cur_char++;
+	checkEol(p);
+
+	blank(NULL);
+
+	if(!positiveInt(pos)){
+		// It must be a positive integer after '['
+		// in this stage. (A variable should be permitted
+		// in future)
+		m_error_msg = "Invalid array pos";
+		throw this;
+	}
+
+	blank(NULL);
+
+	p = &m_lines[m_cur_line];
+	if(p->at(m_cur_char) != ']'){
+		setPos(bl,bc);
+		return false;
+	}
+
+	m_cur_char++;
+	checkEol(p);
+	return true;
+}
+
 bool Feeder::variable(string *ans)
 {
 	if(outOfRange())
@@ -163,7 +212,7 @@ bool Feeder::variable(string *ans)
 
 	for(;i < (int)p->length();i++){
 		char c = p->at(i);
-		if(c == '>' || c == ' ' || c == '#')
+		if(c == '>' || c == ' ' || c == '#' || c == '[')
 			break;
 
 		if(! isAlphabet(c) && ! isNum(c) && c != '_' && c != '-')
@@ -307,6 +356,41 @@ bool Feeder::comment(string *ans)
 	return true;
 }
 
+bool Feeder::positiveInt(long *pos)
+{
+	if(outOfRange())
+		return false;
+
+	string *p = &m_lines[m_cur_line];
+	int i = m_cur_char;
+
+	if(p->at(i) < '0' || p->at(i) > '9')
+		return false;
+
+	i++;
+	for(;i < (int)p->length();i++){
+		if(! isNum(p->at(i)) )
+			break;
+	}
+
+	string str = string(p->c_str()+m_cur_char,i-m_cur_char);
+	char *e = NULL;
+	*pos = std::strtol(str.c_str(), &e, 10);
+
+	if(errno != ERANGE && *e != '\0'){
+		m_error_msg = "Invalid number";
+		throw this;
+	}
+	else if (*pos == LONG_MAX){
+		m_error_msg = "Too large number";
+		throw this;
+	}
+
+	m_cur_char = i;
+	checkEol(p);
+	return true;
+}
+
 bool Feeder::str(string s)
 {
 	if(outOfRange())
@@ -435,3 +519,4 @@ int Feeder::countIndent(void)
 
 	return i;
 }
+

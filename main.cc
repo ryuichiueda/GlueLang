@@ -8,13 +8,15 @@
 #include <sys/wait.h>
 using namespace std;
 
+int scriptPos(int argc, char const* argv[]);
+
 int main(int argc, char const* argv[])
 {
 ///////////////////////////////////////////
 // reading args
 //////////////////////////////////////////
-	if(argc == 1)
-		exit(1);
+	if(argc <= 1)
+		exit(0);
 
 	bool v_opt = false;
 	int result = 0;
@@ -29,9 +31,10 @@ int main(int argc, char const* argv[])
 ///////////////////////////////////////////
 // initialization of top level objects 
 //////////////////////////////////////////
-	ifstream ifs(argv[argc-1]);
+	int script_pos = scriptPos(argc,argv);
+	ifstream ifs(argv[script_pos]);
 	Feeder feeder(&ifs);
-	Environment env;
+	Environment env(argc,argv,script_pos);
 
 	// set tmpdir
 	string tmp_k = "tmpdir";
@@ -104,4 +107,21 @@ int main(int argc, char const* argv[])
 
 	cerr << "unknown error (uncatched)" << endl;
 	exit(1);
+}
+
+int scriptPos(int argc, char const* argv[])
+{
+	string com = string(argv[0]);
+	bool shebang = com.substr(com.find_last_of('/') + 1) != "glue";
+
+	if(shebang == false){
+		int i=1;
+		for(;i<argc;i++){
+			if(argv[i][0] != '-')
+				break;
+		}
+		return i;
+	}
+
+	return 0;
 }

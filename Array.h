@@ -1,5 +1,5 @@
-#ifndef __ARG_H_
-#define __ARG_H_
+#ifndef __ARRAY_H_
+#define __ARRAY_H_
 
 #include "Element.h"
 #include <iostream>
@@ -8,13 +8,16 @@ using namespace std;
 class Feeder;
 class Environment;
 
-class Arg : public Element
+class Array : public Element
 {
 public:
-	Arg(Feeder *f,Environment *env);
-	virtual ~Arg();
+	Array(Feeder *f,Environment *env);
+	virtual ~Array();
+/*
+	virtual void print(int indent_level = 0);
 	const char *getOriginalString(void){return m_text.c_str();}
 	const char *getEvaledString(void){return m_evaled_text.c_str();}
+*/
 
 	virtual bool eval(void);
 	virtual int exec(void);
@@ -22,11 +25,11 @@ public:
 
 	void printOriginalString(void);
 protected:
+/*
 	string m_text;
 	string m_evaled_text;
 
 	bool m_is_variable;
-	bool m_is_array_variable;
-	long m_array_pos;
+*/
 };
 #endif

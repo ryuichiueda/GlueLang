@@ -10,6 +10,7 @@ using namespace std;
 class Environment
 {
 private:
+	vector<string> m_args;
 	map<string,string> m_variables;
 	map<string,string> m_import_paths;
 	vector<string> m_file_list;
@@ -18,9 +19,11 @@ private:
 
 	string m_dir;
 public:
-	Environment();
+	Environment(int argc, char const* argv[],int script_pos);
+
 	void setVariable(string *key, string *value);
 	void getVariable(string *key, string *value);
+	string *getArg(long pos);
 	void getVariable(const char *key, string *value);
 
 	void setImportPath(string *key, string *value);

@@ -5,7 +5,7 @@
 #include <sys/param.h> 
 using namespace std;
 
-Environment::Environment()
+Environment::Environment(int argc, char const* argv[],int script_pos)
 {
 	m_level = 0;
 
@@ -18,6 +18,10 @@ Environment::Environment()
 	}
 
 	m_dir = tmp;	
+
+	//set args
+	for(int i=script_pos;i<argc;i++)
+		m_args.push_back(argv[i]);
 }
 
 void Environment::setImportPath(string *key, string *value)
@@ -100,8 +104,16 @@ void Environment::setFileList(string *filepath)
 
 void Environment::removeFiles(void)
 {
-	for(auto f : m_file_list){
+	for(auto f : m_file_list)
 		remove(f.c_str());
-	}
 }
 
+string *Environment::getArg(long pos)
+{
+	if(pos < 0 || pos >= m_args.size()){
+		m_error_msg = "Array index out of range (pos: "+
+		to_string(pos) + ")";
+		throw this;
+	}
+	return &m_args[pos];
+}

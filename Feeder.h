@@ -37,6 +37,7 @@ public:
 	// they scan the script, move the cursor
 	// and return the string on matching
 	bool variable(string *ans);
+	bool arrayElem(string *name,long *pos);
 	bool comment(string *ans);
 	bool declare(string *ans, string reserved);
 	bool command(string *ans);
@@ -44,6 +45,7 @@ public:
 	bool pipe(string *ans);
 	bool path(string *ans);
 	bool smallCaps(string *ans);
+	bool positiveInt(long *pos);
 
 	bool str(string s);
 
@@ -59,5 +61,7 @@ public:
 	void debugOut(void);
 
 	void printErrorPart(int from, int from_char, int to,int to_char);
+
+	string m_error_msg;
 };
 #endif
