@@ -3,6 +3,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/param.h> 
+#include <sys/stat.h>
 using namespace std;
 
 Environment::Environment(int argc, char const* argv[],int script_pos)
@@ -18,10 +19,29 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 	}
 
 	m_dir = tmp;	
+	m_pid = getpid();
+
+	string a0 = string(argv[0]);
+
+	if(a0 == "glue")//from path
+		m_glue_path = "/usr/local/bin/glue";
+	else
+		m_glue_path = string(tmp) + "/" + string(argv[0]);
 
 	//set args
 	for(int i=script_pos;i<argc;i++)
 		m_args.push_back(argv[i]);
+}
+
+// this function is called from Script::parse
+// after import sentences are parsed.
+void Environment::init(void)
+{
+	getImportPath("tmpdir",&m_tmpdir);
+	m_tmpdir += "glue" + to_string(m_pid);
+	while(mkdir(m_tmpdir.c_str(),0700) != 0){
+		cerr << "unable to create tmpdir" << endl;
+	}
 }
 
 void Environment::setImportPath(string *key, string *value)
@@ -104,8 +124,17 @@ void Environment::setFileList(string *filepath)
 
 void Environment::removeFiles(void)
 {
-	for(auto f : m_file_list)
+	for(auto f : m_file_list){
 		remove(f.c_str());
+	}
+
+	struct stat buf;
+	while(stat(m_tmpdir.c_str(), &buf) == 0){
+		if(remove(m_tmpdir.c_str()) != 0){
+			cerr << "cannot remove tmpdir" << endl;
+			sleep(1);
+		}
+	}
 }
 
 string *Environment::getArg(long pos)

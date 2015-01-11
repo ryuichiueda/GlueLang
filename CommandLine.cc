@@ -160,13 +160,25 @@ int CommandLine::exec(void)
 
 const char** CommandLine::makeArgv(int file_num)
 {
-	auto argv = new const char* [m_nodes.size() - file_num];
-	argv[0] = ((Command *)m_nodes[file_num])->getStr();
-	for (int i=1;i < (int)m_nodes.size()-file_num;i++){
-		argv[i] = ((Arg *)m_nodes[file_num+i])->getEvaledString();
+	Command *com = (Command *)m_nodes[file_num];
+
+	auto argv = new const char* [m_nodes.size() - file_num + 1];
+	argv[0] = com->getStr();
+
+	int skip = 0;
+	// in the case of proc, argv[0] is glue and argv[1] is
+	// the procedure file.
+	if(com->m_is_proc){
+		skip = 1;
+		argv[1] = argv[0];
+		argv[0] = m_env->m_glue_path.c_str();
 	}
 
-	argv[m_nodes.size()-file_num] = NULL;
+	for (int i=1;i < (int)m_nodes.size()-file_num;i++){
+		argv[i+skip] = ((Arg *)m_nodes[file_num+i])->getEvaledString();
+	}
+
+	argv[m_nodes.size()-file_num+skip] = NULL;
 	return argv;
 }
 

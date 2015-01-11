@@ -26,13 +26,8 @@ bool TmpFile::parse(void)
 
 	string tmpdir;
 	m_env->getImportPath("tmpdir",&tmpdir);
-/*
-	if(! m_env->getImportPath("tmpdir",&tmpdir)){
-		m_error_messages.push_back("no tmp dir");
-	}
-*/
 		
-	m_file_name = tmpdir + to_string(getpid()) + "-" + m_var_name;
+	m_file_name = m_env->m_tmpdir + "/" + m_var_name;
 	return true;
 }
 

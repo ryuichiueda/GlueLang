@@ -16,8 +16,9 @@ private:
 	vector<string> m_file_list;
 
 	int m_level;
-
+	int m_pid;
 	string m_dir;
+
 public:
 	Environment(int argc, char const* argv[],int script_pos);
 
@@ -39,6 +40,11 @@ public:
 
 	void inclementLevel(void){m_level++;}
 	int getLevel(void){return m_level;}
+
+	void init(void);
+
+	string m_glue_path;
+	string m_tmpdir;
 };
 
 #endif

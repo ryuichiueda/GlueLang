@@ -14,5 +14,6 @@ bash ./pipeline.test
 bash ./if.test
 bash ./stdcom.test
 bash ./argv.test
+bash ./proc.test
 
 echo OK

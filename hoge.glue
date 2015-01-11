@@ -1,1 +1,3 @@
-/bin/echo argv[3] 'a' argv[1]
+proc hoge = /bin/echo 'hoge'
+
+this.hoge

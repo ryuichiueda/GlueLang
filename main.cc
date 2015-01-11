@@ -27,7 +27,6 @@ int main(int argc, char const* argv[])
 			break;
 		}
 	}
-
 ///////////////////////////////////////////
 // initialization of top level objects 
 //////////////////////////////////////////
@@ -53,7 +52,6 @@ int main(int argc, char const* argv[])
 		cerr << e->pos() << endl;
 		e->printErrorPart();
 		cerr << "\n\t" << e->m_error_msg << endl;
-		env.removeFiles();
 		cerr << "\t";
 
 		int es = e->getExitStatus();
@@ -61,10 +59,13 @@ int main(int argc, char const* argv[])
 		cerr <<  "\tprocess_level " << e->getLevel() << endl;
 		cerr << "\texit_status " << es << endl;
 		cerr << "\tpid " << getpid() << '\n' << endl;
+		env.removeFiles();
+
 		exit(es);
 	}
 	catch(...){
 		cerr << "unknown error" << endl;
+		env.removeFiles();
 		exit(1);
 	}
 
@@ -102,10 +103,12 @@ int main(int argc, char const* argv[])
 	}
 	catch(...){
 		cerr << "unknown error" << endl;
+		env.removeFiles();
 		exit(1);
 	}
 
 	cerr << "unknown error (uncatched)" << endl;
+	env.removeFiles();
 	exit(1);
 }
 
@@ -114,14 +117,13 @@ int scriptPos(int argc, char const* argv[])
 	string com = string(argv[0]);
 	bool shebang = com.substr(com.find_last_of('/') + 1) != "glue";
 
-	if(shebang == false){
-		int i=1;
-		for(;i<argc;i++){
-			if(argv[i][0] != '-')
-				break;
-		}
-		return i;
-	}
+	if(shebang)
+		return 0;
 
-	return 0;
+	int i=1;
+	for(;i<argc;i++){
+		if(argv[i][0] != '-')
+			break;
+	}
+	return i;
 }

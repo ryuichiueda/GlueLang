@@ -5,8 +5,7 @@ using namespace std;
 
 Command::Command(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_path = "";
-	m_prefix = "";
+	m_is_proc = false;
 }
 
 Command::~Command()
@@ -36,9 +35,16 @@ bool Command::parse(void)
 		return m_feeder->command(&m_name);
 	}
 
+
 	// chech whether m_prefix is a prefix or a command name
  	if( m_feeder->str(".") ){
- 		if(m_env->isImportPath(&m_prefix)){
+		//"this" indicetes a procedure that is defined in the script
+		if(m_prefix == "this"){
+			m_is_proc = true;
+			m_path = m_env->m_tmpdir + "/";
+			return m_feeder->command(&m_name);
+		}
+ 		else if(m_env->isImportPath(&m_prefix)){
 			m_env->getImportPath(&m_prefix, &m_path);
 			return m_feeder->command(&m_name);
 		}

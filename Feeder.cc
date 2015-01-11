@@ -521,3 +521,15 @@ int Feeder::countIndent(void)
 	return i;
 }
 
+bool Feeder::lineResidual(string *ans)
+{
+	if(outOfRange())
+		return false;
+
+	string *p = &m_lines[m_cur_line];
+	*ans = string(p->c_str()+m_cur_char,p->size()-m_cur_char);
+	m_cur_char = 0;
+	m_cur_line++;
+	return true;
+	
+}

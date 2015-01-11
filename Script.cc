@@ -2,10 +2,15 @@
 #include "Feeder.h"
 #include "Script.h"
 #include "Import.h"
+#include "Procedure.h"
 #include "IfBlock.h"
 #include "Pipeline.h"
 #include "CommandLine.h"
 #include "Comment.h"
+#include "Environment.h"
+#include <sys/types.h> 
+#include <sys/stat.h> 
+#include <unistd.h>
 using namespace std;
 
 Script::Script(Feeder *f, Environment *env) : Element(f,env)
@@ -27,17 +32,16 @@ bool Script::parse(void)
 	while(add(new Import(m_feeder,m_env))){
 	}
 
+	m_env->init();
+
+
 	while(1){
 		// comments -> pipeline or command -> comments -> pipeline or command ...
-/*
-		m_feeder->blankLines();
-		if(m_feeder->atEnd())
-			break;
-*/
 
 		while(add(new Comment(m_feeder,m_env))){ }
 
-		if(	add(new IfBlock(m_feeder,m_env))
+		if( add(new Procedure(m_feeder,m_env))
+			|| add(new IfBlock(m_feeder,m_env))
 			|| add(new Pipeline(m_feeder,m_env))
 		 	|| add(new CommandLine(m_feeder,m_env))){
 

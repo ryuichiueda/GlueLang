@@ -20,10 +20,15 @@ public:
 	virtual bool parse(void);
 
 	void printOriginalString(void);
+	void setPrefix(const char *p){m_prefix = string(p);}
+	string *getName(void){return &m_name;}
+
+	bool m_is_proc;
 protected:
 	string m_prefix;
 	string m_name;
 	string m_path;
 	string m_fullpath;
+
 };
 #endif
