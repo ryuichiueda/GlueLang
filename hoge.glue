@@ -1,3 +1,4 @@
-proc hoge = /bin/ech 'hoge'
+proc hoge = /bin/echo argv[1] >>= /usr/bin/rev
+      /bin/echo 'OK'
 
-this.hoge
+this.hoge 'abc'

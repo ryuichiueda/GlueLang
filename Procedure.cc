@@ -58,12 +58,12 @@ bool Procedure::parse(void)
 		return false;
 	}
 
+	// reading first line
 	int i = 0;
 	for(;i<tmp.size();i++){
 		if(tmp[i] != ' ' && tmp[i] != '\t')
 			break;
 	}
-
 	int indent = i;
 
 	//create a file
@@ -77,6 +77,20 @@ bool Procedure::parse(void)
 	ofs << tmp.substr(indent,tmp.size()-indent) << endl;
 
 	m_env->setFileList(&tmpdir);
+
+	//read other lines
+	// The second line fixes the offside line of this procedure
+	indent = m_feeder->countIndent();
+	int idt = indent;
+	// no indent -> the while loop should be avoided
+	if(idt == 0)
+		idt = -1;
+
+	while(idt >= indent){//write the script file with removal of the indent
+		m_feeder->lineResidual(&tmp);
+		ofs << tmp.substr(indent,tmp.size()-indent) << endl;
+		idt = m_feeder->countIndent();
+	}
 
 	ofs.close();
 	m_feeder->getPos(&m_end_line, &m_end_char);
