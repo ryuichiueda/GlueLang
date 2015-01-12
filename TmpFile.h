@@ -29,10 +29,14 @@ public:
 	const char *virtualFileName(void){return m_var_name.c_str();}
 
 	int getFd(void){return m_fd;}
+
+	bool m_append_mode;
 protected:
 	string m_var_name;
 	string m_file_name;
 
 	int m_fd;
+
+	bool m_evaled;
 };
 #endif

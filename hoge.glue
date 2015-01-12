@@ -1,3 +1,3 @@
-/bin/echo 'hoge'
->>= /usr/bin/rev
->>= /usr/bin/rev
+str f  = /bin/echo 'a' >> /bin/echo 'b' >> /bin/echo 'c'
+/bin/echo ''
+/bin/echo f

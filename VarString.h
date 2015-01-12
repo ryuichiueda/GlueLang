@@ -30,10 +30,13 @@ public:
 	int getFd(void){return m_fd;}
 
 	bool readFiFo(void);
+
+	bool m_evaled;
+	bool m_opened;
+	bool m_is_set;
 protected:
 	string m_var_name;
 	string m_file_name;
-	string m_value;
 
 	int m_fd;
 };

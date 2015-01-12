@@ -22,6 +22,7 @@ public:
 	Environment(int argc, char const* argv[],int script_pos);
 
 	void setVariable(string *key, string *value);
+	void appendValue(string *key, string *value);
 	void getVariable(string *key, string *value);
 	string *getArg(long pos);
 	void getVariable(const char *key, string *value);

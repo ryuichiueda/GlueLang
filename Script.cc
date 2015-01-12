@@ -5,6 +5,7 @@
 #include "Procedure.h"
 #include "IfBlock.h"
 #include "Pipeline.h"
+#include "Andline.h"
 #include "CommandLine.h"
 #include "Environment.h"
 #include <sys/types.h> 
@@ -40,7 +41,8 @@ bool Script::parse(void)
 		while(m_feeder->comment());
 		if( add(new Procedure(m_feeder,m_env))
 			|| add(new IfBlock(m_feeder,m_env))
-			|| add(new Pipeline(m_feeder,m_env))){ 
+			|| add(new Pipeline(m_feeder,m_env))
+			|| add(new Andline(m_feeder,m_env))){ 
 
 			while(m_feeder->blankLine());
 			continue;

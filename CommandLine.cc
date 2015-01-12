@@ -109,6 +109,7 @@ int CommandLine::exec(void)
 {
 	cout << flush;
 
+
 	if(! eval()){
 		return -1;
 	}

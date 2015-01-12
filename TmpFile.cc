@@ -12,6 +12,8 @@ using namespace std;
 TmpFile::TmpFile(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_fd = -1;
+	m_evaled = false;
+	m_append_mode = false;
 }
 
 TmpFile::~TmpFile()
@@ -49,32 +51,41 @@ bool TmpFile::parse(void)
 // open the file
 bool TmpFile::eval(void)
 {
-	m_env->setVariable(&m_var_name,&m_file_name);
-	m_env->setFileList(&m_file_name);
+	if(m_evaled)
+		return true;
 
+	m_evaled = true;
+	try{
+		m_env->setVariable(&m_var_name,&m_file_name);
+		m_env->setFileList(&m_file_name);
+	}catch(Environment *e){
+		m_error_msg = e->m_error_msg;	
+		m_exit_status = 1;
+		throw this;
+	}
 	return true;
 }
 
 // joint the redirect
 int TmpFile::exec(void)
 {
-	m_fd = open( m_file_name.c_str() ,O_WRONLY | O_CREAT,0700);
+	int mode = O_WRONLY | O_CREAT;
+	if(m_append_mode)
+		mode |= O_APPEND;
+
+	m_fd = open( m_file_name.c_str() , mode, 0700);
 	if(m_fd < 3){
 		m_error_msg = "file: " + m_var_name + " does not open.";
-		//return false;
 		throw this;
 	}
 	if(dup2(m_fd,1) < 0){
 		m_error_msg = "file: " + m_var_name + "  redirect error";
 		throw this;
-		//return -1;
 	}
 	if( close(m_fd) < 0){
 		m_error_msg = "file: " + m_var_name + "  redirect error";
 		throw this;
-		//return -1;
 	}
-
 	return 0;
 }
 

@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 tmp=/tmp/$$
 scr=$(basename $0)
@@ -11,26 +11,24 @@ ERROR_CHECK(){
 	exit 1
 }
 
+os=linux
+[ "$(uname)" != "Linux" ] && os=mac
+
+
 #########################################
-# TEST1: simple io
+# TEST1: with file
 #########################################
 cat << FIN > $tmp-out
-1
-2
-3
-1
-2
-3
-1
-2
-3
+
+a
+b
+c
 FIN
 
 cat << FIN > $tmp-glue
-str tmp = /usr/bin/seq '1' '3'
-/bin/echo tmp
-/bin/echo tmp
-/bin/echo tmp
+file f  = /bin/echo 'a' >> /bin/echo 'b' >> /bin/echo 'c'
+/bin/echo ''
+/bin/cat f
 FIN
 
 ../glue $tmp-glue > $tmp-ans
@@ -39,22 +37,20 @@ ERROR_CHECK "TEST1.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
 
-ls /tmp/*faoeoahgre &> /dev/null
-[ $? -ne 0 ]
-ERROR_CHECK "TEST1.3 error"
-
 #########################################
-# TEST2: pipeline
+# TEST2: with str 
 #########################################
 cat << FIN > $tmp-out
-1 2 3
-1 2 3
+
+a
+b
+c
 FIN
 
 cat << FIN > $tmp-glue
-str tmp = /usr/bin/seq '1' '3' >>= /usr/bin/xargs
-/bin/echo tmp
-/bin/echo tmp
+str s  = /bin/echo 'a' >> /bin/echo 'b' >> /bin/echo 'c'
+/bin/echo ''
+/bin/echo s
 FIN
 
 ../glue $tmp-glue > $tmp-ans
@@ -62,9 +58,5 @@ ERROR_CHECK "TEST2.1 error"
 
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST2.2 error"
-
-ls /tmp/*faoeoahgre &> /dev/null
-[ $? -ne 0 ]
-ERROR_CHECK "TEST2.3 error"
 
 rm -f $tmp-*

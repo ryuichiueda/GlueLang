@@ -64,6 +64,7 @@ int main(int argc, char const* argv[])
 		exit(es);
 	}
 	catch(...){
+		cerr << "\nParse error" << endl;
 		cerr << "unknown error" << endl;
 		env.removeFiles();
 		exit(1);
@@ -102,6 +103,7 @@ int main(int argc, char const* argv[])
 			exit(es);
 	}
 	catch(...){
+		cerr << "\nExecution error" << endl;
 		cerr << "unknown error" << endl;
 		env.removeFiles();
 		exit(1);

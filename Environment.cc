@@ -116,6 +116,16 @@ void Environment::setVariable(string *key, string *value)
 	m_variables[*key] = *value;
 }
 
+void Environment::appendValue(string *key, string *value)
+{
+	if(m_variables.find(*key) == m_variables.end()){
+		m_error_msg = *key + " not exist" ;
+		throw this;
+	}
+
+	m_variables[*key] += *value;
+}
+
 void Environment::getVariable(string *key,string *value)
 {
 	if(m_variables.find(*key) == m_variables.end()){

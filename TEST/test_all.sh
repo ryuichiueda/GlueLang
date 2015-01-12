@@ -16,5 +16,6 @@ bash ./stdcom.test
 bash ./argv.test
 bash ./proc.test
 bash ./blank.test
+bash ./andline.test
 
 echo OK

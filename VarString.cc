@@ -12,6 +12,9 @@ using namespace std;
 VarString::VarString(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_fd = -1;
+	m_opened = false;
+	m_evaled = false;
+	m_is_set = false;
 }
 
 VarString::~VarString()
@@ -26,10 +29,6 @@ bool VarString::parse(void)
 
 	string tmpdir;
 	m_env->getImportPath("tmpdir",&tmpdir);
-/*
-		m_error_messages.push_back("no tmp dir");
-	}
-*/
 		
 	m_file_name = tmpdir + to_string(getpid()) + "-" + m_var_name;
 	return true;
@@ -38,18 +37,24 @@ bool VarString::parse(void)
 // open the file
 bool VarString::eval(void)
 {
+	if(m_evaled)
+		return true;
+
 	if(mkfifo(m_file_name.c_str(),0700) != 0){
 		m_error_msg = "str: " + m_var_name + " " 
 				+ "(named pipe " + m_file_name.c_str() + ") does not prepared.";
 		throw this;
-		//return false;
 	}
+	m_evaled = true;
 	return true;
 }
 
 // joint the redirect
 int VarString::exec(void)
 {
+	if(m_opened)
+		return true;
+
 	m_fd = open( m_file_name.c_str() ,O_WRONLY ,0700);
 	if(dup2(m_fd,1) < 0){
 		m_error_msg = "str: " + m_var_name + "  redirect error";
@@ -62,6 +67,7 @@ int VarString::exec(void)
 		//return -1;
 	}
 
+	m_opened = true;
 	return 0;
 }
 
@@ -81,16 +87,28 @@ bool VarString::readFiFo(void)
 {
 	ifstream ifs(m_file_name.c_str());
 	string tmp;
+	string value;
+	if(m_is_set){
+		value = "\n";
+	}
+
 	bool isfirst = true;
 	while(ifs && getline(ifs, tmp)){
 		if(isfirst){
-			m_value += tmp;
+			value += tmp;
 			isfirst = false;
 		}else
-			m_value += "\n" + tmp;
+			value += "\n" + tmp;
 	}
-	m_env->setVariable(&m_var_name,&m_value);
+
+	if(m_is_set){
+		m_env->appendValue(&m_var_name,&value);
+		return true;
+	}
+
+	m_env->setVariable(&m_var_name,&value);
 	m_env->setFileList(&m_file_name);
+	m_is_set = true;
 
 	return true;
 }
