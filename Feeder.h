@@ -48,7 +48,6 @@ public:
 	bool smallCaps(string *ans);
 	bool positiveInt(long *pos);
 	bool lineResidual(string *ans);
-	bool filename(string *ans);
 
 	bool str(string s);
 
