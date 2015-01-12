@@ -6,7 +6,6 @@
 #include "IfBlock.h"
 #include "Pipeline.h"
 #include "CommandLine.h"
-#include "Comment.h"
 #include "Environment.h"
 #include <sys/types.h> 
 #include <sys/stat.h> 
@@ -30,21 +29,23 @@ bool Script::parse(void)
 
 	// import
 	while(add(new Import(m_feeder,m_env))){
+		while(m_feeder->blankLine());
 	}
 
 	m_env->init();
 
-
 	while(1){
 		// comments -> pipeline or command -> comments -> pipeline or command ...
 
-		while(add(new Comment(m_feeder,m_env))){ }
+		while(m_feeder->comment());
+	//	while(add(new Comment(m_feeder,m_env))){ }
 
 		if( add(new Procedure(m_feeder,m_env))
 			|| add(new IfBlock(m_feeder,m_env))
 			|| add(new Pipeline(m_feeder,m_env))
 		 	|| add(new CommandLine(m_feeder,m_env))){
 
+			while(m_feeder->blankLine());
 			continue;
 		}
 

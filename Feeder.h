@@ -38,10 +38,11 @@ public:
 	// and return the string on matching
 	bool variable(string *ans);
 	bool arrayElem(string *name,long *pos);
-	bool comment(string *ans);
+	bool comment(void);
 	bool declare(string *ans, string reserved);
 	bool command(string *ans);
 	bool blank(string *ans);
+	bool blankLine(void);
 	bool pipe(string *ans);
 	bool path(string *ans);
 	bool smallCaps(string *ans);

@@ -12,7 +12,7 @@ ERROR_CHECK(){
 }
 
 #########################################
-# TEST1:
+# TEST1: whole line comments
 #########################################
 
 cat << FIN > $tmp-glue
@@ -29,6 +29,27 @@ That's OK
 FIN
 
 ../glue $tmp-glue > $tmp-ans
-ERROR_CHECK "TEST1 error"
+ERROR_CHECK "TEST1.1 error"
+
+diff $tmp-{out,ans}
+ERROR_CHECK "TEST1.2 error"
+
+#########################################
+# TEST2: comment at right of code
+#########################################
+
+cat << FIN > $tmp-glue
+/bin/echo 'That\'s OK'
+FIN
+
+cat << FIN > $tmp-out
+That's OK
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST2.1 error"
+
+diff $tmp-{out,ans}
+ERROR_CHECK "TEST2.2 error"
 
 rm -f $tmp-*

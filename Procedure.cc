@@ -78,6 +78,10 @@ bool Procedure::parse(void)
 
 	m_env->setFileList(&tmpdir);
 
+	while(m_feeder->blankLine()){
+		ofs << endl;
+	}
+
 	//read other lines
 	// The second line fixes the offside line of this procedure
 	indent = m_feeder->countIndent();
@@ -89,6 +93,10 @@ bool Procedure::parse(void)
 	while(idt >= indent){//write the script file with removal of the indent
 		m_feeder->lineResidual(&tmp);
 		ofs << tmp.substr(indent,tmp.size()-indent) << endl;
+
+		while(m_feeder->blankLine()){
+			ofs << endl;
+		}
 		idt = m_feeder->countIndent();
 	}
 

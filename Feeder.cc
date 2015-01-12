@@ -85,6 +85,21 @@ bool Feeder::smallCaps(string *ans)
 	checkEol(p);
 	return true;
 }
+bool Feeder::blankLine(void)
+{
+	if(outOfRange() || m_cur_char != 0)
+		return false;
+	
+	string *p = &m_lines[m_cur_line];
+	for(auto c : *p){
+		if(c != ' ' && c != '\t')
+			return false;
+	}
+
+	m_cur_char = p->size();
+	checkEol(p);
+	return true;
+}
 
 bool Feeder::blank(string *ans)
 {
@@ -323,37 +338,33 @@ bool Feeder::outOfRange(void)
 	return (m_cur_line >= (int)m_lines.size());
 }
 
-bool Feeder::comment(string *ans)
+/* comment = blank + blankLines + # + strings + blankLines */
+bool Feeder::comment(void)
 {
+	int ln,ch;
+	getPos(&ln,&ch);
+
+	blank(NULL);
+	while(blankLine()){ };
 	if(outOfRange())
 		return false;
 
-	string *p = &m_lines[m_cur_line];
-
-	// a blank line is treated as a comment
-	if(p->length() == 0){
-		*ans = "";
-		m_cur_char = 0;
-		m_cur_line++;
-
-		while(m_cur_line < (int)m_lines.size()){
-			if(m_lines[m_cur_line].length() != 0)
-				break;
-
-			*ans += "\n";
-			m_cur_line++;
-		}
+	if(atEnd()){
 		return true;
 	}
 
-	// #... is a comment
-	if(p->at(m_cur_char) != '#')
+	string *p = &m_lines[m_cur_line];
+	if(p->size() == 0 || p->at(0) != '#'){
+		setPos(ln,ch);
 		return false;
+	}
 
-	*ans = string(p->c_str()+m_cur_char,p->length()-m_cur_char);
+	if(!lineResidual(NULL)){
+		setPos(ln,ch);
+		return false;
+	}
 
-	m_cur_char = 0;
-	m_cur_line++;
+	while(blankLine()){ };
 	return true;
 }
 
@@ -496,7 +507,7 @@ void Feeder::printErrorPart(int from, int from_char, int to, int to_char)
 			cerr << "\t";
 			for(int j=1-left.size();j<from_char;j++)
 				cerr << " ";
-			cerr << "^";
+			cerr << "^" << endl;
 		}
 	}
 }
@@ -527,7 +538,8 @@ bool Feeder::lineResidual(string *ans)
 		return false;
 
 	string *p = &m_lines[m_cur_line];
-	*ans = string(p->c_str()+m_cur_char,p->size()-m_cur_char);
+	if(ans != NULL)
+		*ans = string(p->c_str()+m_cur_char,p->size()-m_cur_char);
 	m_cur_char = 0;
 	m_cur_line++;
 	return true;

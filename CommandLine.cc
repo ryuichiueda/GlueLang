@@ -55,12 +55,22 @@ bool CommandLine::parse(void)
 	if(!add(new Command(m_feeder,m_env)))
 		return false;
 
+/*
+	m_feeder->blank(NULL);
+	m_feeder->comment(NULL);
+*/
+
+
 	if(m_feeder->atNewLine()){
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		return true;
+	}/*else if(m_feeder{
+		cerr << "!" << endl;
 	}
+	*/
 
 	m_feeder->blank(NULL);
+
 
 	while(add(new Arg(m_feeder,m_env))){
 		if(m_feeder->atNewLine()){

@@ -4,7 +4,6 @@
 #include "Import.h"
 #include "Pipeline.h"
 #include "CommandLine.h"
-#include "Comment.h"
 using namespace std;
 
 IfBlock::IfBlock(Feeder *f, Environment *env) : Element(f,env)
@@ -64,6 +63,8 @@ bool IfBlock::parse(void)
 			return false;
 		}
 
+		while(m_feeder->blankLine()){}
+
 		m_is_cond_node.push_back(true);
 
 		//while(add(new Comment(m_feeder,m_env))){ }
@@ -96,6 +97,7 @@ bool IfBlock::parse(void)
 
 
 				m_is_cond_node.push_back(false);
+				while(m_feeder->blankLine()){}
 				sub_indent = m_feeder->countIndent();
 			}else{
 				m_feeder->setPos(m_start_line, m_start_char);
