@@ -67,10 +67,8 @@ bool IfBlock::parse(void)
 
 		m_is_cond_node.push_back(true);
 
-		//while(add(new Comment(m_feeder,m_env))){ }
 
 		int sub_indent = m_feeder->countIndent();
-
 		// end of the if block
 		if(sub_indent < indent){
 			break;

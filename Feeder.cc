@@ -354,16 +354,14 @@ bool Feeder::comment(void)
 	}
 
 	string *p = &m_lines[m_cur_line];
-	if(p->size() == 0 || p->at(0) != '#'){
+	if(p->size() <= m_cur_char || p->at(m_cur_char) != '#'){
 		setPos(ln,ch);
 		return false;
 	}
 
-	if(!lineResidual(NULL)){
-		setPos(ln,ch);
-		return false;
-	}
+	m_cur_char++;
 
+	lineResidual(NULL);
 	while(blankLine()){ };
 	return true;
 }
