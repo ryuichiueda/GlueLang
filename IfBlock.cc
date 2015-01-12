@@ -3,7 +3,7 @@
 #include "IfBlock.h"
 #include "Import.h"
 #include "Pipeline.h"
-#include "Andline.h"
+#include "AndLine.h"
 #include "CommandLine.h"
 using namespace std;
 
