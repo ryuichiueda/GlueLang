@@ -129,7 +129,7 @@ int IfBlock::exec(void)
 	int exit_status = 0;
 	bool skip = false;
 	bool match = false;
-	for(int i=0;i<m_nodes.size();i++){
+	for(int i=0;i< (int)m_nodes.size();i++){
 		if(m_is_cond_node[i]){ // cond node
 			if(match) // already matched
 				break;	

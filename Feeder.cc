@@ -341,7 +341,7 @@ bool Feeder::comment(void)
 		return true;
 
 	string *p = &m_lines[m_cur_line];
-	if(p->size() <= m_cur_char || p->at(m_cur_char) != '#'){
+	if((int)p->size() <= m_cur_char || p->at(m_cur_char) != '#'){
 		setPos(ln,ch);
 		return false;
 	}
@@ -505,7 +505,7 @@ int Feeder::countIndent(void)
 
 	string *p = &m_lines[m_cur_line];
 	int i = 0;
-	while(i < p->size()){
+	while(i < (int)p->size()){
 		if(strchr(" \t",p->at(i)) == NULL)
 			break;
 

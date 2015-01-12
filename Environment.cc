@@ -154,7 +154,7 @@ void Environment::removeFiles(void)
 
 string *Environment::getArg(long pos)
 {
-	if(pos < 0 || pos >= m_args.size()){
+	if(pos < 0 || pos >= (long)m_args.size()){
 		m_error_msg = "Array index out of range (pos: "+
 		to_string(pos) + ")";
 		throw this;

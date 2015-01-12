@@ -57,7 +57,7 @@ bool Procedure::parse(void)
 
 	// reading first line
 	int i = 0;
-	for(;i<tmp.size();i++){
+	for(;i< (int)tmp.size();i++){
 		if(tmp[i] != ' ' && tmp[i] != '\t')
 			break;
 	}
