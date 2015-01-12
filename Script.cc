@@ -38,12 +38,9 @@ bool Script::parse(void)
 		// comments -> pipeline or command -> comments -> pipeline or command ...
 
 		while(m_feeder->comment());
-	//	while(add(new Comment(m_feeder,m_env))){ }
-
 		if( add(new Procedure(m_feeder,m_env))
 			|| add(new IfBlock(m_feeder,m_env))
-			|| add(new Pipeline(m_feeder,m_env))
-		/* 	|| add(new CommandLine(m_feeder,m_env))*/){
+			|| add(new Pipeline(m_feeder,m_env))){ 
 
 			while(m_feeder->blankLine());
 			continue;

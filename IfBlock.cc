@@ -54,9 +54,6 @@ bool IfBlock::parse(void)
 			
 		}else if(add(new Pipeline(m_feeder,m_env))){
 			((Pipeline *)m_nodes.back())->setIfFlag();
-		}
-		else if(add(new CommandLine(m_feeder,m_env))){
-			((CommandLine *)m_nodes.back())->setIfFlag();
 		}else{
 			m_feeder->setPos(m_start_line, m_start_char);
 			return false;
@@ -86,9 +83,8 @@ bool IfBlock::parse(void)
 		while(sub_indent > indent){
 			m_feeder->blank();
 
-			if(	add(new IfBlock(m_feeder,m_env))
-				|| add(new Pipeline(m_feeder,m_env))
-			 	|| add(new CommandLine(m_feeder,m_env))){
+			if(add(new IfBlock(m_feeder,m_env))
+				|| add(new Pipeline(m_feeder,m_env))){
 
 				m_is_cond_node.push_back(false);
 				while(m_feeder->blankLine()){}
