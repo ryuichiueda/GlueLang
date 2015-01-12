@@ -23,6 +23,7 @@ private:
 
 	bool literalEsc(string *ans);
 	bool literalNoEsc(string *ans);
+
 public:
 	Feeder(ifstream *ifs);
 	~Feeder();
@@ -43,7 +44,6 @@ public:
 	bool command(string *ans);
 	bool blank(string *ans);
 	bool blankLine(void);
-	bool pipe(string *ans);
 	bool path(string *ans);
 	bool smallCaps(string *ans);
 	bool positiveInt(long *pos);

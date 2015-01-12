@@ -47,11 +47,10 @@ bool Feeder::command(string *ans)
 	int i = m_cur_char;
 	for(;i < (int)p->length();i++){
 		char c = p->at(i);
-		if(c == ' ' || c == '#')
+		if(strchr(" #",c) != NULL)
 			break;
 
-		if(! isAlphabet(c) && ! isNum(c) && c != '.'
-			&& c != '_' && c != '-' && c != '/')
+		if(! isAlphabet(c) && ! isNum(c) && strchr("._-/",c) == NULL)
 			return false;
 	}
 	if(i == m_cur_char)
@@ -72,8 +71,7 @@ bool Feeder::smallCaps(string *ans)
 
 	int i = m_cur_char;
 	for(;i < (int)p->length();i++){
-		char c = p->at(i);
-		if( c < 'a' || c > 'z')
+		if( p->at(i) < 'a' || p->at(i) > 'z')
 			break;
 	}
 
@@ -92,7 +90,7 @@ bool Feeder::blankLine(void)
 	
 	string *p = &m_lines[m_cur_line];
 	for(auto c : *p){
-		if(c != ' ' && c != '\t')
+		if(strchr(" \t",c) == NULL)
 			return false;
 	}
 
@@ -114,12 +112,11 @@ bool Feeder::blank(string *ans)
 		return false;
 
 	int i = m_cur_char;
- 	if(p->at(i) != ' ' && p->at(i) != '\t')
+	if(strchr(" \t",p->at(i)) == NULL)
 		return false;
 
 	for(;i < (int)p->length();i++){
-		char c = p->at(i);
-		if( c != ' ' && c != '\t')
+		if(strchr(" \t",p->at(i)) == NULL)
 			break;
 	}
 
@@ -134,37 +131,6 @@ bool Feeder::blank(string *ans)
 bool Feeder::path(string *ans)
 {
 	return command(ans);
-}
-
-bool Feeder::pipe(string *ans)
-{
-	if(outOfRange())
-		return false;
-
-	bool exist = false;
-	string *p = &m_lines[m_cur_line];
-	int i = m_cur_char;
-	for( ;i < (int)p->length();i++){
-		char c = p->at(i);
-		if(c == '>'){
-			if(i >= (int)p->length()-2)
-				return false;
-			if(p->at(i+1) == '>' && p->at(i+2) == '='){
-				exist = true;
-				i += 3;
-				break;
-			}
-		}
-	}
-	if(! exist)
-		return false;
-
-	if(ans != NULL)
-		*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
-
-	m_cur_char = i;
-	checkEol(p);
-	return true;
 }
 
 bool Feeder::arrayElem(string *name,long *pos)
@@ -228,7 +194,7 @@ bool Feeder::variable(string *ans)
 
 	for(;i < (int)p->length();i++){
 		char c = p->at(i);
-		if(c == '>' || c == ' ' || c == '#' || c == '[')
+		if(strchr("> #[",c))
 			break;
 
 		if(! isAlphabet(c) && ! isNum(c) && c != '_' && c != '-')
@@ -255,14 +221,13 @@ bool Feeder::literalNoEsc(string *ans)
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 
-	if(p->at(i) != '-' && (p->at(i) < '0' || p->at(i) > '9'))
+	if(p->at(i) != '-' && ! isNum(p->at(i)))
 		return false;
 
 	i++;
 
 	for(;i < (int)p->length();i++){
-		char c = p->at(i);
-		if(c == ' ' || c == '\t')
+		if(strchr(" \t",p->at(i)))
 			break;
 	}
 
@@ -284,9 +249,8 @@ bool Feeder::literalEsc(string *ans)
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 
-	if(p->at(i) != '\''){
+	if(p->at(i) != '\'')
 		return false;
-	}
 
 	i++;
 
@@ -349,9 +313,8 @@ bool Feeder::comment(void)
 	if(outOfRange())
 		return false;
 
-	if(atEnd()){
+	if(atEnd())
 		return true;
-	}
 
 	string *p = &m_lines[m_cur_line];
 	if(p->size() <= m_cur_char || p->at(m_cur_char) != '#'){
@@ -385,7 +348,7 @@ bool Feeder::positiveInt(long *pos)
 
 	string str = string(p->c_str()+m_cur_char,i-m_cur_char);
 	char *e = NULL;
-	*pos = std::strtol(str.c_str(), &e, 10);
+	*pos = strtol(str.c_str(), &e, 10);
 
 	if(errno != ERANGE && *e != '\0'){
 		m_error_msg = "Invalid number";
@@ -437,7 +400,7 @@ bool Feeder::declare(string *ans, string reserved)
 			break;
 	}
 	int last = i;
-	while(p->at(i) == ' ' || p->at(i) == '\t')
+	while(strchr(" \t",p->at(i)) != NULL)
 		i++;
 
 	if(p->at(i++) != '=')
@@ -521,10 +484,10 @@ int Feeder::countIndent(void)
 	string *p = &m_lines[m_cur_line];
 	int i = 0;
 	while(i < p->size()){
-		if(p->at(i) == ' ' || p->at(i) == '\t')
-			i++;
-		else
+		if(strchr(" \t",p->at(i)) == NULL)
 			break;
+
+		i++;
 	}
 
 	return i;

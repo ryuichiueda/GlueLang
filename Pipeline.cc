@@ -66,7 +66,9 @@ bool Pipeline::parse(void)
 			comnum++;
 		}
 
-		if(! m_feeder->pipe(NULL))
+		m_feeder->blank(NULL);
+
+		if(! m_feeder->str(">>="))
 			break;
 
 		m_feeder->blank(NULL);
