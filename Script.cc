@@ -43,7 +43,7 @@ bool Script::parse(void)
 		if( add(new Procedure(m_feeder,m_env))
 			|| add(new IfBlock(m_feeder,m_env))
 			|| add(new Pipeline(m_feeder,m_env))
-		 	|| add(new CommandLine(m_feeder,m_env))){
+		/* 	|| add(new CommandLine(m_feeder,m_env))*/){
 
 			while(m_feeder->blankLine());
 			continue;

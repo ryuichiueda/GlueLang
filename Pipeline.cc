@@ -57,23 +57,20 @@ bool Pipeline::parse(void)
 
 	int comnum = 0;
 	while(1){
-		bool repeat = false;
-
 		if(add(new CommandLine(m_feeder,m_env))){
 			if(m_if)
 				((CommandLine *)m_nodes.back())->setIfFlag();
-			repeat = true;
 			comnum++;
-		}
+		}else
+			break;
+
+		while(m_feeder->comment());
 
 		if(! m_feeder->str(">>="))
 			break;
-
-		if(! repeat)
-			break;
 	}
 
-	if(comnum < 2){
+	if(comnum < 1){
 		m_feeder->setPos(m_start_line,m_start_char);
 		return false;
 	}

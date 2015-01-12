@@ -107,4 +107,36 @@ ERROR_CHECK "TEST3.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST3.2 error"
 
+#########################################
+# TEST4: start a line with >>=
+#########################################
+cat << FIN > $tmp-out
+1
+2
+3
+4
+5
+FIN
+
+cat << FIN > $tmp-linux
+/usr/bin/seq '1' '5'
+>>= /usr/bin/tac
+>>= /usr/bin/tac
+
+FIN
+
+cat << FIN > $tmp-mac
+/usr/bin/jot '5'
+>>= /usr/bin/tail '-r'
+>>= /usr/bin/tail '-r'
+
+
+FIN
+
+../glue $tmp-$os > $tmp-ans
+ERROR_CHECK "TEST4.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST4.2 error"
+
 rm -f $tmp-*

@@ -21,7 +21,6 @@ CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 	m_pipe[0] = -1;
 	m_pipe[1] = -1;
 	m_pipe_prev = -1;
-	m_is_piped = false;
 
 	m_if = false;
 }
@@ -77,9 +76,6 @@ bool CommandLine::parse(void)
 
 void CommandLine::parentPipeProc(void)
 {
-	if(!m_is_piped)
-		return;
-
 	if(m_pipe_prev >= 0)
 		close(m_pipe_prev);
 
@@ -89,9 +85,6 @@ void CommandLine::parentPipeProc(void)
 
 void CommandLine::childPipeProc(void)
 {
-	if(!m_is_piped)
-		return;
-
 	if(m_pipe[1] >= 0)
 		close(m_pipe[0]);
 
@@ -132,32 +125,8 @@ int CommandLine::exec(void)
 	}
 
 	/*parent*/
-	if(m_is_piped){
-		parentPipeProc();
-		return pid;
-	}
-
-	if(m_outstr != NULL){
-		m_outstr->readFiFo();
-	}
-
-	int status;
-	int options = 0;
-	waitpid(pid,&status,options);
-
-	if(WIFEXITED(status)){
-		int es = WEXITSTATUS(status);
-		if(es != 0){
-			m_exit_status = es;
-			if(m_if)
-				return es;
-			else
-				throw this;
-		}
-		return 0;
-	}
-
-	return -1;
+	parentPipeProc();
+	return pid;
 }
 
 const char** CommandLine::makeArgv(int file_num)
@@ -238,7 +207,6 @@ void CommandLine::setPipe(int *pip,int prev)
 	m_pipe[0] = pip[0];
 	m_pipe[1] = pip[1];
 	m_pipe_prev = prev;
-	m_is_piped = true;
 }
 
 void CommandLine::pushOutFile(TmpFile *e)
