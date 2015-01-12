@@ -56,7 +56,7 @@ bool CommandLine::parse(void)
 		return false;
 
 	if(!m_feeder->atNewLine())
-		m_feeder->blank(NULL);
+		m_feeder->blank();
 
 	if(m_feeder->comment() || m_feeder->atNewLine()){
 		m_feeder->getPos(&m_end_line, &m_end_char);
@@ -68,7 +68,7 @@ bool CommandLine::parse(void)
 			m_feeder->getPos(&m_end_line, &m_end_char);
 			return true;
 		}
-		m_feeder->blank(NULL);
+		m_feeder->blank();
 	}
 
 	m_feeder->getPos(&m_end_line, &m_end_char);

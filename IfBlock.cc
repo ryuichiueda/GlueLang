@@ -40,7 +40,7 @@ bool IfBlock::parse(void)
 
 	int indent = m_feeder->countIndent();
 	
-	m_feeder->blank(NULL);
+	m_feeder->blank();
 	// detect the first condition
 	if(! m_feeder->str("?")){
 		m_feeder->setPos(m_start_line, m_start_char);
@@ -49,10 +49,9 @@ bool IfBlock::parse(void)
 
 	while(1){
 		// condition -> many (pipeline or commandline) -> condition ->...
-		m_feeder->blank(NULL);
-		
 		if(m_feeder->str("otherwise")){
 			m_nodes.push_back(NULL); // dummy
+			
 		}else if(add(new Pipeline(m_feeder,m_env))){
 			((Pipeline *)m_nodes.back())->setIfFlag();
 		}
@@ -67,16 +66,14 @@ bool IfBlock::parse(void)
 
 		m_is_cond_node.push_back(true);
 
-
 		int sub_indent = m_feeder->countIndent();
 		// end of the if block
-		if(sub_indent < indent){
+		if(sub_indent < indent)
 			break;
-		}
 
 		// found another condition
 		if( indent == sub_indent){
-			m_feeder->blank(NULL);
+			m_feeder->blank();
 			if(m_feeder->str("?")){
 				// another condition
 				continue;
@@ -87,12 +84,11 @@ bool IfBlock::parse(void)
 
 		// attempt to search procedures related to the condition
 		while(sub_indent > indent){
-			m_feeder->blank(NULL);
+			m_feeder->blank();
 
 			if(	add(new IfBlock(m_feeder,m_env))
 				|| add(new Pipeline(m_feeder,m_env))
 			 	|| add(new CommandLine(m_feeder,m_env))){
-
 
 				m_is_cond_node.push_back(false);
 				while(m_feeder->blankLine()){}
@@ -111,7 +107,7 @@ bool IfBlock::parse(void)
 
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		// next condition
-		m_feeder->blank(NULL);
+		m_feeder->blank();
 		// detect the first condition
 		if(! m_feeder->str("|")){
 			m_feeder->setPos(m_end_line, m_end_char);

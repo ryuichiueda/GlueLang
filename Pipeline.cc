@@ -66,12 +66,8 @@ bool Pipeline::parse(void)
 			comnum++;
 		}
 
-		m_feeder->blank(NULL);
-
 		if(! m_feeder->str(">>="))
 			break;
-
-		m_feeder->blank(NULL);
 
 		if(! repeat)
 			break;
@@ -88,6 +84,7 @@ bool Pipeline::parse(void)
 	}else if(m_outstr != NULL){
 		((CommandLine *)m_nodes.back())->pushVarString(m_outstr);
 	}
+
 	return true;
 }
 

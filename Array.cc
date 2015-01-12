@@ -34,7 +34,7 @@ bool Array::parse(void)
 		if(! add(new Arg(m_feeder,m_env)))
 			break;
 
-		m_feeder->blank(NULL);
+		m_feeder->blank();
 
 		if(m_feeder->atNewLine())
 			break;

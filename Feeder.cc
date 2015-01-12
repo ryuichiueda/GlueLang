@@ -39,6 +39,27 @@ void Feeder::close(void)
 	m_ifs = NULL;
 }
 
+bool Feeder::filename(string *ans)
+{
+	if(outOfRange())
+		return false;
+
+	string *p = &m_lines[m_cur_line];
+	int i = m_cur_char;
+	for(;i < (int)p->length();i++){
+		char c = p->at(i);
+		if(strchr(" #\t/\'",c) != NULL)
+			break;
+	}
+	if(i == m_cur_char)
+		return false;
+
+	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+	m_cur_char = i;
+	checkEol(p);
+	return true;
+}
+
 bool Feeder::command(string *ans)
 {
 	if(outOfRange())
@@ -100,16 +121,14 @@ bool Feeder::blankLine(void)
 	return true;
 }
 
-bool Feeder::blank(string *ans)
+bool Feeder::blank(void)
 {
 	if(outOfRange())
 		return false;
 
 	string *p = &m_lines[m_cur_line];
-	checkEol(p);
-	p = &m_lines[m_cur_line];
 
-	if(outOfRange() || p->size() < 1)
+	if(p->size() - m_cur_char < 1)
 		return false;
 
 	int i = m_cur_char;
@@ -121,9 +140,6 @@ bool Feeder::blank(string *ans)
 			break;
 	}
 
-	if(ans != NULL)
-		*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
-
 	m_cur_char = i;
 	checkEol(p);
 	return true;
@@ -131,7 +147,11 @@ bool Feeder::blank(string *ans)
 
 bool Feeder::path(string *ans)
 {
-	return command(ans);
+	if(command(ans)){
+		blank();
+		return true;
+	}
+	return false;
 }
 
 bool Feeder::arrayElem(string *name,long *pos)
@@ -160,7 +180,7 @@ bool Feeder::arrayElem(string *name,long *pos)
 	m_cur_char++;
 	checkEol(p);
 
-	blank(NULL);
+	blank();
 
 	if(!positiveInt(pos)){
 		// It must be a positive integer after '['
@@ -170,7 +190,7 @@ bool Feeder::arrayElem(string *name,long *pos)
 		throw this;
 	}
 
-	blank(NULL);
+	blank();
 
 	p = &m_lines[m_cur_line];
 	if(p->at(m_cur_char) != ']'){
@@ -204,6 +224,7 @@ bool Feeder::variable(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
+	blank();
 	checkEol(p);
 	return true;
 }
@@ -234,6 +255,7 @@ bool Feeder::literalNoEsc(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
+	blank();
 	checkEol(p);
 	return true;
 }
@@ -279,6 +301,7 @@ bool Feeder::literalEsc(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char+1,i-m_cur_char-1);
 	m_cur_char = i+1;
+	blank();
 	checkEol(p);
 	return true;
 }
@@ -309,7 +332,7 @@ bool Feeder::comment(void)
 	int ln,ch;
 	getPos(&ln,&ch);
 
-	blank(NULL);
+	blank();
 	while(blankLine()){ };
 	if(outOfRange())
 		return false;
@@ -371,10 +394,11 @@ bool Feeder::str(string s)
 		return false;
 
 	string *p = &m_lines[m_cur_line];
-	if(p->substr(m_cur_char,s.length()) != s)
+	if(p->substr(m_cur_char,s.size()) != s)
 		return false;
 
 	m_cur_char += s.length();
+	blank();
 	checkEol(p);
 	return true;
 }

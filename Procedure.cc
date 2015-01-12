@@ -31,10 +31,7 @@ bool Procedure::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	//int indent;
-
-
-	if(!m_feeder->str("proc") || !m_feeder->blank(NULL)){
+	if(!m_feeder->str("proc")){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}
@@ -45,7 +42,7 @@ bool Procedure::parse(void)
 		return false;
 	}
 
-	m_feeder->blank(NULL);
+	m_feeder->blank();
 
 	if(!m_feeder->str("=")){
 		m_feeder->setPos(m_start_line, m_start_char);

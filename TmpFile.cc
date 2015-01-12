@@ -21,13 +21,28 @@ TmpFile::~TmpFile()
 
 bool TmpFile::parse(void)
 {
-	if(! m_feeder->declare(&m_var_name,string("file")))
+	m_feeder->getPos(&m_start_line, &m_start_char);
+
+	if(!m_feeder->str("file")){
 		return false;
+	}
+
+	if(! m_feeder->variable(&m_var_name)){
+		m_feeder->setPos(m_start_line, m_start_char);
+		return false;
+	}
+
+	if(! m_feeder->str("=")){
+		m_feeder->setPos(m_start_line, m_start_char);
+		return false;
+	}
 
 	string tmpdir;
 	m_env->getImportPath("tmpdir",&tmpdir);
 		
 	m_file_name = m_env->m_tmpdir + "/" + m_var_name;
+
+	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }
 

@@ -42,12 +42,13 @@ public:
 	bool comment(void);
 	bool declare(string *ans, string reserved);
 	bool command(string *ans);
-	bool blank(string *ans);
+	bool blank(void);
 	bool blankLine(void);
 	bool path(string *ans);
 	bool smallCaps(string *ans);
 	bool positiveInt(long *pos);
 	bool lineResidual(string *ans);
+	bool filename(string *ans);
 
 	bool str(string s);
 

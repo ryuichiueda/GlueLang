@@ -39,7 +39,7 @@ ERROR_CHECK "TEST1.2 error"
 #########################################
 
 cat << FIN > $tmp-glue
-/bin/echo 'That\'s OK' #this is a comment
+/bin/echo 'That\'s OK'#this is a comment
 FIN
 
 cat << FIN > $tmp-out
