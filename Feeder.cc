@@ -337,7 +337,7 @@ bool Feeder::positiveInt(long *pos)
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 
-	if(p->at(i) < '0' || p->at(i) > '9')
+	if(! isNum(p->at(i)))
 		return false;
 
 	i++;
@@ -369,16 +369,13 @@ bool Feeder::str(string s)
 	if(outOfRange())
 		return false;
 
-	bool ans = false;
-	
 	string *p = &m_lines[m_cur_line];
-	if(p->substr(m_cur_char,s.length()) == s){
-		ans = true;
-		m_cur_char += s.length();
-	}
+	if(p->substr(m_cur_char,s.length()) != s)
+		return false;
 
+	m_cur_char += s.length();
 	checkEol(p);
-	return ans;
+	return true;
 }
 
 // <reserved> variable = ...
