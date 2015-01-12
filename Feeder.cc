@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits.h>
+#include <string.h>
 using namespace std;
 
 Feeder::Feeder(ifstream *ifs){
