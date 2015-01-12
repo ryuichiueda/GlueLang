@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <unistd.h>
-#include "Andline.h"
+#include "AndLine.h"
 #include "CommandLine.h"
 #include "TmpFile.h"
 #include "VarString.h"
