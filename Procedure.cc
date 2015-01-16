@@ -107,13 +107,3 @@ bool Procedure::parse(void)
 	return true;
 }
 
-void Procedure::printOriginalString(void)
-{
-	cerr << "proc ";
-	m_nodes[0]->printOriginalString();
-	cerr << " = " << endl;
-	for(auto e : m_script){
-		cerr << e << endl;
-	}
-	
-}

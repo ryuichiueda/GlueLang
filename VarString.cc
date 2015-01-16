@@ -70,11 +70,6 @@ int VarString::exec(void)
 	return 0;
 }
 
-void VarString::printOriginalString(void)
-{
-	cerr << m_var_name;
-}
-
 /*
  * This function reads a named pipe and append the output to
  * the value of this variable.

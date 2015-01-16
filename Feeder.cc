@@ -457,6 +457,37 @@ void Feeder::setPos(int ln,int ch)
 	m_cur_char = ch;
 }
 
+void Feeder::printPart(int from, int from_char, int to, int to_char)
+{
+	if(from < 0 || from >= m_lines.size())
+		return;
+
+	auto *ln = &m_lines.at(from);
+	for(int i=0;i<from_char;i++)
+		cerr << ' ';
+	for(int i=from_char;i < ln->size();i++){
+		cerr << ln->at(i);
+	}
+	cerr << endl;
+
+	if(to > m_lines.size())
+		return;
+
+	for(int i=from+1;i<to;i++){
+		cerr << m_lines.at(i) << endl;
+	}
+
+	if(to == m_lines.size())
+		return;
+
+	ln = &m_lines.at(to);
+	for(int i=0;i<=to_char;i++){
+		if(i < ln->size())
+			cerr << ln->at(i);
+	}
+	cerr << endl;
+}
+
 void Feeder::printErrorPart(int from, int from_char, int to, int to_char)
 {
 	for(int i=from;i<=to;i++){

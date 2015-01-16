@@ -101,11 +101,3 @@ const char *Command::getStr(void)
 	m_fullpath = m_path + m_name;
 	return m_fullpath.c_str();
 }
-
-void Command::printOriginalString(void)
-{
-	if(m_prefix != "")
-		cerr << m_prefix << "." << m_name << " ";
-	else
-		cerr << m_name << " ";
-}

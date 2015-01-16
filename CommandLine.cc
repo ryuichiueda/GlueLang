@@ -184,14 +184,6 @@ bool CommandLine::eval(void)
 	return true;
 }
 
-void CommandLine::printOriginalString(void)
-{
-	for(auto s : m_nodes){
-		s->printOriginalString();
-	}
-	cerr << endl;
-}
-
 void CommandLine::setPipe(int *pip,int prev)
 {
 	m_pipe[0] = pip[0];

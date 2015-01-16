@@ -21,7 +21,6 @@ public:
 	bool parseAs(void);
 	bool parsePATH(void);
 
-	void printOriginalString(void);
 protected:
 	string m_path;
 	string m_prefix;

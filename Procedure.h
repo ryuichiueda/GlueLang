@@ -19,7 +19,6 @@ public:
 	virtual int exec(void);
 	virtual bool parse(void);
 
-	void printOriginalString(void);
 protected:
 	string m_name;
 	vector<string> m_script;

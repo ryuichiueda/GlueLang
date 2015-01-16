@@ -26,8 +26,6 @@ public:
 	virtual int exec(void);
 	virtual bool eval(void);
 
-	virtual void printOriginalString(void);
-
 	void setPipe(int *pip,int prev);
 	int getPrevPipe(void){return m_pipe_prev;};
 

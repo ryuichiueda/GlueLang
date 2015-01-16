@@ -62,6 +62,7 @@ public:
 
 	void debugOut(void);
 
+	void printPart(int from, int from_char, int to, int to_char);
 	void printErrorPart(int from, int from_char, int to,int to_char);
 
 	string m_error_msg;

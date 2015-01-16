@@ -31,10 +31,7 @@ bool Element::add(Element *n)
 
 void Element::printOriginalString(void)
 {
-	for(auto s : m_nodes){
-		s->printOriginalString();
-	}
-	cerr << flush;
+	m_feeder->printPart(m_start_line,m_start_char,m_end_line,m_end_char);
 }
 
 string Element::pos(void)

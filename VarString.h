@@ -23,8 +23,6 @@ public:
 	virtual int exec(void);
 	virtual bool eval(void);
 
-	virtual void printOriginalString(void);
-
 	const char *virtualFileName(void){return m_var_name.c_str();}
 
 	int getFd(void){return m_fd;}

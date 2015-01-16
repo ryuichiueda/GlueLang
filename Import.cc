@@ -90,8 +90,3 @@ bool Import::parseAs(void)
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }
-
-void Import::printOriginalString(void)
-{
-	cerr << "import " << m_path << " as " << m_prefix << endl;
-}

@@ -42,10 +42,3 @@ bool Array::parse(void)
 
 	return true;
 }
-
-void Array::printOriginalString(void)
-{
-	for(auto e : m_nodes){
-		e->printOriginalString();
-	}
-}

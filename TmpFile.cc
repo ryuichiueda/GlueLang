@@ -87,7 +87,3 @@ int TmpFile::exec(void)
 	return 0;
 }
 
-void TmpFile::printOriginalString(void)
-{
-	cerr << m_var_name;
-}
