@@ -1,0 +1,2 @@
+file f = /bin/cat '/etc/passwd'
+/bin/echo f

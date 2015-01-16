@@ -27,29 +27,17 @@ CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 
 CommandLine::~CommandLine()
 {
-
 }
 
 /* parse of command line, where command line means
  * the combination of one command, args, and files.
  * We assume two patterns of commandline now:
 
-	file f = command ...
-	command ...
-
-* to do:
-	to implement file redirection for standard error, like
-	file f1 f2 = command ... 
+	command arg arg ...
 */
 bool CommandLine::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
-
-	if(add(new TmpFile(m_feeder,m_env)))
-		m_outfile = (TmpFile *)m_nodes[0];
-	else if(add(new VarString(m_feeder,m_env)))
-		m_outstr = (VarString *)m_nodes[0];
-
 
 	if(!add(new Command(m_feeder,m_env)))
 		return false;
@@ -130,11 +118,11 @@ int CommandLine::exec(void)
 	return pid;
 }
 
-const char** CommandLine::makeArgv(int file_num)
+const char** CommandLine::makeArgv(/*int file_num*/)
 {
-	Command *com = (Command *)m_nodes[file_num];
+	Command *com = (Command *)m_nodes[0/*file_num*/];
 
-	auto argv = new const char* [m_nodes.size() - file_num + 1];
+	auto argv = new const char* [m_nodes.size() /*- file_num*/ + 1];
 	argv[0] = com->getStr();
 
 	int skip = 0;
@@ -146,11 +134,11 @@ const char** CommandLine::makeArgv(int file_num)
 		argv[0] = m_env->m_glue_path.c_str();
 	}
 
-	for (int i=1;i < (int)m_nodes.size()-file_num;i++){
-		argv[i+skip] = ((Arg *)m_nodes[file_num+i])->getEvaledString();
+	for (int i=1;i < (int)m_nodes.size()/*-file_num*/;i++){
+		argv[i+skip] = ((Arg *)m_nodes[/*file_num+*/i])->getEvaledString();
 	}
 
-	argv[m_nodes.size()-file_num+skip] = NULL;
+	argv[m_nodes.size()/*-file_num*/+skip] = NULL;
 	return argv;
 }
 
@@ -159,17 +147,17 @@ void CommandLine::execCommandLine(void)
 	//The child process should not access to the source code.
 	m_feeder->close();
 
-	int io_num = 0;
+	//int io_num = 0;
 	if(m_outfile != NULL){
 		if(m_outfile->exec() != 0)
 			return;
 
-		io_num++;
+	//	io_num++;
 	}else if(m_outstr != NULL){
 		if(m_outstr->exec() != 0)
 			return;
 
-		io_num++;
+	//	io_num++;
 	}
 
 	// send the shell level for the case where the child is glue.
@@ -180,12 +168,16 @@ void CommandLine::execCommandLine(void)
 		throw this;
 	}
 
-	auto argv = makeArgv(io_num);
+	auto argv = makeArgv(/*io_num*/);
 	execv(argv[0],(char **)argv);
 }
 
 bool CommandLine::eval(void)
 {
+	if(m_outfile != NULL)
+		m_outfile->eval();
+	if(m_outstr != NULL)
+		m_outstr->eval();
 	for(auto s : m_nodes){
 		if( ! s->eval() ){
 			m_error_msg = "evaluation of args failed";
@@ -212,12 +204,12 @@ void CommandLine::setPipe(int *pip,int prev)
 
 void CommandLine::pushOutFile(TmpFile *e)
 {
-	m_nodes.insert(m_nodes.begin(),e);
+//	m_nodes.insert(m_nodes.begin(),e);
 	m_outfile = e;
 }
 
 void CommandLine::pushVarString(VarString *e)
 {
-	m_nodes.insert(m_nodes.begin(),e);
+//	m_nodes.insert(m_nodes.begin(),e);
 	m_outstr = e;
 }

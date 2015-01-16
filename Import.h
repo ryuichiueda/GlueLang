@@ -18,6 +18,9 @@ public:
 	virtual int exec(void);
 	virtual bool parse(void);
 
+	bool parseAs(void);
+	bool parsePATH(void);
+
 	void printOriginalString(void);
 protected:
 	string m_path;

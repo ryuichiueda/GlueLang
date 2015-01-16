@@ -33,13 +33,34 @@ bool Import::parse(void)
 		return false;
 	}
 
-	if(! m_feeder->str(string("as")))
-		return false;
+	if(m_feeder->str(string("as")))
+		return parseAs();
 
-	if(! m_feeder->smallCaps(&m_prefix))
-		return false;
+	//import PATH
+	if(m_path == "PATH"){
+		return parsePATH();
+	}
+	
+	m_feeder->setPos(m_start_line, m_start_char);
+	return false;
+}
 
-	m_feeder->getPos(&m_end_line, &m_end_char);
+bool Import::parsePATH(void)
+{
+	char *lv = getenv("PATH");
+	cerr << lv << endl;
+
+	m_feeder->setPos(m_start_line, m_start_char);
+	return false;
+}
+
+bool Import::parseAs(void)
+{
+
+	if(! m_feeder->smallCaps(&m_prefix)){
+		m_feeder->setPos(m_start_line, m_start_char);
+		return false;
+	}
 
 	//evaluate beforehand
 	try{
@@ -48,9 +69,11 @@ bool Import::parse(void)
 	catch(...){
 		m_error_msg = "Import error: " + m_env->m_error_msg;
 		m_exit_status = 1;
+		m_feeder->getPos(&m_end_line, &m_end_char);
 		throw this;
 	}
 
+	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }
 

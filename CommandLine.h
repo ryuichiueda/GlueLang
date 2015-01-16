@@ -31,12 +31,12 @@ public:
 	void setPipe(int *pip,int prev);
 	int getPrevPipe(void){return m_pipe_prev;};
 
-	void pushOutFile(TmpFile *e);
-	void pushVarString(VarString *e);
 
 	void setIfFlag(void){m_if = true;}
 	bool getIfFlag(void){return m_if;}
 
+	void pushOutFile(TmpFile *e);
+	void pushVarString(VarString *e);
 protected:
 	void execCommandLine(void);
 	void execErrorExit(void);
@@ -44,7 +44,7 @@ protected:
 	void childPipeProc(void);
 	void parentPipeProc(void);
 
-	const char** makeArgv(int file_num);
+	const char** makeArgv(/*int file_num*/);
 
 	TmpFile *m_outfile;
 	VarString *m_outstr;
