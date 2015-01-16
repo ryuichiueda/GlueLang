@@ -10,6 +10,7 @@ using namespace std;
 
 int scriptPos(int argc, char const* argv[]);
 void parseErrorMsg(Element *e);
+void execErrorMsg(Element *e);
 
 int main(int argc, char const* argv[])
 {
@@ -74,19 +75,9 @@ int main(int argc, char const* argv[])
 			exit(0);
 	}
 	catch(Element *e){
-		cerr << "\nExecution error at " ;
-		cerr << e->pos() << endl;
-		e->printErrorPart();
-		cerr << "\n\t" << e->m_error_msg << endl;
+		execErrorMsg(e);
 		env.removeFiles();
-		cerr << "\t";
-		//perror("ERROR: exec() failed");
-
 		int es = e->getExitStatus();
-		cerr << '\n';
-		cerr <<  "\tprocess_level " << e->getLevel() << endl;
-		cerr << "\texit_status " << es << endl;
-		cerr << "\tpid " << getpid() << '\n' << endl;
 		if(es == 127)
 			_exit(es);
 		else
@@ -129,6 +120,18 @@ void parseErrorMsg(Element *e)
 	cerr << "\t";
 
 	cerr << '\n';
+	cerr <<  "\tprocess_level " << e->getLevel() << endl;
+	cerr << "\texit_status " << e->getExitStatus() << endl;
+	cerr << "\tpid " << getpid() << '\n' << endl;
+}
+
+void execErrorMsg(Element *e)
+{
+	cerr << "\nExecution error at " ;
+	cerr << e->pos() << endl;
+	e->printErrorPart();
+	cerr << "\n\t" << e->m_error_msg << endl;
+	cerr << "\t\n";
 	cerr <<  "\tprocess_level " << e->getLevel() << endl;
 	cerr << "\texit_status " << e->getExitStatus() << endl;
 	cerr << "\tpid " << getpid() << '\n' << endl;
