@@ -22,10 +22,10 @@ cat << FIN > $tmp-out
 HELL
 FIN
 
-cat << 'FIN' > $tmp-glue
-proc hoge = /bin/echo 'HELL'
+cat << FIN > $tmp-glue
+proc f = /bin/echo 'HELL'
 
-this.hoge
+this.f
 FIN
 
 ../glue $tmp-glue > $tmp-ans

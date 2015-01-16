@@ -37,6 +37,8 @@ bool Command::parse(void)
 	//it should be parsed as a full-path command.
 	// (this rule should be relaxed since a command can start from
 	// a non small captal letter)
+	
+	// fullpath command
 	if( ! m_feeder->smallCaps(&m_prefix)){
 		return m_feeder->command(&m_name);
 	}
@@ -46,8 +48,9 @@ bool Command::parse(void)
 		// if m_prefix is not a prefix, it is a name of a command or a procedure
 		m_name = m_prefix;
 		m_prefix = "";
-		m_feeder->getPos(&m_end_line, &m_end_char);
-		return true;
+		//m_feeder->getPos(&m_end_line, &m_end_char);
+		//return true;
+		return parsePrefixedCom();
 	}
 	//hereafter, a command name with a prefix
 
@@ -73,6 +76,11 @@ bool Command::parse(void)
 		throw this;
 	}
 
+	return parsePrefixedCom();
+}
+
+bool Command::parsePrefixedCom(void)
+{
 	struct stat buf;
 	for(auto path : *m_env->getImportPaths(&m_prefix)){
 		if(stat((path + m_name).c_str(), &buf) != 0)

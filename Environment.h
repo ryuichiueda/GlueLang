@@ -28,6 +28,7 @@ public:
 	void getVariable(const char *key, string *value);
 
 	void setImportPath(string *key, string *value);
+	//void setImportPath(const char *key,const char *value);
 	vector<string> *getImportPaths(string *key);
 	vector<string> *getImportPaths(const char *key);
 

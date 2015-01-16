@@ -47,11 +47,24 @@ bool Import::parse(void)
 
 bool Import::parsePATH(void)
 {
-	char *lv = getenv("PATH");
-	cerr << lv << endl;
+	char *str = getenv("PATH");
 
-	m_feeder->setPos(m_start_line, m_start_char);
-	return false;
+	if(str == NULL){
+		m_feeder->setPos(m_start_line,m_start_char);
+		return false;
+	}
+
+	string nokey("");
+
+	char *p = strtok(str,":");
+	while(p != NULL){
+		string path = string(p) + string("/");
+		m_env->setImportPath(&nokey,&path);
+		p = strtok(NULL,":");
+	}
+
+	m_feeder->getPos(&m_end_line,&m_end_char);
+	return true;
 }
 
 bool Import::parseAs(void)

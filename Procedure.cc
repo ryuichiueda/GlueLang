@@ -36,11 +36,17 @@ bool Procedure::parse(void)
 		return false;
 	}
 
+	if(!m_feeder->smallCaps(&m_name)){
+		m_feeder->setPos(m_start_line, m_start_char);
+		return false;
+	}
+/*
 	if(!add(new Command(m_feeder,m_env))){
 		m_feeder->setPos(m_start_line, m_start_char);
 		((Command *)m_nodes[0])->setPrefix("this");
 		return false;
 	}
+*/
 
 	m_feeder->blank();
 
@@ -66,8 +72,7 @@ bool Procedure::parse(void)
 	//create a file
 	string tmpdir = m_env->getImportPaths("tmpdir")->at(0);
 	int pid = getpid();
-	tmpdir += "glue" + to_string(pid) + "/" 
-		+ *((Command *)m_nodes[0])->getName();
+	tmpdir += "glue" + to_string(pid) + "/" + m_name;
 
 	ofstream ofs(tmpdir.c_str());
 	ofs << tmp.substr(indent,tmp.size()-indent) << endl;

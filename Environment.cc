@@ -65,12 +65,21 @@ void Environment::init(void)
 	}
 }
 
+/*
+void Environment::setImportPath(const char *key,const char *value)
+{
+	m_import_paths[""].push_back(string(value));
+}
+*/
+
 void Environment::setImportPath(string *key, string *value)
 {
+/*
 	if(*value == ""){
 		m_error_msg = "NULL path";
 		throw this;
 	}
+*/
 
 /*
 	if(*key == "tmpdir"){

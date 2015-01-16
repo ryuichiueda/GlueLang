@@ -121,8 +121,15 @@ cat << FIN > $tmp-linux
 /usr/bin/awk 'BEGIN{a=1;print a,a}'
 FIN
 
-../glue $tmp-$os
+cat << FIN > $tmp-out
+1 1
+FIN
+
+../glue $tmp-$os > $tmp-ans
 ERROR_CHECK "TEST6.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST6.2 error"
 
 #########################################
 # TEST7: permit no quote for strings that start from a hyphen or a number

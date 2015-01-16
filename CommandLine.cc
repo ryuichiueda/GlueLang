@@ -121,7 +121,7 @@ const char** CommandLine::makeArgv(void)
 {
 	Command *com = (Command *)m_nodes[0];
 
-	auto argv = new const char* [m_nodes.size() + 1];
+	auto argv = new const char* [m_nodes.size() + 2];
 	argv[0] = com->getStr();
 
 	int skip = 0;
@@ -146,17 +146,14 @@ void CommandLine::execCommandLine(void)
 	//The child process should not access to the source code.
 	m_feeder->close();
 
-	//int io_num = 0;
 	if(m_outfile != NULL){
 		if(m_outfile->exec() != 0)
 			return;
 
-	//	io_num++;
 	}else if(m_outstr != NULL){
 		if(m_outstr->exec() != 0)
 			return;
 
-	//	io_num++;
 	}
 
 	// send the shell level for the case where the child is glue.
@@ -167,7 +164,8 @@ void CommandLine::execCommandLine(void)
 		throw this;
 	}
 
-	auto argv = makeArgv(/*io_num*/);
+	auto argv = makeArgv();
+	//cerr << argv[0] << " " << argv[1] << endl;
 	execv(argv[0],(char **)argv);
 }
 

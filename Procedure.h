@@ -21,6 +21,7 @@ public:
 
 	void printOriginalString(void);
 protected:
+	string m_name;
 	vector<string> m_script;
 	string m_script_path;
 };

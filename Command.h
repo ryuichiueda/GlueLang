@@ -19,6 +19,8 @@ public:
 	virtual int exec(void);
 	virtual bool parse(void);
 
+	bool parsePrefixedCom(void);
+
 	void printOriginalString(void);
 	void setPrefix(const char *p){m_prefix = string(p);}
 	string *getName(void){return &m_name;}
