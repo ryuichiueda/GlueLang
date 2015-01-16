@@ -51,8 +51,10 @@ bool Pipeline::parse(void)
 	// This node is also given to the last command line.
 	if(add(new TmpFile(m_feeder,m_env))){
 		m_outfile = (TmpFile *)m_nodes[0];	
+		m_nodes.pop_back();
 	}else if(add(new VarString(m_feeder,m_env))){
 		m_outstr = (VarString *)m_nodes[0];	
+		m_nodes.pop_back();
 	}
 
 	int comnum = 0;
@@ -81,13 +83,10 @@ bool Pipeline::parse(void)
 		return false;
 	}
 
-	m_feeder->getPos(&m_end_line, &m_end_char);
-	if(m_outfile != NULL){
-		((CommandLine *)m_nodes.back())->pushOutFile(m_outfile);
-	}else if(m_outstr != NULL){
-		((CommandLine *)m_nodes.back())->pushVarString(m_outstr);
-	}
+	((CommandLine *)m_nodes.back())->m_outfile = m_outfile;
+	((CommandLine *)m_nodes.back())->m_outstr = m_outstr;
 
+	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }
 
@@ -104,14 +103,11 @@ int Pipeline::exec(void)
 
 	int pip[2];
 	int prevfd = -1;
-	int n = 0;
-	if(m_outfile != NULL || m_outstr != NULL)
-		n++;
 
-	for(int i=n;i<(int)m_nodes.size();i++){
-		auto *p = (CommandLine *)m_nodes[i];
+	for(auto *n : m_nodes){
+		auto *p = (CommandLine *)n;
 		pip[1] = -1;
-		if ( i+1 != (int)m_nodes.size() && pipe(pip) < 0) {
+		if ( p != m_nodes.back() && pipe(pip) < 0) {
 			close(prevfd);
 			m_error_msg = "Pipe call failed";
 			throw this;

@@ -30,10 +30,9 @@ CommandLine::~CommandLine()
 }
 
 /* parse of command line, where command line means
- * the combination of one command, args, and files.
- * We assume two patterns of commandline now:
+ * the combination of one command and args.
 
-	command arg arg ...
+	m_nodes: command arg arg ...
 */
 bool CommandLine::parse(void)
 {
@@ -118,11 +117,11 @@ int CommandLine::exec(void)
 	return pid;
 }
 
-const char** CommandLine::makeArgv(/*int file_num*/)
+const char** CommandLine::makeArgv(void)
 {
-	Command *com = (Command *)m_nodes[0/*file_num*/];
+	Command *com = (Command *)m_nodes[0];
 
-	auto argv = new const char* [m_nodes.size() /*- file_num*/ + 1];
+	auto argv = new const char* [m_nodes.size() + 1];
 	argv[0] = com->getStr();
 
 	int skip = 0;
@@ -134,11 +133,11 @@ const char** CommandLine::makeArgv(/*int file_num*/)
 		argv[0] = m_env->m_glue_path.c_str();
 	}
 
-	for (int i=1;i < (int)m_nodes.size()/*-file_num*/;i++){
-		argv[i+skip] = ((Arg *)m_nodes[/*file_num+*/i])->getEvaledString();
+	for (int i=1;i < (int)m_nodes.size();i++){
+		argv[i+skip] = ((Arg *)m_nodes[i])->getEvaledString();
 	}
 
-	argv[m_nodes.size()/*-file_num*/+skip] = NULL;
+	argv[m_nodes.size()+skip] = NULL;
 	return argv;
 }
 
@@ -200,16 +199,4 @@ void CommandLine::setPipe(int *pip,int prev)
 	m_pipe[0] = pip[0];
 	m_pipe[1] = pip[1];
 	m_pipe_prev = prev;
-}
-
-void CommandLine::pushOutFile(TmpFile *e)
-{
-//	m_nodes.insert(m_nodes.begin(),e);
-	m_outfile = e;
-}
-
-void CommandLine::pushVarString(VarString *e)
-{
-//	m_nodes.insert(m_nodes.begin(),e);
-	m_outstr = e;
 }

@@ -35,8 +35,8 @@ public:
 	void setIfFlag(void){m_if = true;}
 	bool getIfFlag(void){return m_if;}
 
-	void pushOutFile(TmpFile *e);
-	void pushVarString(VarString *e);
+	TmpFile *m_outfile;
+	VarString *m_outstr;
 protected:
 	void execCommandLine(void);
 	void execErrorExit(void);
@@ -44,10 +44,8 @@ protected:
 	void childPipeProc(void);
 	void parentPipeProc(void);
 
-	const char** makeArgv(/*int file_num*/);
+	const char** makeArgv(void);
 
-	TmpFile *m_outfile;
-	VarString *m_outstr;
 
 	int m_pipe[2];
 	int m_pipe_prev;

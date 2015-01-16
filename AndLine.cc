@@ -51,8 +51,10 @@ bool Andline::parse(void)
 	// This node is also given to the last command line.
 	if(add(new TmpFile(m_feeder,m_env))){
 		m_outfile = (TmpFile *)m_nodes[0];	
+		m_nodes.pop_back();
 	}else if(add(new VarString(m_feeder,m_env))){
 		m_outstr = (VarString *)m_nodes[0];	
+		m_nodes.pop_back();
 	}
 
 	int comnum = 0;
@@ -76,17 +78,11 @@ bool Andline::parse(void)
 	}
 
 	m_feeder->getPos(&m_end_line, &m_end_char);
+
 	// stdout of all commands are appended into a file
-	if(m_outfile != NULL){
-		for(int i=1;i<m_nodes.size();i++){
-			CommandLine *p = (CommandLine *)m_nodes[i];
-			p->pushOutFile(m_outfile);
-		}
-	}else if(m_outstr != NULL){
-		for(int i=1;i<m_nodes.size();i++){
-			CommandLine *p = (CommandLine *)m_nodes[i];
-			p->pushVarString(m_outstr);
-		}
+	for(auto *n : m_nodes){
+		((CommandLine *)n)->m_outfile = m_outfile;
+		((CommandLine *)n)->m_outstr = m_outstr;
 	}
 
 	return true;
@@ -101,20 +97,10 @@ int Andline::exec(void)
 {
 	cout << flush;
 
-	//vector<int> pids;
-
-/*
-	int pip[2];
-	int prevfd = -1;
-*/
-	int n = 0;
-	if(m_outfile != NULL || m_outstr != NULL)
-		n++;
-
-	for(int i=n;i<(int)m_nodes.size();i++){
+	for(int i=0;i<(int)m_nodes.size();i++){
 		auto *p = (CommandLine *)m_nodes[i];
 		if(m_outfile != NULL){
-			if(i!=n){
+			if(i!=0){
 				m_outfile->m_append_mode = true;
 			}
 		}
