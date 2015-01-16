@@ -9,6 +9,7 @@
 using namespace std;
 
 int scriptPos(int argc, char const* argv[]);
+void parseErrorMsg(Element *e);
 
 int main(int argc, char const* argv[])
 {
@@ -48,20 +49,9 @@ int main(int argc, char const* argv[])
 		s.parse();
 	}
 	catch(Element *e){
-		cerr << "\nParse error at " ;
-		cerr << e->pos() << endl;
-		e->printErrorPart();
-		cerr << "\n\t" << e->m_error_msg << endl;
-		cerr << "\t";
-
-		int es = e->getExitStatus();
-		cerr << '\n';
-		cerr <<  "\tprocess_level " << e->getLevel() << endl;
-		cerr << "\texit_status " << es << endl;
-		cerr << "\tpid " << getpid() << '\n' << endl;
+		parseErrorMsg(e);
 		env.removeFiles();
-
-		exit(es);
+		exit(e->getExitStatus());
 	}
 	catch(...){
 		cerr << "\nParse error" << endl;
@@ -128,4 +118,18 @@ int scriptPos(int argc, char const* argv[])
 			break;
 	}
 	return i;
+}
+
+void parseErrorMsg(Element *e)
+{
+	cerr << "\nParse error at " ;
+	cerr << e->pos() << endl;
+	e->printErrorPart();
+	cerr << "\n\t" << e->m_error_msg << endl;
+	cerr << "\t";
+
+	cerr << '\n';
+	cerr <<  "\tprocess_level " << e->getLevel() << endl;
+	cerr << "\texit_status " << e->getExitStatus() << endl;
+	cerr << "\tpid " << getpid() << '\n' << endl;
 }
