@@ -1,6 +1,7 @@
 #include "Import.h"
 #include "Feeder.h"
 #include "Environment.h"
+#include <string.h>
 using namespace std;
 
 Import::Import(Feeder *f, Environment *env) : Element(f,env)
