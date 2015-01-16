@@ -12,7 +12,7 @@ class Environment
 private:
 	vector<string> m_args;
 	map<string,string> m_variables;
-	map<string,string> m_import_paths;
+	map<string, vector<string> > m_import_paths;
 	vector<string> m_file_list;
 
 	int m_pid;
@@ -28,8 +28,8 @@ public:
 	void getVariable(const char *key, string *value);
 
 	void setImportPath(string *key, string *value);
-	void getImportPath(string *key, string *value);
-	void getImportPath(const char *key, string *value);
+	vector<string> *getImportPaths(string *key);
+	vector<string> *getImportPaths(const char *key);
 
 	void setFileList(string *filepath);
 	void removeFiles(void);

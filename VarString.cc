@@ -27,8 +27,7 @@ bool VarString::parse(void)
 	if(! m_feeder->declare(&m_var_name,string("str")))
 		return false;
 
-	string tmpdir;
-	m_env->getImportPath("tmpdir",&tmpdir);
+	string tmpdir = m_env->getImportPaths("tmpdir")->at(0);
 		
 	m_file_name = tmpdir + to_string(getpid()) + "-" + m_var_name;
 	return true;

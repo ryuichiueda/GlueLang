@@ -1,6 +1,7 @@
 #include "Command.h"
 #include "Feeder.h"
 #include "Environment.h"
+#include <sys/stat.h>
 using namespace std;
 
 Command::Command(Feeder *f, Environment *env) : Element(f,env)
@@ -22,10 +23,15 @@ int Command::exec(void)
 	return 0;
 }
 
+/*
+ * /bin/echo
+ * b.echo
+ * echo
+ * this.<procedure>
+ */
 bool Command::parse(void)
 {
-	int prev_ln,prev_ch;
-	m_feeder->getPos(&prev_ln, &prev_ch);
+	m_feeder->getPos(&m_start_line, &m_start_char);
 
 	//If the name of a command starts from a small capital letter,
 	//it should be parsed as a full-path command.
@@ -35,26 +41,51 @@ bool Command::parse(void)
 		return m_feeder->command(&m_name);
 	}
 
-
 	// chech whether m_prefix is a prefix or a command name
- 	if( m_feeder->str(".") ){
-		//"this" indicetes a procedure that is defined in the script
-		if(m_prefix == "this"){
-			m_is_proc = true;
-			m_path = m_env->m_tmpdir + "/";
-			return m_feeder->command(&m_name);
-		}
- 		else if(m_env->isImportPath(&m_prefix)){
-			m_env->getImportPath(&m_prefix, &m_path);
-			return m_feeder->command(&m_name);
-		}
+ 	if(!m_feeder->str(".")){
+		// if m_prefix is not a prefix, it is a name of a command or a procedure
+		m_name = m_prefix;
+		m_prefix = "";
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		return true;
+	}
+	//hereafter, a command name with a prefix
+
+	//"this" indicetes a procedure that is defined in the script
+	if(m_prefix == "this"){
+		m_is_proc = true;
+		m_path = m_env->m_tmpdir + "/";
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		return m_feeder->command(&m_name);
 	}
 
-	// if m_prefix is not a prefix, it is discarded
-	m_prefix = "";
-	m_feeder->setPos(prev_ln,prev_ch);
-	return m_feeder->command(&m_name);
+ 	if(! m_env->isImportPath(&m_prefix)){
+		m_error_msg = "Invalid path";
+		m_exit_status = 1;
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		throw this;
+	}
 
+	if(!m_feeder->command(&m_name)){
+		m_error_msg = "Invalid command name";
+		m_exit_status = 1;
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		throw this;
+	}
+
+	struct stat buf;
+	for(auto path : *m_env->getImportPaths(&m_prefix)){
+		if(stat((path + m_name).c_str(), &buf) != 0)
+				continue;
+
+		m_path = path;
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		return true;
+	}
+	m_error_msg = "Command " + m_name  + " not exist";
+	m_exit_status = 1;
+	m_feeder->getPos(&m_end_line, &m_end_char);
+	throw this;
 }
 
 const char *Command::getStr(void)

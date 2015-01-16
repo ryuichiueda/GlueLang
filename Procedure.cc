@@ -64,8 +64,7 @@ bool Procedure::parse(void)
 	int indent = i;
 
 	//create a file
-	string tmpdir;
-	m_env->getImportPath("tmpdir",&tmpdir);
+	string tmpdir = m_env->getImportPaths("tmpdir")->at(0);
 	int pid = getpid();
 	tmpdir += "glue" + to_string(pid) + "/" 
 		+ *((Command *)m_nodes[0])->getName();

@@ -39,9 +39,7 @@ bool TmpFile::parse(void)
 		return false;
 	}
 
-	string tmpdir;
-	m_env->getImportPath("tmpdir",&tmpdir);
-		
+	string tmpdir = m_env->getImportPaths("tmpdir")->at(0);
 	m_file_name = m_env->m_tmpdir + "/" + m_var_name;
 
 	m_feeder->getPos(&m_end_line, &m_end_char);

@@ -47,18 +47,36 @@ diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
 
 #########################################
-# TEST2: multiple import error
+# TEST2: multiple import 
 #########################################
 
 cat << FIN > $tmp-glue
 import /bin/ as b
 import /usr/bin/ as b
 
-/bin/echo 'hoge'
+b.echo 'hoge'
+b.seq 1 10
 FIN
 
-../glue $tmp-glue
-[ $? -eq 1 ]
+cat << FIN > $tmp-out
+hoge
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+FIN
+
+../glue $tmp-glue > $tmp-ans
+[ $? -eq 0 ]
 ERROR_CHECK "TEST2.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST2.2 error"
 
 rm -f $tmp-*

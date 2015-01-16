@@ -52,10 +52,16 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 // after import sentences are parsed.
 void Environment::init(void)
 {
-	getImportPath("tmpdir",&m_tmpdir);
-	m_tmpdir += "glue" + to_string(m_pid);
+	auto *p = getImportPaths("tmpdir");
+	if(p == NULL || p->size() < 1){
+		cerr << "unable to create tmpdir" << endl;
+		throw this;
+	}
+
+	m_tmpdir = p->at(0) + "glue" + to_string(m_pid);
 	while(mkdir(m_tmpdir.c_str(),0700) != 0){
 		cerr << "unable to create tmpdir" << endl;
+		throw this;
 	}
 }
 
@@ -66,8 +72,10 @@ void Environment::setImportPath(string *key, string *value)
 		throw this;
 	}
 
+/*
 	if(*key == "tmpdir"){
-		m_import_paths[*key] = *value;
+//		m_import_paths[*key] = *value;
+		m_import_paths.insert(make_pair(*key,*value));
 		return;
 	}
 
@@ -75,24 +83,31 @@ void Environment::setImportPath(string *key, string *value)
 		m_error_msg = *key + " is already used" ;
 		throw this;
 	}
+*/
 
+	string path;
 	if(value->at(0) == '/'){
-		m_import_paths[*key] = *value;
-		return;
+		path = *value;
+	}else{
+		//resolve relative path (too lazy)
+		path = m_dir + "/" + *value;
 	}
-
-	//resolve relative path (too lazy)
-	m_import_paths[*key] = m_dir + "/" + *value;
+	m_import_paths[*key].push_back(path);
 }
 
-void Environment::getImportPath(string *key, string *value)
+vector<string> *Environment::getImportPaths(string *key)
 {
 	if(m_import_paths.find(*key) == m_import_paths.end()){
-		m_error_msg = *key + " not found" ;
-		throw this;
+		return NULL;
 	}
 
-	*value = m_import_paths[*key];
+	return &m_import_paths[*key];
+}
+
+vector<string> *Environment::getImportPaths(const char *key)
+{
+	string tmp(key);
+	return getImportPaths(&tmp);
 }
 
 bool Environment::isImportPath(string *key)
@@ -100,11 +115,13 @@ bool Environment::isImportPath(string *key)
 	return m_import_paths.find(*key) != m_import_paths.end();
 }
 
+/*
 void Environment::getImportPath(const char *key, string *value)
 {
 	string k = string(key);
 	getImportPath(&k,value);
 }
+*/
 
 void Environment::setVariable(string *key, string *value)
 {
