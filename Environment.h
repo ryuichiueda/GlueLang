@@ -28,7 +28,6 @@ public:
 	void getVariable(const char *key, string *value);
 
 	void setImportPath(string *key, string *value);
-	//void setImportPath(const char *key,const char *value);
 	vector<string> *getImportPaths(string *key);
 	vector<string> *getImportPaths(const char *key);
 
@@ -39,7 +38,6 @@ public:
 
 	bool isImportPath(string *key);
 
-	//void inclementLevel(void){m_level++;}
 	int getLevel(void){return m_level;}
 
 	void init(void);
@@ -47,6 +45,8 @@ public:
 	int m_level;
 	string m_glue_path;
 	string m_tmpdir;
+
+	bool m_v_opt;
 };
 
 #endif

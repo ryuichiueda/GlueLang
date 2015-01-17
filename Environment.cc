@@ -46,6 +46,8 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 	//set args
 	for(int i=script_pos;i<argc;i++)
 		m_args.push_back(argv[i]);
+
+	m_v_opt = false;
 }
 
 // this function is called from Script::parse

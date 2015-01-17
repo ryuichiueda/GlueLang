@@ -11,24 +11,13 @@ using namespace std;
 int scriptPos(int argc, char const* argv[]);
 void parseErrorMsg(Element *e);
 void execErrorMsg(Element *e);
+void setFlags(int argc, char const* argv[],Environment *e);
 
 int main(int argc, char const* argv[])
 {
-///////////////////////////////////////////
-// reading args
-//////////////////////////////////////////
 	if(argc <= 1)
 		exit(0);
 
-	bool v_opt = false;
-	int result = 0;
-	while((result = getopt(argc,(char**)argv,"v"))!=-1){
-		switch(result){
-		case 'v':
-			v_opt = true;
-			break;
-		}
-	}
 ///////////////////////////////////////////
 // initialization of top level objects 
 //////////////////////////////////////////
@@ -43,6 +32,7 @@ int main(int argc, char const* argv[])
 	env.setImportPath(&tmp_k,&tmp_v);
 	Script s(&feeder,&env);
 
+	setFlags(argc,argv,&env);
 ///////////////////////////////////////////
 // parse
 //////////////////////////////////////////
@@ -61,9 +51,6 @@ int main(int argc, char const* argv[])
 		exit(1);
 	}
 
-	if(v_opt)
-		s.printOriginalString();
-		
 ///////////////////////////////////////////
 // exec
 //////////////////////////////////////////
@@ -135,4 +122,17 @@ void execErrorMsg(Element *e)
 	cerr <<  "\tprocess_level " << e->getLevel() << endl;
 	cerr << "\texit_status " << e->getExitStatus() << endl;
 	cerr << "\tpid " << getpid() << '\n' << endl;
+}
+
+void setFlags(int argc, char const* argv[],Environment *e)
+{
+	int result = 0;
+	while((result = getopt(argc,(char**)argv,"v"))!=-1){
+		switch(result){
+		case 'v':
+			e->m_v_opt = true;
+			break;
+		}
+	}
+
 }

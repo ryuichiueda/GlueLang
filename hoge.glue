@@ -1,3 +1,3 @@
-/usr/bin/diff a b
-	where	file a = /bin/echo 'aaa'
-		file b = /bin/echo 'aab'
+import PATH
+
+echo 'a' >>= sed 's/./&&/'

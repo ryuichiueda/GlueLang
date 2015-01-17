@@ -1,4 +1,0 @@
-proc hoge = /bin/echo 'HELL'
-
-/bin/echo 'a'
-this.hoge

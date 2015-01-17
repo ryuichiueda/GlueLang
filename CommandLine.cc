@@ -104,6 +104,9 @@ int CommandLine::exec(void)
 		exit(1);
 
 	if (pid == 0){//child
+		if(m_env->m_v_opt)
+			cerr << "+ fork pid " << getpid() << endl;
+
 		m_env->m_level++;
 		childPipeProc();
 		execCommandLine();
@@ -163,6 +166,8 @@ void CommandLine::execCommandLine(void)
 	}
 
 	auto argv = makeArgv();
+	if(m_env->m_v_opt)
+		cerr << "+ exec pid " << getpid() << " " << argv[0] << endl;
 	execv(argv[0],(char **)argv);
 }
 

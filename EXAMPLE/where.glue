@@ -1,0 +1,13 @@
+import PATH
+
+# "file a = ..." and "file b" = ... are evaluated before "diff a b"
+diff a b
+	where file a = seq 10
+	      file b = seq 10
+
+# ? is required because this diff returns 1
+? file ans = diff c d
+	where file c = seq 8
+	      file d = seq 10
+
+cat ans
