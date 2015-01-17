@@ -1,0 +1,4 @@
+import PATH
+
+file f = echo 'aho' >>= rev
+cat f

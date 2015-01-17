@@ -16,27 +16,13 @@ ERROR_CHECK(){
 #########################################
 
 cat << FIN > $tmp-glue
-#this is a comment
-#あいうえお
-
-
-
 /bin/echo 'That\'s OK'
-FIN
-
-cat << FIN > $tmp-out
-#this is a comment
-#あいうえお
-
-
-
-/bin/echo That\'s OK 
 FIN
 
 ../glue -v $tmp-glue > /dev/null 2> $tmp-ans
 ERROR_CHECK "TEST1.1 error"
 
-diff $tmp-out $tmp-ans > /dev/null
+grep '+' $tmp-ans > /dev/null
 ERROR_CHECK "TEST1.2 error"
 
 rm -f $tmp-*
