@@ -168,7 +168,7 @@ void CommandLine::execCommandLine(void)
 	auto argv = makeArgv();
 	if(m_env->m_v_opt)
 		cerr << "+ pid " << getpid() << " exec line " 
-			<< m_start_line << argv[0] << endl;
+			<< m_start_line << " " << argv[0] << endl;
 	execv(argv[0],(char **)argv);
 }
 
