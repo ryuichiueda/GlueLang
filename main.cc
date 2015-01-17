@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/wait.h>
+#include <signal.h>
 using namespace std;
 
 int scriptPos(int argc, char const* argv[]);
@@ -13,10 +14,24 @@ void parseErrorMsg(Element *e);
 void execErrorMsg(Element *e);
 void setFlags(int argc, char const* argv[],Environment *e);
 
+static void sig_int(int sig)
+{
+	Element::m_signal = sig;
+}
+
 int main(int argc, char const* argv[])
 {
 	if(argc <= 1)
 		exit(0);
+
+///////////////////////////////////////////
+// set signals
+//////////////////////////////////////////
+	struct sigaction sig;
+	memset(&sig,'\0',sizeof(sig));
+
+	sig.sa_handler = sig_int;
+	sigaction(SIGINT,&sig,NULL);
 
 ///////////////////////////////////////////
 // initialization of top level objects 

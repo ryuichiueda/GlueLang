@@ -107,6 +107,8 @@ int CommandLine::exec(void)
 		if(m_env->m_v_opt)
 			cerr << "+ pid " << getpid() << " fork " << endl;
 
+		signalCheck();
+
 		m_env->m_level++;
 		childPipeProc();
 		execCommandLine();

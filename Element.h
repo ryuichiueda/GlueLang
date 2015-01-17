@@ -21,6 +21,8 @@ protected:
 	int m_start_line, m_start_char;
 	int m_end_line, m_end_char;
 	int m_exit_status;
+
+	void signalCheck(void);
 public:
 	Element(Feeder *f, Environment *env);
 	virtual ~Element();
@@ -41,5 +43,8 @@ public:
 
 	TmpFile *m_outfile;
 	VarString *m_outstr;
+
+	static int m_signal;
 };
+
 #endif

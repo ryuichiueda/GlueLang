@@ -5,6 +5,8 @@
 #include <iostream>
 using namespace std;
 
+int Element::m_signal = 0;
+
 Element::Element(Feeder *f, Environment *env)
 {
 	m_outfile = NULL;
@@ -50,4 +52,14 @@ void Element::printErrorPart(void)
 int Element::getLevel(void)
 {
 	return m_env->getLevel();
+}
+
+void Element::signalCheck(void)
+{
+	if(m_signal == 0)
+		return;
+
+	m_error_msg = "signal interruption";
+	m_exit_status = 100 + m_signal;
+	throw this;
 }
