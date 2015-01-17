@@ -54,7 +54,9 @@ int VarString::exec(void)
 	if(m_opened)
 		return true;
 
-	m_fd = open( m_file_name.c_str() ,O_WRONLY ,0700);
+	m_fd = open( m_file_name.c_str() ,O_WRONLY ,0600);
+	if(m_env->m_v_opt)
+		cerr << "+ pid " << getpid() << " file " << m_file_name << " created" << endl;
 	if(dup2(m_fd,1) < 0){
 		m_error_msg = "str: " + m_var_name + "  redirect error";
 		throw this;

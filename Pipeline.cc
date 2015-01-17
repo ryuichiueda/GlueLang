@@ -11,6 +11,7 @@
 #include "Arg.h"
 #include "Feeder.h"
 #include "Where.h"
+#include "Environment.h"
 using namespace std;
 
 Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
@@ -139,8 +140,13 @@ int Pipeline::exec(void)
 		waitpid(pid,&status,options);
 		if(WIFEXITED(status)){
 			int e = WEXITSTATUS(status);
-			if(e == 0)
+
+			if(m_env->m_v_opt)
+				cerr << "+ pid " << pid << " exit " << e << endl;
+
+			if(e == 0){
 				continue;
+			}
 
 			if(m_nodes.size() > 1)
 				m_error_msg = "Pipeline error";

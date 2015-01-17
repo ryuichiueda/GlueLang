@@ -10,6 +10,7 @@
 #include "VarString.h"
 #include "Arg.h"
 #include "Feeder.h"
+#include "Environment.h"
 using namespace std;
 
 Andline::Andline(Feeder *f, Environment *env) : Element(f,env)
@@ -112,6 +113,10 @@ int Andline::exec(void)
 		waitpid(pid,&status,options);
 		if(WIFEXITED(status)){
 			int e = WEXITSTATUS(status);
+
+			if(m_env->m_v_opt)
+				cerr << "+ pid " << pid << " exit " << e << endl;
+
 			if(e == 0)
 				continue;
 

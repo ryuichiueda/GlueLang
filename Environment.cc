@@ -179,6 +179,8 @@ void Environment::removeFiles(void)
 {
 	for(auto f : m_file_list){
 		remove(f.c_str());
+		if(m_v_opt)
+			cerr << "+ pid " << getpid() << " file " << f << " deleted" << endl;
 	}
 
 	struct stat buf;

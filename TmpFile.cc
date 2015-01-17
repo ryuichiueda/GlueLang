@@ -74,7 +74,10 @@ int TmpFile::exec(void)
 	if(m_append_mode)
 		mode |= O_APPEND;
 
-	m_fd = open( m_file_name.c_str() , mode, 0700);
+	m_fd = open( m_file_name.c_str() , mode, 0600);
+	if(m_env->m_v_opt)
+		cerr << "+ pid " << getpid() << " file " << m_file_name << " created" << endl;
+
 	if(m_fd < 3){
 		m_error_msg = "file: " + m_var_name + " does not open.";
 		throw this;
