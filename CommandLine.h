@@ -34,9 +34,6 @@ public:
 
 	void setIfFlag(void){m_if = true;}
 	bool getIfFlag(void){return m_if;}
-
-	TmpFile *m_outfile;
-	VarString *m_outstr;
 protected:
 	void execCommandLine(void);
 	void execErrorExit(void);
@@ -50,7 +47,5 @@ protected:
 	int m_pipe_prev;
 
 	bool m_if;
-
-	Where *m_where;
 };
 #endif

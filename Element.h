@@ -7,6 +7,8 @@ using namespace std;
 
 class Feeder;
 class Environment;
+class TmpFile;
+class VarString;
 
 class Element
 {
@@ -34,9 +36,10 @@ public:
 
 	string pos(void);
 	int getExitStatus(void){return m_exit_status;};
-
 	void printErrorPart(void);
-
 	int getLevel(void);
+
+	TmpFile *m_outfile;
+	VarString *m_outstr;
 };
 #endif

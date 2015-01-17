@@ -42,7 +42,6 @@ bool Command::parse(void)
 	if( ! m_feeder->smallCaps(&m_prefix)){
 		return m_feeder->command(&m_name);
 	}
-
 	// chech whether m_prefix is a prefix or a command name
  	if(!m_feeder->str(".")){
 		// if m_prefix is not a prefix, it is a name of a command or a procedure

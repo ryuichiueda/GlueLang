@@ -1,0 +1,54 @@
+#!/bin/bash 
+
+tmp=/tmp/$$
+scr=$(basename $0)
+cd $(dirname $0) || exit 1
+
+ERROR_CHECK(){
+	[ "$(tr -d '0 ' <<< ${PIPESTATUS[@]} )" = "" ] && return
+	rm -f $tmp-*
+	echo "$scr" "$1"
+	exit 1
+}
+
+os=linux
+[ "$(uname)" != "Linux" ] && os=mac
+
+#########################################
+# TEST1: file
+#########################################
+cat << FIN > $tmp-glue
+/usr/bin/diff a b
+        where   file a = /bin/echo 'aaa'
+                file b = /bin/echo 'aaa'
+FIN
+
+: > $tmp-out
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST1.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST1.2 error"
+
+cat << FIN > $tmp-glue
+/usr/bin/diff a b
+        where   file a = /bin/echo 'aaa'
+                file b = /bin/echo 'aab'
+FIN
+
+cat << FIN > $tmp-out
+1c1
+< aaa
+---
+> aab
+FIN
+
+../glue $tmp-glue > $tmp-ans
+[ $? -eq 1 ]
+ERROR_CHECK "TEST1.3 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST1.4 error"
+
+rm -f $tmp-*

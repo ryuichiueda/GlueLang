@@ -18,7 +18,7 @@ public:
 	//virtual void print(int indent_level = 0);
 	bool parse(void);
 	virtual int exec(void);
-	virtual bool eval(void){return true;};
+	virtual bool eval(void);
 protected:
 };
 #endif

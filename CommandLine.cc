@@ -17,15 +17,11 @@ using namespace std;
 
 CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_outfile = NULL;
-	m_outstr = NULL;
 	m_pipe[0] = -1;
 	m_pipe[1] = -1;
 	m_pipe_prev = -1;
 
 	m_if = false;
-
-	m_where = NULL;
 }
 
 CommandLine::~CommandLine()
@@ -33,7 +29,7 @@ CommandLine::~CommandLine()
 }
 
 /* parse of command line, where command line means
- * the combination of one command and args.
+ * the combination of one command, args, and where.
 
 	m_nodes: command arg arg ...
 */
@@ -47,11 +43,6 @@ bool CommandLine::parse(void)
 	if(!m_feeder->comment() && !m_feeder->atNewLine()){
 		m_feeder->blank();
 		parseArgs();
-	}
-
-	if(add(new Where(m_feeder,m_env))){
-		m_where = (Where *)m_nodes.back();
-		m_nodes.pop_back();
 	}
 
 	m_feeder->getPos(&m_end_line, &m_end_char);
@@ -172,7 +163,6 @@ void CommandLine::execCommandLine(void)
 	}
 
 	auto argv = makeArgv();
-	//cerr << argv[0] << " " << argv[1] << endl;
 	execv(argv[0],(char **)argv);
 }
 

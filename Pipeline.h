@@ -13,6 +13,7 @@ class Arg;
 class CommandLine;
 class TmpFile;
 class VarString;
+class Where;
 
 class Pipeline : public Element
 {
@@ -32,5 +33,7 @@ protected:
 	VarString *m_outstr;
 
 	bool m_if;
+
+	Where *m_where;
 };
 #endif

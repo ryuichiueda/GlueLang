@@ -14,6 +14,9 @@ TmpFile::TmpFile(Feeder *f, Environment *env) : Element(f,env)
 	m_fd = -1;
 	m_evaled = false;
 	m_append_mode = false;
+
+	m_var_name = "";
+	m_file_name = "";
 }
 
 TmpFile::~TmpFile()

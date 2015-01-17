@@ -10,6 +10,7 @@
 #include "VarString.h"
 #include "Arg.h"
 #include "Feeder.h"
+#include "Where.h"
 using namespace std;
 
 Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
@@ -18,11 +19,14 @@ Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 	m_outstr = NULL;
 
 	m_if = false;
+
+	m_where = NULL;
 }
 
 Pipeline::~Pipeline()
 {
-
+	if(m_where != NULL)
+		delete m_where;
 }
 
 void Pipeline::print(int indent_level)
@@ -86,6 +90,11 @@ bool Pipeline::parse(void)
 	((CommandLine *)m_nodes.back())->m_outfile = m_outfile;
 	((CommandLine *)m_nodes.back())->m_outstr = m_outstr;
 
+	if(add(new Where(m_feeder,m_env))){
+		m_where = (Where *)m_nodes.back();
+		m_nodes.pop_back();
+	}
+
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }
@@ -97,6 +106,9 @@ bool Pipeline::eval(void)
 
 int Pipeline::exec(void)
 {
+	if(m_where != NULL)
+		m_where->exec();
+
 	cout << flush;
 
 	vector<int> pids;
@@ -130,7 +142,10 @@ int Pipeline::exec(void)
 			if(e == 0)
 				continue;
 
-			m_error_msg = "Pipeline error";
+			if(m_nodes.size() > 1)
+				m_error_msg = "Pipeline error";
+			else
+				m_error_msg = "Command error";
 			m_exit_status = e;
 			if(! m_if)
 				throw this;

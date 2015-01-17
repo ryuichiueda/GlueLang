@@ -14,9 +14,6 @@ using namespace std;
 
 Andline::Andline(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_outfile = NULL;
-	m_outstr = NULL;
-
 	m_if = false;
 }
 

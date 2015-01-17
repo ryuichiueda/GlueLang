@@ -29,9 +29,10 @@ public:
 	int getFd(void){return m_fd;}
 
 	bool m_append_mode;
-protected:
+
 	string m_var_name;
 	string m_file_name;
+protected:
 
 	int m_fd;
 

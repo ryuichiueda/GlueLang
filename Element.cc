@@ -7,6 +7,8 @@ using namespace std;
 
 Element::Element(Feeder *f, Environment *env)
 {
+	m_outfile = NULL;
+	m_outstr = NULL;
 	m_feeder = f;	
 	m_env = env;
 

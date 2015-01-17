@@ -7,6 +7,8 @@ Arg::Arg(Feeder *f,Environment *env) : Element(f,env)
 {
 	m_is_variable = false;
 	m_is_array_variable = false;
+
+	//m_is_local_variable = false;
 }
 
 Arg::~Arg()
