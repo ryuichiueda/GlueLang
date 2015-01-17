@@ -47,6 +47,11 @@ echo s
 # tmpfile
 file f = seq 1 10 >>= grep 5
 cat f
+
+# where
+diff a b
+        where file a = seq 1 10
+              file b = seq 1 10
 ```
 
 Licence
