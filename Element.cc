@@ -60,6 +60,9 @@ void Element::signalCheck(void)
 		return;
 
 	m_error_msg = "signal interruption";
-	m_exit_status = 100 + m_signal;
+	if(m_signal > 0 && m_signal < 100)
+		m_exit_status = 100 + m_signal;
+	else
+		m_exit_status = 200;
 	throw this;
 }
