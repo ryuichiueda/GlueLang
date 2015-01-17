@@ -12,13 +12,15 @@ class Arg;
 class TmpFile;
 class VarString;
 class Environment;
+class Where;
 
 class CommandLine : public Element
 {
 public:
 	CommandLine(Feeder *f, Environment *env);
 	virtual ~CommandLine();
-	bool parse(void);
+	virtual bool parse(void);
+	void parseArgs(void);
 
 	void setName(string s);
 	void appendArg(string a);
@@ -44,10 +46,11 @@ protected:
 
 	const char** makeArgv(void);
 
-
 	int m_pipe[2];
 	int m_pipe_prev;
 
 	bool m_if;
+
+	Where *m_where;
 };
 #endif

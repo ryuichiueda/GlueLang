@@ -59,6 +59,7 @@ bool Feeder::command(string *ans)
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
 	m_cur_char = i;
+	blank();
 	checkEol(p);
 	return true;
 }

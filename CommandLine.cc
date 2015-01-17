@@ -2,6 +2,7 @@
 #include "Command.h"
 #include "Environment.h"
 #include "Arg.h"
+#include "Where.h"
 #include "TmpFile.h"
 #include "VarString.h"
 #include <stdlib.h>
@@ -23,6 +24,8 @@ CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 	m_pipe_prev = -1;
 
 	m_if = false;
+
+	m_where = NULL;
 }
 
 CommandLine::~CommandLine()
@@ -41,24 +44,28 @@ bool CommandLine::parse(void)
 	if(!add(new Command(m_feeder,m_env)))
 		return false;
 
-	if(!m_feeder->atNewLine())
+	if(!m_feeder->comment() && !m_feeder->atNewLine()){
 		m_feeder->blank();
-
-	if(m_feeder->comment() || m_feeder->atNewLine()){
-		m_feeder->getPos(&m_end_line, &m_end_char);
-		return true;
+		parseArgs();
 	}
 
-	while(add(new Arg(m_feeder,m_env))){
-		if(m_feeder->comment() || m_feeder->atNewLine()){
-			m_feeder->getPos(&m_end_line, &m_end_char);
-			return true;
-		}
-		m_feeder->blank();
+	if(add(new Where(m_feeder,m_env))){
+		m_where = (Where *)m_nodes.back();
+		m_nodes.pop_back();
 	}
 
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
+}
+
+void CommandLine::parseArgs(void)
+{
+	while(add(new Arg(m_feeder,m_env))){
+		if(m_feeder->comment() || m_feeder->atNewLine())
+			return;
+
+		m_feeder->blank();
+	}
 }
 
 void CommandLine::parentPipeProc(void)
