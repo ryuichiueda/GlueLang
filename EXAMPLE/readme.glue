@@ -1,0 +1,24 @@
+import PATH
+ 
+# not a Haskell code but a glue code
+ 
+# how to write a procedure (function of bash)
+proc revten =
+	/usr/bin/seq 1 10
+	>>= /usr/bin/tail -r
+ 
+# if, else if, else
+? false
+	this.revten
+| true
+	echo 'foo'
+| otherwise
+	echo 'bar'
+ 
+# output connection
+str s = echo 'foofoo' >> echo 'barbar'
+echo s
+
+# tmpfile
+file f = seq 1 10 >>= grep 5
+cat f
