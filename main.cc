@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <string.h>
 using namespace std;
 
 int scriptPos(int argc, char const* argv[]);
