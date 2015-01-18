@@ -33,7 +33,7 @@ bool VarString::parse(void)
 		return false;
 
 	string tmpdir = m_env->getImportPaths("tmpdir")->at(0);
-	m_file_name = tmpdir + to_string(getpid()) + "-" + m_var_name;
+	m_file_name = m_env->m_tmpdir + "/" + m_var_name;
 
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
@@ -50,6 +50,15 @@ bool VarString::eval(void)
 			+ "(named pipe " + m_file_name.c_str() + ") does not prepared.";
 		throw this;
 	}
+
+	try{
+		m_env->setFileList(&m_file_name);
+	}catch(Environment *e){
+		m_error_msg = e->m_error_msg;	
+		m_exit_status = 1;
+		throw this;
+	}
+
 	m_evaled = true;
 	return true;
 }
@@ -62,16 +71,14 @@ int VarString::exec(void)
 
 	m_fd = open( m_file_name.c_str() ,O_WRONLY ,0600);
 	if(m_env->m_v_opt)
-		cerr << "+ pid " << getpid() << " file " << m_file_name << " created" << endl;
+		cerr << "+ pid " << getpid() << " file " << m_file_name << " open" << endl;
 	if(dup2(m_fd,1) < 0){
 		m_error_msg = "str: " + m_var_name + "  redirect error";
 		throw this;
-		//return -1;
 	}
 	if( close(m_fd) < 0){
 		m_error_msg = "str: " + m_var_name + "  redirect error";
 		throw this;
-		//return -1;
 	}
 
 	m_opened = true;

@@ -5,7 +5,7 @@
 #include "Procedure.h"
 #include "IfBlock.h"
 #include "Pipeline.h"
-#include "AndLine.h"
+#include "And.h"
 #include "CommandLine.h"
 #include "Environment.h"
 #include <sys/types.h> 
@@ -36,19 +36,19 @@ bool Script::parse(void)
 	m_env->init();
 
 	while(1){
-		// comments -> pipeline or command -> comments -> pipeline or command ...
+		// comments -> proc or and -> proc or and -> ...
 
 		while(m_feeder->comment());
-		if( add(new Procedure(m_feeder,m_env))
-			|| add(new IfBlock(m_feeder,m_env))
-			|| add(new Pipeline(m_feeder,m_env))
-			|| add(new Andline(m_feeder,m_env))){ 
 
-			while(m_feeder->blankLine());
-			continue;
+		if( add(new Procedure(m_feeder,m_env))){
+		}else if( add(new And(m_feeder,m_env))){
+		}else if( add(new IfBlock(m_feeder,m_env))){
+		}else{
+			break;
 		}
-
-		break;
+	
+		while(m_feeder->blankLine());
+		continue;
 	}
 	m_feeder->getPos(&m_end_line, &m_end_char);
 

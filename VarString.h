@@ -36,8 +36,8 @@ public:
 
 	Condition* m_condition;
 	string m_var_name;
-protected:
 	string m_file_name;
+protected:
 
 	int m_fd;
 };

@@ -26,14 +26,10 @@ public:
 	virtual bool eval(void);
 	virtual bool parse(void);
 
-	void setIfFlag(void){m_if = true;}
-	bool getIfFlag(void){return m_if;}
-protected:
 	TmpFile *m_outfile;
 	VarString *m_outstr;
 
 	bool m_if;
-
-	Where *m_where;
+protected:
 };
 #endif

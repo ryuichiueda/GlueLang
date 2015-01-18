@@ -1,5 +1,5 @@
-#ifndef __ANDLINE_H_
-#define __ANDLINE_H_
+#ifndef __AND_H_
+#define __AND_H_
 
 #include "Element.h"
 #include <iostream>
@@ -14,23 +14,22 @@ class CommandLine;
 class TmpFile;
 class VarString;
 
-class Andline : public Element
+class And : public Element
 {
 public:
-	Andline(Feeder *f, Environment *env);
-	virtual ~Andline();
+	And(Feeder *f, Environment *env);
+	virtual ~And();
 	virtual void print(int indent_level = 0);
 
 	virtual int exec(void);
 	virtual bool eval(void);
 	virtual bool parse(void);
 
-	void setIfFlag(void){m_if = true;}
-	bool getIfFlag(void){return m_if;}
+	bool m_if;
 protected:
 	TmpFile *m_outfile;
 	VarString *m_outstr;
 
-	bool m_if;
+	Where *m_where;
 };
 #endif

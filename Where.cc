@@ -5,7 +5,6 @@
 #include "Procedure.h"
 #include "IfBlock.h"
 #include "Pipeline.h"
-#include "AndLine.h"
 #include "CommandLine.h"
 #include "Environment.h"
 #include "Condition.h"
@@ -13,6 +12,7 @@
 #include <sys/stat.h> 
 #include <unistd.h>
 #include <vector>
+#include "And.h"
 using namespace std;
 
 Where::Where(Feeder *f, Environment *env) : Element(f,env)
@@ -42,8 +42,7 @@ bool Where::parse(void)
 		if(add(new Condition(m_feeder,m_env))){
 			m_conditions.push_back((Condition *)m_nodes.back());
 			m_nodes.pop_back();
-		}else if(add(new Pipeline(m_feeder,m_env))){
-		}else if(add(new Andline(m_feeder,m_env))){
+		}else if(add(new And(m_feeder,m_env))){
 		}else{
 			m_error_msg = "Invalid where sentences";	
 			m_exit_status = 1;

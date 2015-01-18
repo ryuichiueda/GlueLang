@@ -94,7 +94,6 @@ int CommandLine::exec(void)
 {
 	cout << flush;
 
-
 	if(! eval()){
 		return -1;
 	}
@@ -156,7 +155,6 @@ void CommandLine::execCommandLine(void)
 	}else if(m_outstr != NULL){
 		if(m_outstr->exec() != 0)
 			return;
-
 	}
 
 	// send the shell level for the case where the child is glue.
@@ -176,10 +174,12 @@ void CommandLine::execCommandLine(void)
 
 bool CommandLine::eval(void)
 {
+/*
 	if(m_outfile != NULL)
 		m_outfile->eval();
 	if(m_outstr != NULL)
 		m_outstr->eval();
+*/
 	for(auto s : m_nodes){
 		if( ! s->eval() ){
 			m_error_msg = "evaluation of args failed";

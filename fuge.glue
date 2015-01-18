@@ -1,0 +1,2 @@
+str tmp = /usr/bin/seq 1 3
+/bin/echo tmp
