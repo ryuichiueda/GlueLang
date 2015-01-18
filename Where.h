@@ -9,6 +9,7 @@ using namespace std;
 class Element;
 class Feeder;
 class Environment;
+class Condition;
 
 class Where : public Element
 {
@@ -19,6 +20,9 @@ public:
 	bool parse(void);
 	virtual int exec(void);
 	virtual bool eval(void);
+
+	Condition* findCond(string *var);
 protected:
+	vector<Condition *> m_conditions;
 };
 #endif

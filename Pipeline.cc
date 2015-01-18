@@ -94,6 +94,11 @@ bool Pipeline::parse(void)
 	if(add(new Where(m_feeder,m_env))){
 		m_where = (Where *)m_nodes.back();
 		m_nodes.pop_back();
+		// give conditions to strings
+		if(m_outstr != NULL){
+			m_outstr->m_condition = m_where->findCond(&m_outstr->m_var_name);
+		}
+
 	}
 
 	m_feeder->getPos(&m_end_line, &m_end_char);

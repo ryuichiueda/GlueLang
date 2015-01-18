@@ -7,6 +7,7 @@
 #include <signal.h>
 #include "Feeder.h"
 #include "Environment.h"
+#include "Condition.h"
 using namespace std;
 
 VarString::VarString(Feeder *f, Environment *env) : Element(f,env)
@@ -15,6 +16,8 @@ VarString::VarString(Feeder *f, Environment *env) : Element(f,env)
 	m_opened = false;
 	m_evaled = false;
 	m_is_set = false;
+
+	m_condition = NULL;
 }
 
 VarString::~VarString()
@@ -24,12 +27,15 @@ VarString::~VarString()
 
 bool VarString::parse(void)
 {
+	m_feeder->getPos(&m_start_line, &m_start_char);
+
 	if(! m_feeder->declare(&m_var_name,string("str")))
 		return false;
 
 	string tmpdir = m_env->getImportPaths("tmpdir")->at(0);
-		
 	m_file_name = tmpdir + to_string(getpid()) + "-" + m_var_name;
+
+	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }
 
@@ -41,7 +47,7 @@ bool VarString::eval(void)
 
 	if(mkfifo(m_file_name.c_str(),0700) != 0){
 		m_error_msg = "str: " + m_var_name + " " 
-				+ "(named pipe " + m_file_name.c_str() + ") does not prepared.";
+			+ "(named pipe " + m_file_name.c_str() + ") does not prepared.";
 		throw this;
 	}
 	m_evaled = true;
@@ -95,6 +101,14 @@ bool VarString::readFiFo(void)
 			isfirst = false;
 		}else
 			value += "\n" + tmp;
+
+		if(m_condition != NULL){
+			if(m_condition->m_upper_byte <= value.size()){
+				m_error_msg = "Over length";
+				m_exit_status = 3;
+				throw this;
+			}
+		}
 	}
 
 	if(m_is_set){

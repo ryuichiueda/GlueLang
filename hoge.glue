@@ -1,0 +1,6 @@
+import PATH
+
+str hoge = echo 'aaaaaaaaaaaa'
+	where cond hoge : length < 10
+
+echo hoge

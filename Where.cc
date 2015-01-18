@@ -8,9 +8,11 @@
 #include "AndLine.h"
 #include "CommandLine.h"
 #include "Environment.h"
+#include "Condition.h"
 #include <sys/types.h> 
 #include <sys/stat.h> 
 #include <unistd.h>
+#include <vector>
 using namespace std;
 
 Where::Where(Feeder *f, Environment *env) : Element(f,env)
@@ -37,8 +39,12 @@ bool Where::parse(void)
 	int indent = base_indent;
 	while(indent >= base_indent){
 		m_feeder->blank();
-		if( ! add(new Pipeline(m_feeder,m_env)) &&
-		! add(new Andline(m_feeder,m_env))){
+		if(add(new Condition(m_feeder,m_env))){
+			m_conditions.push_back((Condition *)m_nodes.back());
+			m_nodes.pop_back();
+		}else if(add(new Pipeline(m_feeder,m_env))){
+		}else if(add(new Andline(m_feeder,m_env))){
+		}else{
 			m_error_msg = "Invalid where sentences";	
 			m_exit_status = 1;
 			throw this;
@@ -72,4 +78,13 @@ bool Where::eval(void)
 		cerr << ((TmpFile *)n)->m_var_name << endl;
 	}
 	return true;
+}
+
+Condition* Where::findCond(string *var)
+{
+	for(auto c : m_conditions){
+		if(c->m_name == *var)
+			return c;	
+	}
+	return NULL;
 }
