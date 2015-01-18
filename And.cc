@@ -18,7 +18,8 @@ using namespace std;
 And::And(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_if = false;
-
+	m_outfile = NULL;
+	m_outstr = NULL;
 	m_where = NULL;
 }
 
