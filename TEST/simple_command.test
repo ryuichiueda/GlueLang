@@ -65,11 +65,11 @@ cat << 'FIN' > $tmp-glue
 FIN
 
 ../glue $tmp-glue > /dev/null 2> $tmp-out
-[ "$?" == 127 ]
+[ $? -ne 0 ]
 ERROR_CHECK "TEST3.1 error"
 
 grep -F 'Execution error at line 1, char 1' $tmp-out
-ERROR_CHECK "TEST1.2 error"
+ERROR_CHECK "TEST3.2 error"
 
 #########################################
 # TEST4: execution of two commands 

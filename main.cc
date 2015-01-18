@@ -24,6 +24,9 @@ static void sig_int(int sig)
 
 int main(int argc, char const* argv[])
 {
+	if(setpgid(0,0) != 0)
+		exit(1);
+
 	if(argc <= 1)
 		exit(0);
 

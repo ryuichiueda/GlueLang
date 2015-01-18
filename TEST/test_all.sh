@@ -18,5 +18,6 @@ bash ./proc.test
 bash ./blank.test
 bash ./andline.test
 bash ./where.test
+bash ./signal.test
 
 echo OK

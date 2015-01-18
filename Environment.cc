@@ -1,9 +1,11 @@
 #include "Environment.h"
+#include "Element.h"
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
 #include <sys/param.h> 
 #include <sys/stat.h>
+#include <signal.h>
 using namespace std;
 
 Environment::Environment(int argc, char const* argv[],int script_pos)
@@ -190,6 +192,8 @@ void Environment::removeFiles(void)
 			sleep(1);
 		}
 	}
+	if(Element::m_signal != 0)
+		kill(0,SIGKILL);
 }
 
 string *Environment::getArg(long pos)

@@ -22,7 +22,7 @@ protected:
 	int m_end_line, m_end_char;
 	int m_exit_status;
 
-	void signalCheck(void);
+	//void signalCheck(void);
 public:
 	Element(Feeder *f, Environment *env);
 	virtual ~Element();

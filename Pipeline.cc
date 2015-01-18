@@ -98,24 +98,40 @@ int Pipeline::exec(void)
 	for(auto pid : pids){
 		int status;
 		int options = 0;
-		waitpid(pid,&status,options);
+
+		int wpid = waitpid(pid,&status,options);
+		if(wpid < 1){
+			m_error_msg = "Command wait error";
+			m_exit_status = 2;
+			throw this;
+		}
+		
 		if(WIFEXITED(status)){
-			int e = WEXITSTATUS(status);
-
-			if(m_env->m_v_opt)
-				cerr << "+ pid " << pid << " exit " << e << endl;
-
-			if(e == 0){
-				continue;
+			if(!WIFEXITED(status)){
+				m_error_msg = "Irregular command termination";
+				m_exit_status = 1;
+				throw this;
 			}
+
+			m_exit_status = WEXITSTATUS(status);
+			if(m_env->m_v_opt)
+				cerr << "+ pid " << pid 
+					<< " exit " << m_exit_status << endl;
+
+			if(m_exit_status == 0)
+				continue;
 
 			if(m_nodes.size() > 1)
 				m_error_msg = "Pipeline error";
 			else
 				m_error_msg = "Command error";
-			m_exit_status = e;
+
 			if(! m_if)
 				throw this;
+		}else{
+			m_error_msg = "Unknown error";
+			m_exit_status = 2;
+			throw this;
 		}
 	}
 	return m_exit_status;

@@ -54,6 +54,7 @@ int Element::getLevel(void)
 	return m_env->getLevel();
 }
 
+/*
 void Element::signalCheck(void)
 {
 	if(m_signal == 0)
@@ -66,3 +67,4 @@ void Element::signalCheck(void)
 		m_exit_status = 200;
 	throw this;
 }
+*/

@@ -102,7 +102,7 @@ int CommandLine::exec(void)
 	if(pid < 0)
 		exit(1);
 
-	signalCheck();
+	//signalCheck();
 
 	if (pid == 0){//child
 		if(m_env->m_v_opt)

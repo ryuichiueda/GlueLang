@@ -1,0 +1,43 @@
+#!/bin/bash 
+
+tmp=/tmp/$$
+scr=$(basename $0)
+cd $(dirname $0) || exit 1
+
+ERROR_CHECK(){
+	[ "$(tr -d '0 ' <<< ${PIPESTATUS[@]} )" = "" ] && return
+	rm -f $tmp-*
+	echo "$scr" "$1"
+	exit 1
+}
+
+#########################################
+# TEST1: SIGINT
+#########################################
+
+cat << FIN > $tmp-glue
+import PATH
+sleep 10000 >>= sleep 10000 >>= sleep 10000
+FIN
+
+../glue $tmp-glue &
+sleep 3
+killall -SIGINT glue
+sleep 3
+
+# sleep should not remain
+ps o pid,pgid,command		|
+grep -v grep			|
+grep sleep 
+RES=$?
+
+killall sleep
+
+[ $RES -eq 1 ]
+ERROR_CHECK "TEST1.1 error"
+
+ls /tmp/glue*
+[ $? -eq 1 ]
+ERROR_CHECK "TEST1.2 error"
+
+rm -f $tmp-*
