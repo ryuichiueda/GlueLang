@@ -193,7 +193,7 @@ void Environment::removeFiles(void)
 		}
 	}
 	if(Element::m_signal != 0)
-		kill(0,SIGKILL);
+		kill(0,SIGHUP);
 }
 
 string *Environment::getArg(long pos)

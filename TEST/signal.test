@@ -37,7 +37,7 @@ killall sleep
 ERROR_CHECK "TEST1.1 error"
 
 ls /tmp/glue*
-[ $? -eq 1 ]
+[ $? -ne 0 ]
 ERROR_CHECK "TEST1.2 error"
 
 rm -f $tmp-*
