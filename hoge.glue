@@ -1,6 +1,7 @@
 import PATH
 
-echo 'abc' >>= grep '1' &a
-sleep 10
-in.wait a
-echo 'b'
+sleep 1 >> echo 'abc' &a
+sleep 2 >> echo 'abc' &b
+echo 'x'
+in.wait a b
+echo 'y'

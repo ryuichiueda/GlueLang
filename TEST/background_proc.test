@@ -87,4 +87,31 @@ ERROR_CHECK "TEST3.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST3.2 error"
 
+#########################################
+# TEST4: multiple wait
+#########################################
+
+cat << FIN > $tmp-glue
+import PATH
+
+sleep 1 >> echo 'abc' &a
+sleep 2 >> echo 'def' &b
+echo 'x'
+in.wait a b
+echo 'y'
+FIN
+
+cat << FIN > $tmp-out
+x
+abc
+def
+y
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST4.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST4.2 error"
+
 rm -f $tmp-*
