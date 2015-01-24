@@ -19,8 +19,6 @@ public:
 	virtual bool eval(void);
 	virtual int exec(void);
 	virtual bool parse(void);
-
-//	bool m_is_local_variable;
 protected:
 	string m_text;
 	string m_evaled_text;

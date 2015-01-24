@@ -11,10 +11,6 @@ public:
 private:
 	static int echo(int argc, char const** argv);
 	static int pid(int argc, char const** argv,Environment *e);
-/*
-	static int gluewait(int argc, char const** argv,Environment *e,CommandLine *p);
-	static int subwait(int pid,Environment *e,CommandLine *p);
-*/
 };
 
 #endif

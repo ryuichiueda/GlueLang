@@ -1,7 +1,5 @@
 import PATH
 
 sleep 1 >> echo 'abc' &a
-sleep 2 >> echo 'abc' &b
-echo 'x'
-in.wait a b
-echo 'y'
+echo 'b'
+in.wait a

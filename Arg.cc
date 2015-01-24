@@ -31,7 +31,6 @@ bool Arg::eval(void)
 		return true;
 	}
 
-
 	if(m_is_variable){
 		try{
 			m_env->getVariable(&m_text,&m_evaled_text);

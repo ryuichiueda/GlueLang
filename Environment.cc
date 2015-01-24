@@ -103,8 +103,9 @@ bool Environment::setBG(string *key, int value)
 int Environment::getBG(const char *key)
 {
 	string k(key);
-	if(m_background_jobs.find(k) == m_background_jobs.end())
+	if(m_background_jobs.find(k) == m_background_jobs.end()){
 		return -1;
+	}
 
 	return m_background_jobs[k];
 }

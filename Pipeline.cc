@@ -70,6 +70,9 @@ int Pipeline::exec(void)
 {
 	eval();
 
+	// When wait(1) is set in the command line,
+	// wait(1) is done in this process.
+	// Wait(1) cannot be connected with other commands
 	auto *cl = (CommandLine *)m_nodes[0];
 	if(cl->m_is_wait){
 		return execWait();
@@ -105,6 +108,7 @@ int Pipeline::exec(void)
 int Pipeline::execWait(void)
 {
 	auto *c = (CommandLine *)m_nodes[0];
+	c->eval();
 	auto argv = c->makeArgv();
 	
 	int i = 1;
@@ -112,6 +116,11 @@ int Pipeline::execWait(void)
 		int pid = m_env->getBG(argv[i]);
 		while(pid == 0){ // not forked
 			pid = m_env->getBG(argv[i]);
+		}
+		if(pid < 0){
+			m_error_msg = "Unknown background process";
+			m_exit_status = 1;
+			throw this;
 		}
 		m_pids.push_back(pid);
 		i++;
