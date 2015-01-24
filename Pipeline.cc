@@ -70,10 +70,6 @@ int Pipeline::exec(void)
 {
 	eval();
 
-	cout << flush;
-
-	vector<int> pids;
-
 	int pip[2];
 	int prevfd = -1;
 
@@ -87,51 +83,49 @@ int Pipeline::exec(void)
 		}
 
 		p->setPipe(pip,prevfd);
-		pids.push_back( p->exec() );
+		m_pids.push_back( p->exec() );
 		prevfd = p->getPrevPipe();
 	}
 
 	if(m_outstr != NULL){
 		m_outstr->readFiFo();
 	}
-	for(auto pid : pids){
-		int status;
-		int options = 0;
 
-		int wpid = waitpid(pid,&status,options);
-		if(wpid < 1){
-			m_error_msg = "Command wait error";
-			m_exit_status = 2;
-			throw this;
-		}
-		
-		if(WIFEXITED(status)){
-			if(!WIFEXITED(status)){
-				m_error_msg = "Irregular command termination";
-				m_exit_status = 1;
-				throw this;
-			}
+	for(auto pid : m_pids)
+		waitCommands(pid);
 
-			m_exit_status = WEXITSTATUS(status);
-			if(m_env->m_v_opt)
-				cerr << "+ pid " << pid 
-					<< " exit " << m_exit_status << endl;
-
-			if(m_exit_status == 0)
-				continue;
-
-			if(m_nodes.size() > 1)
-				m_error_msg = "Pipeline error";
-			else
-				m_error_msg = "Command error";
-
-			if(! m_if)
-				throw this;
-		}else{
-			m_error_msg = "Unknown error";
-			m_exit_status = 2;
-			throw this;
-		}
-	}
 	return m_exit_status;
+}
+
+void Pipeline::waitCommands(int pid)
+{
+	int options = 0;
+	int wpid = waitpid(pid,&status,options);
+	if(wpid < 1){
+		m_error_msg = "Command wait error";
+		m_exit_status = 2;
+		throw this;
+	}
+		
+	int status;
+	if(!WIFEXITED(status)){
+		m_error_msg = "Irregular command termination";
+		m_exit_status = 2;
+		throw this;
+	}
+
+	m_exit_status = WEXITSTATUS(status);
+	if(m_env->m_v_opt)
+		cerr << "+ pid " << pid << " exit " << m_exit_status << endl;
+
+	if(m_exit_status == 0)
+		return;
+
+	if(m_nodes.size() > 1)
+		m_error_msg = "Pipeline error";
+	else
+		m_error_msg = "Command error";
+
+	if(! m_if)
+		throw this;
 }

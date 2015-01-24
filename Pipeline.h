@@ -31,5 +31,7 @@ public:
 
 	bool m_if;
 protected:
+	void waitCommands(int pid);
+	vector<int> m_pids;
 };
 #endif
