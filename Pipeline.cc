@@ -100,6 +100,7 @@ int Pipeline::exec(void)
 void Pipeline::waitCommands(int pid)
 {
 	int options = 0;
+	int status;
 	int wpid = waitpid(pid,&status,options);
 	if(wpid < 1){
 		m_error_msg = "Command wait error";
@@ -107,7 +108,6 @@ void Pipeline::waitCommands(int pid)
 		throw this;
 	}
 		
-	int status;
 	if(!WIFEXITED(status)){
 		m_error_msg = "Irregular command termination";
 		m_exit_status = 2;
