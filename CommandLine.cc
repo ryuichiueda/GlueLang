@@ -23,6 +23,7 @@ CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 	m_pipe_prev = -1;
 
 	m_if = false;
+	m_is_wait = false;
 }
 
 CommandLine::~CommandLine()
@@ -44,6 +45,11 @@ bool CommandLine::parse(void)
 	if(!m_feeder->comment() && !m_feeder->atNewLine()){
 		m_feeder->blank();
 		parseArgs();
+	}
+
+	auto *c = (Command *)m_nodes[0];
+	if(c->m_is_internal && c->m_name == "wait"){
+		m_is_wait = true;
 	}
 
 	m_feeder->getPos(&m_end_line, &m_end_char);
@@ -98,15 +104,6 @@ int CommandLine::exec(void)
 	if(! eval())
 		return -1;
 
-	auto *c = (Command *)m_nodes[0];
-	if(c->m_is_internal && c->m_name == "wait"){
-		auto argv = makeArgv();
-		int pid = m_env->getBG(argv[1]);
-		while(pid == 0){ // not forked
-			pid = m_env->getBG(argv[1]);
-		}
-		return pid;
-	}
 
 	int pid = fork();
 	if(pid < 0)

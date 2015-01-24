@@ -79,7 +79,9 @@ bool And::parse(void)
 	if(m_feeder->str("&")){
 		m_is_background = true;
 		if(! m_feeder->variable(&m_job_name)){
-			m_job_name = "noname";
+			m_error_msg = "no job name";
+			m_exit_status = 1;
+			throw this;
 		}
 		m_env->setVariable(&m_job_name,&m_job_name);
 		if(!m_env->initBG(&m_job_name)){

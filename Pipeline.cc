@@ -70,6 +70,11 @@ int Pipeline::exec(void)
 {
 	eval();
 
+	auto *cl = (CommandLine *)m_nodes[0];
+	if(cl->m_is_wait){
+		return execWait();
+	}
+
 	int pip[2];
 	int prevfd = -1;
 
@@ -95,6 +100,27 @@ int Pipeline::exec(void)
 		waitCommands(pid);
 
 	return m_exit_status;
+}
+
+int Pipeline::execWait(void)
+{
+	auto *c = (CommandLine *)m_nodes[0];
+	auto argv = c->makeArgv();
+	
+	int i = 1;
+	while(argv[i] != NULL){
+		int pid = m_env->getBG(argv[i]);
+		while(pid == 0){ // not forked
+			pid = m_env->getBG(argv[i]);
+		}
+		m_pids.push_back(pid);
+		i++;
+	}
+
+	for(auto pid : m_pids)
+		waitCommands(pid);
+
+	return 0;
 }
 
 void Pipeline::waitCommands(int pid)

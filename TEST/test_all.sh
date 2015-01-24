@@ -20,5 +20,6 @@ bash ./andline.test
 bash ./where.test
 bash ./signal.test
 bash ./internal_commands.test
+bash ./background_proc.test
 
 echo OK

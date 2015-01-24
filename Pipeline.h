@@ -25,6 +25,7 @@ public:
 	virtual int exec(void);
 	virtual bool eval(void);
 	virtual bool parse(void);
+	int execWait(void);
 
 	TmpFile *m_outfile;
 	VarString *m_outstr;

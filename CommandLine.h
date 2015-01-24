@@ -34,6 +34,10 @@ public:
 
 	void setIfFlag(void){m_if = true;}
 	bool getIfFlag(void){return m_if;}
+
+	bool m_is_wait;
+
+	const char** makeArgv(void);
 protected:
 	void execCommandLine(void);
 	void execErrorExit(void);
@@ -41,7 +45,6 @@ protected:
 	void childPipeProc(void);
 	void parentPipeProc(void);
 
-	const char** makeArgv(void);
 
 	int m_pipe[2];
 	int m_pipe_prev;
