@@ -1,1 +1,6 @@
-in.pid
+import PATH
+
+echo 'abc' >>= grep '1' &a
+sleep 10
+in.wait a
+echo 'b'

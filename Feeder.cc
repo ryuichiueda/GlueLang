@@ -190,7 +190,7 @@ bool Feeder::variable(string *ans)
 
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
-	if(p->at(i) == '>')
+	if(p->at(i) == '>' || p->at(i) == '&')
 		return false;
 
 	for(;i < (int)p->length();i++){

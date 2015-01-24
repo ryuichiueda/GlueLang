@@ -69,35 +69,9 @@ void Environment::init(void)
 	}
 }
 
-/*
-void Environment::setImportPath(const char *key,const char *value)
-{
-	m_import_paths[""].push_back(string(value));
-}
-*/
 
 void Environment::setImportPath(string *key, string *value)
 {
-/*
-	if(*value == ""){
-		m_error_msg = "NULL path";
-		throw this;
-	}
-*/
-
-/*
-	if(*key == "tmpdir"){
-//		m_import_paths[*key] = *value;
-		m_import_paths.insert(make_pair(*key,*value));
-		return;
-	}
-
-	if(m_import_paths.find(*key) != m_import_paths.end()){
-		m_error_msg = *key + " is already used" ;
-		throw this;
-	}
-*/
-
 	string path;
 	if(value->at(0) == '/'){
 		path = *value;
@@ -106,6 +80,33 @@ void Environment::setImportPath(string *key, string *value)
 		path = m_dir + "/" + *value;
 	}
 	m_import_paths[*key].push_back(path);
+}
+
+bool Environment::initBG(string *key)
+{
+	if(m_background_jobs.find(*key) != m_background_jobs.end())
+		return false;
+
+	m_background_jobs[*key] = 0;
+	return true;
+}
+
+bool Environment::setBG(string *key, int value)
+{
+	if(m_background_jobs.find(*key) == m_background_jobs.end())
+		return false;
+
+	m_background_jobs[*key] = value;
+	return true;
+}
+
+int Environment::getBG(const char *key)
+{
+	string k(key);
+	if(m_background_jobs.find(k) == m_background_jobs.end())
+		return -1;
+
+	return m_background_jobs[k];
 }
 
 vector<string> *Environment::getImportPaths(string *key)

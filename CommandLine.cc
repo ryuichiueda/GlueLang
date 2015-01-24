@@ -95,15 +95,22 @@ int CommandLine::exec(void)
 {
 	cout << flush;
 
-	if(! eval()){
+	if(! eval())
 		return -1;
+
+	auto *c = (Command *)m_nodes[0];
+	if(c->m_is_internal && c->m_name == "wait"){
+		auto argv = makeArgv();
+		int pid = m_env->getBG(argv[1]);
+		while(pid == 0){ // not forked
+			pid = m_env->getBG(argv[1]);
+		}
+		return pid;
 	}
 
 	int pid = fork();
 	if(pid < 0)
 		exit(1);
-
-	//signalCheck();
 
 	if (pid == 0){//child
 		if(m_env->m_v_opt)
@@ -172,7 +179,7 @@ void CommandLine::execCommandLine(void)
 			<< m_start_line << " " << argv[0] << endl;
 
 	if(((Command *)m_nodes[0])->m_is_internal){
-		InternalCommands::exec((int)m_nodes.size(),argv,m_env,m_feeder);
+		InternalCommands::exec((int)m_nodes.size(),argv,m_env,m_feeder,this);
 	}else{
 		execv(argv[0],(char **)argv);
 	}
@@ -180,12 +187,6 @@ void CommandLine::execCommandLine(void)
 
 bool CommandLine::eval(void)
 {
-/*
-	if(m_outfile != NULL)
-		m_outfile->eval();
-	if(m_outstr != NULL)
-		m_outstr->eval();
-*/
 	for(auto s : m_nodes){
 		if( ! s->eval() ){
 			m_error_msg = "evaluation of args failed";

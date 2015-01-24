@@ -20,7 +20,6 @@ protected:
 
 	int m_start_line, m_start_char;
 	int m_end_line, m_end_char;
-	int m_exit_status;
 
 	//void signalCheck(void);
 public:
@@ -35,6 +34,7 @@ public:
 	bool add(Element *n);
 
 	string m_error_msg;
+	int m_exit_status;
 
 	string pos(void);
 	int getExitStatus(void){return m_exit_status;};

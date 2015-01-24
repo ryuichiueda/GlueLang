@@ -27,9 +27,15 @@ public:
 
 	bool m_if;
 protected:
+	int execNormal(void);
+	int execBackGround(void);
+
 	TmpFile *m_outfile;
 	VarString *m_outstr;
 
 	Where *m_where;
+
+	string m_job_name;
+	bool m_is_background;
 };
 #endif

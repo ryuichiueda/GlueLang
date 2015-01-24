@@ -14,6 +14,7 @@ private:
 	map<string,string> m_variables;
 	map<string, vector<string> > m_import_paths;
 	vector<string> m_file_list;
+	map<string,int> m_background_jobs;
 
 	string m_dir;
 public:
@@ -46,6 +47,11 @@ public:
 
 	bool m_v_opt;
 	int m_pid;
+
+	// BG: backgournd job
+	bool initBG(string *key);
+	bool setBG(string *key, int value);
+	int getBG(const char *key);
 };
 
 #endif

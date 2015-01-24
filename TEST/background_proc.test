@@ -1,0 +1,90 @@
+#!/bin/bash 
+
+tmp=/tmp/$$
+scr=$(basename $0)
+cd $(dirname $0) || exit 1
+
+ERROR_CHECK(){
+	[ "$(tr -d '0 ' <<< ${PIPESTATUS[@]} )" = "" ] && return
+	rm -f $tmp-*
+	echo "$scr" "$1"
+	exit 1
+}
+
+os=linux
+[ "$(uname)" != "Linux" ] && os=mac
+
+#########################################
+# TEST1: non wait
+#########################################
+
+cat << FIN > $tmp-glue
+import PATH
+
+sleep 2 >> echo 'abc' >>= rev &a
+echo 'b'
+sleep 3
+FIN
+
+cat << FIN > $tmp-out
+b
+cba
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST1.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST1.2 error"
+
+#########################################
+# TEST2: wait
+#########################################
+
+cat << FIN > $tmp-glue
+import PATH
+
+sleep 2 >> echo 'abc' >>= rev &a
+echo 'b'
+in.wait a
+echo 'c'
+FIN
+
+cat << FIN > $tmp-out
+b
+cba
+c
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST2.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST2.2 error"
+
+#########################################
+# TEST3: already finished commands
+#########################################
+
+cat << FIN > $tmp-glue
+import PATH
+
+echo 'abc' >>= grep '1' &a
+sleep 5
+echo 'b'
+in.wait a
+echo 'c'
+FIN
+
+cat << FIN > $tmp-out
+b
+FIN
+
+../glue $tmp-glue > $tmp-ans
+[ $? -eq 1 ]
+ERROR_CHECK "TEST3.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST3.2 error"
+
+rm -f $tmp-*

@@ -20,6 +20,7 @@ And::And(Feeder *f, Environment *env) : Element(f,env)
 	m_outfile = NULL;
 	m_outstr = NULL;
 	m_where = NULL;
+	m_is_background = false;
 }
 
 And::~And()
@@ -62,9 +63,8 @@ bool And::parse(void)
 
 	int comnum = 0;
 	while(1){
-		if(add(new Pipeline(m_feeder,m_env))){
+		if(add(new Pipeline(m_feeder,m_env)))
 			comnum++;
-		}
 
 		if(! m_feeder->str(">>"))
 			break;
@@ -73,6 +73,20 @@ bool And::parse(void)
 	if(comnum < 1){
 		m_feeder->setPos(m_start_line,m_start_char);
 		return false;
+	}
+
+	// whether background proc or not
+	if(m_feeder->str("&")){
+		m_is_background = true;
+		if(! m_feeder->variable(&m_job_name)){
+			m_job_name = "noname";
+		}
+		m_env->setVariable(&m_job_name,&m_job_name);
+		if(!m_env->initBG(&m_job_name)){
+			m_error_msg = "Job name confliction";
+			m_exit_status = 1;
+			throw this;
+		}
 	}
 
 	if(add(new Where(m_feeder,m_env))){
@@ -114,23 +128,54 @@ int And::exec(void)
 	if(m_where != NULL)
 		m_where->exec();
 
+	if(m_is_background)
+		return execBackGround();
+
+	return execNormal();
+}
+
+int And::execNormal(void)
+{
 	for(int i=0;i<(int)m_nodes.size();i++){
 		auto *p = (Pipeline *)m_nodes[i];
-		if(m_outfile != NULL){
-			if(i!=0){
-				m_outfile->m_append_mode = true;
-			}
-		}
+		if(m_outfile != NULL && i!=0)
+			m_outfile->m_append_mode = true;
+
 		int es = p->exec();
 		if(m_if && es != 0)
 			return es;
-
-/*
-		if(m_outstr != NULL){
-			cerr << m_outstr->m_file_name << endl;
-			m_outstr->readFiFo();
-		}
-*/
 	}
+	return 0;
+}
+
+int And::execBackGround(void)
+{
+
+	int pid = fork();
+	if(pid < 0)
+		exit(1);
+
+	if (pid == 0){//child
+		if(m_env->m_v_opt)
+			cerr << "+ pid " << getpid() << " fork " << endl;
+
+		for(int i=0;i<(int)m_nodes.size();i++){
+			auto *p = (Pipeline *)m_nodes[i];
+			if(m_outfile != NULL && i!=0)
+				m_outfile->m_append_mode = true;
+	
+			int es = p->exec();
+			if(m_if && es != 0)
+				exit(es);
+		}
+		exit(0);
+	}
+
+	if(!m_env->setBG(&m_job_name,pid)){
+		m_error_msg = "Bug of backgound process";
+		m_exit_status = 1;
+		throw this;
+	}
+
 	return 0;
 }
