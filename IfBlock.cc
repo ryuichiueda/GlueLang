@@ -3,7 +3,7 @@
 #include "IfBlock.h"
 #include "Import.h"
 #include "Pipeline.h"
-#include "And.h"
+#include "Job.h"
 #include "CommandLine.h"
 using namespace std;
 
@@ -52,8 +52,8 @@ bool IfBlock::parse(void)
 		// condition -> many (pipeline or commandline) -> condition ->...
 		if(m_feeder->str("otherwise")){
 			m_nodes.push_back(NULL); // dummy
-		}else if(add(new And(m_feeder,m_env))){
-			((And *)m_nodes.back())->m_if = true;
+		}else if(add(new Job(m_feeder,m_env))){
+			((Job *)m_nodes.back())->m_if = true;
 		}else{
 			m_feeder->setPos(m_start_line, m_start_char);
 			return false;
@@ -85,7 +85,7 @@ bool IfBlock::parse(void)
 			m_feeder->blank();
 
 			if(add(new IfBlock(m_feeder,m_env))
-				|| add(new And(m_feeder,m_env))){
+				|| add(new Job(m_feeder,m_env))){
 
 				m_is_cond_node.push_back(false);
 				while(m_feeder->blankLine()){}

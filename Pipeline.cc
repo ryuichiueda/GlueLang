@@ -123,11 +123,15 @@ int Pipeline::execWait(void)
 			throw this;
 		}
 		m_pids.push_back(pid);
+		m_env->unsetBG(argv[i]);
 		i++;
 	}
 
 	for(auto pid : m_pids)
 		waitCommands(pid);
+
+	if(m_env->m_v_opt)
+		cerr << "+ pid " << m_env->m_pid << " wait done" << endl;
 
 	return 0;
 }

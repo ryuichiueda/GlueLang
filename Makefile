@@ -11,7 +11,7 @@ $(TARGET): $(OBJS)
 
 .PHONY: clean test
 clean:
-	rm -f $(TARGET) $(OBJS) $(BINDIR)/$(TARGET)
+	rm -f $(TARGET) $(OBJS) 
 
 test: $(TARGET)
 	sh -e ./TEST/test_all.sh

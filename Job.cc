@@ -10,11 +10,11 @@
 #include "Arg.h"
 #include "Feeder.h"
 #include "Environment.h"
-#include "And.h"
+#include "Job.h"
 #include "Where.h"
 using namespace std;
 
-And::And(Feeder *f, Environment *env) : Element(f,env)
+Job::Job(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_if = false;
 	m_outfile = NULL;
@@ -23,13 +23,13 @@ And::And(Feeder *f, Environment *env) : Element(f,env)
 	m_is_background = false;
 }
 
-And::~And()
+Job::~Job()
 {
 	if(m_where != NULL)
 		delete m_where;
 }
 
-void And::print(int indent_level)
+void Job::print(int indent_level)
 {
 }
 
@@ -45,7 +45,7 @@ void And::print(int indent_level)
 	The way of writting for redirection of standard error
 	toward one command line will be an issue.
 */
-bool And::parse(void)
+bool Job::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -105,7 +105,7 @@ bool And::parse(void)
 	return true;
 }
 
-bool And::eval(void)
+bool Job::eval(void)
 {
 	if(m_outfile != NULL)
 		m_outfile->eval();
@@ -121,7 +121,7 @@ bool And::eval(void)
 	return true;
 }
 
-int And::exec(void)
+int Job::exec(void)
 {
 	cout << flush;
 
@@ -136,7 +136,7 @@ int And::exec(void)
 	return execNormal();
 }
 
-int And::execNormal(void)
+int Job::execNormal(void)
 {
 	for(int i=0;i<(int)m_nodes.size();i++){
 		auto *p = (Pipeline *)m_nodes[i];
@@ -150,7 +150,7 @@ int And::execNormal(void)
 	return 0;
 }
 
-int And::execBackGround(void)
+int Job::execBackGround(void)
 {
 
 	int pid = fork();
@@ -159,7 +159,7 @@ int And::execBackGround(void)
 
 	if (pid == 0){//child
 		if(m_env->m_v_opt)
-			cerr << "+ pid " << getpid() << " fork " << endl;
+			cerr << "+ pid " << m_env->m_pid << " fork " << m_job_name << endl;
 
 		for(int i=0;i<(int)m_nodes.size();i++){
 			auto *p = (Pipeline *)m_nodes[i];

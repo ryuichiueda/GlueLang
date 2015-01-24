@@ -100,6 +100,12 @@ bool Environment::setBG(string *key, int value)
 	return true;
 }
 
+void Environment::unsetBG(const char *key)
+{
+	string k(key);
+	m_background_jobs.erase(k);
+}
+
 int Environment::getBG(const char *key)
 {
 	string k(key);

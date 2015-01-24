@@ -51,6 +51,7 @@ public:
 	// BG: backgournd job
 	bool initBG(string *key);
 	bool setBG(string *key, int value);
+	void unsetBG(const char *key);
 	int getBG(const char *key);
 };
 

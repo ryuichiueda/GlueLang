@@ -1,5 +1,5 @@
-#ifndef __AND_H_
-#define __AND_H_
+#ifndef __JOB_H_
+#define __JOB_H_
 
 #include "Element.h"
 #include <iostream>
@@ -14,11 +14,11 @@ class CommandLine;
 class TmpFile;
 class VarString;
 
-class And : public Element
+class Job : public Element
 {
 public:
-	And(Feeder *f, Environment *env);
-	virtual ~And();
+	Job(Feeder *f, Environment *env);
+	virtual ~Job();
 	virtual void print(int indent_level = 0);
 
 	virtual int exec(void);
