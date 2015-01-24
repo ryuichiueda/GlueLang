@@ -7,6 +7,7 @@ using namespace std;
 Command::Command(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_is_proc = false;
+	m_is_internal = false;
 }
 
 Command::~Command()
@@ -57,6 +58,11 @@ bool Command::parse(void)
 	if(m_prefix == "this"){
 		m_is_proc = true;
 		m_path = m_env->m_tmpdir + "/";
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		return m_feeder->command(&m_name);
+	}else if(m_prefix == "in"){
+		m_is_internal = true;
+		m_path = "";
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		return m_feeder->command(&m_name);
 	}

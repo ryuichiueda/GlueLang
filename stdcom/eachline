@@ -1,0 +1,25 @@
+#!/bin/bash
+# eachline command
+# usage: eachline <commands>
+# 
+# is failed, and outputs the output of the last successful trial.
+
+# version: "Sat Jan 10 16:58:28 JST 2015"
+
+# This command should be rewritten with C/C++.
+
+ERROR_EXIT(){
+	rm -f /tmp/$$-*
+	exit 1
+}
+
+ERROR_CHECK(){
+	[ "$(tr -d ' 0' <<< ${PIPESTATUS[@]})" = "" ] && return
+	ERROR_EXIT
+}
+
+while read line ; do
+	"$1" "$line"
+	ERROR_CHECK
+done
+ERROR_CHECK

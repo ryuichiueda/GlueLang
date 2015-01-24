@@ -1,5 +1,6 @@
 #include "CommandLine.h"
 #include "Command.h"
+#include "InternalCommands.h"
 #include "Environment.h"
 #include "Arg.h"
 #include "Where.h"
@@ -169,7 +170,12 @@ void CommandLine::execCommandLine(void)
 	if(m_env->m_v_opt)
 		cerr << "+ pid " << getpid() << " exec line " 
 			<< m_start_line << " " << argv[0] << endl;
-	execv(argv[0],(char **)argv);
+
+	if(((Command *)m_nodes[0])->m_is_internal){
+		InternalCommands::exec((int)m_nodes.size(),argv,m_env,m_feeder);
+	}else{
+		execv(argv[0],(char **)argv);
+	}
 }
 
 bool CommandLine::eval(void)

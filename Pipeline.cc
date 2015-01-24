@@ -10,7 +10,6 @@
 #include "VarString.h"
 #include "Arg.h"
 #include "Feeder.h"
-#include "Where.h"
 #include "Environment.h"
 using namespace std;
 

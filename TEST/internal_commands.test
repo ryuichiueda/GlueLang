@@ -1,4 +1,4 @@
-#!/bin/bash -xv
+#!/bin/bash 
 
 tmp=/tmp/$$
 scr=$(basename $0)
@@ -15,46 +15,16 @@ os=linux
 [ "$(uname)" != "Linux" ] && os=mac
 
 #########################################
-# TEST1: loop-serial
+# TEST1: echo
 #########################################
-
-cat << FIN > $tmp-out
-9
-FIN
-
-cat << 'FIN' > $tmp-glue
-import ../stdcom/ as std
-
-/bin/echo 1 >>=
-std.loop-serial '/usr/bin/awk' '{print ++$1;if($1==10){exit 1}}'
-FIN
-
-../glue $tmp-glue > $tmp-ans
-ERROR_CHECK "TEST1.1 error"
-
-diff $tmp-out $tmp-ans
-ERROR_CHECK "TEST1.2 error"
-
-#########################################
-# TEST2: eachline
-#########################################
-
-cat << FIN > $tmp-in
-1
-2
-FIN
-
-cat << FIN > $tmp-out
-1
-1
-2
-FIN
 
 cat << FIN > $tmp-glue
 import PATH
-import ../stdcom/ as std
+in.echo 'hoge' >>= rev
+FIN
 
-cat '$tmp-in' >>= std.eachline '/usr/bin/seq'
+cat << FIN > $tmp-out
+egoh
 FIN
 
 ../glue $tmp-glue > $tmp-ans
@@ -62,5 +32,26 @@ ERROR_CHECK "TEST1.1 error"
 
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
+
+#########################################
+# TEST2: pid
+#########################################
+
+cat << FIN > $tmp-glue
+import PATH
+in.pid
+sleep 3
+FIN
+
+../glue $tmp-glue > $tmp-ans &
+sleep 1
+ps		|
+grep 'glue'	|
+grep -v grep	|
+awk '{print $1}'	> $tmp-out
+sleep 4
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST2 error"
 
 rm -f $tmp-*

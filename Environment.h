@@ -15,9 +15,7 @@ private:
 	map<string, vector<string> > m_import_paths;
 	vector<string> m_file_list;
 
-	int m_pid;
 	string m_dir;
-
 public:
 	Environment(int argc, char const* argv[],int script_pos);
 
@@ -47,6 +45,7 @@ public:
 	string m_tmpdir;
 
 	bool m_v_opt;
+	int m_pid;
 };
 
 #endif

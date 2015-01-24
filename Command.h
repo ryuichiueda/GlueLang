@@ -25,6 +25,7 @@ public:
 	string *getName(void){return &m_name;}
 
 	bool m_is_proc;
+	bool m_is_internal;
 protected:
 	string m_prefix;
 	string m_name;

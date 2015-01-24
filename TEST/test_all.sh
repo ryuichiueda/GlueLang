@@ -19,5 +19,6 @@ bash ./blank.test
 bash ./andline.test
 bash ./where.test
 bash ./signal.test
+bash ./internal_commands.test
 
 echo OK
