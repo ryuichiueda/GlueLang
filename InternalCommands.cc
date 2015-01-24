@@ -2,6 +2,7 @@
 #include "Environment.h"
 #include "Feeder.h"
 #include <iostream>
+#include <string.h>
 using namespace std;
 
 int InternalCommands::exec(int argc, char const** argv,Environment *e,Feeder *f)
