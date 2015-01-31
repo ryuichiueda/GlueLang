@@ -109,7 +109,7 @@ bool VarString::readFiFo(void)
 			value += "\n" + tmp;
 
 		if(m_condition != NULL){
-			if(m_condition->m_upper_byte <= value.size()){
+			if(m_condition->m_upper_byte <= (int)value.size()){
 				m_error_msg = "Over length";
 				m_exit_status = 3;
 				throw this;
