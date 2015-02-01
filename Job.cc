@@ -66,8 +66,13 @@ bool Job::parse(void)
 		if(add(new Pipeline(m_feeder,m_env)))
 			comnum++;
 
-		if(! m_feeder->str(">>"))
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		m_feeder->blank();
+
+		if(! m_feeder->str(">>")){
+			m_feeder->setPos(m_end_line, m_end_char);
 			break;
+		}
 	}
 
 	if(comnum < 1){

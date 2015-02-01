@@ -1,7 +1,5 @@
 import PATH
 
-sleep 3 >> echo 'abc' >>= rev &a
-sleep 2 >> echo 'def' >>= rev &b
-in.wait a b
-echo 'OK'
+echo 'a' >> echo 'b'
+	>> echo 'c'
 

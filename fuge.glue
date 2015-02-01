@@ -1,2 +1,6 @@
-str tmp = /usr/bin/seq 1 3
-/bin/echo tmp
+? /bin/true
+	/bin/echo 'OK'
+| /bin/echo 'a'
+	/bin/echo 'no'
+| otherwise
+	/bin/echo 'ow'
