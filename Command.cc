@@ -87,9 +87,13 @@ bool Command::parse(void)
 bool Command::parsePrefixedCom(void)
 {
 	struct stat buf;
-	for(auto path : *m_env->getImportPaths(&m_prefix)){
+	auto paths = m_env->getImportPaths(&m_prefix);
+	if(paths == NULL)
+		return false;
+
+	for(auto path : *paths){
 		if(stat((path + m_name).c_str(), &buf) != 0)
-				continue;
+			continue;
 
 		m_path = path;
 		m_feeder->getPos(&m_end_line, &m_end_char);
