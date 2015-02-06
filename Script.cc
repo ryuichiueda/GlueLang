@@ -1,6 +1,7 @@
 #include "Element.h"
 #include "Feeder.h"
 #include "Script.h"
+#include "Heredoc.h"
 #include "Import.h"
 #include "Procedure.h"
 #include "IfBlock.h"
@@ -41,6 +42,7 @@ bool Script::parse(void)
 		while(m_feeder->comment());
 
 		if( add(new Procedure(m_feeder,m_env))){
+		}else if( add(new Heredoc(m_feeder,m_env))){
 		}else if( add(new Job(m_feeder,m_env))){
 		}else if( add(new IfBlock(m_feeder,m_env))){
 		}else{

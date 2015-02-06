@@ -1,5 +1,8 @@
 import PATH
 
-echo 'a' >> echo 'b'
-	>> echo 'c'
+file f = '''
+あいう
+えお
+'''
 
+cat f
