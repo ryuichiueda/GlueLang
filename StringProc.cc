@@ -18,23 +18,16 @@ using namespace std;
 
 StringProc::StringProc(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_pipe[0] = -1;
-	m_pipe[1] = -1;
-	m_pipe_prev = -1;
-
-	m_if = false;
-	m_is_wait = false;
+	m_com = "echo";
 }
 
 StringProc::~StringProc()
 {
 }
 
-/* parse of command line, where command line means
- * the combination of one command, args, and where.
-
-	m_nodes: command arg arg ...
-*/
+/* parse of procedures for strings
+ * now this recognizes just one literal
+ */
 bool StringProc::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
@@ -56,11 +49,19 @@ bool StringProc::parse(void)
 
 int StringProc::exec(void)
 {
-	cout << m_text << endl;
 	return 0;
 }
 
 bool StringProc::eval(void)
 {
 	return true;
+}
+
+const char** StringProc::makeArgv(void)
+{
+	auto argv = new const char* [m_nodes.size() + 2];
+	argv[0] = m_com.c_str();
+	argv[1] = m_text.c_str();
+	argv[2] = NULL;
+	return argv;
 }

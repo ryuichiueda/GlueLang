@@ -23,14 +23,9 @@ public:
 	virtual int exec(void);
 	virtual bool eval(void);
 
-	bool m_is_wait;
-
-protected:
-	int m_pipe[2];
-	int m_pipe_prev;
-
-	bool m_if;
-
+	string m_com;
 	string m_text;
+
+	const char** makeArgv(void);
 };
 #endif

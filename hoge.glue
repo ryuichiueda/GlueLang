@@ -1,3 +1,6 @@
 import PATH
 
-'hoge'
+'hoge
+a
+b
+cde' >>= rev

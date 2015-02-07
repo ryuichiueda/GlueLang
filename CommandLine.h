@@ -45,9 +45,10 @@ protected:
 	void childPipeProc(void);
 	void parentPipeProc(void);
 
-
 	int m_pipe[2];
 	int m_pipe_prev;
+
+	bool m_is_strout;
 
 	bool m_if;
 };
