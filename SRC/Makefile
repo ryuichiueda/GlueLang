@@ -8,7 +8,7 @@ OBJS := $(SRCS:.cc=.o)
 
 $(TARGET): $(OBJS)
 	$(CXX) -o $@ $(OBJS)
-	mv $(TARGET) ../
+	cp $(TARGET) ../
 
 .PHONY: clean
 clean:

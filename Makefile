@@ -1,6 +1,6 @@
 all:
-	cd SRC; make
-	cd stdcom; make
+	$(MAKE) -C SRC
+	$(MAKE) -C stdcom
 
 clean:
 	cd SRC; make clean
@@ -8,7 +8,6 @@ clean:
 	cd stdcom; make realclean
 	rm -f ./glue
 
-.PHONY: test
 test: all
 	sh -e ./TEST/test_all.sh
 
