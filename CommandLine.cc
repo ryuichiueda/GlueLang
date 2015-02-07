@@ -217,39 +217,10 @@ void CommandLine::execProcedure(void)
 	Feeder feeder(&ifs);
 
 	m_env->subshellInit(argv);
-/*
-	m_env->m_pid = getpid();
-	//set args
-	m_env->m_args.clear();
-	int p = 2;
-	while(argv[p] != NULL){
-		m_env->m_args.push_back(argv[p]);
-		p++;
-	}
-*/
-
 	Script s(&feeder,m_env);
 
 	s.parse();
-
-	int es = s.exec();
-	m_env->removeFiles();
-	exit(es);
-/*
-	// send the shell level for the case where the child is glue.
-	string lv = "GLUELEVEL=" + to_string(m_env->m_level);
-	if(putenv((char *)lv.c_str()) != 0){
-		m_error_msg = "putenv error";
-		m_exit_status = 1;
-		throw this;
-	}
-
-	if(m_env->m_v_opt)
-		cerr << "+ pid " << getpid() << " exec line " 
-			<< m_start_line << " " << argv[0] << endl;
-
-	execv(argv[0],(char **)argv);
-*/
+	s.exec();
 }
 
 bool CommandLine::eval(void)
