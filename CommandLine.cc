@@ -1,5 +1,5 @@
 #include "CommandLine.h"
-#include "Command.h"
+#include "ArgCommand.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
@@ -54,7 +54,7 @@ bool CommandLine::parse(void)
 	}
 
 	// start from a command
-	if(!add(new Command(m_feeder,m_env)))
+	if(!add(new ArgCommand(m_feeder,m_env)))
 		return false;
 
 	if(!m_feeder->comment() && !m_feeder->atNewLine()){
@@ -62,7 +62,7 @@ bool CommandLine::parse(void)
 		parseArgs();
 	}
 
-	auto *c = (Command *)m_nodes[0];
+	auto *c = (ArgCommand *)m_nodes[0];
 	if(c->m_is_internal && c->m_name == "wait"){
 		m_is_wait = true;
 	}
@@ -149,13 +149,7 @@ int CommandLine::exec(void)
 			}
 		}
 
-		if(m_is_strout){
-			execCommandLine();
-		}else if(((Command *)m_nodes[0])->m_is_proc){
-			execProcedure();
-		}else{ 
-			execCommandLine();
-		}
+		execChild();
 		execErrorExit();
 	}
 
@@ -171,7 +165,7 @@ const char** CommandLine::makeArgv(void)
 	}
 	auto argv = new const char* [m_nodes.size() + 2];
 	
-	Command *com = (Command *)m_nodes[0];
+	auto *com = (ArgCommand *)m_nodes[0];
 	argv[0] = com->getStr();
 
 	int skip = 0;
@@ -191,38 +185,6 @@ const char** CommandLine::makeArgv(void)
 	return argv;
 }
 
-void CommandLine::execCommandLine(void)
-{
-	auto argv = makeArgv();
-	if(m_env->m_v_opt)
-		cerr << "+ pid " << getpid() << " exec line " 
-			<< m_start_line << " " << argv[0] << endl;
-
-	if(m_is_strout){ // execution of string output
-		InternalCommands::exec(argv,m_env,m_feeder,this);
-	}else if(((Command *)m_nodes[0])->m_is_internal){// execution of internal command
-		InternalCommands::exec(argv,m_env,m_feeder,this);
-	}else{
-		execv(argv[0],(char **)argv);
-	}
-}
-
-void CommandLine::execProcedure(void)
-{
-	auto argv = makeArgv();
-	// argv[1]: script file
-	// argv[2,3,...]: args
-	//
-	ifstream ifs(argv[1]);
-	Feeder feeder(&ifs);
-
-	m_env->subshellInit(argv);
-	Script s(&feeder,m_env);
-
-	s.parse();
-	s.exec(); // exit in the exec function
-}
-
 bool CommandLine::eval(void)
 {
 	for(auto s : m_nodes){
@@ -239,4 +201,13 @@ void CommandLine::setPipe(int *pip,int prev)
 	m_pipe[0] = pip[0];
 	m_pipe[1] = pip[1];
 	m_pipe_prev = prev;
+}
+
+void CommandLine::vOptProc(char const* arg)
+{
+	if(!m_env->m_v_opt)
+		return;
+
+	cerr << "+ pid " << getpid() << " exec line " 
+		<< m_start_line << " " << arg << endl;
 }

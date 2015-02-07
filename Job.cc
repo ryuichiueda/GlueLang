@@ -157,7 +157,6 @@ int Job::execNormal(void)
 
 int Job::execBackGround(void)
 {
-
 	int pid = fork();
 	if(pid < 0)
 		exit(1);

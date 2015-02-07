@@ -1,25 +1,25 @@
-#include "Command.h"
+#include "ArgCommand.h"
 #include "Feeder.h"
 #include "Environment.h"
 #include <sys/stat.h>
 using namespace std;
 
-Command::Command(Feeder *f, Environment *env) : Element(f,env)
+ArgCommand::ArgCommand(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_is_proc = false;
 	m_is_internal = false;
 }
 
-Command::~Command()
+ArgCommand::~ArgCommand()
 {
 }
 
-bool Command::eval(void)
+bool ArgCommand::eval(void)
 {
 	return true;
 }
 
-int Command::exec(void)
+int ArgCommand::exec(void)
 {
 	return 0;
 }
@@ -30,7 +30,7 @@ int Command::exec(void)
  * echo
  * this.<procedure>
  */
-bool Command::parse(void)
+bool ArgCommand::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -84,7 +84,7 @@ bool Command::parse(void)
 	return parsePrefixedCom();
 }
 
-bool Command::parsePrefixedCom(void)
+bool ArgCommand::parsePrefixedCom(void)
 {
 	struct stat buf;
 	auto paths = m_env->getImportPaths(&m_prefix);
@@ -99,13 +99,13 @@ bool Command::parsePrefixedCom(void)
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		return true;
 	}
-	m_error_msg = "Command " + m_name  + " not exist";
+	m_error_msg = "ArgCommand " + m_name  + " not exist";
 	m_exit_status = 1;
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	throw this;
 }
 
-const char *Command::getStr(void)
+const char *ArgCommand::getStr(void)
 {
 	m_fullpath = m_path + m_name;
 	return m_fullpath.c_str();

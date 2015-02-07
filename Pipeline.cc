@@ -5,7 +5,10 @@
 #include <signal.h>
 #include <unistd.h>
 #include "Pipeline.h"
-#include "CommandLine.h"
+#include "SubShell.h"
+#include "StringPut.h"
+#include "ExtCommand.h"
+#include "IntCommand.h"
 #include "TmpFile.h"
 #include "VarString.h"
 #include "Arg.h"
@@ -40,7 +43,13 @@ bool Pipeline::parse(void)
 
 	int comnum = 0;
 	while(1){
-		if(add(new CommandLine(m_feeder,m_env))){
+		if(add(new StringPut(m_feeder,m_env))){
+			comnum++;
+		}else if(add(new SubShell(m_feeder,m_env))){
+			comnum++;
+		}else if(add(new IntCommand(m_feeder,m_env))){
+			comnum++;
+		}else if(add(new ExtCommand(m_feeder,m_env))){
 			comnum++;
 		}else
 			break;

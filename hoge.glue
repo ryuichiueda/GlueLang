@@ -1,10 +1,6 @@
 import PATH
 
-proc abc =
-	file g = 'HELL'
-	cat f
-	cat g
+proc hoge =
+	echo 'a'
 
-file f = 'Hello'
-
-this.abc 
+this.hoge

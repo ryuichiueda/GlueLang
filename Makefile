@@ -18,7 +18,7 @@ clean:
 	cd stdcom; make clean
 	cd stdcom; make realclean
 
-test: $(TARGET)
+test: $(TARGET) ./stdcom/eachline
 	sh -e ./TEST/test_all.sh
 
 install: $(TARGET)

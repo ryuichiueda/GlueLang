@@ -14,6 +14,10 @@ int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,CommandLin
 	}
 	if(strncmp(argv[0],"echo",4) == 0){
 		exit( echo(c,argv) );
+/*
+	}else if(strncmp(argv[0],"cat",3) == 0){
+		exit( cat(c,argv) );
+*/
 	}else if(strncmp(argv[0],"pid",3) == 0){
 		exit( pid(c,argv,e) );
 	}
@@ -30,6 +34,19 @@ int InternalCommands::echo(int argc, char const** argv)
 
 	return 0;
 }
+
+/*
+int InternalCommands::cat(int argc, char const** argv)
+{
+	string str;
+	cin >> str;
+	while(cin){
+		cout << "!" << str << endl;
+		cin >> str;
+	}
+	return 0;
+}
+*/
 
 int InternalCommands::pid(int argc, char const** argv,Environment *e)
 {

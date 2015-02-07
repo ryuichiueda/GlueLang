@@ -1,5 +1,5 @@
 #include "Procedure.h"
-#include "Command.h"
+#include "ArgCommand.h"
 #include "CommandLine.h"
 #include "Feeder.h"
 #include "Environment.h"
@@ -63,7 +63,6 @@ bool Procedure::parse(void)
 
 	//create a file
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
-
 	ofstream ofs(tmpdir.c_str());
 	ofs << tmp.substr(indent,tmp.size()-indent) << endl;
 

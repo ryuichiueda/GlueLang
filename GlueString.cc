@@ -1,5 +1,5 @@
 #include "GlueString.h"
-#include "Command.h"
+#include "ArgCommand.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Arg.h"

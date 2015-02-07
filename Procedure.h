@@ -2,7 +2,6 @@
 #define __PROC_H_
 
 #include "Element.h"
-#include <iostream>
 using namespace std;
 
 class Feeder;

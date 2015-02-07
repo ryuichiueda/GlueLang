@@ -19,7 +19,7 @@ class CommandLine : public Element
 public:
 	CommandLine(Feeder *f, Environment *env);
 	virtual ~CommandLine();
-	virtual bool parse(void);
+	virtual bool parse(void) = 0;
 	void parseArgs(void);
 
 	void setName(string s);
@@ -39,8 +39,8 @@ public:
 
 	const char** makeArgv(void);
 protected:
-	void execCommandLine(void);
-	void execProcedure(void);
+	virtual void execChild(void) = 0;
+//	void execProcedure(void);
 	void execErrorExit(void);
 
 	void childPipeProc(void);
@@ -54,5 +54,7 @@ protected:
 	bool m_is_strout;
 
 	bool m_if;
+
+	void vOptProc(char const *arg);
 };
 #endif
