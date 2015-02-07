@@ -1,6 +1,0 @@
-? /bin/true
-	/bin/echo 'OK'
-| /bin/echo 'a'
-	/bin/echo 'no'
-| otherwise
-	/bin/echo 'ow'

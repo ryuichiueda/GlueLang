@@ -19,6 +19,7 @@ private:
 	string m_dir;
 public:
 	Environment(int argc, char const* argv[],int script_pos);
+	void subshellInit(char const* argv[]);
 
 	void setVariable(string *key, string *value);
 	void appendValue(string *key, string *value);

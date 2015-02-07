@@ -49,7 +49,7 @@ int main(int argc, char const* argv[])
 	Environment env(argc,argv,script_pos);
 
 	if(!setFlags(argc,argv,&env))
-		exit(1);
+		exit(1);//flags are invalid.
 
 	// set tmpdir
 	string tmp_k = "tmpdir";

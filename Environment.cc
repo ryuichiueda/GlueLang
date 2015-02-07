@@ -52,6 +52,18 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 	m_v_opt = false;
 }
 
+void Environment::subshellInit(char const* argv[])
+{
+	m_pid = getpid();
+	//set args
+	int c = 1;
+	m_args.clear();
+	while(argv[c] != NULL){
+		m_args.push_back(argv[c]);
+		c++;
+	}
+}
+
 // this function is called from Script::parse
 // after import sentences are parsed.
 void Environment::init(void)

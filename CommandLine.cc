@@ -2,6 +2,7 @@
 #include "Command.h"
 #include "InternalCommands.h"
 #include "Environment.h"
+#include "Script.h"
 #include "Arg.h"
 #include "StringArray.h"
 #include "Where.h"
@@ -128,7 +129,33 @@ int CommandLine::exec(void)
 
 		m_env->m_level++;
 		childPipeProc();
-		execCommandLine();
+
+		//The child process should not access to the source code.
+		m_feeder->close();
+
+		//open a file or a string variable
+		if(m_outfile != NULL){
+			if(m_outfile->exec() != 0){
+				m_error_msg = "Cannot prepare file";
+				m_exit_status = 1;
+				throw this;
+			}
+
+		}else if(m_outstr != NULL){
+			if(m_outstr->exec() != 0){
+				m_error_msg = "Cannot prepare file";
+				m_exit_status = 1;
+				throw this;
+			}
+		}
+
+		if(m_is_strout){
+			execCommandLine();
+		}else if(((Command *)m_nodes[0])->m_is_proc){
+			execProcedure();
+		}else{ 
+			execCommandLine();
+		}
 		execErrorExit();
 	}
 
@@ -166,27 +193,6 @@ const char** CommandLine::makeArgv(void)
 
 void CommandLine::execCommandLine(void)
 {
-	//The child process should not access to the source code.
-	m_feeder->close();
-
-	//open a file or a string variable
-	if(m_outfile != NULL){
-		if(m_outfile->exec() != 0)
-			return;
-
-	}else if(m_outstr != NULL){
-		if(m_outstr->exec() != 0)
-			return;
-	}
-
-	// send the shell level for the case where the child is glue.
-	string lv = "GLUELEVEL=" + to_string(m_env->m_level);
-	if(putenv((char *)lv.c_str()) != 0){
-		m_error_msg = "putenv error";
-		m_exit_status = 1;
-		throw this;
-	}
-
 	auto argv = makeArgv();
 	if(m_env->m_v_opt)
 		cerr << "+ pid " << getpid() << " exec line " 
@@ -199,6 +205,49 @@ void CommandLine::execCommandLine(void)
 	}else{
 		execv(argv[0],(char **)argv);
 	}
+}
+
+void CommandLine::execProcedure(void)
+{
+	auto argv = makeArgv();
+	// argv[1]: script file
+	// argv[2,3,...]: args
+	//
+	ifstream ifs(argv[1]);
+	Feeder feeder(&ifs);
+
+	m_env->subshellInit(argv);
+/*
+	m_env->m_pid = getpid();
+	//set args
+	m_env->m_args.clear();
+	int p = 2;
+	while(argv[p] != NULL){
+		m_env->m_args.push_back(argv[p]);
+		p++;
+	}
+*/
+
+	Script s(&feeder,m_env);
+
+	s.parse();
+
+	exit( s.exec() );
+/*
+	// send the shell level for the case where the child is glue.
+	string lv = "GLUELEVEL=" + to_string(m_env->m_level);
+	if(putenv((char *)lv.c_str()) != 0){
+		m_error_msg = "putenv error";
+		m_exit_status = 1;
+		throw this;
+	}
+
+	if(m_env->m_v_opt)
+		cerr << "+ pid " << getpid() << " exec line " 
+			<< m_start_line << " " << argv[0] << endl;
+
+	execv(argv[0],(char **)argv);
+*/
 }
 
 bool CommandLine::eval(void)

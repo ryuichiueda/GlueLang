@@ -54,14 +54,3 @@ bool GlueString::eval(void)
 {
 	return true;
 }
-
-/*
-const char** GlueString::makeArgv(void)
-{
-	auto argv = new const char* [m_nodes.size() + 2];
-	argv[0] = m_com.c_str();
-	argv[1] = m_text.c_str();
-	argv[2] = NULL;
-	return argv;
-}
-*/

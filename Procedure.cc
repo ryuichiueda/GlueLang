@@ -40,14 +40,6 @@ bool Procedure::parse(void)
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}
-/*
-	if(!add(new Command(m_feeder,m_env))){
-		m_feeder->setPos(m_start_line, m_start_char);
-		((Command *)m_nodes[0])->setPrefix("this");
-		return false;
-	}
-*/
-
 	m_feeder->blank();
 
 	if(!m_feeder->str("=")){

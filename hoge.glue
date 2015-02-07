@@ -1,2 +1,7 @@
 import PATH
-['abc','def','ghi'] >>= rev
+
+proc abc =
+	echo 'abc'
+	echo argv[1]
+
+this.abc 'a'

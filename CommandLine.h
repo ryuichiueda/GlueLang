@@ -40,10 +40,13 @@ public:
 	const char** makeArgv(void);
 protected:
 	void execCommandLine(void);
+	void execProcedure(void);
 	void execErrorExit(void);
 
 	void childPipeProc(void);
 	void parentPipeProc(void);
+
+	void prepareFile(void);
 
 	int m_pipe[2];
 	int m_pipe_prev;
