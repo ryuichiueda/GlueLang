@@ -15,7 +15,6 @@ public:
 	virtual ~StringArray();
 
 	virtual bool eval(void);
-	virtual int exec(void);
 	virtual bool parse(void);
 
 	const char** makeArgv(void);

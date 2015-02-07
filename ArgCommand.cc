@@ -14,16 +14,6 @@ ArgCommand::~ArgCommand()
 {
 }
 
-bool ArgCommand::eval(void)
-{
-	return true;
-}
-
-int ArgCommand::exec(void)
-{
-	return 0;
-}
-
 /*
  * /bin/echo
  * b.echo

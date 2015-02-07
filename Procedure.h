@@ -14,8 +14,6 @@ public:
 	virtual ~Procedure();
 	//const char *getStr(void);
 
-	virtual bool eval(void);
-	virtual int exec(void);
 	virtual bool parse(void);
 
 protected:

@@ -37,13 +37,12 @@ bool StringPut::parse(void)
 	}
 
 	m_feeder->getPos(&m_end_line, &m_end_char);
-	m_is_strout = true;
 	return true;
 }
 
 void StringPut::execChild(void)
 {
-	auto argv = makeArgv();
+	auto argv = ((StringArray *)m_nodes[0])->makeArgv();
 	vOptProc(argv[0]);
 	InternalCommands::exec(argv,m_env,m_feeder,this);
 }

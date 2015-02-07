@@ -20,13 +20,7 @@ bool StringArray::eval(void)
 	for(auto e : m_nodes){
 		e->eval();
 	}
-
 	return true;
-}
-
-int StringArray::exec(void)
-{
-	return 0;
 }
 
 bool StringArray::parse(void)

@@ -44,13 +44,3 @@ bool GlueString::parse(void)
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }
-
-int GlueString::exec(void)
-{
-	return 0;
-}
-
-bool GlueString::eval(void)
-{
-	return true;
-}

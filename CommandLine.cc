@@ -25,10 +25,9 @@ CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 	m_pipe[1] = -1;
 	m_pipe_prev = -1;
 
-	m_is_strout = false;
+	m_is_wait = false;
 
 	m_if = false;
-	m_is_wait = false;
 }
 
 CommandLine::~CommandLine()
@@ -42,6 +41,8 @@ CommandLine::~CommandLine()
 	or
 	m_nodes: string procedure
 */
+
+/*
 bool CommandLine::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
@@ -70,6 +71,7 @@ bool CommandLine::parse(void)
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }
+*/
 
 void CommandLine::parseArgs(void)
 {
@@ -160,22 +162,12 @@ int CommandLine::exec(void)
 
 const char** CommandLine::makeArgv(void)
 {
-	if(m_is_strout){
-		return ((StringArray *)m_nodes[0])->makeArgv();
-	}
 	auto argv = new const char* [m_nodes.size() + 2];
 	
 	auto *com = (ArgCommand *)m_nodes[0];
 	argv[0] = com->getStr();
 
 	int skip = 0;
-	// in the case of proc, argv[0] is glue and argv[1] is
-	// the procedure file.
-	if(com->m_is_proc){
-		skip = 1;
-		argv[1] = argv[0];
-		argv[0] = m_env->m_glue_path.c_str();
-	}
 
 	for (int i=1;i < (int)m_nodes.size();i++){
 		argv[i+skip] = ((Arg *)m_nodes[i])->getEvaledString();

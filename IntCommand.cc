@@ -46,7 +46,7 @@ bool IntCommand::parse(void)
 	}
 
 	auto *c = (ArgCommand *)m_nodes[0];
-	if(c->m_is_internal && c->m_name == "wait"){
+	if(/*m_is_internal &&*/ c->m_name == "wait"){
 		m_is_wait = true;
 	}
 

@@ -20,8 +20,6 @@ public:
 	GlueString(Feeder *f, Environment *env);
 	virtual ~GlueString();
 	virtual bool parse(void);
-	virtual int exec(void);
-	virtual bool eval(void);
 
 	string m_text;
 

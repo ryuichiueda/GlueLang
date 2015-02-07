@@ -40,7 +40,6 @@ public:
 	const char** makeArgv(void);
 protected:
 	virtual void execChild(void) = 0;
-//	void execProcedure(void);
 	void execErrorExit(void);
 
 	void childPipeProc(void);
@@ -50,8 +49,6 @@ protected:
 
 	int m_pipe[2];
 	int m_pipe_prev;
-
-	bool m_is_strout;
 
 	bool m_if;
 

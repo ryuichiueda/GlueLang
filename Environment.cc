@@ -11,23 +11,6 @@ using namespace std;
 
 Environment::Environment(int argc, char const* argv[],int script_pos)
 {
-	char *lv = getenv("GLUELEVEL");
-	if(lv == NULL){
-		m_level = 0;
-	}else{
-		char *e = NULL;
-		m_level = (int)std::strtol(lv, &e, 10);
-		if(errno != ERANGE && *e != '\0'){
-			cerr << "***FATAL: STRANGE GLUELEVEL***" << endl;
-			exit(1);
-		}
-
-		if(m_level >= INT_MAX || m_level < 0){
-			cerr << "***FATAL: STRANGE GLUELEVEL***" << endl;
-			exit(1);
-		}
-	}
-
 	// set cwd (this directory is never changed)
 	char tmp[MAXPATHLEN];
 	if (getcwd(tmp,sizeof(tmp)) == NULL){
@@ -41,10 +24,12 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 
 	string a0 = string(argv[0]);
 
+/*
 	if(a0 == "glue")//from path
 		m_glue_path = "/usr/local/bin/glue";
 	else
 		m_glue_path = string(tmp) + "/" + string(argv[0]);
+*/
 
 	//set args
 	for(int i=script_pos;i<argc;i++)
@@ -53,11 +38,11 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 	m_v_opt = false;
 }
 
-void Environment::subshellInit(char const* argv[])
+void Environment::initSubShell(char const* argv[])
 {
 	m_pid = getpid();
 	//set args
-	int c = 1;
+	int c = 0;
 	m_args.clear();
 	while(argv[c] != NULL){
 		m_args.push_back(argv[c]);

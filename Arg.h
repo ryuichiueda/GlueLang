@@ -17,7 +17,6 @@ public:
 	const char *getEvaledString(void){return m_evaled_text.c_str();}
 
 	virtual bool eval(void);
-	virtual int exec(void);
 	virtual bool parse(void);
 protected:
 	string m_text;

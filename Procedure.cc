@@ -17,16 +17,6 @@ Procedure::~Procedure()
 {
 }
 
-bool Procedure::eval(void)
-{
-	return true;
-}
-
-int Procedure::exec(void)
-{
-	return 0;
-}
-
 bool Procedure::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);

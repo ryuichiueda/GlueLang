@@ -25,9 +25,9 @@ protected:
 public:
 	Element(Feeder *f, Environment *env);
 	virtual ~Element();
-	virtual bool eval(void) = 0;
-	virtual int exec(void) = 0;
-	virtual bool parse(void) = 0;
+	virtual bool eval(void){return true;}
+	virtual int exec(void){return 0;}
+	virtual bool parse(void){return false;}
 
 	virtual void printOriginalString(void);
 

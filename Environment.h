@@ -19,7 +19,7 @@ private:
 	string m_dir;
 public:
 	Environment(int argc, char const* argv[],int script_pos);
-	void subshellInit(char const* argv[]);
+	void initSubShell(char const* argv[]);
 
 	void setVariable(string *key, string *value);
 	void appendValue(string *key, string *value);
@@ -43,7 +43,6 @@ public:
 	void initTmpdir(void);
 
 	int m_level;
-	string m_glue_path;
 	string m_tmpdir;
 
 	bool m_v_opt;

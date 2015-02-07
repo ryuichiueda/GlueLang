@@ -52,15 +52,14 @@ bool SubShell::parse(void)
 void SubShell::execChild(void)
 {
 	auto argv = makeArgv();
-	// argv[1]: script file
-	// argv[2,3,...]: args
+	// argv[0]: script file
+	// argv[1,2,...]: args
 	
-	vOptProc(argv[0]);	
-
-	ifstream ifs(argv[1]);
+	vOptProc(argv[0]);
+	ifstream ifs(argv[0]);
 	Feeder feeder(&ifs);
 
-	m_env->subshellInit(argv);
+	m_env->initSubShell(argv);
 	Script s(&feeder,m_env);
 
 	s.parse();

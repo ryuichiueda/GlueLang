@@ -12,16 +12,6 @@ Import::~Import()
 {
 }
 
-bool Import::eval(void)//nothing to do here
-{
-	return true;
-}
-
-int Import::exec(void)
-{
-	return 0;
-}
-
 bool Import::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);

@@ -14,8 +14,6 @@ public:
 	Import(Feeder *f, Environment *env);
 	virtual ~Import();
 
-	virtual bool eval(void);
-	virtual int exec(void);
 	virtual bool parse(void);
 
 	bool parseAs(void);

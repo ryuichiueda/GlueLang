@@ -13,16 +13,6 @@ Condition::~Condition()
 {
 }
 
-bool Condition::eval(void)
-{
-	return true;
-}
-
-int Condition::exec(void)
-{
-	return 0;
-}
-
 /*
  * Condition objects give and check some restrictions to files
  * and strings.
