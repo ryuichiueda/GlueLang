@@ -14,6 +14,7 @@ class CommandLine;
 class TmpFile;
 class VarString;
 class Where;
+class StringProc;
 
 class Pipeline : public Element
 {
@@ -34,5 +35,7 @@ public:
 protected:
 	void waitCommands(int pid);
 	vector<int> m_pids;
+
+	StringProc *m_strproc;
 };
 #endif

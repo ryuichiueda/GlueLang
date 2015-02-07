@@ -1,9 +1,3 @@
 import PATH
 
-file f = echo 'a
-b
-c'
-
-cat f
-
-#echo -n 'a b v'
+'hoge'

@@ -11,6 +11,7 @@
 #include "Arg.h"
 #include "Feeder.h"
 #include "Environment.h"
+#include "StringProc.h"
 using namespace std;
 
 Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
@@ -18,11 +19,15 @@ Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 	m_outfile = NULL;
 	m_outstr = NULL;
 
+	m_strproc = NULL;
+
 	m_if = false;
 }
 
 Pipeline::~Pipeline()
 {
+	if(m_strproc != NULL)
+		delete m_strproc;
 }
 
 void Pipeline::print(int indent_level)
@@ -31,22 +36,35 @@ void Pipeline::print(int indent_level)
 
 /* parse of a pipe line, which is more than one command lines.
 	commandLine ... >>= commandLine ... >>= ...
+	or 
+	string ... >>= commandLine ... >>= ...
 */
 bool Pipeline::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	int comnum = 0;
+	// when the first part is string.
+	if(add(new StringProc(m_feeder,m_env))){
+		m_strproc = (StringProc *)m_nodes[0];
+		m_nodes.pop_back();
+	}else if(add(new CommandLine(m_feeder,m_env))){
+
+	}else{
+		return false;
+	}
+
+	int comnum = 1;
 	while(1){
+		while(m_feeder->comment());
+
+		if(! m_feeder->str(">>="))
+			break;
+
 		if(add(new CommandLine(m_feeder,m_env))){
 			comnum++;
 		}else
 			break;
 
-		while(m_feeder->comment());
-
-		if(! m_feeder->str(">>="))
-			break;
 	}
 
 	if(comnum < 1){
@@ -68,6 +86,11 @@ bool Pipeline::eval(void)
 
 int Pipeline::exec(void)
 {
+	if(m_strproc != NULL){
+		m_strproc->exec();
+		return 0;
+	}
+
 	eval();
 
 	// When wait(1) is set in the command line,
