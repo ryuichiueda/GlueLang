@@ -62,9 +62,7 @@ bool Procedure::parse(void)
 	int indent = i;
 
 	//create a file
-	string tmpdir = m_env->getImportPaths("tmpdir")->at(0);
-	int pid = getpid();
-	tmpdir += "glue" + to_string(pid) + "/" + m_name;
+	string tmpdir = m_env->m_tmpdir + "/" + m_name;
 
 	ofstream ofs(tmpdir.c_str());
 	ofs << tmp.substr(indent,tmp.size()-indent) << endl;

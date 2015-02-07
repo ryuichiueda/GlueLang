@@ -2,6 +2,7 @@
 #include "Element.h"
 #include <fstream>
 #include <iostream>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/param.h> 
 #include <sys/stat.h>
@@ -74,7 +75,9 @@ void Environment::initTmpdir(void)
 		throw this;
 	}
 
-	m_tmpdir = p->at(0) + "glue" + to_string(m_pid);
+	srand(time(NULL));
+
+	m_tmpdir = p->at(0) + "glue" + to_string(m_pid) + "-" + to_string(rand());
 	while(mkdir(m_tmpdir.c_str(),0700) != 0){
 		cerr << "unable to create tmpdir" << endl;
 		throw this;

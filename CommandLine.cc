@@ -220,7 +220,7 @@ void CommandLine::execProcedure(void)
 	Script s(&feeder,m_env);
 
 	s.parse();
-	s.exec();
+	s.exec(); // exit in the exec function
 }
 
 bool CommandLine::eval(void)
