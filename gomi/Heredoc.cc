@@ -16,6 +16,7 @@ using namespace std;
 
 Heredoc::Heredoc(Feeder *f, Environment *env) : Element(f,env)
 {
+	m_indent = 0;
 }
 
 Heredoc::~Heredoc()
@@ -46,6 +47,25 @@ bool Heredoc::parse(void)
 	if(! m_feeder->str("'''")){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
+	}
+
+	if(! m_feeder->atNewLine()){
+		m_feeder->setPos(m_start_line, m_start_char);
+		return false;
+	}
+
+	// null heredoc
+	if(m_feeder->str("'''")){
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		return true;
+	}
+
+	int n = m_feeder->countIndent();
+	if(n < 1){
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		m_exit_status = 1;
+		m_error_msg = "No indent at here document";
+		throw this;
 	}
 
 	m_feeder->getPos(&m_end_line, &m_end_char);

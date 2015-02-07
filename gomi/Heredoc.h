@@ -24,5 +24,7 @@ public:
 	virtual int exec(void);
 	virtual bool eval(void);
 	virtual bool parse(void);
+private:
+	int m_indent;
 };
 #endif

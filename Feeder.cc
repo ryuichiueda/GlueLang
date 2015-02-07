@@ -249,6 +249,8 @@ bool Feeder::literalEsc(string *ans)
 	if(outOfRange())
 		return false;
 
+	*ans = "";
+
 	string *p = &m_lines[m_cur_line];
 	int i = m_cur_char;
 
@@ -258,32 +260,46 @@ bool Feeder::literalEsc(string *ans)
 	i++;
 
 	bool escaped = false;
+	bool end = false;
 
-	for(;i < (int)p->length();i++){
-		char c = p->at(i);
-		if(c == '\\'){
-			escaped = true;
-			continue;
-		}
-
-		if(c == '\''){
-			if(escaped){
-				escaped = false;
+	while(1){
+		for(;i < (int)p->length();i++){
+			char c = p->at(i);
+			if(c == '\\'){
+				escaped = true;
 				continue;
-			}else{
-				break;
 			}
-		}else{
-			escaped = false;
+	
+			if(c == '\''){
+				if(escaped){
+					escaped = false;
+					continue;
+				}else{
+					end = true;
+					break;
+				}
+			}else{
+				escaped = false;
+			}
+	
 		}
 
+		*ans += string(p->c_str()+m_cur_char,i-m_cur_char);
+		if(end){ // end ' is found
+			m_cur_char = i+1;
+			blank();
+			checkEol(p);
+			*ans = string(ans->c_str()+1,ans->length()-1);
+			return true;
+		}else{ // go to next line
+			m_cur_char = 0;
+			m_cur_line++;
+			p = &m_lines[m_cur_line];
+			i = 0;
+			*ans += '\n';
+		}
 	}
-
-	*ans = string(p->c_str()+m_cur_char+1,i-m_cur_char-1);
-	m_cur_char = i+1;
-	blank();
-	checkEol(p);
-	return true;
+	return false;
 }
 
 void Feeder::readAll(void)

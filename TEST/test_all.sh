@@ -5,6 +5,8 @@ cd `dirname $0`
 OS="$(uname)"
 
 bash ./simple_command.test
+bash ./variable.test
+bash ./simple_command.test
 bash ./comment.test
 bash ./file.test
 bash ./v_opt.test
