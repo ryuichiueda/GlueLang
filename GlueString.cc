@@ -1,4 +1,4 @@
-#include "StringProc.h"
+#include "GlueString.h"
 #include "Command.h"
 #include "InternalCommands.h"
 #include "Environment.h"
@@ -16,26 +16,24 @@
 #include "Feeder.h"
 using namespace std;
 
-StringProc::StringProc(Feeder *f, Environment *env) : Element(f,env)
+GlueString::GlueString(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_com = "echo";
 }
 
-StringProc::~StringProc()
+GlueString::~GlueString()
 {
 }
 
 /* parse of procedures for strings
  * now this recognizes just one literal
  */
-bool StringProc::parse(void)
+bool GlueString::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
 	try{
-		if(! m_feeder->literal(&m_text)){
+		if(! m_feeder->literal(&m_text))
 			return false;
-		}
 	}catch(Feeder *e){
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		m_error_msg = e->m_error_msg;
@@ -47,17 +45,18 @@ bool StringProc::parse(void)
 	return true;
 }
 
-int StringProc::exec(void)
+int GlueString::exec(void)
 {
 	return 0;
 }
 
-bool StringProc::eval(void)
+bool GlueString::eval(void)
 {
 	return true;
 }
 
-const char** StringProc::makeArgv(void)
+/*
+const char** GlueString::makeArgv(void)
 {
 	auto argv = new const char* [m_nodes.size() + 2];
 	argv[0] = m_com.c_str();
@@ -65,3 +64,4 @@ const char** StringProc::makeArgv(void)
 	argv[2] = NULL;
 	return argv;
 }
+*/

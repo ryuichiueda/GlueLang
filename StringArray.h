@@ -8,15 +8,22 @@ using namespace std;
 class Feeder;
 class Environment;
 
-class Array : public Element
+class StringArray : public Element
 {
 public:
-	Array(Feeder *f,Environment *env);
-	virtual ~Array();
+	StringArray(Feeder *f,Environment *env);
+	virtual ~StringArray();
 
 	virtual bool eval(void);
 	virtual int exec(void);
 	virtual bool parse(void);
+
+	const char** makeArgv(void);
+
+	void connect(string delimiter);
 protected:
+
+	string m_com;
+	string m_connected;
 };
 #endif

@@ -18,15 +18,11 @@ Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 	m_outfile = NULL;
 	m_outstr = NULL;
 
-//	m_strproc = NULL;
-
 	m_if = false;
 }
 
 Pipeline::~Pipeline()
 {
-//	if(m_strproc != NULL)
-//		delete m_strproc;
 }
 
 void Pipeline::print(int indent_level)
@@ -41,18 +37,6 @@ void Pipeline::print(int indent_level)
 bool Pipeline::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
-
-/*
-	// when the first part is string.
-	if(add(new StringProc(m_feeder,m_env))){
-		m_strproc = (StringProc *)m_nodes[0];
-		m_nodes.pop_back();
-	}else if(add(new CommandLine(m_feeder,m_env))){
-
-	}else{
-		return false;
-	}
-*/
 
 	int comnum = 0;
 	while(1){
@@ -86,15 +70,6 @@ bool Pipeline::eval(void)
 
 int Pipeline::exec(void)
 {
-/*
-	if(m_strproc != NULL){
-		if(m_nodes.size() == 0){
-			m_strproc->exec();
-			return 0;
-		}
-	}
-*/
-
 	eval();
 
 	// When wait(1) is set in the command line,
@@ -107,21 +82,6 @@ int Pipeline::exec(void)
 
 	int pip[2];
 	int prevfd = -1;
-
-/*
-	if(m_strproc != NULL){
-		pip[1] = -1;
-		if (pipe(pip) < 0) {
-			close(prevfd);
-			m_error_msg = "Pipe call failed";
-			throw this;
-		}
-
-		p->setPipe(pip,prevfd);
-		m_pids.push_back( m_strproc->exec() );
-		prevfd = m_strproc->getPrevPipe();
-	}
-*/
 
 	for(auto *n : m_nodes){
 		auto *p = (CommandLine *)n;

@@ -3,6 +3,7 @@
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Arg.h"
+#include "StringArray.h"
 #include "Where.h"
 #include "TmpFile.h"
 #include "VarString.h"
@@ -14,7 +15,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include "Feeder.h"
-#include "StringProc.h"
+#include "GlueString.h"
 using namespace std;
 
 CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
@@ -44,12 +45,14 @@ bool CommandLine::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	if(add(new StringProc(m_feeder,m_env))){
+	// start from a literal or an array of literals
+	if(add(new StringArray(m_feeder,m_env))){
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		m_is_strout = true;
 		return true;
 	}
 
+	// start from a command
 	if(!add(new Command(m_feeder,m_env)))
 		return false;
 
@@ -137,19 +140,11 @@ int CommandLine::exec(void)
 const char** CommandLine::makeArgv(void)
 {
 	if(m_is_strout){
-		return ((StringProc *)m_nodes[0])->makeArgv();
+		return ((StringArray *)m_nodes[0])->makeArgv();
 	}
 	auto argv = new const char* [m_nodes.size() + 2];
-	if(m_is_strout){
-		auto *s = (StringProc *)m_nodes[0];
-		argv[0] = s->m_com.c_str();
-		argv[1] = s->m_text.c_str();
-		argv[2] = NULL;
-		return argv;
-	}
 	
 	Command *com = (Command *)m_nodes[0];
-
 	argv[0] = com->getStr();
 
 	int skip = 0;
@@ -198,9 +193,9 @@ void CommandLine::execCommandLine(void)
 			<< m_start_line << " " << argv[0] << endl;
 
 	if(m_is_strout){ // execution of string output
-		InternalCommands::exec((int)m_nodes.size()+1,argv,m_env,m_feeder,this);
+		InternalCommands::exec(argv,m_env,m_feeder,this);
 	}else if(((Command *)m_nodes[0])->m_is_internal){// execution of internal command
-		InternalCommands::exec((int)m_nodes.size(),argv,m_env,m_feeder,this);
+		InternalCommands::exec(argv,m_env,m_feeder,this);
 	}else{
 		execv(argv[0],(char **)argv);
 	}

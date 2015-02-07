@@ -14,18 +14,17 @@ class VarString;
 class Environment;
 class Where;
 
-class StringProc : public Element
+class GlueString : public Element
 {
 public:
-	StringProc(Feeder *f, Environment *env);
-	virtual ~StringProc();
+	GlueString(Feeder *f, Environment *env);
+	virtual ~GlueString();
 	virtual bool parse(void);
 	virtual int exec(void);
 	virtual bool eval(void);
 
-	string m_com;
 	string m_text;
 
-	const char** makeArgv(void);
+//	const char** makeArgv(void);
 };
 #endif

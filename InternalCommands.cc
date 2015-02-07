@@ -6,12 +6,16 @@
 #include <string.h>
 using namespace std;
 
-int InternalCommands::exec(int argc, char const** argv,Environment *e,Feeder *f,CommandLine *p)
+int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,CommandLine *p)
 {
+	int c = 0;
+	while(argv[c] != NULL){
+		c++;
+	}
 	if(strncmp(argv[0],"echo",4) == 0){
-		exit( echo(argc,argv) );
+		exit( echo(c,argv) );
 	}else if(strncmp(argv[0],"pid",3) == 0){
-		exit( pid(argc,argv,e) );
+		exit( pid(c,argv,e) );
 	}
 	return -1;
 }

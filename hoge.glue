@@ -1,6 +1,2 @@
 import PATH
-
-'hoge
-a
-b
-cde' >>= rev
+['abc','def','ghi'] >>= rev

@@ -7,7 +7,7 @@ class CommandLine;
 
 class InternalCommands{
 public:
-	static int exec(int argc, char const** argv,Environment *e,Feeder *f,CommandLine *p);
+	static int exec(char const** argv,Environment *e,Feeder *f,CommandLine *p);
 private:
 	static int echo(int argc, char const** argv);
 	static int pid(int argc, char const** argv,Environment *e);
