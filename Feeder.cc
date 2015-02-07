@@ -211,7 +211,11 @@ bool Feeder::variable(string *ans)
 
 bool Feeder::literal(string *ans)
 {
-	return literalNoEsc(ans) || literalEsc(ans);
+	try{
+		return literalNoEsc(ans) || literalEsc(ans);
+	}catch(...){
+		throw this;
+	}
 }
 
 // an arg that starts from - (a hyphen)
@@ -294,6 +298,10 @@ bool Feeder::literalEsc(string *ans)
 		}else{ // go to next line
 			m_cur_char = 0;
 			m_cur_line++;
+			if(atEnd()){
+				m_error_msg = "Literal not end";
+				throw this;
+			}
 			p = &m_lines[m_cur_line];
 			i = 0;
 			*ans += '\n';

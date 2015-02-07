@@ -68,15 +68,23 @@ bool Arg::parse(void)
 			return true;
 		}
 	}catch(Feeder *e){
+		m_feeder->getPos(&m_end_line, &m_end_char);
 		m_error_msg = e->m_error_msg;
 		m_exit_status = 1;
 		throw this;
 	}
 
-	if( m_feeder->literal(&m_text)){
-		m_is_variable = false;
+	try{
+		if( m_feeder->literal(&m_text)){
+			m_is_variable = false;
+			m_feeder->getPos(&m_end_line, &m_end_char);
+			return true;
+		}
+	}catch(Feeder *e){
 		m_feeder->getPos(&m_end_line, &m_end_char);
-		return true;
+		m_error_msg = e->m_error_msg;
+		m_exit_status = 1;
+		throw this;
 	}
 
 	if(m_feeder->variable(&m_text)){
