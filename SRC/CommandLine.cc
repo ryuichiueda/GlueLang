@@ -4,7 +4,6 @@
 #include "Environment.h"
 #include "Script.h"
 #include "Arg.h"
-#include "StringArray.h"
 #include "Where.h"
 #include "TmpFile.h"
 #include "VarString.h"
@@ -33,45 +32,6 @@ CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 CommandLine::~CommandLine()
 {
 }
-
-/* parse of command line, where command line means
- * the combination of one command, args, and where.
-
-	m_nodes: command arg arg ...
-	or
-	m_nodes: string procedure
-*/
-
-/*
-bool CommandLine::parse(void)
-{
-	m_feeder->getPos(&m_start_line, &m_start_char);
-
-	// start from a literal or an array of literals
-	if(add(new StringArray(m_feeder,m_env))){
-		m_feeder->getPos(&m_end_line, &m_end_char);
-		m_is_strout = true;
-		return true;
-	}
-
-	// start from a command
-	if(!add(new ArgCommand(m_feeder,m_env)))
-		return false;
-
-	if(!m_feeder->comment() && !m_feeder->atNewLine()){
-		m_feeder->blank();
-		parseArgs();
-	}
-
-	auto *c = (ArgCommand *)m_nodes[0];
-	if(c->m_is_internal && c->m_name == "wait"){
-		m_is_wait = true;
-	}
-
-	m_feeder->getPos(&m_end_line, &m_end_char);
-	return true;
-}
-*/
 
 void CommandLine::parseArgs(void)
 {

@@ -1,6 +1,0 @@
-import PATH
-
-proc hoge =
-	echo 'a'
-
-this.hoge

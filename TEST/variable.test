@@ -62,10 +62,10 @@ ERROR_CHECK "TEST2.2 error"
 #########################################
 
 cat << FIN > $tmp-glue
-'a
+['a
 b
 c
-'
+']
 FIN
 
 cat << FIN > $tmp-out
