@@ -232,7 +232,9 @@ void CommandLine::execProcedure(void)
 
 	s.parse();
 
-	exit( s.exec() );
+	int es = s.exec();
+	m_env->removeFiles();
+	exit(es);
 /*
 	// send the shell level for the case where the child is glue.
 	string lv = "GLUELEVEL=" + to_string(m_env->m_level);

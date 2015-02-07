@@ -1,7 +1,10 @@
 import PATH
 
 proc abc =
-	echo 'abc'
-	echo argv[1]
+	file g = 'HELL'
+	cat f
+	cat g
 
-this.abc 'a'
+file f = 'Hello'
+
+this.abc 

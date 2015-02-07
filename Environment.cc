@@ -66,11 +66,11 @@ void Environment::subshellInit(char const* argv[])
 
 // this function is called from Script::parse
 // after import sentences are parsed.
-void Environment::init(void)
+void Environment::initTmpdir(void)
 {
 	auto *p = getImportPaths("tmpdir");
 	if(p == NULL || p->size() < 1){
-		cerr << "unable to create tmpdir" << endl;
+		cerr << "unable to find tmpdir" << endl;
 		throw this;
 	}
 
@@ -200,6 +200,9 @@ void Environment::setFileList(string *filepath)
 void Environment::removeFiles(void)
 {
 	for(auto f : m_file_list){
+		if(m_tmpdir + "/" != f.substr(0,m_tmpdir.size() + 1))
+			continue;
+
 		remove(f.c_str());
 		if(m_v_opt)
 			cerr << "+ pid " << getpid() << " file " << f << " deleted" << endl;

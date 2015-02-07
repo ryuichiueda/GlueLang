@@ -33,7 +33,7 @@ bool Script::parse(void)
 		while(m_feeder->blankLine());
 	}
 
-	m_env->init();
+	m_env->initTmpdir();
 
 	while(1){
 		// comments -> proc or and -> proc or and -> ...

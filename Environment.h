@@ -40,7 +40,7 @@ public:
 
 	int getLevel(void){return m_level;}
 
-	void init(void);
+	void initTmpdir(void);
 
 	int m_level;
 	string m_glue_path;
