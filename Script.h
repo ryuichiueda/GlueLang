@@ -22,5 +22,8 @@ public:
 protected:
 
 	bool tryElement(Element *n);
+	void parseErrorMsg(Element *e);
+	void execErrorMsg(Element *e);
+	bool doParse(void);
 };
 #endif

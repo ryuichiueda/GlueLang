@@ -26,6 +26,24 @@ Script::~Script()
 
 bool Script::parse(void)
 {
+	try{
+		return doParse();
+	}
+	catch(Element *e){
+		parseErrorMsg(e);
+		m_env->removeFiles();
+		exit(e->getExitStatus());
+	}
+	catch(...){
+		cerr << "\nParse error" << endl;
+		cerr << "unknown error" << endl;
+		m_env->removeFiles();
+		exit(1);
+	}
+}
+
+bool Script::doParse(void)
+{
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
 	// import
@@ -64,8 +82,55 @@ bool Script::parse(void)
 int Script::exec(void)
 {
 	int exit_status = 0;
-	for(auto &c : m_nodes){
-		exit_status = c->exec();
+	try{
+		for(auto &c : m_nodes){
+			exit_status = c->exec();
+		}
+		m_env->removeFiles();
+		if(exit_status == 0)
+			exit(0);
+
+	}catch(Element *e){
+		execErrorMsg(e);
+		m_env->removeFiles();
+		int es = e->getExitStatus();
+		if(es == 127)
+			_exit(es);
+		else
+			exit(es);
+	}catch(...){
+		cerr << "\nExecution error" << endl;
+		cerr << "unknown error" << endl;
+		m_env->removeFiles();
+		exit(1);
 	}
-	return exit_status;
+	cerr << "unknown error (uncatched)" << endl;
+	m_env->removeFiles();
+	exit(1);
+}
+
+void Script::execErrorMsg(Element *e)
+{
+	cerr << "\nExecution error at " ;
+	cerr << e->pos() << endl;
+	e->printErrorPart();
+	cerr << "\n\t" << e->m_error_msg << endl;
+	cerr << "\t\n";
+	cerr <<  "\tprocess_level " << e->getLevel() << endl;
+	cerr << "\texit_status " << e->getExitStatus() << endl;
+	cerr << "\tpid " << getpid() << '\n' << endl;
+}
+
+void Script::parseErrorMsg(Element *e)
+{
+	cerr << "\nParse error at " ;
+	cerr << e->pos() << endl;
+	e->printErrorPart();
+	cerr << "\n\t" << e->m_error_msg << endl;
+	cerr << "\t";
+
+	cerr << '\n';
+	cerr <<  "\tprocess_level " << e->getLevel() << endl;
+	cerr << "\texit_status " << e->getExitStatus() << endl;
+	cerr << "\tpid " << getpid() << '\n' << endl;
 }

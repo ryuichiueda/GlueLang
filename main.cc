@@ -13,8 +13,6 @@
 using namespace std;
 
 int scriptPos(int argc, char const* argv[]);
-void parseErrorMsg(Element *e);
-void execErrorMsg(Element *e);
 bool setFlags(int argc, char const* argv[],Environment *e);
 
 static void sig_int(int sig)
@@ -57,53 +55,13 @@ int main(int argc, char const* argv[])
 	env.setImportPath(&tmp_k,&tmp_v);
 	Script s(&feeder,&env);
 
-///////////////////////////////////////////
-// parse
 //////////////////////////////////////////
-	try{
-		s.parse();
-	}
-	catch(Element *e){
-		parseErrorMsg(e);
-		env.removeFiles();
-		exit(e->getExitStatus());
-	}
-	catch(...){
-		cerr << "\nParse error" << endl;
-		cerr << "unknown error" << endl;
-		env.removeFiles();
-		exit(1);
-	}
-
-///////////////////////////////////////////
-// exec
+//execution
 //////////////////////////////////////////
-	try{
-		int status = s.exec();
-		env.removeFiles();
-
-		if(status == 0)
-			exit(0);
-	}
-	catch(Element *e){
-		execErrorMsg(e);
-		env.removeFiles();
-		int es = e->getExitStatus();
-		if(es == 127)
-			_exit(es);
-		else
-			exit(es);
-	}
-	catch(...){
-		cerr << "\nExecution error" << endl;
-		cerr << "unknown error" << endl;
-		env.removeFiles();
-		exit(1);
-	}
-
-	cerr << "unknown error (uncatched)" << endl;
-	env.removeFiles();
-	exit(1);
+	s.parse();
+	s.exec();
+	//do not write something here because
+	//a subshell cannot execute this part.
 }
 
 int scriptPos(int argc, char const* argv[])
@@ -122,31 +80,7 @@ int scriptPos(int argc, char const* argv[])
 	return i;
 }
 
-void parseErrorMsg(Element *e)
-{
-	cerr << "\nParse error at " ;
-	cerr << e->pos() << endl;
-	e->printErrorPart();
-	cerr << "\n\t" << e->m_error_msg << endl;
-	cerr << "\t";
 
-	cerr << '\n';
-	cerr <<  "\tprocess_level " << e->getLevel() << endl;
-	cerr << "\texit_status " << e->getExitStatus() << endl;
-	cerr << "\tpid " << getpid() << '\n' << endl;
-}
-
-void execErrorMsg(Element *e)
-{
-	cerr << "\nExecution error at " ;
-	cerr << e->pos() << endl;
-	e->printErrorPart();
-	cerr << "\n\t" << e->m_error_msg << endl;
-	cerr << "\t\n";
-	cerr <<  "\tprocess_level " << e->getLevel() << endl;
-	cerr << "\texit_status " << e->getExitStatus() << endl;
-	cerr << "\tpid " << getpid() << '\n' << endl;
-}
 
 void usage(void)
 {
