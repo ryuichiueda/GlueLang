@@ -7,16 +7,17 @@ using namespace std;
 
 FileData::FileData() : Data()
 {
+	m_append_mode = false;
 }
 
 FileData::~FileData()
 {
 }
 
-void FileData::openFile(bool append)
+void FileData::openFile(void)
 {
 	int mode = O_WRONLY | O_CREAT;
-	if(append)
+	if(m_append_mode)
 		mode |= O_APPEND;
 
 	int fd = open( m_value.c_str() , mode, 0600);

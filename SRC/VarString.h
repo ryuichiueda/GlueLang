@@ -21,7 +21,7 @@ public:
 	virtual bool parse(void);
 	virtual int exec(void);
 
-	void setName(string s);
+//	void setName(string s);
 
 	bool readFifo(void);
 

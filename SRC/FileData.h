@@ -12,7 +12,9 @@ public:
 	virtual ~FileData();
 	virtual string *getFileName(void);
 
-	void openFile(bool append);
+	void openFile(void);
+
+	bool m_append_mode;
 };
 
 #endif

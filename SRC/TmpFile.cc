@@ -11,7 +11,6 @@ using namespace std;
 
 TmpFile::TmpFile(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_append_mode = false;
 	m_var_name = "";
 	m_file_name = "";
 	m_data = NULL;
@@ -59,14 +58,7 @@ bool TmpFile::parse(void)
 // joint the redirect
 int TmpFile::exec(void)
 {
-	try{
-		m_data->openFile(m_append_mode);
-	}catch(Data *d){
-		m_error_msg = d->m_error_msg;
-		m_error_msg += "File: " + m_var_name;
-		m_exit_status = 1;
-		throw this;
-	}
+	m_data->openFile();
 	if(m_env->m_v_opt)
 		cerr << "+ pid " << getpid() << " file " << m_file_name << " created" << endl;
 

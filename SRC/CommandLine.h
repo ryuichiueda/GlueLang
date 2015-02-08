@@ -22,7 +22,7 @@ public:
 	virtual bool parse(void) = 0;
 	void parseArgs(void);
 
-	void setName(string s);
+//	void setName(string s);
 	void appendArg(string a);
 
 	virtual int exec(void);
