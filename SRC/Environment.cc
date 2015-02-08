@@ -25,18 +25,12 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 
 	string a0 = string(argv[0]);
 
-/*
-	if(a0 == "glue")//from path
-		m_glue_path = "/usr/local/bin/glue";
-	else
-		m_glue_path = string(tmp) + "/" + string(argv[0]);
-*/
-
 	//set args
 	for(int i=script_pos;i<argc;i++)
 		m_args.push_back(argv[i]);
 
 	m_v_opt = false;
+	m_level = 0;
 }
 
 Environment::~Environment()
