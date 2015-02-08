@@ -78,8 +78,7 @@ int CommandLine::exec(void)
 {
 	cout << flush;
 
-	if(! eval())
-		return -1;
+	eval();
 
 	int pid = fork();
 	if(pid < 0)
@@ -96,19 +95,10 @@ int CommandLine::exec(void)
 		m_feeder->close();
 
 		//open a file or a string variable
-		if(m_outfile != NULL){
-			if(m_outfile->exec() != 0){
-				m_error_msg = "Cannot prepare file";
-				m_exit_status = 1;
-				throw this;
-			}
-		}else if(m_outstr != NULL){
-			if(m_outstr->exec() != 0){
-				m_error_msg = "Cannot prepare file";
-				m_exit_status = 1;
-				throw this;
-			}
-		}
+		if(m_outfile != NULL)
+			m_outfile->exec();
+		else if(m_outstr != NULL)
+			m_outstr->exec();
 
 		execChild();
 		execErrorExit();
@@ -121,28 +111,25 @@ int CommandLine::exec(void)
 
 const char** CommandLine::makeArgv(void)
 {
-	auto argv = new const char* [m_nodes.size() + 2];
+	auto argv = new const char* [m_nodes.size() + 1];
 	
-	auto *com = (ArgCommand *)m_nodes[0];
-	argv[0] = com->getStr();
-
-	int skip = 0;
-
+	argv[0] = ((ArgCommand *)m_nodes[0])->getStr();
 	for (int i=1;i < (int)m_nodes.size();i++){
-		argv[i+skip] = ((Arg *)m_nodes[i])->getEvaledString();
+		argv[i] = ((Arg *)m_nodes[i])->getEvaledString();
 	}
 
-	argv[m_nodes.size()+skip] = NULL;
+	argv[m_nodes.size()] = NULL;
 	return argv;
 }
 
 bool CommandLine::eval(void)
 {
 	for(auto s : m_nodes){
-		if( ! s->eval() ){
-			m_error_msg = "evaluation of args failed";
-			throw this;
-		}
+		if(s->eval())
+			continue;
+
+		m_error_msg = "evaluation of args failed";
+		throw this;
 	}
 	return true;
 }
