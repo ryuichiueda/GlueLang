@@ -71,10 +71,9 @@ int Where::exec(void)
 
 bool Where::eval(void)
 {
-	for(auto n : m_nodes){
+	for(auto n : m_nodes)
 		n->eval();
-		cerr << ((TmpFile *)n)->m_var_name << endl;
-	}
+
 	return true;
 }
 

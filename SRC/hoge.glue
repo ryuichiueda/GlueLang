@@ -1,5 +1,5 @@
 import PATH
 
-file f = 'e'
+str f = 'e'
 
-cat f
+echo f

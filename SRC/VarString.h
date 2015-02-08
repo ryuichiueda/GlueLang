@@ -9,7 +9,6 @@ using namespace std;
 class Element;
 class Feeder;
 class Environment;
-class Arg;
 class Condition;
 class StrData;
 
@@ -21,16 +20,10 @@ public:
 	virtual bool parse(void);
 	virtual int exec(void);
 
-//	void setName(string s);
-
 	bool readFifo(void);
-
-	bool m_opened;
-	bool m_is_set;
 
 	Condition* m_condition;
 	string m_var_name;
-	string m_file_name;
 protected:
 	StrData *m_data;
 };

@@ -20,16 +20,6 @@ public:
 	virtual bool parse(void);
 	virtual int exec(void);
 
-//	void setName(string s);
-
-
-//	const char *actualFileName(void){return m_file_name.c_str();}
-//	const char *virtualFileName(void){return m_var_name.c_str();}
-
-	//bool m_append_mode;
-
-	string m_var_name;
-	string m_file_name;
 	FileData *m_data;
 };
 #endif

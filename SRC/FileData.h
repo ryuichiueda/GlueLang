@@ -14,6 +14,9 @@ public:
 
 	void openFile(void);
 
+	void setAppend(void);
+
+private:
 	bool m_append_mode;
 };
 

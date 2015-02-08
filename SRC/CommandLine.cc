@@ -102,7 +102,6 @@ int CommandLine::exec(void)
 				m_exit_status = 1;
 				throw this;
 			}
-
 		}else if(m_outstr != NULL){
 			if(m_outstr->exec() != 0){
 				m_error_msg = "Cannot prepare file";

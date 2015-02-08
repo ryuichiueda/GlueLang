@@ -14,6 +14,11 @@ FileData::~FileData()
 {
 }
 
+void FileData::setAppend(void)
+{
+	m_append_mode = true;
+}
+
 void FileData::openFile(void)
 {
 	int mode = O_WRONLY | O_CREAT;

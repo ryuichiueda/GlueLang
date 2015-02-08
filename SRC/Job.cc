@@ -152,7 +152,7 @@ int Job::execNormal(void)
 	for(int i=0;i<(int)m_nodes.size();i++){
 		auto *p = (Pipeline *)m_nodes[i];
 		if(m_outfile != NULL && i!=0){
-			m_outfile->m_data->m_append_mode = true;
+			m_outfile->m_data->setAppend();
 			//m_outfile->m_append_mode = true;
 		}
 
@@ -176,7 +176,7 @@ int Job::execBackGround(void)
 		for(int i=0;i<(int)m_nodes.size();i++){
 			auto *p = (Pipeline *)m_nodes[i];
 			if(m_outfile != NULL && i!=0)
-				m_outfile->m_data->m_append_mode = true;
+				m_outfile->m_data->setAppend();
 			//	m_outfile->m_append_mode = true;
 	
 			int es = p->exec();

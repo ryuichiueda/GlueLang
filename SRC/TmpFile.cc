@@ -11,8 +11,6 @@ using namespace std;
 
 TmpFile::TmpFile(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_var_name = "";
-	m_file_name = "";
 	m_data = NULL;
 }
 
@@ -25,8 +23,9 @@ bool TmpFile::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
+	string var_name;
 	bool res = m_feeder->str("file") 
-			&& m_feeder->variable(&m_var_name) 
+			&& m_feeder->variable(&var_name) 
 			&& m_feeder->str("=");
 
 	if(!res){
@@ -34,15 +33,13 @@ bool TmpFile::parse(void)
 		return false;
 	}
 
-	string tmpdir = m_env->getImportPaths("tmpdir")->at(0);
-	m_file_name = m_env->m_tmpdir + "/" + m_var_name;
-
 	m_feeder->getPos(&m_end_line, &m_end_char);
 
 	try{
 		m_data = new FileData();
-		m_data->setData(&m_file_name);
-		m_env->setData(&m_var_name,m_data);
+		string filename = m_env->m_tmpdir + "/" + var_name;
+		m_data->setData(&filename);
+		m_env->setData(&var_name,m_data);
 	}catch(Environment *e){
 		m_error_msg = e->m_error_msg;	
 		m_exit_status = 1;
@@ -60,7 +57,8 @@ int TmpFile::exec(void)
 {
 	m_data->openFile();
 	if(m_env->m_v_opt)
-		cerr << "+ pid " << getpid() << " file " << m_file_name << " created" << endl;
+		cerr << "+ pid " << getpid() << " file "
+		<< m_data->m_value << " created" << endl;
 
 	return 0;
 }

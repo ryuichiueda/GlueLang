@@ -23,7 +23,6 @@ public:
 	virtual void print(int indent_level = 0);
 
 	virtual int exec(void);
-	virtual bool eval(void);
 	virtual bool parse(void);
 	int execWait(void);
 

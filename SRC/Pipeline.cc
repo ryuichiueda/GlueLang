@@ -44,15 +44,14 @@ bool Pipeline::parse(void)
 
 	int comnum = 0;
 	while(1){
-		if(add(new StringPut(m_feeder,m_env))){
+		bool res = add(new StringPut(m_feeder,m_env))
+			|| add(new SubShell(m_feeder,m_env))
+			|| add(new IntCommand(m_feeder,m_env))
+			|| add(new ExtCommand(m_feeder,m_env));
+				
+		if(res)
 			comnum++;
-		}else if(add(new SubShell(m_feeder,m_env))){
-			comnum++;
-		}else if(add(new IntCommand(m_feeder,m_env))){
-			comnum++;
-		}else if(add(new ExtCommand(m_feeder,m_env))){
-			comnum++;
-		}else
+		else
 			break;
 
 		while(m_feeder->comment());
@@ -66,29 +65,21 @@ bool Pipeline::parse(void)
 		return false;
 	}
 
-
 	m_feeder->getPos(&m_end_line, &m_end_char);
-	return true;
-}
-
-bool Pipeline::eval(void)
-{
-	((CommandLine *)m_nodes.back())->m_outfile = m_outfile;
-	((CommandLine *)m_nodes.back())->m_outstr = m_outstr;
 	return true;
 }
 
 int Pipeline::exec(void)
 {
-	eval();
+	m_nodes.back()->m_outfile = m_outfile;
+	m_nodes.back()->m_outstr = m_outstr;
 
 	// When wait(1) is set in the command line,
 	// wait(1) is done in this process.
 	// Wait(1) cannot be connected with other commands
-	auto *cl = (CommandLine *)m_nodes[0];
-	if(cl->m_is_wait){
+	//auto *cl = (CommandLine *)m_nodes[0];
+	if(((CommandLine *)m_nodes[0])->m_is_wait)
 		return execWait();
-	}
 
 	int pip[2];
 	int prevfd = -1;
@@ -107,9 +98,8 @@ int Pipeline::exec(void)
 		prevfd = p->getPrevPipe();
 	}
 
-	if(m_outstr != NULL){
+	if(m_outstr != NULL)
 		m_outstr->readFifo();
-	}
 
 	for(auto pid : m_pids)
 		waitCommands(pid);

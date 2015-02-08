@@ -41,8 +41,9 @@ void StrData::openFifo(void)
 	}
 }
 
-void StrData::readFifo(Condition *c,bool is_set)
+void StrData::readFifo(Condition *c)
 {
+	static bool is_set = false;
 	ifstream ifs(m_filename.c_str());
 	string tmp;
 	string value;
@@ -66,6 +67,7 @@ void StrData::readFifo(Condition *c,bool is_set)
 		}
 	}
 
+	is_set = true;
 	m_value += value;
 }
 

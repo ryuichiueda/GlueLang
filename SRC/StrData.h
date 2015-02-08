@@ -15,7 +15,7 @@ public:
 
 	void createFifo(void);
 	void openFifo(void);
-	void readFifo(Condition *c,bool is_set);
+	void readFifo(Condition *c);
 
 	void setFifoName(string *name);
 protected:
