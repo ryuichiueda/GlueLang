@@ -11,6 +11,7 @@ class Feeder;
 class Environment;
 class Arg;
 class Condition;
+class StrData;
 
 class VarString : public Element
 {
@@ -18,19 +19,12 @@ public:
 	VarString(Feeder *f, Environment *env);
 	virtual ~VarString();
 	virtual bool parse(void);
+	virtual int exec(void);
 
 	void setName(string s);
 
-	virtual int exec(void);
-	virtual bool eval(void);
+	bool readFifo(void);
 
-	//const char *virtualFileName(void){return m_var_name.c_str();}
-
-	int getFd(void){return m_fd;}
-
-	bool readFiFo(void);
-
-	bool m_evaled;
 	bool m_opened;
 	bool m_is_set;
 
@@ -38,7 +32,6 @@ public:
 	string m_var_name;
 	string m_file_name;
 protected:
-
-	int m_fd;
+	StrData *m_data;
 };
 #endif

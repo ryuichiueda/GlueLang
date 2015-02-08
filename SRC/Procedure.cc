@@ -3,6 +3,7 @@
 #include "CommandLine.h"
 #include "Feeder.h"
 #include "Environment.h"
+#include "ProcData.h"
 #include <fstream>
 #include <sys/types.h> 
 #include <sys/stat.h> 
@@ -56,7 +57,12 @@ bool Procedure::parse(void)
 	ofstream ofs(tmpdir.c_str());
 	ofs << tmp.substr(indent,tmp.size()-indent) << endl;
 
-	m_env->setFileList(&tmpdir);
+	auto *p = new ProcData();
+	p->setFileName(&tmpdir);
+	m_env->setData(&m_name,p);
+	
+
+	//m_env->setFileList(&tmpdir);
 
 	while(m_feeder->blankLine()){
 		ofs << endl;

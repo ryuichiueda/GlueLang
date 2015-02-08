@@ -407,6 +407,7 @@ bool Feeder::str(string s)
 	return true;
 }
 
+/*
 // <reserved> variable = ...
 bool Feeder::declare(string *ans, string reserved)
 {
@@ -440,6 +441,7 @@ bool Feeder::declare(string *ans, string reserved)
 	checkEol(p);
 	return true;
 }
+*/
 
 void Feeder::checkEol(string *p)
 {

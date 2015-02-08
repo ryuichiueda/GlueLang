@@ -33,7 +33,9 @@ bool Arg::eval(void)
 
 	if(m_is_variable){
 		try{
-			m_env->getVariable(&m_text,&m_evaled_text);
+			auto *p = m_env->getData(&m_text);
+			m_evaled_text = p->m_value;
+			//m_env->getVariable(&m_text,&m_evaled_text);
 		}catch(...){
 			m_error_msg = m_env->m_error_msg;
 			m_exit_status = 1;

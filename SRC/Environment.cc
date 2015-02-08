@@ -7,6 +7,7 @@
 #include <sys/param.h> 
 #include <sys/stat.h>
 #include <signal.h>
+#include "JobData.h"
 using namespace std;
 
 Environment::Environment(int argc, char const* argv[],int script_pos)
@@ -36,6 +37,14 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 		m_args.push_back(argv[i]);
 
 	m_v_opt = false;
+}
+
+Environment::~Environment()
+{
+	for(auto d : m_data){
+		if(d.second != NULL)
+			delete d.second;
+	}
 }
 
 void Environment::initSubShell(char const* argv[])
@@ -82,40 +91,6 @@ void Environment::setImportPath(string *key, string *value)
 	m_import_paths[*key].push_back(path);
 }
 
-bool Environment::initBG(string *key)
-{
-	if(m_background_jobs.find(*key) != m_background_jobs.end())
-		return false;
-
-	m_background_jobs[*key] = 0;
-	return true;
-}
-
-bool Environment::setBG(string *key, int value)
-{
-	if(m_background_jobs.find(*key) == m_background_jobs.end())
-		return false;
-
-	m_background_jobs[*key] = value;
-	return true;
-}
-
-void Environment::unsetBG(const char *key)
-{
-	string k(key);
-	m_background_jobs.erase(k);
-}
-
-int Environment::getBG(const char *key)
-{
-	string k(key);
-	if(m_background_jobs.find(k) == m_background_jobs.end()){
-		return -1;
-	}
-
-	return m_background_jobs[k];
-}
-
 vector<string> *Environment::getImportPaths(string *key)
 {
 	if(m_import_paths.find(*key) == m_import_paths.end()){
@@ -136,57 +111,32 @@ bool Environment::isImportPath(string *key)
 	return m_import_paths.find(*key) != m_import_paths.end();
 }
 
-/*
-void Environment::getImportPath(const char *key, string *value)
+Data *Environment::getData(string *key)
 {
-	string k = string(key);
-	getImportPath(&k,value);
-}
-*/
-
-void Environment::setVariable(string *key, string *value)
-{
-	if(m_variables.find(*key) != m_variables.end()){
-		m_error_msg = *key + " already exist" ;
-		throw this;
-	}
-
-	m_variables[*key] = *value;
-}
-
-void Environment::appendValue(string *key, string *value)
-{
-	if(m_variables.find(*key) == m_variables.end()){
-		m_error_msg = *key + " not exist" ;
-		throw this;
-	}
-
-	m_variables[*key] += *value;
-}
-
-void Environment::getVariable(string *key,string *value)
-{
-	if(m_variables.find(*key) == m_variables.end()){
+	if(m_data.find(*key) == m_data.end()){
 		m_error_msg = "variable " + *key + " not found";
 		throw this;
 	}
 
-	*value = m_variables[*key];
-}
-
-void Environment::getVariable(const char *key,string *value)
-{
-	string k = string(key);
-	return getVariable(&k,value);
-}
-
-void Environment::setFileList(string *filepath)
-{
-	m_file_list.push_back(*filepath);
+	return m_data[*key];
 }
 
 void Environment::removeFiles(void)
 {
+	for(auto d : m_data){
+		string *f = d.second->getFileName();
+		if(f == NULL)
+			continue;
+
+		if(m_tmpdir + "/" != f->substr(0,m_tmpdir.size() + 1))
+			continue;
+
+		remove(f->c_str());
+		if(m_v_opt)
+			cerr << "+ pid " << getpid() << " file " << f << " deleted" << endl;
+	}
+	
+/*
 	for(auto f : m_file_list){
 		if(m_tmpdir + "/" != f.substr(0,m_tmpdir.size() + 1))
 			continue;
@@ -195,6 +145,7 @@ void Environment::removeFiles(void)
 		if(m_v_opt)
 			cerr << "+ pid " << getpid() << " file " << f << " deleted" << endl;
 	}
+*/
 
 	struct stat buf;
 	while(stat(m_tmpdir.c_str(), &buf) == 0){
@@ -215,4 +166,13 @@ string *Environment::getArg(long pos)
 		throw this;
 	}
 	return &m_args[pos];
+}
+
+void Environment::setData(string *key, Data *value)
+{
+	if(m_data.find(*key) != m_data.end()){
+		m_error_msg = *key + " already exist";
+		throw this;
+	}
+	m_data[*key] = value;
 }

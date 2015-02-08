@@ -5,33 +5,37 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "Data.h"
 using namespace std;
 
 class Environment
 {
 private:
 	vector<string> m_args;
-	map<string,string> m_variables;
 	map<string, vector<string> > m_import_paths;
-	vector<string> m_file_list;
-	map<string,int> m_background_jobs;
 
 	string m_dir;
+
+	map<string,Data *> m_data;
 public:
+	void setData(string *key, Data *value);
+
 	Environment(int argc, char const* argv[],int script_pos);
+	~Environment();
 	void initSubShell(char const* argv[]);
 
-	void setVariable(string *key, string *value);
+	//void setVariable(string *key, string *value);
 	void appendValue(string *key, string *value);
 	void getVariable(string *key, string *value);
+	Data *getData(string *key);
 	string *getArg(long pos);
-	void getVariable(const char *key, string *value);
+	//void getVariable(const char *key, string *value);
 
 	void setImportPath(string *key, string *value);
 	vector<string> *getImportPaths(string *key);
 	vector<string> *getImportPaths(const char *key);
 
-	void setFileList(string *filepath);
+	//void setFileList(string *filepath);
 	void removeFiles(void);
 
 	string m_error_msg;
@@ -47,12 +51,6 @@ public:
 
 	bool m_v_opt;
 	int m_pid;
-
-	// BG: backgournd job
-	bool initBG(string *key);
-	bool setBG(string *key, int value);
-	void unsetBG(const char *key);
-	int getBG(const char *key);
 };
 
 #endif

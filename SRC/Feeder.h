@@ -40,7 +40,7 @@ public:
 	bool variable(string *ans);
 	bool arrayElem(string *name,long *pos);
 	bool comment(void);
-	bool declare(string *ans, string reserved);
+	//bool declare(string *ans, string reserved);
 	bool command(string *ans);
 	bool blank(void);
 	bool blankLine(void);

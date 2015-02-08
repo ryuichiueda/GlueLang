@@ -14,6 +14,7 @@
 #include "Arg.h"
 #include "Feeder.h"
 #include "Environment.h"
+#include "JobData.h"
 using namespace std;
 
 Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
@@ -107,7 +108,7 @@ int Pipeline::exec(void)
 	}
 
 	if(m_outstr != NULL){
-		m_outstr->readFiFo();
+		m_outstr->readFifo();
 	}
 
 	for(auto pid : m_pids)
@@ -124,9 +125,22 @@ int Pipeline::execWait(void)
 	
 	int i = 1;
 	while(argv[i] != NULL){
-		int pid = m_env->getBG(argv[i]);
+		JobData *p = NULL;
+		int pid = 0;
+		
 		while(pid == 0){ // not forked
-			pid = m_env->getBG(argv[i]);
+			if(p == NULL){
+				try{
+					string s(argv[i]);
+					p = (JobData *)m_env->getData(&s);
+				}catch(...){
+					m_error_msg = "Bug of backgound process";
+					m_exit_status = 1;
+					throw this;
+				}
+			}
+			pid = p->m_pid;
+			//pid = m_env->getBG(argv[i]);
 		}
 		if(pid < 0){
 			m_error_msg = "Unknown background process";
@@ -134,7 +148,8 @@ int Pipeline::execWait(void)
 			throw this;
 		}
 		m_pids.push_back(pid);
-		m_env->unsetBG(argv[i]);
+		//m_env->unsetBG(argv[i]);
+		p->m_pid = 0;
 		i++;
 	}
 

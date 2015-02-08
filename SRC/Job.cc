@@ -10,6 +10,7 @@
 #include "Arg.h"
 #include "Feeder.h"
 #include "Environment.h"
+#include "JobData.h"
 #include "Job.h"
 #include "Where.h"
 using namespace std;
@@ -88,12 +89,25 @@ bool Job::parse(void)
 			m_exit_status = 1;
 			throw this;
 		}
-		m_env->setVariable(&m_job_name,&m_job_name);
-		if(!m_env->initBG(&m_job_name)){
-			m_error_msg = "Job name confliction";
+
+		JobData *d = new JobData();
+		d->setData(&m_job_name);
+
+		try{
+			m_env->setData(&m_job_name,d);
+		}catch(Environment *e){
+			m_error_msg = e->m_error_msg;	
 			m_exit_status = 1;
 			throw this;
 		}
+		
+/*
+		if(!m_env->initBG(&m_job_name)){
+			m_error_msg = "Name confliction";
+			m_exit_status = 1;
+			throw this;
+		}
+*/
 	}
 
 	if(add(new Where(m_feeder,m_env))){
@@ -110,24 +124,15 @@ bool Job::parse(void)
 	return true;
 }
 
-bool Job::eval(void)
+int Job::exec(void)
 {
-	if(m_outfile != NULL)
-		m_outfile->eval();
-	if(m_outstr != NULL)
-		m_outstr->eval();
-
 	// stdout of all commands are appended into a file
 	for(auto *n : m_nodes){
 		((Pipeline *)n)->m_if = m_if;
 		((Pipeline *)n)->m_outfile = m_outfile;
 		((Pipeline *)n)->m_outstr = m_outstr;
 	}
-	return true;
-}
 
-int Job::exec(void)
-{
 	cout << flush;
 
 	eval();
@@ -177,7 +182,10 @@ int Job::execBackGround(void)
 		exit(0);
 	}
 
-	if(!m_env->setBG(&m_job_name,pid)){
+	try{
+		JobData *p = (JobData *)m_env->getData(&m_job_name);
+		p->m_pid = pid;
+	}catch(...){
 		m_error_msg = "Bug of backgound process";
 		m_exit_status = 1;
 		throw this;

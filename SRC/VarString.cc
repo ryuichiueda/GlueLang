@@ -7,58 +7,57 @@
 #include "Feeder.h"
 #include "Environment.h"
 #include "Condition.h"
+#include "StrData.h"
+#include <fstream>
 using namespace std;
 
 VarString::VarString(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_fd = -1;
 	m_opened = false;
-	m_evaled = false;
 	m_is_set = false;
 
 	m_condition = NULL;
+
+	m_data = NULL;
 }
 
 VarString::~VarString()
 {
-
 }
 
 bool VarString::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	if(! m_feeder->declare(&m_var_name,string("str")))
+	bool res = m_feeder->str("str") 
+			&& m_feeder->variable(&m_var_name) 
+			&& m_feeder->str("=");
+
+	if(!res){
+		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
+	}
 
 	string tmpdir = m_env->getImportPaths("tmpdir")->at(0);
 	m_file_name = m_env->m_tmpdir + "/" + m_var_name;
 
 	m_feeder->getPos(&m_end_line, &m_end_char);
-	return true;
-}
-
-// open the file
-bool VarString::eval(void)
-{
-	if(m_evaled)
-		return true;
-
-	if(mkfifo(m_file_name.c_str(),0700) != 0){
-		m_error_msg = "str: " + m_var_name + " " 
-			+ "(named pipe " + m_file_name.c_str() + ") does not prepared.";
-		throw this;
-	}
 
 	try{
-		m_env->setFileList(&m_file_name);
+		m_data = new StrData();
+		m_data->setFifoName(&m_file_name);
+		m_data->createFifo();
+		m_env->setData(&m_var_name,m_data);
 	}catch(Environment *e){
+		m_error_msg = e->m_error_msg;	
+		m_exit_status = 1;
+		throw this;
+	}catch(StrData *e){
 		m_error_msg = e->m_error_msg;	
 		m_exit_status = 1;
 		throw this;
 	}
 
-	m_evaled = true;
 	return true;
 }
 
@@ -68,17 +67,7 @@ int VarString::exec(void)
 	if(m_opened)
 		return true;
 
-	m_fd = open( m_file_name.c_str() ,O_WRONLY ,0600);
-	if(m_env->m_v_opt)
-		cerr << "+ pid " << getpid() << " file " << m_file_name << " open" << endl;
-	if(dup2(m_fd,1) < 0){
-		m_error_msg = "str: " + m_var_name + "  redirect error";
-		throw this;
-	}
-	if( close(m_fd) < 0){
-		m_error_msg = "str: " + m_var_name + "  redirect error";
-		throw this;
-	}
+	m_data->openFifo();
 
 	m_opened = true;
 	return 0;
@@ -91,8 +80,17 @@ int VarString::exec(void)
  * However, It's not critical because this string
  * should not contain a long string.
  */
-bool VarString::readFiFo(void)
+bool VarString::readFifo(void)
 {
+	try{
+		m_data->readFifo(m_condition,m_is_set);
+	}catch(StrData *e){
+		m_error_msg = e->m_error_msg;
+		m_exit_status = 3;
+		throw this;
+	}
+
+/*
 	ifstream ifs(m_file_name.c_str());
 	string tmp;
 	string value;
@@ -116,15 +114,17 @@ bool VarString::readFiFo(void)
 			}
 		}
 	}
+*/
 
+/*
 	if(m_is_set){
 		m_env->appendValue(&m_var_name,&value);
 		return true;
 	}
 
 	m_env->setVariable(&m_var_name,&value);
-	m_env->setFileList(&m_file_name);
+*/
+	//m_env->setFileList(&m_file_name);
 	m_is_set = true;
-
 	return true;
 }

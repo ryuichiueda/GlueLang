@@ -20,7 +20,6 @@ public:
 	virtual int exec(void);
 	virtual bool eval(void){return true;};
 protected:
-
 	bool tryElement(Element *n);
 	void parseErrorMsg(Element *e);
 	void execErrorMsg(Element *e);

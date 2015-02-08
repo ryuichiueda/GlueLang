@@ -10,6 +10,7 @@ class Element;
 class Feeder;
 class Environment;
 class Arg;
+class FileData;
 
 class TmpFile : public Element
 {
@@ -17,25 +18,19 @@ public:
 	TmpFile(Feeder *f, Environment *env);
 	virtual ~TmpFile();
 	virtual bool parse(void);
+	virtual int exec(void);
 
 	void setName(string s);
 
-	virtual int exec(void);
-	virtual bool eval(void);
 
 	const char *actualFileName(void){return m_file_name.c_str();}
 	const char *virtualFileName(void){return m_var_name.c_str();}
-
-	int getFd(void){return m_fd;}
 
 	bool m_append_mode;
 
 	string m_var_name;
 	string m_file_name;
 protected:
-
-	int m_fd;
-
-	bool m_evaled;
+	FileData *m_data;
 };
 #endif
