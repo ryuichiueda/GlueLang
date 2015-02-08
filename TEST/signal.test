@@ -19,7 +19,7 @@ rm -Rf /tmp/glue*
 
 cat << FIN > $tmp-glue
 import PATH
-sleep 10000 >>= sleep 10000 >>= sleep 10000
+cat
 FIN
 
 ../glue $tmp-glue &
@@ -27,13 +27,13 @@ sleep 2
 killall -SIGINT glue
 sleep 2
 
-# sleep should not remain
+# cat should not remain
 ps o pid,pgid,command		|
 grep -v grep			|
-grep sleep 
+grep cat 
 RES=$?
 
-killall sleep
+killall cat
 
 [ $RES -eq 1 ]
 ERROR_CHECK "TEST1.1 error"
@@ -50,7 +50,7 @@ rm -Rf /tmp/glue*
 
 cat << FIN > $tmp-glue
 import PATH
-sleep 10000 >>= sleep 10000 >>= sleep 10000
+cat
 FIN
 
 ../glue $tmp-glue &
@@ -58,13 +58,13 @@ sleep 2
 killall -SIGHUP glue
 sleep 2
 
-# sleep should not remain
+# cat should not remain
 ps o pid,pgid,command		|
 grep -v grep			|
-grep sleep 
+grep cat 
 RES=$?
 
-killall sleep
+killall cat
 
 [ $RES -eq 1 ]
 ERROR_CHECK "TEST2.1 error"
@@ -81,7 +81,7 @@ rm -Rf /tmp/glue*
 
 cat << FIN > $tmp-glue
 import PATH
-sleep 10000 >>= sleep 10000 >>= sleep 10000
+cat
 FIN
 
 ../glue $tmp-glue &
@@ -89,13 +89,13 @@ sleep 2
 killall -SIGTERM glue
 sleep 2
 
-# sleep should not remain
+# cat should not remain
 ps o pid,pgid,command		|
-grep -v grep			|
-grep sleep 
+grep -v cat			|
+grep cat 
 RES=$?
 
-killall sleep
+killall cat
 
 [ $RES -eq 1 ]
 ERROR_CHECK "TEST3.1 error"
@@ -112,7 +112,7 @@ rm -Rf /tmp/glue*
 
 cat << FIN > $tmp-glue
 import PATH
-awk '{sleep(10000)}' > & a
+cat & a
 in.wait a
 FIN
 
@@ -121,13 +121,13 @@ sleep 2
 killall glue
 sleep 2
 
-# sleep should not remain
+# cat should not remain
 ps o pid,pgid,command		|
 grep -v grep			|
-grep sleep 
+grep cat 
 RES=$?
 
-killall sleep
+killall cat
 
 [ $RES -eq 1 ]
 ERROR_CHECK "TEST4.1 error"
