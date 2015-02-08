@@ -23,9 +23,9 @@ sleep 10000 >>= sleep 10000 >>= sleep 10000
 FIN
 
 ../glue $tmp-glue &
-sleep 3
+sleep 2
 killall -SIGINT glue
-sleep 3
+sleep 2
 
 # sleep should not remain
 ps o pid,pgid,command		|
@@ -41,5 +41,120 @@ ERROR_CHECK "TEST1.1 error"
 ls /tmp/glue*
 [ $? -ne 0 ]
 ERROR_CHECK "TEST1.2 error"
+
+#########################################
+# TEST2: SIGHUP
+#########################################
+
+rm -Rf /tmp/glue*
+
+cat << FIN > $tmp-glue
+import PATH
+sleep 10000 >>= sleep 10000 >>= sleep 10000
+FIN
+
+../glue $tmp-glue &
+sleep 2
+killall -SIGHUP glue
+sleep 2
+
+# sleep should not remain
+ps o pid,pgid,command		|
+grep -v grep			|
+grep sleep 
+RES=$?
+
+killall sleep
+
+[ $RES -eq 1 ]
+ERROR_CHECK "TEST2.1 error"
+
+ls /tmp/glue*
+[ $? -ne 0 ]
+ERROR_CHECK "TEST2.2 error"
+
+#########################################
+# TEST3: SIGTERM
+#########################################
+
+rm -Rf /tmp/glue*
+
+cat << FIN > $tmp-glue
+import PATH
+sleep 10000 >>= sleep 10000 >>= sleep 10000
+FIN
+
+../glue $tmp-glue &
+sleep 2
+killall -SIGTERM glue
+sleep 2
+
+# sleep should not remain
+ps o pid,pgid,command		|
+grep -v grep			|
+grep sleep 
+RES=$?
+
+killall sleep
+
+[ $RES -eq 1 ]
+ERROR_CHECK "TEST3.1 error"
+
+ls /tmp/glue*
+[ $? -ne 0 ]
+ERROR_CHECK "TEST3.2 error"
+
+#########################################
+# TEST4: kill at wait
+#########################################
+
+rm -Rf /tmp/glue*
+
+cat << FIN > $tmp-glue
+import PATH
+awk '{sleep(10000)}' > & a
+in.wait a
+FIN
+
+../glue $tmp-glue &
+sleep 2
+killall glue
+sleep 2
+
+# sleep should not remain
+ps o pid,pgid,command		|
+grep -v grep			|
+grep sleep 
+RES=$?
+
+killall sleep
+
+[ $RES -eq 1 ]
+ERROR_CHECK "TEST4.1 error"
+
+ls /tmp/glue*
+[ $? -ne 0 ]
+ERROR_CHECK "TEST4.2 error"
+
+#########################################
+# TEST5: ignore sigpipe
+#########################################
+
+cat << FIN > $tmp-out
+y
+y
+y
+FIN
+
+cat << FIN > $tmp-glue
+import PATH
+yes >>= head -n 3
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST5.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST5.2 error"
 
 rm -f $tmp-*

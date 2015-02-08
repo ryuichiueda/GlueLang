@@ -53,18 +53,3 @@ int Element::getLevel(void)
 {
 	return m_env->getLevel();
 }
-
-/*
-void Element::signalCheck(void)
-{
-	if(m_signal == 0)
-		return;
-
-	m_error_msg = "signal interruption";
-	if(m_signal > 0 && m_signal < 100)
-		m_exit_status = 100 + m_signal;
-	else
-		m_exit_status = 200;
-	throw this;
-}
-*/

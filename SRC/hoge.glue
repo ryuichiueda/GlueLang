@@ -1,5 +1,3 @@
 import PATH
 
-str f = 'e'
-
-echo f
+yes >>= head

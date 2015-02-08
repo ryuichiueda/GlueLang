@@ -20,6 +20,16 @@ static void sig_int(int sig)
 	Element::m_signal = sig;
 }
 
+static void sig_hup(int sig)
+{
+	Element::m_signal = sig;
+}
+
+static void sig_term(int sig)
+{
+	Element::m_signal = sig;
+}
+
 int main(int argc, char const* argv[])
 {
 	if(setpgid(0,0) != 0)
@@ -36,6 +46,10 @@ int main(int argc, char const* argv[])
 
 	sig.sa_handler = sig_int;
 	sigaction(SIGINT,&sig,NULL);
+	sig.sa_handler = sig_hup;
+	sigaction(SIGHUP,&sig,NULL);
+	sig.sa_handler = sig_term;
+	sigaction(SIGTERM,&sig,NULL);
 
 ///////////////////////////////////////////
 // initialization of top level objects 

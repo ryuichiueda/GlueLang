@@ -164,12 +164,17 @@ void Pipeline::waitCommands(int pid)
 	}
 		
 	if(!WIFEXITED(status)){
-		m_error_msg = "Irregular command termination";
-		m_exit_status = 2;
-		throw this;
+		if(WIFSIGNALED(status) && WTERMSIG(status) == 13){//ignore sigpipe
+			m_exit_status = 0;
+		}else{
+			m_error_msg = "Irregular command termination";
+			m_exit_status = 2;
+			throw this;
+		}
+	}else{
+		m_exit_status = WEXITSTATUS(status);
 	}
 
-	m_exit_status = WEXITSTATUS(status);
 	if(m_env->m_v_opt)
 		cerr << "+ pid " << pid << " exit " << m_exit_status << endl;
 

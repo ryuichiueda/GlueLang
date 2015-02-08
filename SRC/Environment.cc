@@ -130,17 +130,6 @@ void Environment::removeFiles(void)
 			cerr << "+ pid " << getpid() << " file " << f << " deleted" << endl;
 	}
 	
-/*
-	for(auto f : m_file_list){
-		if(m_tmpdir + "/" != f.substr(0,m_tmpdir.size() + 1))
-			continue;
-
-		remove(f.c_str());
-		if(m_v_opt)
-			cerr << "+ pid " << getpid() << " file " << f << " deleted" << endl;
-	}
-*/
-
 	struct stat buf;
 	while(stat(m_tmpdir.c_str(), &buf) == 0){
 		if(remove(m_tmpdir.c_str()) != 0){
@@ -148,8 +137,9 @@ void Environment::removeFiles(void)
 			sleep(1);
 		}
 	}
+
 	if(Element::m_signal != 0)
-		kill(0,SIGHUP);
+		kill(0,Element::m_signal);
 }
 
 string *Environment::getArg(long pos)
