@@ -30,7 +30,8 @@ bool ArgCommand::parse(void)
 	// a non small captal letter)
 	
 	// fullpath command
-	if( ! m_feeder->smallCaps(&m_prefix)){
+	if( ! m_feeder->smallCapsWithNum(&m_prefix)){
+		m_feeder->getPos(&m_end_line, &m_end_char);
 		return m_feeder->command(&m_name);
 	}
 	// chech whether m_prefix is a prefix or a command name

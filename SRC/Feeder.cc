@@ -85,6 +85,42 @@ bool Feeder::smallCaps(string *ans)
 	checkEol(p);
 	return true;
 }
+
+bool Feeder::smallCapsWithNum(string *ans)
+{
+	if(outOfRange())
+		return false;
+
+	string *p = &m_lines[m_cur_line];
+
+	int i = m_cur_char;
+	bool first = true;
+	for(;i < (int)p->length();i++){
+		if(first){
+			if( p->at(i) >= 'a' && p->at(i) <= 'z'){
+				first = false;
+				continue;
+			}
+			break;
+		}else{
+			if( p->at(i) >= 'a' && p->at(i) <= 'z')
+				continue;
+			if( p->at(i) >= '0' && p->at(i) <= '9')
+				continue;
+
+			break;
+		}
+	}
+
+	if(i == m_cur_char)
+		return false;
+
+	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
+	m_cur_char = i;
+	checkEol(p);
+	return true;
+}
+
 bool Feeder::blankLine(void)
 {
 	if(outOfRange() || m_cur_char != 0)

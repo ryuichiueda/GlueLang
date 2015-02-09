@@ -46,6 +46,7 @@ public:
 	bool blankLine(void);
 	bool path(string *ans);
 	bool smallCaps(string *ans);
+	bool smallCapsWithNum(string *ans);
 	bool positiveInt(long *pos);
 	bool lineResidual(string *ans);
 
