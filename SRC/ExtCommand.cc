@@ -54,6 +54,10 @@ void ExtCommand::execChild(void)
 {
 	auto argv = makeArgv();
 	vOptProc(argv[0]);
-	execv(argv[0],(char **)argv);
+	char *str = getenv("PATH");
+	auto env = new const char* [2];
+	env[0] = str;
+	env[1] = NULL;
+	execve(argv[0],(char **)argv,(char **)env);
 }
 

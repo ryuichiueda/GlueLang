@@ -46,6 +46,8 @@ bool Script::doParse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
+	// mainly for shebang
+	while(m_feeder->comment());
 	// import
 	while(add(new Import(m_feeder,m_env))){
 		while(m_feeder->blankLine());
