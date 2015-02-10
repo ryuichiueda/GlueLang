@@ -11,3 +11,6 @@ clean:
 test: all
 	sh -e ./TEST/test_all.sh
 
+
+install:
+	cd SRC; make install
