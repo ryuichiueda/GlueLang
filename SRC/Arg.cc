@@ -13,6 +13,45 @@ Arg::~Arg()
 {
 }
 
+bool Arg::parse(void)
+{
+	m_feeder->getPos(&m_start_line, &m_start_char);
+
+	try{
+		if( m_feeder->arrayElem(&m_text,&m_array_pos)){
+			m_is_array_variable = true;
+			m_feeder->getPos(&m_end_line, &m_end_char);
+			return true;
+		}
+	}catch(Feeder *e){
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		m_error_msg = e->m_error_msg;
+		m_exit_status = 1;
+		throw this;
+	}
+
+	try{
+		if( m_feeder->literal(&m_text)){
+			m_is_variable = false;
+			m_feeder->getPos(&m_end_line, &m_end_char);
+			return true;
+		}
+	}catch(Feeder *e){
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		m_error_msg = e->m_error_msg;
+		m_exit_status = 1;
+		throw this;
+	}
+
+	if(m_feeder->variable(&m_text)){
+		m_is_variable = true;
+		m_feeder->getPos(&m_end_line, &m_end_char);
+		return true;
+	}
+
+	return false;
+}
+
 bool Arg::eval(void)
 {
 	if(m_is_array_variable){
@@ -52,41 +91,3 @@ bool Arg::eval(void)
 	return true;
 }
 
-bool Arg::parse(void)
-{
-	m_feeder->getPos(&m_start_line, &m_start_char);
-
-	try{
-		if( m_feeder->arrayElem(&m_text,&m_array_pos)){
-			m_is_array_variable = true;
-			m_feeder->getPos(&m_end_line, &m_end_char);
-			return true;
-		}
-	}catch(Feeder *e){
-		m_feeder->getPos(&m_end_line, &m_end_char);
-		m_error_msg = e->m_error_msg;
-		m_exit_status = 1;
-		throw this;
-	}
-
-	try{
-		if( m_feeder->literal(&m_text)){
-			m_is_variable = false;
-			m_feeder->getPos(&m_end_line, &m_end_char);
-			return true;
-		}
-	}catch(Feeder *e){
-		m_feeder->getPos(&m_end_line, &m_end_char);
-		m_error_msg = e->m_error_msg;
-		m_exit_status = 1;
-		throw this;
-	}
-
-	if(m_feeder->variable(&m_text)){
-		m_is_variable = true;
-		m_feeder->getPos(&m_end_line, &m_end_char);
-		return true;
-	}
-
-	return false;
-}

@@ -2,7 +2,7 @@
 #include "Arg.h"
 #include "Feeder.h"
 #include "Environment.h"
-#include "GlueString.h"
+#include "Literal.h"
 using namespace std;
 
 StringArray::StringArray(Feeder *f,Environment *env) : Element(f,env)
@@ -28,7 +28,7 @@ bool StringArray::parse(void)
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
 	// solo string (no bracket)
-	if(add(new GlueString(m_feeder,m_env))){
+	if(add(new Literal(m_feeder,m_env))){
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		return true;
 	}
@@ -43,7 +43,7 @@ bool StringArray::parse(void)
 		return true;
 	}
 
-	while(add(new GlueString(m_feeder,m_env))){
+	while(add(new Literal(m_feeder,m_env))){
 		if(! m_feeder->str(","))
 			break;
 	}
@@ -67,7 +67,7 @@ void StringArray::connect(string delimiter)
 		}
 
 		notfirst = true;
-		m_connected += ((GlueString *)n)->m_text;
+		m_connected += ((Literal *)n)->getEvaledString();
 	}
 }
 

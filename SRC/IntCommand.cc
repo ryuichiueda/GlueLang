@@ -16,7 +16,6 @@
 #include <fcntl.h>
 #include <signal.h>
 #include "Feeder.h"
-#include "GlueString.h"
 using namespace std;
 
 IntCommand::IntCommand(Feeder *f, Environment *env) : CommandLine(f,env)

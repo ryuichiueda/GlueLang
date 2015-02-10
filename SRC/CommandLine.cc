@@ -7,6 +7,7 @@
 #include "Where.h"
 #include "TmpFile.h"
 #include "VarString.h"
+#include "Literal.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -14,7 +15,6 @@
 #include <fcntl.h>
 #include <signal.h>
 #include "Feeder.h"
-#include "GlueString.h"
 #include <string.h>
 using namespace std;
 
@@ -35,7 +35,13 @@ CommandLine::~CommandLine()
 
 void CommandLine::parseArgs(void)
 {
-	while(add(new Arg(m_feeder,m_env))){
+	bool flg = true;
+	while(1){
+		flg = add(new Literal(m_feeder,m_env))
+			|| add(new Arg(m_feeder,m_env));
+		if(flg == false)
+			return;
+
 		if(m_feeder->comment() || m_feeder->atNewLine())
 			return;
 

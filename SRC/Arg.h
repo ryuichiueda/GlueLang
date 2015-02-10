@@ -13,8 +13,8 @@ class Arg : public Element
 public:
 	Arg(Feeder *f,Environment *env);
 	virtual ~Arg();
-	const char *getOriginalString(void){return m_text.c_str();}
-	const char *getEvaledString(void){return m_evaled_text.c_str();}
+	virtual const char *getOriginalString(void){return m_text.c_str();}
+	virtual const char *getEvaledString(void){return m_evaled_text.c_str();}
 
 	virtual bool eval(void);
 	virtual bool parse(void);

@@ -4,7 +4,6 @@
 #include "Environment.h"
 #include "Script.h"
 #include "Arg.h"
-#include "StringArray.h"
 #include "Where.h"
 #include "TmpFile.h"
 #include "VarString.h"
@@ -16,7 +15,6 @@
 #include <fcntl.h>
 #include <signal.h>
 #include "Feeder.h"
-#include "GlueString.h"
 #include "SubShell.h"
 #include "StringPut.h"
 #include "ExtCommand.h"
