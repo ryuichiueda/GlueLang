@@ -15,6 +15,7 @@
 #include <signal.h>
 #include "Feeder.h"
 #include "GlueString.h"
+#include <string.h>
 using namespace std;
 
 CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
