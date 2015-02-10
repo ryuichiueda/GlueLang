@@ -5,7 +5,6 @@ using namespace std;
 
 Arg::Arg(Feeder *f,Environment *env) : Element(f,env)
 {
-	m_is_variable = false;
 	m_is_array_variable = false;
 }
 
@@ -30,21 +29,7 @@ bool Arg::parse(void)
 		throw this;
 	}
 
-	try{
-		if( m_feeder->literal(&m_text)){
-			m_is_variable = false;
-			m_feeder->getPos(&m_end_line, &m_end_char);
-			return true;
-		}
-	}catch(Feeder *e){
-		m_feeder->getPos(&m_end_line, &m_end_char);
-		m_error_msg = e->m_error_msg;
-		m_exit_status = 1;
-		throw this;
-	}
-
 	if(m_feeder->variable(&m_text)){
-		m_is_variable = true;
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		return true;
 	}
@@ -68,25 +53,13 @@ bool Arg::eval(void)
 		return true;
 	}
 
-	if(m_is_variable){
-		try{
-			auto *p = m_env->getData(&m_text);
-			m_evaled_text = p->m_value;
-			//m_env->getVariable(&m_text,&m_evaled_text);
-		}catch(...){
-			m_error_msg = m_env->m_error_msg;
-			m_exit_status = 1;
-			throw this;
-		}
-		return true;
-	}
-
-	m_evaled_text = m_text;
-	//evaled escaped characters 
-	auto pos = m_evaled_text.find("\\\'"); // \'
-	while(pos != string::npos){
-		m_evaled_text.replace(pos, 2, "\'");
-		pos = m_evaled_text.find("\\\'", pos + 1);
+	try{
+		auto *p = m_env->getData(&m_text);
+		m_evaled_text = p->m_value;
+	}catch(...){
+		m_error_msg = m_env->m_error_msg;
+		m_exit_status = 1;
+		throw this;
 	}
 	return true;
 }

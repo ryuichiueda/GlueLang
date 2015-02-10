@@ -22,7 +22,6 @@ protected:
 	string m_text;
 	string m_evaled_text;
 
-	bool m_is_variable;
 	bool m_is_array_variable;
 	long m_array_pos;
 };
