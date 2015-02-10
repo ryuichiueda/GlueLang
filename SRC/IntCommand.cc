@@ -46,7 +46,7 @@ bool IntCommand::parse(void)
 	}
 
 	auto *c = (ArgCommand *)m_nodes[0];
-	if(/*m_is_internal &&*/ c->m_name == "wait"){
+	if(c->m_name == "wait"){
 		m_is_wait = true;
 	}
 
@@ -58,5 +58,5 @@ void IntCommand::execChild(void)
 {
 	auto argv = makeArgv();
 	vOptProc(argv[0]);
-	InternalCommands::exec(argv,m_env,m_feeder,this);
+	InternalCommands::exec((const char**)argv,m_env,m_feeder,this);
 }

@@ -30,7 +30,7 @@ sleep 2
 # cat should not remain
 ps o pid,pgid,command		|
 grep -v grep			|
-grep cat 
+grep '[^a-z]cat[^a-z]'
 RES=$?
 
 killall cat
@@ -61,7 +61,7 @@ sleep 2
 # cat should not remain
 ps o pid,pgid,command		|
 grep -v grep			|
-grep cat 
+grep '[^a-z]cat[^a-z]'
 RES=$?
 
 killall cat
@@ -92,7 +92,7 @@ sleep 2
 # cat should not remain
 ps o pid,pgid,command		|
 grep -v cat			|
-grep cat 
+grep '[^a-z]*cat[^a-z]'
 RES=$?
 
 killall cat
@@ -124,7 +124,7 @@ sleep 2
 # cat should not remain
 ps o pid,pgid,command		|
 grep -v grep			|
-grep cat 
+grep '[^a-z]cat[^a-z]'
 RES=$?
 
 killall cat

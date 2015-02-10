@@ -90,7 +90,7 @@ bool ArgCommand::parsePrefixedCom(void)
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		return true;
 	}
-	m_error_msg = "ArgCommand " + m_name  + " not exist";
+	m_error_msg = "Command " + m_name  + " not exist";
 	m_exit_status = 1;
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	throw this;

@@ -9,7 +9,6 @@
 #include "VarString.h"
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -109,16 +108,23 @@ int CommandLine::exec(void)
 	return pid;
 }
 
-const char** CommandLine::makeArgv(void)
+char** CommandLine::makeArgv(void)
 {
-	auto argv = new const char* [m_nodes.size() + 1];
+	auto argv = new char* [m_nodes.size() + 1 + m_add_args.size()];
 	
-	argv[0] = ((ArgCommand *)m_nodes[0])->getStr();
-	for (int i=1;i < (int)m_nodes.size();i++){
-		argv[i] = ((Arg *)m_nodes[i])->getEvaledString();
+	argv[0] = (char *)((ArgCommand *)m_nodes[0])->getStr();
+	int i = 1;
+	for (;i < (int)m_nodes.size();i++){
+		argv[i] = (char *)((Arg *)m_nodes[i])->getEvaledString();
+	}
+	for(auto a : m_add_args){
+		argv[i] = new char [a.size()+1];
+		strcpy(argv[i],a.c_str());
+		argv[i][a.size()] = '\0';
+		i++;
 	}
 
-	argv[m_nodes.size()] = NULL;
+	argv[m_nodes.size() + m_add_args.size()] = NULL;
 	return argv;
 }
 

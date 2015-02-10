@@ -1,0 +1,73 @@
+#!/bin/bash 
+
+tmp=/tmp/$$
+scr=$(basename $0)
+cd $(dirname $0) || exit 1
+
+ERROR_CHECK(){
+	[ "$(tr -d '0 ' <<< ${PIPESTATUS[@]} )" = "" ] && return
+	rm -f $tmp-*
+	echo "$scr" "$1"
+	exit 1
+}
+
+#########################################
+# TEST1: external command
+#########################################
+cat << FIN > $tmp-out
+2 1 egoh
+4 3 egoh
+6 5 egoh
+8 7 egoh
+01 9 egoh
+FIN
+
+cat << FIN > $tmp-glue
+import PATH
+
+seq 1 10 >>= xargs -n 2 >>= eachline /bin/echo 'hoge' >>= rev
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST1.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST1.2 error"
+
+#########################################
+# TEST2: internal command
+#########################################
+
+cat << FIN > $tmp-glue
+import PATH
+
+seq 1 10 >>= xargs -n 2 >>= eachline in.echo 'hoge' >>= rev
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST2.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST2.2 error"
+
+#########################################
+# TEST3: proc
+#########################################
+
+cat << FIN > $tmp-glue
+import PATH
+
+proc hoge =
+	in.echo 'hoge' argv[1] argv[2] >>= rev
+
+seq 1 10 >>= xargs -n 2 >>= eachline this.hoge
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST3.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST3.2 error"
+
+
+rm -f $tmp-*

@@ -39,13 +39,6 @@ bool ExtCommand::parse(void)
 		parseArgs();
 	}
 
-/*
-	auto *c = (ArgCommand *)m_nodes[0];
-	if(c->m_is_internal && c->m_name == "wait"){
-		m_is_wait = true;
-	}
-*/
-
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }

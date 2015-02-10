@@ -22,8 +22,8 @@ public:
 	virtual bool parse(void) = 0;
 	void parseArgs(void);
 
-//	void setName(string s);
-	void appendArg(string a);
+	virtual void appendArg(string a){m_add_args.push_back(a);}
+	virtual void clearAppendArg(void){m_add_args.clear();}
 
 	virtual int exec(void);
 	virtual bool eval(void);
@@ -31,13 +31,12 @@ public:
 	void setPipe(int *pip,int prev);
 	int getPrevPipe(void){return m_pipe_prev;};
 
-
 	void setIfFlag(void){m_if = true;}
 	bool getIfFlag(void){return m_if;}
 
 	bool m_is_wait;
 
-	const char** makeArgv(void);
+	char** makeArgv(void);
 protected:
 	virtual void execChild(void) = 0;
 	void execErrorExit(void);
@@ -53,5 +52,7 @@ protected:
 	bool m_if;
 
 	void vOptProc(char const *arg);
+
+	vector<string> m_add_args;
 };
 #endif

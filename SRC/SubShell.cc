@@ -59,7 +59,7 @@ void SubShell::execChild(void)
 	ifstream ifs(argv[0]);
 	Feeder feeder(&ifs);
 
-	m_env->initSubShell(argv);
+	m_env->initSubShell((const char**)argv);
 	Script s(&feeder,m_env);
 
 	s.parse();

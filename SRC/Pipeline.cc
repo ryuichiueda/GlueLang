@@ -8,6 +8,7 @@
 #include "SubShell.h"
 #include "StringPut.h"
 #include "ExtCommand.h"
+#include "EachLine.h"
 #include "IntCommand.h"
 #include "TmpFile.h"
 #include "VarString.h"
@@ -45,6 +46,7 @@ bool Pipeline::parse(void)
 	int comnum = 0;
 	while(1){
 		bool res = add(new StringPut(m_feeder,m_env))
+			|| add(new EachLine(m_feeder,m_env))
 			|| add(new SubShell(m_feeder,m_env))
 			|| add(new IntCommand(m_feeder,m_env))
 			|| add(new ExtCommand(m_feeder,m_env));
