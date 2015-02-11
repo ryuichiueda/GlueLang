@@ -5,6 +5,7 @@
 #include "Script.h"
 #include "Arg.h"
 #include "Literal.h"
+#include "ArgVariable.h"
 #include "Where.h"
 #include "TmpFile.h"
 #include "VarString.h"
@@ -38,7 +39,8 @@ bool StringPut::parse(void)
 	while(res){
 		if(m_feeder->atNewLine())
 			break;
-		res = add(new Literal(m_feeder,m_env));
+		res = add(new Literal(m_feeder,m_env))
+			|| add(new ArgVariable(m_feeder,m_env));
 	}
 	
 	m_feeder->getPos(&m_end_line, &m_end_char);
@@ -47,9 +49,10 @@ bool StringPut::parse(void)
 
 void StringPut::execChild(void)
 {
-	string s;
+	string s,tmp;
 	for(auto n : m_nodes){
-		s += ((Literal *)n)->getEvaledString();
+		tmp = ((Arg *)n)->getEvaledString();
+		s += tmp;
 	}
 
 	const char **argv = new const char *[3];

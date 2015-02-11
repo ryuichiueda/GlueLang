@@ -9,6 +9,7 @@ using namespace std;
 
 StrData::StrData() : Data()
 {
+	m_is_set = false;
 }
 
 StrData::~StrData()
@@ -43,11 +44,10 @@ void StrData::openFifo(void)
 
 void StrData::readFifo(Condition *c)
 {
-	static bool is_set = false;
 	ifstream ifs(m_filename.c_str());
 	string tmp;
 	string value;
-	if(is_set){
+	if(m_is_set){
 		value = "\n";
 	}
 
@@ -67,7 +67,7 @@ void StrData::readFifo(Condition *c)
 		}
 	}
 
-	is_set = true;
+	m_is_set = true;
 	m_value += value;
 }
 

@@ -20,6 +20,7 @@ public:
 	void setFifoName(string *name);
 protected:
 	string m_filename;
+	bool m_is_set;
 };
 
 #endif
