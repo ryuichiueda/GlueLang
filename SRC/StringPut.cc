@@ -46,10 +46,11 @@ bool StringPut::parse(void)
 void StringPut::execChild(void)
 {
 	string s = ((Literal *)m_nodes[0])->getEvaledString();
-	const char **argv = new const char *[2];
+	const char **argv = new const char *[3];
 	string com = "echo";
 	argv[0] = (const char *)com.c_str();
 	argv[1] = (const char *)s.c_str();
+	argv[2] = NULL;
 	vOptProc(argv[0]);
 	InternalCommands::exec(argv,m_env,m_feeder,this);
 }
