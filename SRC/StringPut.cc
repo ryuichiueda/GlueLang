@@ -1,5 +1,5 @@
 #include "StringPut.h"
-#include "ArgCommand.h"
+//#include "ArgCommand.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"

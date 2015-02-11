@@ -11,44 +11,37 @@ using namespace std;
 class Environment
 {
 private:
-	vector<string> m_args;
+	vector<string> m_args; //args of this command
 	map<string, vector<string> > m_import_paths;
-
 	string m_dir;
-
 	map<string,Data *> m_data;
 public:
 	void setData(string *key, Data *value);
 
 	Environment(int argc, char const* argv[],int script_pos);
 	~Environment();
-	void initSubShell(char const* argv[]);
 
-	//void setVariable(string *key, string *value);
-	void appendValue(string *key, string *value);
-	void getVariable(string *key, string *value);
+	// fork
+	void initSubShell(char const* argv[]);
+	int getLevel(void){return m_level;}
+	int m_level;
+
+	// manipulators for m_data
 	Data *getData(string *key);
 	string *getArg(long pos);
-	//void getVariable(const char *key, string *value);
 
+	// manipulators for m_import_paths
 	void setImportPath(string *key, string *value);
 	vector<string> *getImportPaths(string *key);
 	vector<string> *getImportPaths(const char *key);
-
-	//void setFileList(string *filepath);
-	void removeFiles(void);
-
-	string m_error_msg;
-
 	bool isImportPath(string *key);
 
-	int getLevel(void){return m_level;}
+	void removeFiles(void);
 
 	void initTmpdir(void);
 
-	int m_level;
+	string m_error_msg;
 	string m_tmpdir;
-
 	bool m_v_opt;
 	int m_pid;
 };

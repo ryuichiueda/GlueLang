@@ -16,13 +16,10 @@ public:
 	virtual const char *getOriginalString(void){return m_text.c_str();}
 	virtual const char *getEvaledString(void){return m_evaled_text.c_str();}
 
-	virtual bool eval(void);
-	virtual bool parse(void);
-protected:
+	//virtual bool eval(void) = 0;
+	virtual bool parse(void) = 0;
+
 	string m_text;
 	string m_evaled_text;
-
-	bool m_is_array_variable;
-	long m_array_pos;
 };
 #endif

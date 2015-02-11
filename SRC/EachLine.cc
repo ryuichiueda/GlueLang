@@ -1,6 +1,6 @@
 #include "EachLine.h"
-#include "ArgCommand.h"
-#include "InternalCommands.h"
+//#include "ArgCommand.h"
+//#include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
 #include "Arg.h"

@@ -1,5 +1,5 @@
 #include "IntCommand.h"
-#include "ArgCommand.h"
+#include "ArgIntCommand.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
@@ -34,17 +34,21 @@ bool IntCommand::parse(void)
 	//rewind
 	m_feeder->setPos(m_start_line, m_start_char);
 
-	// start from a command
-	if(!add(new ArgCommand(m_feeder,m_env)))
+	if(!add(new ArgIntCommand(m_feeder,m_env)))
 		return false;
+/*
+	// start from a command
+	if(!add(new ArgIntCommand(m_feeder,m_env)))
+		return false;
+*/
 
 	if(!m_feeder->comment() && !m_feeder->atNewLine()){
 		m_feeder->blank();
 		parseArgs();
 	}
 
-	auto *c = (ArgCommand *)m_nodes[0];
-	if(c->m_name == "wait"){
+	auto *c = (ArgIntCommand *)m_nodes[0];
+	if(c->m_text == "in.wait"){
 		m_is_wait = true;
 	}
 

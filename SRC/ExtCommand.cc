@@ -1,5 +1,5 @@
 #include "ExtCommand.h"
-#include "ArgCommand.h"
+#include "ArgExtCommand.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
@@ -29,7 +29,7 @@ bool ExtCommand::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	if(!add(new ArgCommand(m_feeder,m_env)))
+	if(!add(new ArgExtCommand(m_feeder,m_env)))
 		return false;
 
 	if(!m_feeder->comment() && !m_feeder->atNewLine()){

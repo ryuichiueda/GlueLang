@@ -1,9 +1,12 @@
 #include "CommandLine.h"
-#include "ArgCommand.h"
-#include "InternalCommands.h"
+//#include "ArgCommand.h"
+//#include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
-#include "Arg.h"
+#include "ArrayVariable.h"
+#include "ArgVariable.h"
+#include "ArgProc.h"
+#include "ArgIntCommand.h"
 #include "Where.h"
 #include "TmpFile.h"
 #include "VarString.h"
@@ -38,7 +41,9 @@ void CommandLine::parseArgs(void)
 	bool flg = true;
 	while(1){
 		flg = add(new Literal(m_feeder,m_env))
-			|| add(new Arg(m_feeder,m_env));
+			|| add(new ArrayVariable(m_feeder,m_env))
+			|| add(new ArgVariable(m_feeder,m_env));
+
 		if(flg == false)
 			return;
 
@@ -119,7 +124,15 @@ char** CommandLine::makeArgv(void)
 {
 	auto argv = new char* [m_nodes.size() + 1 + m_add_args.size()];
 	
-	argv[0] = (char *)((ArgCommand *)m_nodes[0])->getStr();
+	argv[0] = (char *)((ArgIntCommand *)m_nodes[0])->m_evaled_text.c_str();
+/*
+	if(typeid(*m_nodes[0]) == typeid(ArgIntCommand))
+		argv[0] = (char *)((ArgIntCommand *)m_nodes[0])->m_evaled_text.c_str();
+	else if(typeid(*m_nodes[0]) == typeid(ArgProc)){
+		argv[0] = (char *)((ArgIntCommand *)m_nodes[0])->m_evaled_text.c_str();
+	}else
+		argv[0] = (char *)((ArgCommand *)m_nodes[0])->getStr();
+*/
 	int i = 1;
 	for (;i < (int)m_nodes.size();i++){
 		argv[i] = (char *)((Arg *)m_nodes[i])->getEvaledString();
