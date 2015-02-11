@@ -30,14 +30,16 @@ bool StringPut::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	if(! add(new Literal(m_feeder,m_env))){
+	bool res = add(new Literal(m_feeder,m_env));
+
+	if(!res)
 		return false;
+
+	while(res){
+		if(m_feeder->atNewLine())
+			break;
+		res = add(new Literal(m_feeder,m_env));
 	}
-/*
-	if(! add(new Literal(m_feeder,m_env))){
-		return false;
-	}
-*/
 	
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
@@ -45,7 +47,11 @@ bool StringPut::parse(void)
 
 void StringPut::execChild(void)
 {
-	string s = ((Literal *)m_nodes[0])->getEvaledString();
+	string s;
+	for(auto n : m_nodes){
+		s += ((Literal *)n)->getEvaledString();
+	}
+
 	const char **argv = new const char *[3];
 	string com = "echo";
 	argv[0] = (const char *)com.c_str();

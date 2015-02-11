@@ -101,14 +101,6 @@ bool Job::parse(void)
 			m_exit_status = 1;
 			throw this;
 		}
-		
-/*
-		if(!m_env->initBG(&m_job_name)){
-			m_error_msg = "Name confliction";
-			m_exit_status = 1;
-			throw this;
-		}
-*/
 	}
 
 	if(add(new Where(m_feeder,m_env))){

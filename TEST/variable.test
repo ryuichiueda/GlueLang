@@ -57,50 +57,46 @@ ERROR_CHECK "TEST2.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST2.2 error"
 
-##########################################
-## TEST3: without echo
-##########################################
-#
-#cat << FIN > $tmp-glue
-#['a
-#b
-#c
-#']
-#FIN
-#
-#cat << FIN > $tmp-out
-#a
-#b
-#c
-#
-#FIN
-#
-#../glue $tmp-glue > $tmp-ans
-#ERROR_CHECK "TEST3.1 error"
-#
-#diff $tmp-out $tmp-ans
-#ERROR_CHECK "TEST3.2 error"
+#########################################
+# TEST3: without echo
+#########################################
 
-##########################################
-## TEST4: list
-##########################################
-#
-#cat << FIN > $tmp-glue
-#import PATH
-#['abc','def','ghi'] >>= /usr/bin/rev
-#FIN
-#
-#cat << FIN > $tmp-out
-#cba
-#fed
-#ihg
-#FIN
-#
-#../glue $tmp-glue > $tmp-ans
-#ERROR_CHECK "TEST4.1 error"
-#
-#diff $tmp-out $tmp-ans
-#ERROR_CHECK "TEST4.2 error"
+cat << FIN > $tmp-glue
+'a
+b
+c
+'
+FIN
 
+cat << FIN > $tmp-out
+a
+b
+c
+
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST3.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST3.2 error"
+
+#########################################
+# TEST4: connection of strings
+#########################################
+
+cat << FIN > $tmp-glue
+'a' 'b' 'c'
+FIN
+
+cat << FIN > $tmp-out
+abc
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST4.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST4.2 error"
 
 rm -f $tmp-*
