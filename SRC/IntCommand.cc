@@ -4,7 +4,6 @@
 #include "Environment.h"
 #include "Script.h"
 #include "Arg.h"
-#include "StringArray.h"
 #include "Where.h"
 #include "TmpFile.h"
 #include "VarString.h"

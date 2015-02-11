@@ -8,7 +8,6 @@
 #include "Where.h"
 #include "TmpFile.h"
 #include "VarString.h"
-#include "StringArray.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -31,24 +30,22 @@ bool StringPut::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	// start from a literal or an array of literals
-	/*
-	if(! add(new StringArray(m_feeder,m_env))){
-		return false;
-	}
-	*/
 	if(! add(new Literal(m_feeder,m_env))){
 		return false;
 	}
+/*
+	if(! add(new Literal(m_feeder,m_env))){
+		return false;
+	}
+*/
 	
-
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }
 
 void StringPut::execChild(void)
 {
-	string s = ((Arg *)m_nodes[0])->getEvaledString();
+	string s = ((Literal *)m_nodes[0])->getEvaledString();
 	const char **argv = new const char *[2];
 	string com = "echo";
 	argv[0] = (const char *)com.c_str();

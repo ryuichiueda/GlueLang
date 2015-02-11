@@ -1,0 +1,3 @@
+import PATH
+
+['a','b','c'] >>= echo
