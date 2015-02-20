@@ -15,12 +15,21 @@ bool ArgProc::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
+/*
 	if(!m_feeder->str("this."))
 		return false;
+*/
+	m_feeder->str("this.");
 
 	string tmp;
-	if(!m_feeder->variable(&m_evaled_text))
+	if(!m_feeder->variable(&m_evaled_text)){
+		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
+	}
+	if(!m_env->isData(&m_evaled_text)){
+		m_feeder->setPos(m_start_line, m_start_char);
+		return false;
+	}
 
 	m_text = "this." + m_evaled_text;
 	m_evaled_text = m_env->m_tmpdir + "/" + m_evaled_text;

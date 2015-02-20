@@ -16,12 +16,17 @@ bool ArgIntCommand::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
+/*
 	if(!m_feeder->str("in."))
 		return false;
+*/
+	m_feeder->str("in.");
 
 	string tmp;
-	if(!m_feeder->variable(&m_evaled_text))
+	if(!m_feeder->variable(&m_evaled_text)){
+		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
+	}
 
 	m_text = "in." + m_evaled_text;
 
