@@ -33,6 +33,7 @@ protected:
 	VarString *m_outstr;
 
 	Where *m_where;
+	Environment *m_local_env;
 
 	string m_job_name;
 	bool m_is_background;

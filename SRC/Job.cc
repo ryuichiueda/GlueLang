@@ -23,6 +23,8 @@ Job::Job(Feeder *f, Environment *env) : Element(f,env)
 	m_outstr = NULL;
 	m_where = NULL;
 	m_is_background = false;
+
+	m_local_env = NULL;
 }
 
 Job::~Job()
@@ -130,8 +132,10 @@ int Job::exec(void)
 
 	eval();
 
-	if(m_where != NULL)
+	if(m_where != NULL){
 		m_where->exec();
+		m_local_env = m_where->m_local_env;
+	}
 
 	if(m_is_background)
 		return execBackGround();

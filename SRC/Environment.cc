@@ -33,6 +33,19 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 	m_level = 0;
 }
 
+Environment::Environment(Environment *e)
+{
+	m_args = e->m_args; //args of this command
+	m_import_paths = e->m_import_paths;
+	m_data = e->m_data;
+	m_dir = e->m_dir;	
+	m_pid = e->m_pid;
+	m_tmpdir = e->m_tmpdir;
+
+	m_v_opt = e->m_v_opt;
+	m_level = e->m_level;
+}
+
 Environment::~Environment()
 {
 	for(auto d : m_data){
@@ -115,8 +128,21 @@ Data *Environment::getData(string *key)
 	return m_data[*key];
 }
 
-void Environment::removeFiles(void)
+bool Environment::isData(string *key)
 {
+	if(m_data.find(*key) == m_data.end()){
+		return false;
+	}
+
+	return true;
+}
+
+void Environment::removeFiles(bool local)
+{
+	for(auto &le : m_local_env){
+		le->removeFiles(true);
+	}
+
 	for(auto d : m_data){
 		string *f = d.second->getFileName();
 		if(f == NULL)
@@ -130,11 +156,14 @@ void Environment::removeFiles(void)
 			cerr << "+ pid " << getpid() << " file " << f << " deleted" << endl;
 	}
 	
-	struct stat buf;
-	while(stat(m_tmpdir.c_str(), &buf) == 0){
-		if(remove(m_tmpdir.c_str()) != 0){
-			cerr << "cannot remove tmpdir" << endl;
-			sleep(1);
+
+	if(!local){
+		struct stat buf;
+		while(stat(m_tmpdir.c_str(), &buf) == 0){
+			if(remove(m_tmpdir.c_str()) != 0){
+				cerr << "cannot remove tmpdir" << endl;
+				sleep(1);
+			}
 		}
 	}
 

@@ -55,7 +55,14 @@ bool TmpFile::parse(void)
 // joint the redirect
 int TmpFile::exec(void)
 {
-	m_data->openFile();
+	try{
+		m_data->openFile();
+	}catch(FileData *e){
+		m_error_msg = e->m_error_msg;	
+		m_exit_status = 1;
+		throw this;
+	}
+
 	if(m_env->m_v_opt)
 		cerr << "+ pid " << getpid() << " file "
 		<< m_data->m_value << " created" << endl;

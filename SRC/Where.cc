@@ -16,10 +16,14 @@ using namespace std;
 
 Where::Where(Feeder *f, Environment *env) : Element(f,env)
 {
+	m_local_env = NULL;
 }
 
 Where::~Where()
 {
+	if(m_local_env != NULL){
+		delete m_local_env;
+	}
 }
 
 bool Where::parse(void)
@@ -35,13 +39,17 @@ bool Where::parse(void)
 		return false;
 	}
 
+	m_local_env = new Environment(m_env);
+
+	m_env->m_local_env.push_back(m_local_env);
+
 	int indent = base_indent;
 	while(indent >= base_indent){
 		m_feeder->blank();
-		if(add(new Condition(m_feeder,m_env))){
+		if(add(new Condition(m_feeder,m_local_env))){
 			m_conditions.push_back((Condition *)m_nodes.back());
 			m_nodes.pop_back();
-		}else if(add(new Job(m_feeder,m_env))){
+		}else if(add(new Job(m_feeder,m_local_env))){
 		}else{
 			m_error_msg = "Invalid where sentences";	
 			m_exit_status = 1;

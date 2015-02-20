@@ -20,7 +20,8 @@ Script::Script(Feeder *f, Environment *env) : Element(f,env)
 Script::~Script()
 {
 	for(auto &n : m_nodes){
-		delete n;
+		if(n != NULL)
+			delete n;
 	}
 }
 
@@ -31,13 +32,12 @@ bool Script::parse(void)
 	}
 	catch(Element *e){
 		parseErrorMsg(e);
-		m_env->removeFiles();
+		m_env->removeFiles(false);
 		exit(e->getExitStatus());
-	}
-	catch(...){
+	}catch(...){
 		cerr << "\nParse error" << endl;
 		cerr << "unknown error" << endl;
-		m_env->removeFiles();
+		m_env->removeFiles(false);
 		exit(1);
 	}
 }
@@ -60,12 +60,21 @@ bool Script::doParse(void)
 
 		while(m_feeder->comment());
 
+		bool res = add(new Procedure(m_feeder,m_env))
+			|| add(new Job(m_feeder,m_env))
+			|| add(new IfBlock(m_feeder,m_env));
+
+		if(!res)
+			break;
+
+/*
 		if( add(new Procedure(m_feeder,m_env))){
 		}else if( add(new Job(m_feeder,m_env))){
 		}else if( add(new IfBlock(m_feeder,m_env))){
 		}else{
 			break;
 		}
+*/
 	
 		while(m_feeder->blankLine());
 		continue;
@@ -88,13 +97,12 @@ int Script::exec(void)
 		for(auto &c : m_nodes){
 			exit_status = c->exec();
 		}
-		m_env->removeFiles();
+		m_env->removeFiles(false);
 		if(exit_status == 0)
 			exit(0);
-
 	}catch(Element *e){
 		execErrorMsg(e);
-		m_env->removeFiles();
+		m_env->removeFiles(false);
 		int es = e->getExitStatus();
 		if(es == 127)
 			_exit(es);
@@ -103,11 +111,11 @@ int Script::exec(void)
 	}catch(...){
 		cerr << "\nExecution error" << endl;
 		cerr << "unknown error" << endl;
-		m_env->removeFiles();
+		m_env->removeFiles(false);
 		exit(1);
 	}
 	cerr << "unknown error (uncatched)" << endl;
-	m_env->removeFiles();
+	m_env->removeFiles(false);
 	exit(1);
 }
 

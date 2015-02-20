@@ -37,6 +37,7 @@ bool ExtCommand::parse(void)
 		parseArgs();
 	}
 
+
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }

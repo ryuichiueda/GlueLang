@@ -18,7 +18,7 @@ os=linux
 # TEST1: file
 #########################################
 cat << FIN > $tmp-glue
-/usr/bin/diff a b
+/usr/bin/diff local.a local.b
         where   file a = /bin/echo 'aaa'
                 file b = /bin/echo 'aaa'
 FIN
@@ -32,7 +32,7 @@ diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
 
 cat << FIN > $tmp-glue
-/usr/bin/diff a b
+/usr/bin/diff local.a local.b
         where   file a = /bin/echo 'aaa'
                 file b = /bin/echo 'aab'
 FIN

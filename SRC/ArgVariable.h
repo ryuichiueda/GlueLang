@@ -16,5 +16,7 @@ public:
 
 	virtual bool eval(void);
 	virtual bool parse(void);
+
+	bool m_is_local;
 };
 #endif
