@@ -21,7 +21,7 @@ protected:
 	int m_start_line, m_start_char;
 	int m_end_line, m_end_char;
 
-	//void signalCheck(void);
+	int m_job_id;
 public:
 	Element(Feeder *f, Environment *env);
 	virtual ~Element();
@@ -30,6 +30,8 @@ public:
 	virtual bool parse(void){return false;}
 
 	virtual void printOriginalString(void);
+
+	virtual void setJobId(int id);
 
 	bool add(Element *n);
 

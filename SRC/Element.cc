@@ -17,6 +17,8 @@ Element::Element(Feeder *f, Environment *env)
 	m_start_line = m_start_char = -1000;
 	m_end_line = m_end_char = -1000;
 	m_exit_status = 0;
+
+	m_job_id = 0;
 }
 
 Element::~Element()
@@ -52,4 +54,13 @@ void Element::printErrorPart(void)
 int Element::getLevel(void)
 {
 	return m_env->getLevel();
+}
+
+void Element::setJobId(int id)
+{
+	m_job_id = id;
+	for(auto &n : m_nodes){
+		n->m_job_id = id;
+		n->setJobId(id);
+	}
 }

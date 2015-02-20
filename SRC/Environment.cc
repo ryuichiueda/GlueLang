@@ -31,6 +31,8 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 
 	m_v_opt = false;
 	m_level = 0;
+
+	m_job_counter = 0;
 }
 
 Environment::Environment(Environment *e)
@@ -44,6 +46,8 @@ Environment::Environment(Environment *e)
 
 	m_v_opt = e->m_v_opt;
 	m_level = e->m_level;
+
+	m_job_counter = e->m_job_counter;
 }
 
 Environment::~Environment()
@@ -139,8 +143,8 @@ bool Environment::isData(string *key)
 
 void Environment::removeFiles(bool local)
 {
-	for(auto &le : m_local_env){
-		le->removeFiles(true);
+	for(auto le : m_local_env){
+		le.second->removeFiles(true);
 	}
 
 	for(auto d : m_data){
@@ -188,4 +192,9 @@ void Environment::setData(string *key, Data *value)
 		throw this;
 	}
 	m_data[*key] = value;
+}
+
+int Environment::publishJobId(void)
+{
+	return ++m_job_counter;
 }

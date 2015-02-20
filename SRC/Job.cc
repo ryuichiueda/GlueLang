@@ -105,6 +105,7 @@ bool Job::parse(void)
 		}
 	}
 
+	setJobId(m_env->publishJobId());
 	if(add(new Where(m_feeder,m_env))){
 		m_where = (Where *)m_nodes.back();
 		m_nodes.pop_back();
@@ -114,6 +115,9 @@ bool Job::parse(void)
 		}
 
 	}
+	if(m_outstr != NULL)	m_outstr->setJobId(m_job_id);
+	if(m_outfile != NULL)	m_outfile->setJobId(m_job_id);
+	if(m_where != NULL)	m_where->setJobId(m_job_id);
 
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;

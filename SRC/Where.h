@@ -23,7 +23,6 @@ public:
 
 	Condition* findCond(string *var);
 	Environment *m_local_env;
-
 protected:
 	vector<Condition *> m_conditions;
 };

@@ -41,8 +41,6 @@ bool Where::parse(void)
 
 	m_local_env = new Environment(m_env);
 
-	m_env->m_local_env.push_back(m_local_env);
-
 	int indent = base_indent;
 	while(indent >= base_indent){
 		m_feeder->blank();
@@ -71,6 +69,7 @@ bool Where::parse(void)
 
 int Where::exec(void)
 {
+	m_env->m_local_env[m_job_id] = m_local_env;
 	for(auto n : m_nodes)
 		n->exec();
 

@@ -34,7 +34,7 @@ bool ArgVariable::eval(void)
 		if(!m_is_local){
 			p = m_env->getData(&m_text);
 		}else{
-			p = m_env->m_local_env[0]->getData(&m_text);
+			p = m_env->m_local_env[m_job_id]->getData(&m_text);
 		}
 		m_evaled_text = p->m_value;
 	}catch(...){

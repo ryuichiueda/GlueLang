@@ -16,6 +16,7 @@ private:
 	string m_dir;
 	map<string,Data *> m_data;
 
+	int m_job_counter;
 public:
 	void setData(string *key, Data *value);
 
@@ -48,7 +49,10 @@ public:
 	bool m_v_opt;
 	int m_pid;
 
-	vector<Environment *> m_local_env;
+	map<int, Environment *> m_local_env;
+
+	// giving job id
+	int publishJobId(void);
 };
 
 #endif
