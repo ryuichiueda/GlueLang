@@ -5,11 +5,11 @@
 
 class Data;
 
-class FileData : public Data
+class DataFile : public Data
 {
 public:
-	FileData();
-	virtual ~FileData();
+	DataFile();
+	virtual ~DataFile();
 	virtual string *getFileName(void);
 
 	void openFile(void);

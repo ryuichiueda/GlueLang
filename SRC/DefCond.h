@@ -8,11 +8,11 @@ using namespace std;
 class Feeder;
 class Envrionment;
 
-class Condition : public Element
+class DefCond : public Element
 {
 public:
-	Condition(Feeder *f, Environment *env);
-	virtual ~Condition();
+	DefCond(Feeder *f, Environment *env);
+	virtual ~DefCond();
 
 	virtual bool parse(void);
 

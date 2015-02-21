@@ -7,8 +7,8 @@ using namespace std;
 
 class Feeder;
 class Environment;
-class TmpFile;
-class VarString;
+class DefFile;
+class DefStr;
 
 class Element
 {
@@ -43,8 +43,8 @@ public:
 	void printErrorPart(void);
 	int getLevel(void);
 
-	TmpFile *m_outfile;
-	VarString *m_outstr;
+	DefFile *m_outfile;
+	DefStr *m_outstr;
 
 	static int m_signal;
 };

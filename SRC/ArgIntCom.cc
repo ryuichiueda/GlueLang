@@ -1,18 +1,18 @@
-#include "ArgIntCommand.h"
+#include "ArgIntCom.h"
 #include "Feeder.h"
 #include "Environment.h"
 #include "InternalCommands.h"
 using namespace std;
 
-ArgIntCommand::ArgIntCommand(Feeder *f,Environment *env) : Arg(f,env)
+ArgIntCom::ArgIntCom(Feeder *f,Environment *env) : Arg(f,env)
 {
 }
 
-ArgIntCommand::~ArgIntCommand()
+ArgIntCom::~ArgIntCom()
 {
 }
 
-bool ArgIntCommand::parse(void)
+bool ArgIntCom::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -41,7 +41,7 @@ bool ArgIntCommand::parse(void)
 }
 
 /*
-bool ArgIntCommand::eval(void)
+bool ArgIntCom::eval(void)
 {
 	return true;
 }

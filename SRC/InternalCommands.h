@@ -6,11 +6,11 @@ using namespace std;
 
 class Environment;
 class Feeder;
-class CommandLine;
+class Exe;
 
 class InternalCommands{
 public:
-	static int exec(char const** argv,Environment *e,Feeder *f,CommandLine *p);
+	static int exec(char const** argv,Environment *e,Feeder *f,Exe *p);
 	static bool exist(string *name);
 private:
 	static int echo(int argc, char const** argv);

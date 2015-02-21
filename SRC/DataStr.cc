@@ -1,22 +1,22 @@
-#include "StrData.h"
+#include "DataStr.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "Condition.h"
+#include "DefCond.h"
 #include <fstream>
 using namespace std;
 
-StrData::StrData() : Data()
+DataStr::DataStr() : Data()
 {
 	m_is_set = false;
 }
 
-StrData::~StrData()
+DataStr::~DataStr()
 {
 }
 
-void StrData::createFifo(void)
+void DataStr::createFifo(void)
 {
 	if(mkfifo(m_filename.c_str(),0700) != 0){
 		m_error_msg = "fifo cannot be created";
@@ -24,12 +24,12 @@ void StrData::createFifo(void)
 	}
 }
 
-void StrData::setFifoName(string *name)
+void DataStr::setFifoName(string *name)
 {
 	m_filename = *name;
 }
 
-void StrData::openFifo(void)
+void DataStr::openFifo(void)
 {
 	int fd = open( m_filename.c_str() ,O_WRONLY ,0600);
 	if(dup2(fd,1) < 0){
@@ -42,7 +42,7 @@ void StrData::openFifo(void)
 	}
 }
 
-void StrData::readFifo(Condition *c)
+void DataStr::readFifo(DefCond *c)
 {
 	ifstream ifs(m_filename.c_str());
 	string tmp;
@@ -71,7 +71,7 @@ void StrData::readFifo(Condition *c)
 	m_value += value;
 }
 
-string *StrData::getFileName(void)
+string *DataStr::getFileName(void)
 {
 	return &m_filename;
 }

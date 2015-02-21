@@ -5,11 +5,11 @@
 
 class Data;
 
-class ProcData : public Data
+class DataProc : public Data
 {
 public:
-	ProcData();
-	virtual ~ProcData();
+	DataProc();
+	virtual ~DataProc();
 
 	virtual string *getFileName(void);
 	void setFileName(string *name);

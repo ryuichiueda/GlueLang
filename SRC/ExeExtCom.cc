@@ -1,12 +1,12 @@
-#include "ExtCommand.h"
-#include "ArgExtCommand.h"
+#include "ExeExtCom.h"
+#include "ArgExtCom.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
 #include "Arg.h"
 #include "Where.h"
-#include "TmpFile.h"
-#include "VarString.h"
+#include "DefFile.h"
+#include "DefStr.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -17,19 +17,19 @@
 #include "Feeder.h"
 using namespace std;
 
-ExtCommand::ExtCommand(Feeder *f, Environment *env) : CommandLine(f,env)
+ExeExtCom::ExeExtCom(Feeder *f, Environment *env) : Exe(f,env)
 {
 }
 
-ExtCommand::~ExtCommand()
+ExeExtCom::~ExeExtCom()
 {
 }
 
-bool ExtCommand::parse(void)
+bool ExeExtCom::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	if(!add(new ArgExtCommand(m_feeder,m_env)))
+	if(!add(new ArgExtCom(m_feeder,m_env)))
 		return false;
 
 	if(!m_feeder->comment() && !m_feeder->atNewLine()){
@@ -42,7 +42,7 @@ bool ExtCommand::parse(void)
 	return true;
 }
 
-void ExtCommand::execChild(void)
+void ExeExtCom::execChild(void)
 {
 	auto argv = makeArgv();
 	vOptProc(argv[0]);

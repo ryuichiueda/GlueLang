@@ -2,11 +2,11 @@
 #include "Feeder.h"
 #include "Script.h"
 #include "Import.h"
-#include "Procedure.h"
+#include "DefProc.h"
 #include "IfBlock.h"
 #include "Pipeline.h"
 #include "Job.h"
-#include "CommandLine.h"
+#include "Exe.h"
 #include "Environment.h"
 #include <sys/types.h> 
 #include <sys/stat.h> 
@@ -60,7 +60,7 @@ bool Script::doParse(void)
 
 		while(m_feeder->comment());
 
-		bool res = add(new Procedure(m_feeder,m_env))
+		bool res = add(new DefProc(m_feeder,m_env))
 			|| add(new Job(m_feeder,m_env))
 			|| add(new IfBlock(m_feeder,m_env));
 
@@ -68,7 +68,7 @@ bool Script::doParse(void)
 			break;
 
 /*
-		if( add(new Procedure(m_feeder,m_env))){
+		if( add(new DefProc(m_feeder,m_env))){
 		}else if( add(new Job(m_feeder,m_env))){
 		}else if( add(new IfBlock(m_feeder,m_env))){
 		}else{

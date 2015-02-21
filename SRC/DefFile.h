@@ -10,16 +10,16 @@ class Element;
 class Feeder;
 class Environment;
 class Arg;
-class FileData;
+class DataFile;
 
-class TmpFile : public Element
+class DefFile : public Element
 {
 public:
-	TmpFile(Feeder *f, Environment *env);
-	virtual ~TmpFile();
+	DefFile(Feeder *f, Environment *env);
+	virtual ~DefFile();
 	virtual bool parse(void);
 	virtual int exec(void);
 
-	FileData *m_data;
+	DataFile *m_data;
 };
 #endif

@@ -1,4 +1,4 @@
-#include "VarString.h"
+#include "DefStr.h"
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -6,22 +6,22 @@
 #include <signal.h>
 #include "Feeder.h"
 #include "Environment.h"
-#include "Condition.h"
-#include "StrData.h"
+#include "DefCond.h"
+#include "DataStr.h"
 #include <fstream>
 using namespace std;
 
-VarString::VarString(Feeder *f, Environment *env) : Element(f,env)
+DefStr::DefStr(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_condition = NULL;
 	m_data = NULL;
 }
 
-VarString::~VarString()
+DefStr::~DefStr()
 {
 }
 
-bool VarString::parse(void)
+bool DefStr::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -39,7 +39,7 @@ bool VarString::parse(void)
 	m_feeder->getPos(&m_end_line, &m_end_char);
 
 	try{
-		m_data = new StrData();
+		m_data = new DataStr();
 		string f = m_env->m_tmpdir + "/" + m_var_name;
 		m_data->setFifoName(&f);
 		m_data->createFifo();
@@ -48,7 +48,7 @@ bool VarString::parse(void)
 		m_error_msg = e->m_error_msg;	
 		m_exit_status = 1;
 		throw this;
-	}catch(StrData *e){
+	}catch(DataStr *e){
 		m_error_msg = e->m_error_msg;	
 		m_exit_status = 1;
 		throw this;
@@ -58,7 +58,7 @@ bool VarString::parse(void)
 }
 
 // joint the redirect
-int VarString::exec(void)
+int DefStr::exec(void)
 {
 	m_data->openFifo();
 	return 0;
@@ -71,11 +71,11 @@ int VarString::exec(void)
  * However, It's not critical because this string
  * should not contain a long string.
  */
-bool VarString::readFifo(void)
+bool DefStr::readFifo(void)
 {
 	try{
 		m_data->readFifo(m_condition);
-	}catch(StrData *e){
+	}catch(DataStr *e){
 		m_error_msg = e->m_error_msg;
 		m_exit_status = 3;
 		throw this;

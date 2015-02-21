@@ -1,4 +1,4 @@
-#include "TmpFile.h"
+#include "DefFile.h"
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -6,20 +6,20 @@
 #include <signal.h>
 #include "Feeder.h"
 #include "Environment.h"
-#include "FileData.h"
+#include "DataFile.h"
 using namespace std;
 
-TmpFile::TmpFile(Feeder *f, Environment *env) : Element(f,env)
+DefFile::DefFile(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_data = NULL;
 }
 
-TmpFile::~TmpFile()
+DefFile::~DefFile()
 {
 
 }
 
-bool TmpFile::parse(void)
+bool DefFile::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -36,7 +36,7 @@ bool TmpFile::parse(void)
 	m_feeder->getPos(&m_end_line, &m_end_char);
 
 	try{
-		m_data = new FileData();
+		m_data = new DataFile();
 		string filename = m_env->m_tmpdir + "/" + var_name;
 		m_data->setData(&filename);
 		m_env->setData(&var_name,m_data);
@@ -53,11 +53,11 @@ bool TmpFile::parse(void)
 }
 
 // joint the redirect
-int TmpFile::exec(void)
+int DefFile::exec(void)
 {
 	try{
 		m_data->openFile();
-	}catch(FileData *e){
+	}catch(DataFile *e){
 		m_error_msg = e->m_error_msg;	
 		m_exit_status = 1;
 		throw this;

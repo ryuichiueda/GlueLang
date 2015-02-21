@@ -10,9 +10,9 @@ class Element;
 class Feeder;
 class Environment;
 class Arg;
-class CommandLine;
-class TmpFile;
-class VarString;
+class Exe;
+class DefFile;
+class DefStr;
 class Where;
 
 class Pipeline : public Element
@@ -26,8 +26,8 @@ public:
 	virtual bool parse(void);
 	int execWait(void);
 
-	TmpFile *m_outfile;
-	VarString *m_outstr;
+	DefFile *m_outfile;
+	DefStr *m_outstr;
 
 	bool m_if;
 protected:

@@ -5,8 +5,8 @@
 #include "Script.h"
 #include "Arg.h"
 #include "Where.h"
-#include "TmpFile.h"
-#include "VarString.h"
+#include "DefFile.h"
+#include "DefStr.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -15,13 +15,13 @@
 #include <fcntl.h>
 #include <signal.h>
 #include "Feeder.h"
-#include "SubShell.h"
-#include "StringPut.h"
-#include "ExtCommand.h"
-#include "IntCommand.h"
+#include "ExeProc.h"
+#include "ExeString.h"
+#include "ExeExtCom.h"
+#include "ExeIntCom.h"
 using namespace std;
 
-EachLine::EachLine(Feeder *f, Environment *env) : CommandLine(f,env)
+EachLine::EachLine(Feeder *f, Environment *env) : Exe(f,env)
 {
 }
 
@@ -36,9 +36,9 @@ bool EachLine::parse(void)
 		return false;
 	}
 
-	bool res = add(new SubShell(m_feeder,m_env))
-		|| add(new IntCommand(m_feeder,m_env))
-		|| add(new ExtCommand(m_feeder,m_env));
+	bool res = add(new ExeProc(m_feeder,m_env))
+		|| add(new ExeIntCom(m_feeder,m_env))
+		|| add(new ExeExtCom(m_feeder,m_env));
 
 	if(!res){
 		m_feeder->setPos(m_start_line, m_start_char);
@@ -51,7 +51,7 @@ bool EachLine::parse(void)
 
 void EachLine::execChild(void)
 {	
-	auto *com = (CommandLine *)m_nodes[0];
+	auto *com = (Exe *)m_nodes[0];
 	string line;
 	while (getline(cin, line)){
 		vector<string> ws;

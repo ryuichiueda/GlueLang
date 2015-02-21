@@ -8,11 +8,11 @@ using namespace std;
 class Feeder;
 class Environment;
 
-class ArgExtCommand : public Arg
+class ArgExtCom : public Arg
 {
 public:
-	ArgExtCommand(Feeder *f,Environment *env);
-	virtual ~ArgExtCommand();
+	ArgExtCom(Feeder *f,Environment *env);
+	virtual ~ArgExtCom();
 
 	//virtual bool eval(void);
 	virtual bool parse(void);

@@ -1,6 +1,6 @@
 #include "InternalCommands.h"
 #include "Environment.h"
-#include "CommandLine.h"
+#include "Exe.h"
 #include "Feeder.h"
 #include <iostream>
 #include <string.h>
@@ -16,7 +16,7 @@ bool InternalCommands::exist(string *name)
 
 }
 
-int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,CommandLine *p)
+int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,Exe *p)
 {
 	int c = 0;
 	while(argv[c] != NULL){

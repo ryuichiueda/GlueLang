@@ -1,12 +1,12 @@
 #include "Element.h"
 #include "Feeder.h"
 #include "Where.h"
-#include "TmpFile.h"
+#include "DefFile.h"
 #include "IfBlock.h"
 #include "Pipeline.h"
-#include "CommandLine.h"
+#include "Exe.h"
 #include "Environment.h"
-#include "Condition.h"
+#include "DefCond.h"
 #include <sys/types.h> 
 #include <sys/stat.h> 
 #include <unistd.h>
@@ -44,8 +44,8 @@ bool Where::parse(void)
 	int indent = base_indent;
 	while(indent >= base_indent){
 		m_feeder->blank();
-		if(add(new Condition(m_feeder,m_local_env))){
-			m_conditions.push_back((Condition *)m_nodes.back());
+		if(add(new DefCond(m_feeder,m_local_env))){
+			m_conditions.push_back((DefCond *)m_nodes.back());
 			m_nodes.pop_back();
 		}else if(add(new Job(m_feeder,m_local_env))){
 		}else{
@@ -84,7 +84,7 @@ bool Where::eval(void)
 	return true;
 }
 
-Condition* Where::findCond(string *var)
+DefCond* Where::findCond(string *var)
 {
 	for(auto c : m_conditions){
 		if(c->m_name == *var)

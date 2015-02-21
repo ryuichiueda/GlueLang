@@ -1,13 +1,13 @@
-#include "CommandLine.h"
+#include "Exe.h"
 #include "Environment.h"
 #include "Script.h"
 #include "ArrayVariable.h"
 #include "ArgVariable.h"
 #include "ArgProc.h"
-#include "ArgIntCommand.h"
+#include "ArgIntCom.h"
 #include "Where.h"
-#include "TmpFile.h"
-#include "VarString.h"
+#include "DefFile.h"
+#include "DefStr.h"
 #include "Literal.h"
 #include <stdlib.h>
 #include <unistd.h>
@@ -19,7 +19,7 @@
 #include <string.h>
 using namespace std;
 
-CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
+Exe::Exe(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_pipe[0] = -1;
 	m_pipe[1] = -1;
@@ -30,11 +30,11 @@ CommandLine::CommandLine(Feeder *f, Environment *env) : Element(f,env)
 	m_if = false;
 }
 
-CommandLine::~CommandLine()
+Exe::~Exe()
 {
 }
 
-void CommandLine::parseArgs(void)
+void Exe::parseArgs(void)
 {
 	bool flg = true;
 	while(1){
@@ -52,7 +52,7 @@ void CommandLine::parseArgs(void)
 	}
 }
 
-void CommandLine::parentPipeProc(void)
+void Exe::parentPipeProc(void)
 {
 	if(m_pipe_prev >= 0)
 		close(m_pipe_prev);
@@ -61,7 +61,7 @@ void CommandLine::parentPipeProc(void)
 	close(m_pipe[1]);
 }
 
-void CommandLine::childPipeProc(void)
+void Exe::childPipeProc(void)
 {
 	if(m_pipe[1] >= 0)
 		close(m_pipe[0]);
@@ -76,14 +76,14 @@ void CommandLine::childPipeProc(void)
 	}
 }
 
-void CommandLine::execErrorExit(void)
+void Exe::execErrorExit(void)
 {
 	m_error_msg =  "Command error";
 	m_exit_status = 127;
 	throw this;
 }
 
-int CommandLine::exec(void)
+int Exe::exec(void)
 {
 	cout << flush;
 
@@ -118,11 +118,11 @@ int CommandLine::exec(void)
 	return pid;
 }
 
-char** CommandLine::makeArgv(void)
+char** Exe::makeArgv(void)
 {
 	auto argv = new char* [m_nodes.size() + 1 + m_add_args.size()];
 	
-	argv[0] = (char *)((ArgIntCommand *)m_nodes[0])->m_evaled_text.c_str();
+	argv[0] = (char *)((ArgIntCom *)m_nodes[0])->m_evaled_text.c_str();
 
 	int i = 1;
 	for (;i < (int)m_nodes.size();i++){
@@ -139,7 +139,7 @@ char** CommandLine::makeArgv(void)
 	return argv;
 }
 
-bool CommandLine::eval(void)
+bool Exe::eval(void)
 {
 	for(auto s : m_nodes){
 		if(s->eval())
@@ -151,14 +151,14 @@ bool CommandLine::eval(void)
 	return true;
 }
 
-void CommandLine::setPipe(int *pip,int prev)
+void Exe::setPipe(int *pip,int prev)
 {
 	m_pipe[0] = pip[0];
 	m_pipe[1] = pip[1];
 	m_pipe_prev = prev;
 }
 
-void CommandLine::vOptProc(char const* arg)
+void Exe::vOptProc(char const* arg)
 {
 	if(!m_env->m_v_opt)
 		return;

@@ -1,12 +1,12 @@
-#include "IntCommand.h"
-#include "ArgIntCommand.h"
+#include "ExeIntCom.h"
+#include "ArgIntCom.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
 #include "Arg.h"
 #include "Where.h"
-#include "TmpFile.h"
-#include "VarString.h"
+#include "DefFile.h"
+#include "DefStr.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -17,15 +17,15 @@
 #include "Feeder.h"
 using namespace std;
 
-IntCommand::IntCommand(Feeder *f, Environment *env) : CommandLine(f,env)
+ExeIntCom::ExeIntCom(Feeder *f, Environment *env) : Exe(f,env)
 {
 }
 
-IntCommand::~IntCommand()
+ExeIntCom::~ExeIntCom()
 {
 }
 
-bool IntCommand::parse(void)
+bool ExeIntCom::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 /*
@@ -36,11 +36,11 @@ bool IntCommand::parse(void)
 	m_feeder->setPos(m_start_line, m_start_char);
 */
 
-	if(!add(new ArgIntCommand(m_feeder,m_env)))
+	if(!add(new ArgIntCom(m_feeder,m_env)))
 		return false;
 /*
 	// start from a command
-	if(!add(new ArgIntCommand(m_feeder,m_env)))
+	if(!add(new ArgIntCom(m_feeder,m_env)))
 		return false;
 */
 
@@ -49,7 +49,7 @@ bool IntCommand::parse(void)
 		parseArgs();
 	}
 
-	auto *c = (ArgIntCommand *)m_nodes[0];
+	auto *c = (ArgIntCom *)m_nodes[0];
 	if(c->m_text == "in.wait"){
 		m_is_wait = true;
 	}
@@ -58,7 +58,7 @@ bool IntCommand::parse(void)
 	return true;
 }
 
-void IntCommand::execChild(void)
+void ExeIntCom::execChild(void)
 {
 	auto argv = makeArgv();
 	vOptProc(argv[0]);

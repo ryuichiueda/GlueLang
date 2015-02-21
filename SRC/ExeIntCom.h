@@ -1,18 +1,18 @@
 #ifndef __INT_COMMAND_H_
 #define __INT_COMMAND_H_
 
-#include "CommandLine.h"
+#include "Exe.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
 class Feeder;
 
-class IntCommand : public CommandLine
+class ExeIntCom : public Exe
 {
 public:
-	IntCommand(Feeder *f, Environment *env);
-	virtual ~IntCommand();
+	ExeIntCom(Feeder *f, Environment *env);
+	virtual ~ExeIntCom();
 	virtual bool parse(void);
 protected:
 	void execChild(void);

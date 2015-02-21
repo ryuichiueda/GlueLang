@@ -1,18 +1,18 @@
-#include "ArgExtCommand.h"
+#include "ArgExtCom.h"
 #include "Feeder.h"
 #include "Environment.h"
 #include <sys/stat.h>
 using namespace std;
 
-ArgExtCommand::ArgExtCommand(Feeder *f,Environment *env) : Arg(f,env)
+ArgExtCom::ArgExtCom(Feeder *f,Environment *env) : Arg(f,env)
 {
 }
 
-ArgExtCommand::~ArgExtCommand()
+ArgExtCom::~ArgExtCom()
 {
 }
 
-bool ArgExtCommand::parse(void)
+bool ArgExtCom::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -61,13 +61,13 @@ bool ArgExtCommand::parse(void)
 }
 
 /*
-bool ArgExtCommand::eval(void)
+bool ArgExtCom::eval(void)
 {
 	return true;
 }
 */
 
-bool ArgExtCommand::parsePrefixedCom(void)
+bool ArgExtCom::parsePrefixedCom(void)
 {
 	struct stat buf;
 	auto paths = m_env->getImportPaths(&m_prefix);

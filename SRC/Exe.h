@@ -9,16 +9,16 @@ using namespace std;
 class Element;
 class Feeder;
 class Arg;
-class TmpFile;
-class VarString;
+class DefFile;
+class DefStr;
 class Environment;
 class Where;
 
-class CommandLine : public Element
+class Exe : public Element
 {
 public:
-	CommandLine(Feeder *f, Environment *env);
-	virtual ~CommandLine();
+	Exe(Feeder *f, Environment *env);
+	virtual ~Exe();
 	virtual bool parse(void) = 0;
 	void parseArgs(void);
 

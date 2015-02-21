@@ -9,22 +9,22 @@ using namespace std;
 class Element;
 class Feeder;
 class Environment;
-class Condition;
-class StrData;
+class DefCond;
+class DataStr;
 
-class VarString : public Element
+class DefStr : public Element
 {
 public:
-	VarString(Feeder *f, Environment *env);
-	virtual ~VarString();
+	DefStr(Feeder *f, Environment *env);
+	virtual ~DefStr();
 	virtual bool parse(void);
 	virtual int exec(void);
 
 	bool readFifo(void);
 
-	Condition* m_condition;
+	DefCond* m_condition;
 	string m_var_name;
 protected:
-	StrData *m_data;
+	DataStr *m_data;
 };
 #endif

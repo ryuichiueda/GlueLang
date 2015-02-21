@@ -10,9 +10,9 @@ class Element;
 class Feeder;
 class Environment;
 class Arg;
-class CommandLine;
-class TmpFile;
-class VarString;
+class Exe;
+class DefFile;
+class DefStr;
 
 class Job : public Element
 {
@@ -29,8 +29,8 @@ protected:
 	int execNormal(void);
 	int execBackGround(void);
 
-	TmpFile *m_outfile;
-	VarString *m_outstr;
+	DefFile *m_outfile;
+	DefStr *m_outstr;
 
 	Where *m_where;
 	Environment *m_local_env;

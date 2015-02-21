@@ -7,11 +7,11 @@ using namespace std;
 class Feeder;
 class Envrionment;
 
-class Procedure : public Element
+class DefProc : public Element
 {
 public:
-	Procedure(Feeder *f, Environment *env);
-	virtual ~Procedure();
+	DefProc(Feeder *f, Environment *env);
+	virtual ~DefProc();
 	//const char *getStr(void);
 
 	virtual bool parse(void);

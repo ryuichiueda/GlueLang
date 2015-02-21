@@ -1,18 +1,18 @@
 #ifndef __STRING_PUT_H_
 #define __STRING_PUT_H_
 
-#include "CommandLine.h"
+#include "Exe.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
 class Feeder;
 
-class StringPut : public CommandLine
+class ExeString : public Exe
 {
 public:
-	StringPut(Feeder *f, Environment *env);
-	virtual ~StringPut();
+	ExeString(Feeder *f, Environment *env);
+	virtual ~ExeString();
 	virtual bool parse(void);
 protected:
 	void execChild(void);

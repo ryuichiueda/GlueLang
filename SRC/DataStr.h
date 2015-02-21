@@ -4,18 +4,18 @@
 #include "Data.h"
 
 class Data;
-class Condition;
+class DefCond;
 
-class StrData : public Data
+class DataStr : public Data
 {
 public:
-	StrData();
-	virtual ~StrData();
+	DataStr();
+	virtual ~DataStr();
 	virtual string *getFileName(void);
 
 	void createFifo(void);
 	void openFifo(void);
-	void readFifo(Condition *c);
+	void readFifo(DefCond *c);
 
 	void setFifoName(string *name);
 protected:

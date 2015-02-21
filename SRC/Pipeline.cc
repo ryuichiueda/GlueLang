@@ -5,17 +5,17 @@
 #include <signal.h>
 #include <unistd.h>
 #include "Pipeline.h"
-#include "SubShell.h"
-#include "StringPut.h"
-#include "ExtCommand.h"
+#include "ExeProc.h"
+#include "ExeString.h"
+#include "ExeExtCom.h"
 #include "EachLine.h"
-#include "IntCommand.h"
-#include "TmpFile.h"
-#include "VarString.h"
+#include "ExeIntCom.h"
+#include "DefFile.h"
+#include "DefStr.h"
 #include "Arg.h"
 #include "Feeder.h"
 #include "Environment.h"
-#include "JobData.h"
+#include "DataJob.h"
 using namespace std;
 
 Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
@@ -45,11 +45,11 @@ bool Pipeline::parse(void)
 
 	int comnum = 0;
 	while(1){
-		bool res = add(new StringPut(m_feeder,m_env))
+		bool res = add(new ExeString(m_feeder,m_env))
  			|| add(new EachLine(m_feeder,m_env))
-			|| add(new SubShell(m_feeder,m_env))
-			|| add(new IntCommand(m_feeder,m_env))
-			|| add(new ExtCommand(m_feeder,m_env));
+			|| add(new ExeProc(m_feeder,m_env))
+			|| add(new ExeIntCom(m_feeder,m_env))
+			|| add(new ExeExtCom(m_feeder,m_env));
 		if(res)
 			comnum++;
 		else
@@ -78,15 +78,15 @@ int Pipeline::exec(void)
 	// When wait(1) is set in the command line,
 	// wait(1) is done in this process.
 	// Wait(1) cannot be connected with other commands
-	//auto *cl = (CommandLine *)m_nodes[0];
-	if(((CommandLine *)m_nodes[0])->m_is_wait)
+	//auto *cl = (Exe *)m_nodes[0];
+	if(((Exe *)m_nodes[0])->m_is_wait)
 		return execWait();
 
 	int pip[2];
 	int prevfd = -1;
 
 	for(auto *n : m_nodes){
-		auto *p = (CommandLine *)n;
+		auto *p = (Exe *)n;
 		pip[1] = -1;
 		if ( p != m_nodes.back() && pipe(pip) < 0) {
 			close(prevfd);
@@ -110,20 +110,20 @@ int Pipeline::exec(void)
 
 int Pipeline::execWait(void)
 {
-	auto *c = (CommandLine *)m_nodes[0];
+	auto *c = (Exe *)m_nodes[0];
 	c->eval();
 	auto argv = c->makeArgv();
 	
 	int i = 1;
 	while(argv[i] != NULL){
-		JobData *p = NULL;
+		DataJob *p = NULL;
 		int pid = 0;
 		
 		while(pid == 0){ // not forked
 			if(p == NULL){
 				try{
 					string s(argv[i]);
-					p = (JobData *)m_env->getData(&s);
+					p = (DataJob *)m_env->getData(&s);
 				}catch(...){
 					m_error_msg = "Bug of backgound process";
 					m_exit_status = 1;

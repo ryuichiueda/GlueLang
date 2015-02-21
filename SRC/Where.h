@@ -9,7 +9,7 @@ using namespace std;
 class Element;
 class Feeder;
 class Environment;
-class Condition;
+class DefCond;
 
 class Where : public Element
 {
@@ -21,9 +21,9 @@ public:
 	virtual int exec(void);
 	virtual bool eval(void);
 
-	Condition* findCond(string *var);
+	DefCond* findCond(string *var);
 	Environment *m_local_env;
 protected:
-	vector<Condition *> m_conditions;
+	vector<DefCond *> m_conditions;
 };
 #endif

@@ -1,4 +1,4 @@
-#include "StringPut.h"
+#include "ExeString.h"
 //#include "ArgCommand.h"
 #include "InternalCommands.h"
 #include "Environment.h"
@@ -7,8 +7,8 @@
 #include "Literal.h"
 #include "ArgVariable.h"
 #include "Where.h"
-#include "TmpFile.h"
-#include "VarString.h"
+#include "DefFile.h"
+#include "DefStr.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -19,15 +19,15 @@
 #include "Feeder.h"
 using namespace std;
 
-StringPut::StringPut(Feeder *f, Environment *env) : CommandLine(f,env)
+ExeString::ExeString(Feeder *f, Environment *env) : Exe(f,env)
 {
 }
 
-StringPut::~StringPut()
+ExeString::~ExeString()
 {
 }
 
-bool StringPut::parse(void)
+bool ExeString::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -47,7 +47,7 @@ bool StringPut::parse(void)
 	return true;
 }
 
-void StringPut::execChild(void)
+void ExeString::execChild(void)
 {
 	string s,tmp;
 	for(auto n : m_nodes){

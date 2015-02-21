@@ -25,7 +25,7 @@ public:
 	~Environment();
 
 	// fork
-	void initSubShell(char const* argv[]);
+	void initExeProc(char const* argv[]);
 	int getLevel(void){return m_level;}
 	int m_level;
 

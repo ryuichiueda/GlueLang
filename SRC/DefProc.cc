@@ -1,24 +1,24 @@
-#include "Procedure.h"
+#include "DefProc.h"
 //#include "ArgCommand.h"
-#include "CommandLine.h"
+#include "Exe.h"
 #include "Feeder.h"
 #include "Environment.h"
-#include "ProcData.h"
+#include "DataProc.h"
 #include <fstream>
 #include <sys/types.h> 
 #include <sys/stat.h> 
 #include <unistd.h>
 using namespace std;
 
-Procedure::Procedure(Feeder *f, Environment *env) : Element(f,env)
+DefProc::DefProc(Feeder *f, Environment *env) : Element(f,env)
 {
 }
 
-Procedure::~Procedure()
+DefProc::~DefProc()
 {
 }
 
-bool Procedure::parse(void)
+bool DefProc::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -57,7 +57,7 @@ bool Procedure::parse(void)
 	ofstream ofs(tmpdir.c_str());
 	ofs << tmp.substr(indent,tmp.size()-indent) << endl;
 
-	auto *p = new ProcData();
+	auto *p = new DataProc();
 	p->setFileName(&tmpdir);
 	m_env->setData(&m_name,p);
 	

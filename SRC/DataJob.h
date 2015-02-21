@@ -5,11 +5,11 @@
 
 class Data;
 
-class JobData : public Data
+class DataJob : public Data
 {
 public:
-	JobData();
-	virtual ~JobData();
+	DataJob();
+	virtual ~DataJob();
 
 	virtual string *getFileName(void){return NULL;}
 	int m_pid;

@@ -7,7 +7,7 @@
 #include <sys/param.h> 
 #include <sys/stat.h>
 #include <signal.h>
-#include "JobData.h"
+#include "DataJob.h"
 using namespace std;
 
 Environment::Environment(int argc, char const* argv[],int script_pos)
@@ -58,7 +58,7 @@ Environment::~Environment()
 	}
 }
 
-void Environment::initSubShell(char const* argv[])
+void Environment::initExeProc(char const* argv[])
 {
 	m_pid = getpid();
 	//set args

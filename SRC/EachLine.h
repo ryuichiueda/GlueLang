@@ -1,14 +1,14 @@
 #ifndef __EACH_LINE_H_
 #define __EACH_LINE_H_
 
-#include "CommandLine.h"
+#include "Exe.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
 class Feeder;
 
-class EachLine : public CommandLine
+class EachLine : public Exe
 {
 public:
 	EachLine(Feeder *f, Environment *env);

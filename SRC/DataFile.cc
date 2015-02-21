@@ -1,4 +1,4 @@
-#include "FileData.h"
+#include "DataFile.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -6,21 +6,21 @@
 #include <iostream>
 using namespace std;
 
-FileData::FileData() : Data()
+DataFile::DataFile() : Data()
 {
 	m_append_mode = false;
 }
 
-FileData::~FileData()
+DataFile::~DataFile()
 {
 }
 
-void FileData::setAppend(void)
+void DataFile::setAppend(void)
 {
 	m_append_mode = true;
 }
 
-void FileData::openFile(void)
+void DataFile::openFile(void)
 {
 	int mode = O_WRONLY | O_CREAT;
 	if(m_append_mode)
@@ -41,7 +41,7 @@ void FileData::openFile(void)
 	}
 }
 
-string *FileData::getFileName(void)
+string *DataFile::getFileName(void)
 {
 	return &m_value;
 }

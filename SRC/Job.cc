@@ -3,15 +3,15 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <unistd.h>
-#include "CommandLine.h"
-#include "TmpFile.h"
-#include "VarString.h"
+#include "Exe.h"
+#include "DefFile.h"
+#include "DefStr.h"
 #include "Pipeline.h"
 #include "Arg.h"
 #include "Feeder.h"
 #include "Environment.h"
-#include "JobData.h"
-#include "FileData.h"
+#include "DataJob.h"
+#include "DataFile.h"
 #include "Job.h"
 #include "IfBlock.h"
 #include "Where.h"
@@ -56,13 +56,13 @@ bool Job::parse(void)
 
 	// scanning of file name 
 	// If `file <filename> =` is found, 
-	// the TmpFile object is pushed as the first element of m_nodes.
+	// the DefFile object is pushed as the first element of m_nodes.
 	// This node is also given to the last command line.
-	if(add(new TmpFile(m_feeder,m_env))){
-		m_outfile = (TmpFile *)m_nodes[0];	
+	if(add(new DefFile(m_feeder,m_env))){
+		m_outfile = (DefFile *)m_nodes[0];	
 		m_nodes.pop_back();
-	}else if(add(new VarString(m_feeder,m_env))){
-		m_outstr = (VarString *)m_nodes[0];	
+	}else if(add(new DefStr(m_feeder,m_env))){
+		m_outstr = (DefStr *)m_nodes[0];	
 		m_nodes.pop_back();
 	}
 
@@ -94,7 +94,7 @@ bool Job::parse(void)
 			throw this;
 		}
 
-		JobData *d = new JobData();
+		DataJob *d = new DataJob();
 		d->setData(&m_job_name);
 
 		try{
@@ -188,7 +188,7 @@ int Job::execBackGround(void)
 	}
 
 	try{
-		JobData *p = (JobData *)m_env->getData(&m_job_name);
+		DataJob *p = (DataJob *)m_env->getData(&m_job_name);
 		p->m_pid = pid;
 	}catch(...){
 		m_error_msg = "Bug of backgound process";
