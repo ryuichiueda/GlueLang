@@ -55,25 +55,14 @@ void EachLine::execChild(void)
 	string line;
 	while (getline(cin, line)){
 		vector<string> ws;
-		int s = 0;
-		int num = 0;
-		line += ' ';
-		for(char c : line){
-			if(c == ' '){
-				com->appendArg(line.substr(s,num));
-				num = 0;
-				s += num + 2;
-			}else
-				num++;
+		line += ' ';//add a space at the end of a line
+		int from = 0;
+		for(int i=from;i<line.size();i++){
+			if(line.at(i) == ' '){
+				com->appendArg(line.substr(from,i-from));
+				from = i + 1;
+			}
 		}
-		//ws.push_back(line.substr(s,e-s));
-
-/*
-		for(auto w : ws){
-			//com->appendArg(&w);
-			//cerr << &w << endl;
-		}
-*/
 
 		int pid = com->exec();
 		

@@ -59,7 +59,6 @@ bool IfBlock::parse(void)
 			return false;
 		}
 
-
 		while(m_feeder->blankLine()){}
 
 		m_is_cond_node.push_back(true);

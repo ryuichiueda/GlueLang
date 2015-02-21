@@ -13,6 +13,7 @@
 #include "JobData.h"
 #include "FileData.h"
 #include "Job.h"
+#include "IfBlock.h"
 #include "Where.h"
 using namespace std;
 
