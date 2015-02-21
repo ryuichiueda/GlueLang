@@ -8,7 +8,7 @@
 #include "ExeProc.h"
 #include "ExeString.h"
 #include "ExeExtCom.h"
-#include "EachLine.h"
+#include "ExeEachline.h"
 #include "ExeIntCom.h"
 #include "DefFile.h"
 #include "DefStr.h"
@@ -46,7 +46,7 @@ bool Pipeline::parse(void)
 	int comnum = 0;
 	while(1){
 		bool res = add(new ExeString(m_feeder,m_env))
- 			|| add(new EachLine(m_feeder,m_env))
+ 			|| add(new ExeEachline(m_feeder,m_env))
 			|| add(new ExeProc(m_feeder,m_env))
 			|| add(new ExeIntCom(m_feeder,m_env))
 			|| add(new ExeExtCom(m_feeder,m_env));

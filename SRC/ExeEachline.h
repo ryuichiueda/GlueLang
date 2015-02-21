@@ -8,11 +8,11 @@ using namespace std;
 
 class Feeder;
 
-class EachLine : public Exe
+class ExeEachline : public Exe
 {
 public:
-	EachLine(Feeder *f, Environment *env);
-	virtual ~EachLine();
+	ExeEachline(Feeder *f, Environment *env);
+	virtual ~ExeEachline();
 	virtual bool parse(void);
 protected:
 	void execChild(void);

@@ -1,4 +1,4 @@
-#include "EachLine.h"
+#include "ExeEachline.h"
 //#include "ArgCommand.h"
 //#include "InternalCommands.h"
 #include "Environment.h"
@@ -21,15 +21,15 @@
 #include "ExeIntCom.h"
 using namespace std;
 
-EachLine::EachLine(Feeder *f, Environment *env) : Exe(f,env)
+ExeEachline::ExeEachline(Feeder *f, Environment *env) : Exe(f,env)
 {
 }
 
-EachLine::~EachLine()
+ExeEachline::~ExeEachline()
 {
 }
 
-bool EachLine::parse(void)
+bool ExeEachline::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 	if(!m_feeder->str("eachline")){
@@ -49,7 +49,7 @@ bool EachLine::parse(void)
 	return true;
 }
 
-void EachLine::execChild(void)
+void ExeEachline::execChild(void)
 {	
 	auto *com = (Exe *)m_nodes[0];
 	string line;
@@ -76,7 +76,7 @@ void EachLine::execChild(void)
 }
 
 //copy from PipeLine.cc (It's not cool.)
-void EachLine::waitCommands(int pid)
+void ExeEachline::waitCommands(int pid)
 {
 	int options = 0;
 	int status;
