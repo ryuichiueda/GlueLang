@@ -66,18 +66,8 @@ bool Script::doParse(void)
 
 		if(!res)
 			break;
-
-/*
-		if( add(new DefProc(m_feeder,m_env))){
-		}else if( add(new Job(m_feeder,m_env))){
-		}else if( add(new IfBlock(m_feeder,m_env))){
-		}else{
-			break;
-		}
-*/
 	
 		while(m_feeder->blankLine());
-		continue;
 	}
 	m_feeder->getPos(&m_end_line, &m_end_char);
 
