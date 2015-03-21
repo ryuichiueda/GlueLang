@@ -33,6 +33,8 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 	m_level = 0;
 
 	m_job_counter = 0;
+
+	m_is_local = false;
 }
 
 Environment::Environment(Environment *e)
@@ -153,6 +155,32 @@ void Environment::removeFiles(bool local)
 			continue;
 
 		if(m_tmpdir + "/" != f->substr(0,m_tmpdir.size() + 1))
+			continue;
+
+/*
+		cerr << "try: " << f->c_str() << endl;
+		if(m_is_local){
+			cerr << "local" << endl;
+		}
+*/
+/*
+		if(m_is_local){
+		if(f->substr(m_tmpdir.size(),6+1) == "local."){
+			remove(f->c_str());
+			if(m_v_opt)
+				cerr << "+ pid " << getpid() << " file " << f << " deleted" << endl;
+			continue;
+		}
+		}
+*/
+/*
+		if(m_is_local){
+			cerr << "local: " << f->c_str() << endl;
+		}else{
+			cerr << "global: " << f->c_str() << endl;
+		}
+*/
+		if(f->substr(m_tmpdir.size()+1,6) != "local." && m_is_local)
 			continue;
 
 		remove(f->c_str());

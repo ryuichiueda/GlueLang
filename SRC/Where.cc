@@ -21,9 +21,8 @@ Where::Where(Feeder *f, Environment *env) : Element(f,env)
 
 Where::~Where()
 {
-	if(m_local_env != NULL){
+	if(m_local_env != NULL)
 		delete m_local_env;
-	}
 }
 
 bool Where::parse(void)
@@ -40,6 +39,12 @@ bool Where::parse(void)
 	}
 
 	m_local_env = new Environment(m_env);
+	m_local_env->m_is_local = true;
+
+/*
+	cerr << "global: " << m_env << endl;
+	cerr << "local: " << m_local_env << endl;
+*/
 
 	int indent = base_indent;
 	while(indent >= base_indent){

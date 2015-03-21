@@ -53,6 +53,8 @@ public:
 
 	// giving job id
 	int publishJobId(void);
+
+	bool m_is_local;
 };
 
 #endif

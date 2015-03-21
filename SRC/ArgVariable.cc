@@ -23,6 +23,9 @@ bool ArgVariable::parse(void)
 	if(!m_feeder->variable(&m_text))
 		return false;
 
+	if(m_is_local)
+		m_text = "local." + m_text;
+
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;
 }

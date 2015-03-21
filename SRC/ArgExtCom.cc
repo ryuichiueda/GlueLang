@@ -37,8 +37,6 @@ bool ArgExtCom::parse(void)
 		// if m_prefix is not a prefix, it is a name of a command or a procedure
 		m_text = m_prefix;
 		m_prefix = "";
-		//m_feeder->getPos(&m_end_line, &m_end_char);
-		//return true;
 		return parsePrefixedCom();
 	}
 	//hereafter, a command name with a prefix
@@ -59,13 +57,6 @@ bool ArgExtCom::parse(void)
 
 	return parsePrefixedCom();
 }
-
-/*
-bool ArgExtCom::eval(void)
-{
-	return true;
-}
-*/
 
 bool ArgExtCom::parsePrefixedCom(void)
 {

@@ -28,6 +28,10 @@ bool DefFile::parse(void)
 			&& m_feeder->variable(&var_name) 
 			&& m_feeder->str("=");
 
+	if(m_env->m_is_local){
+		var_name = "local." + var_name;	
+	}
+
 	if(!res){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;

@@ -142,6 +142,7 @@ int Job::exec(void)
 		m_local_env = m_where->m_local_env;
 	}
 
+
 	if(m_is_background)
 		return execBackGround();
 
@@ -150,11 +151,11 @@ int Job::exec(void)
 
 int Job::execNormal(void)
 {
+
 	for(int i=0;i<(int)m_nodes.size();i++){
 		auto *p = (Pipeline *)m_nodes[i];
 		if(m_outfile != NULL && i!=0){
 			m_outfile->m_data->setAppend();
-			//m_outfile->m_append_mode = true;
 		}
 
 		int es = p->exec();
@@ -178,7 +179,6 @@ int Job::execBackGround(void)
 			auto *p = (Pipeline *)m_nodes[i];
 			if(m_outfile != NULL && i!=0)
 				m_outfile->m_data->setAppend();
-			//	m_outfile->m_append_mode = true;
 	
 			int es = p->exec();
 			if(m_if && es != 0)
