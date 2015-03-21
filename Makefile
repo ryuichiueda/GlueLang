@@ -1,11 +1,8 @@
 all:
 	$(MAKE) -C SRC
-	$(MAKE) -C stdcom
 
 clean:
 	cd SRC; make clean
-	cd stdcom; make clean
-	cd stdcom; make realclean
 	rm -f ./glue
 
 test: all
