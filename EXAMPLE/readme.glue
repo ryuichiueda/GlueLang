@@ -8,12 +8,14 @@ proc revten =
 	>>= /usr/bin/tail -r
  
 # if, else if, else
-? false
+{
+	false
 	this.revten
-| true
+} !> {
 	echo 'foo'
-| otherwise
+} !> {
 	echo 'bar'
+}
  
 # output connection
 str s = echo 'foofoo' >> echo 'barbar'
@@ -24,6 +26,6 @@ file f = seq 1 10 >>= grep 5
 cat f
 
 # where
-diff a b
+diff local.a local.b
 	where file a = seq 1 10
 	      file b = seq 1 10

@@ -33,12 +33,14 @@ proc revten =
 	>>= /usr/bin/tail -r
  
 # if, else if, else
-? false
+{
+	false
 	this.revten
-| true
+} !> {
 	echo 'foo'
-| otherwise
+} !> {
 	echo 'bar'
+}
  
 # output connection
 str s = echo 'foofoo' >> echo 'barbar'
