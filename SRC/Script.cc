@@ -3,7 +3,6 @@
 #include "Script.h"
 #include "Import.h"
 #include "DefProc.h"
-#include "IfBlock.h"
 #include "Pipeline.h"
 #include "Job.h"
 #include "Exe.h"
@@ -15,6 +14,7 @@ using namespace std;
 
 Script::Script(Feeder *f, Environment *env) : Element(f,env)
 {
+	m_silent = false;
 }
 
 Script::~Script()
@@ -61,8 +61,7 @@ bool Script::doParse(void)
 		while(m_feeder->comment());
 
 		bool res = add(new DefProc(m_feeder,m_env))
-			|| add(new Job(m_feeder,m_env))
-			|| add(new IfBlock(m_feeder,m_env));
+			|| add(new Job(m_feeder,m_env));
 
 		if(!res)
 			break;
@@ -111,6 +110,9 @@ int Script::exec(void)
 
 void Script::execErrorMsg(Element *e)
 {
+	if(m_silent)
+		return;
+
 	cerr << "\nExecution error at " ;
 	cerr << e->pos() << endl;
 	e->printErrorPart();

@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "Pipeline.h"
 #include "ExeProc.h"
+#include "ExeSubShell.h"
 #include "ExeString.h"
 #include "ExeExtCom.h"
 #include "ExeEachline.h"
@@ -47,7 +48,8 @@ bool Pipeline::parse(void)
 
 	int comnum = 0;
 	while(1){
-		bool res = add(new ExeString(m_feeder,m_env))
+		bool res = add(new ExeSubShell(m_feeder,m_env))
+			|| add(new ExeString(m_feeder,m_env))
  			|| add(new ExeEachline(m_feeder,m_env))
 			|| add(new ExeProc(m_feeder,m_env))
 			|| add(new ExeIntCom(m_feeder,m_env))
@@ -184,18 +186,8 @@ void Pipeline::waitCommands(int pid)
 		cerr << "+ pid " << pid << " exit " << m_exit_status << endl;
 
 	// judged at the upper level if !> is used
-	if(m_rev_connect){
-/*
-		if(m_exit_status == 0)
-			m_rev_connect = false;
-			//This false means that the right sight of !> is not executed.
-			//This is referred in Job.cc
-		else
-			m_exit_status = 0;
-
-*/
+	if(m_rev_connect)
 		return;
-	}
 
 	if(m_exit_status == 0)
 		return;

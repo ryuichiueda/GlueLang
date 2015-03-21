@@ -29,13 +29,6 @@ ExeProc::~ExeProc()
 bool ExeProc::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
-/*
-	if(!m_feeder->str("this.")){
-		return false;
-	}
-	//rewind
-	m_feeder->setPos(m_start_line, m_start_char);
-*/
 
 	if(!add(new ArgProc(m_feeder,m_env)))
 		return false;

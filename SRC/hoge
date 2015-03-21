@@ -1,0 +1,6 @@
+import PATH
+
+file a = seq 1 5
+file b = seq 1 5
+
+diff a b !> true

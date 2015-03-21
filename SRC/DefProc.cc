@@ -61,9 +61,6 @@ bool DefProc::parse(void)
 	p->setFileName(&tmpdir);
 	m_env->setData(&m_name,p);
 	
-
-	//m_env->setFileList(&tmpdir);
-
 	while(m_feeder->blankLine()){
 		ofs << endl;
 	}
@@ -88,7 +85,7 @@ bool DefProc::parse(void)
 
 	ofs.close();
 	m_feeder->getPos(&m_end_line, &m_end_char);
-	m_script.push_back(tmp);
+	//m_script.push_back(tmp);
 	return true;
 }
 

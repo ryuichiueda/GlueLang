@@ -18,7 +18,7 @@ public:
 
 protected:
 	string m_name;
-	vector<string> m_script;
+	//vector<string> m_script;
 	string m_script_path;
 };
 #endif

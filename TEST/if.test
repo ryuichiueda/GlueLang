@@ -1,4 +1,4 @@
-#!/bin/bash -xv
+#!/bin/bash
 
 tmp=/tmp/$$
 scr=$(basename $0)
@@ -30,11 +30,11 @@ c
 FIN
 
 cat << FIN > $tmp-linux
-? /bin/false
+/bin/false !> /bin/true
 FIN
 
 cat << FIN > $tmp-mac
-? /usr/bin/false
+/usr/bin/false !> /usr/bin/true
 FIN
 
 ../glue $tmp-$os
@@ -49,11 +49,11 @@ hoge
 FIN
 
 cat << FIN > $tmp-linux
-? /bin/false >>= /bin/echo 'hoge'
+/bin/false >>= /bin/echo 'hoge' !> /bin/true
 FIN
 
 cat << FIN > $tmp-mac
-? /usr/bin/false >>= /bin/echo 'hoge'
+/usr/bin/false >>= /bin/echo 'hoge' !> /usr/bin/true
 FIN
 
 ../glue $tmp-$os > $tmp-ans
@@ -67,51 +67,29 @@ ERROR_CHECK "TEST2.2 error"
 #########################################
 
 cat << FIN > $tmp-out
-OK
-a
-OK
-OK
+d
+d
 FIN
 
-cat << FIN > $tmp-linux
-? /bin/true
-	/bin/echo 'OK'
-| /bin/echo 'a'
-	/bin/echo 'no'
-| otherwise
-	/bin/echo 'ow'
+cat << FIN > $tmp-glue
+import PATH
 
-? /bin/false
-	/bin/echo 'NG'
-| /bin/echo 'a'
-	/bin/echo 'OK'
+file x = {
+        false
+        echo 'a'
+        echo 'b'
+} !> {
+        false
+        echo 'c'
+} !> {
+        echo 'd'
+}
 
-? /bin/false
-	/bin/echo 'NG'
-| otherwise
-	/bin/echo 'OK'
+cat x
+cat x
 FIN
 
-cat << FIN > $tmp-mac
-? /usr/bin/true
-	/bin/echo 'OK'
-| /bin/echo 'a'
-	/bin/echo 'no'
-| otherwise
-	/bin/echo 'ow'
-
-? /usr/bin/false
-	/bin/echo 'NG'
-| /bin/echo 'a'
-	/bin/echo 'OK'
-
-? /usr/bin/false
-	/bin/echo 'NG'
-| otherwise
-	/bin/echo 'OK'
-FIN
-
-../glue $tmp-$os > $tmp-ans
+../glue $tmp-glue > $tmp-ans
 ERROR_CHECK "TEST3.1 error"
 
 diff $tmp-out $tmp-ans

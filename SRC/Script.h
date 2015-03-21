@@ -19,10 +19,13 @@ public:
 	bool parse(void);
 	virtual int exec(void);
 	virtual bool eval(void){return true;};
+
+	void setSilent(void){m_silent = true;}
 protected:
 	bool tryElement(Element *n);
 	void parseErrorMsg(Element *e);
 	void execErrorMsg(Element *e);
 	bool doParse(void);
+	bool m_silent;
 };
 #endif

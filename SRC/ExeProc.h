@@ -1,5 +1,5 @@
-#ifndef __SUB_SHELL_H_
-#define __SUB_SHELL_H_
+#ifndef __EXEPROC_H_
+#define __EXEPROC_H_
 
 #include "Exe.h"
 #include <iostream>
