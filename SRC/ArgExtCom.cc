@@ -26,7 +26,7 @@ bool ArgExtCom::parse(void)
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		bool res = m_feeder->command(&m_text);
 
-		if(res == true)
+		if(res)
 			m_evaled_text = m_text;
 
 		return res;

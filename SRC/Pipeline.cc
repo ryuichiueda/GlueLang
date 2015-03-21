@@ -24,6 +24,8 @@ Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 	m_outstr = NULL;
 
 	m_if = false;
+
+	m_rev_connect = false;
 }
 
 Pipeline::~Pipeline()
@@ -180,6 +182,20 @@ void Pipeline::waitCommands(int pid)
 
 	if(m_env->m_v_opt)
 		cerr << "+ pid " << pid << " exit " << m_exit_status << endl;
+
+	// judged at the upper level if !> is used
+	if(m_rev_connect){
+/*
+		if(m_exit_status == 0)
+			m_rev_connect = false;
+			//This false means that the right sight of !> is not executed.
+			//This is referred in Job.cc
+		else
+			m_exit_status = 0;
+
+*/
+		return;
+	}
 
 	if(m_exit_status == 0)
 		return;

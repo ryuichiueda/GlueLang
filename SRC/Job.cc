@@ -70,11 +70,22 @@ bool Job::parse(void)
 	while(1){
 		if(add(new Pipeline(m_feeder,m_env)))
 			comnum++;
+		else
+			break;
+/*
+		cerr << "?";
+		((Pipeline *)m_nodes.back())->printOriginalString();
+		cerr << "?" << endl;
+		exit(1);
+*/
 
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		m_feeder->blank();
 
-		if(! m_feeder->str(">>")){
+		if(m_feeder->str(">>")){
+		}else if(m_feeder->str("!>")){
+			((Pipeline *)m_nodes.back())->m_rev_connect = true;
+		}else{
 			m_feeder->setPos(m_end_line, m_end_char);
 			break;
 		}
@@ -154,11 +165,17 @@ int Job::execNormal(void)
 
 	for(int i=0;i<(int)m_nodes.size();i++){
 		auto *p = (Pipeline *)m_nodes[i];
-		if(m_outfile != NULL && i!=0){
+		if(m_outfile != NULL && i!=0)
 			m_outfile->m_data->setAppend();
-		}
 
 		int es = p->exec();
+		if(p->m_rev_connect){
+			if(p->m_exit_status == 0)
+				return 0;//Right side pipelines are not executed.
+			else
+				es = 0;
+		}
+
 		if(m_if && es != 0)
 			return es;
 	}
