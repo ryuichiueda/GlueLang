@@ -75,9 +75,18 @@ bool Job::parse(void)
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		m_feeder->blank();
 
+		size_t num = m_nodes.size();
+		Pipeline *back1 = (Pipeline *)m_nodes.back();
+		Pipeline *back2 = num >= 2 ? (Pipeline *)m_nodes[num-2] : NULL;
+
 		if(m_feeder->str(">>")){
+		}else if(m_feeder->str("?")){
+			back1->m_has_then = true;
 		}else if(m_feeder->str("!>")){
-			((Pipeline *)m_nodes.back())->m_rev_connect = true;
+			if(back2 != NULL && back2->m_has_then)
+				back2->m_has_else = true;
+			else
+				back1->m_has_else = true;
 		}else{
 			m_feeder->setPos(m_end_line, m_end_char);
 			break;
@@ -155,18 +164,34 @@ int Job::exec(void)
 
 int Job::execNormal(void)
 {
-
+	bool then_and_return = false;
+	bool skip = false;
 	for(int i=0;i<(int)m_nodes.size();i++){
+		if(skip){
+			skip = false;
+			continue;
+		}
+
 		auto *p = (Pipeline *)m_nodes[i];
 		if(m_outfile != NULL && i!=0)
 			m_outfile->m_data->setAppend();
 
 		int es = p->exec();
-		if(p->m_rev_connect){
-			if(p->m_exit_status == 0)
-				return 0;//Right side pipelines are not executed.
-			else
-				es = 0;
+		if(then_and_return)
+			return es;
+
+		if(p->m_has_else){
+			if(p->m_has_then){
+				if(p->m_exit_status == 0)
+					then_and_return = true;
+				else
+					skip = true;
+			}else{
+				if(p->m_exit_status == 0)
+					return es;
+			}
+
+			es = 0;
 		}
 
 		if(m_if && es != 0)

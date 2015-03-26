@@ -1,7 +1,0 @@
-#!/usr/local/bin/glue
-import PATH
-
-file a = seq 1 3
-file b = seq 1 2
-
-diff a b !> true

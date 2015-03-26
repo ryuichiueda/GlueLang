@@ -30,7 +30,8 @@ public:
 	DefStr *m_outstr;
 
 	bool m_if;
-	bool m_rev_connect;
+	bool m_has_then;
+	bool m_has_else;
 protected:
 	void waitCommands(int pid);
 	vector<int> m_pids;

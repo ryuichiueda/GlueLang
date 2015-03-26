@@ -26,7 +26,7 @@ Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 
 	m_if = false;
 
-	m_rev_connect = false;
+	m_has_else = false;
 }
 
 Pipeline::~Pipeline()
@@ -186,7 +186,7 @@ void Pipeline::waitCommands(int pid)
 		cerr << "+ pid " << pid << " exit " << m_exit_status << endl;
 
 	// judged at the upper level if !> is used
-	if(m_rev_connect)
+	if(m_has_else)
 		return;
 
 	if(m_exit_status == 0)

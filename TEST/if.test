@@ -94,4 +94,33 @@ ERROR_CHECK "TEST3.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST3.2 error"
 
+#########################################
+# TEST4: connection by ?
+#########################################
+
+cat << FIN > $tmp-out
+c
+c
+FIN
+
+cat << FIN > $tmp-glue
+import PATH
+
+file x = false ? do
+        echo 'a'
+        echo 'b'
+!> true ? do
+        echo 'c'
+!> echo 'd'
+
+cat x
+cat x
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST4.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST4.2 error"
+
 rm -f $tmp-*
