@@ -74,16 +74,15 @@ FIN
 cat << FIN > $tmp-glue
 import PATH
 
-file x = (
+file x = do
         false
         echo 'a'
         echo 'b'
-) !> (
+!> do
         false
         echo 'c'
-) !> (
+!> do
         echo 'd'
-)
 
 cat x
 cat x

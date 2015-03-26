@@ -1,19 +1,20 @@
 import PATH
 
+proc catx1 = do
+	cat x
 
-if false >>= true
->>= hoge
-	echo 'aho'
-elif true
-	echo 'OK'
+proc catx2 = cat x
 
-
-
-file x = false do
+file x = do
+        false
         echo 'a'
         echo 'b'
-!> true do
-        false
+!> do
         echo 'c'
-!> true do
+!> do
         echo 'd'
+
+
+catx1
+
+catx2

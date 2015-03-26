@@ -71,12 +71,6 @@ bool Job::parse(void)
 			comnum++;
 		else
 			break;
-/*
-		cerr << "?";
-		((Pipeline *)m_nodes.back())->printOriginalString();
-		cerr << "?" << endl;
-		exit(1);
-*/
 
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		m_feeder->blank();

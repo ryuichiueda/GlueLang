@@ -27,7 +27,7 @@ bool DefProc::parse(void)
 		return false;
 	}
 
-	if(!m_feeder->smallCaps(&m_name)){
+	if(!m_feeder->command(&m_name)){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}

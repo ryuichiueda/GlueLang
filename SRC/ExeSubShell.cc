@@ -31,7 +31,16 @@ bool ExeSubShell::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
+/*
 	if(!m_feeder->str("(")){
+		m_feeder->setPos(m_start_line, m_start_char);
+		return false;
+	}
+*/
+
+	string scr;
+	bool scr_exist = m_feeder->doBlock(&scr);
+	if(!scr_exist){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}
@@ -41,11 +50,13 @@ bool ExeSubShell::parse(void)
 	//create a file
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
 	ofstream ofs(tmpdir.c_str());
+	ofs << scr;
 
 	auto *p = new DataProc();
 	p->setFileName(&tmpdir);
 	m_env->setData(&m_name,p);
 	
+/*
 	while(m_feeder->blankLine()){
 		ofs << endl;
 	}
@@ -75,6 +86,7 @@ bool ExeSubShell::parse(void)
 	ofs.close();
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	//m_script.push_back(tmp);
+*/
 	return true;
 }
 
