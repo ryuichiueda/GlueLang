@@ -49,6 +49,7 @@ public:
 	bool smallCapsWithNum(string *ans);
 	bool positiveInt(long *pos);
 	bool lineResidual(string *ans);
+	bool doBlock(string *ans);
 
 	bool str(string s);
 

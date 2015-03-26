@@ -33,7 +33,7 @@ ERROR_CHECK "TEST1 error"
 #########################################
 
 cat << FIN > $tmp-glue
-proc p =
+proc p = do
   /bin/echo 'a'
 
   /bin/echo 'b'

@@ -601,3 +601,29 @@ bool Feeder::lineResidual(string *ans)
 	return true;
 	
 }
+
+bool Feeder::doBlock(string *ans)
+{
+	if(!str("do")){
+                return false;
+	}
+
+        while(blankLine()){
+		*ans += '\n';
+        }
+
+	int indent = countIndent();
+	int idt = INT_MAX;
+        while(idt >= indent){//write the script file with removal of the indent
+		string tmp;
+                lineResidual(&tmp);
+                *ans += tmp.substr(indent,tmp.size()-indent);
+		*ans += '\n';
+
+                while(blankLine()){
+			*ans += '\n';
+                }
+                idt = countIndent();
+        }
+	return true;
+}

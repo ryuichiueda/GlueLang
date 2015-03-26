@@ -38,54 +38,24 @@ bool DefProc::parse(void)
 		return false;
 	}
 
-	string tmp;
-	if(!m_feeder->lineResidual(&tmp)){
+	string scr;
+	bool scr_exist = m_feeder->doBlock(&scr) || m_feeder->lineResidual(&scr);
+	if(!scr_exist){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}
 
-	// reading first line
-	int i = 0;
-	for(;i< (int)tmp.size();i++){
-		if(tmp[i] != ' ' && tmp[i] != '\t')
-			break;
-	}
-	int indent = i;
-
 	//create a file
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
 	ofstream ofs(tmpdir.c_str());
-	ofs << tmp.substr(indent,tmp.size()-indent) << endl;
+	ofs << scr;
+	ofs.close();
 
 	auto *p = new DataProc();
 	p->setFileName(&tmpdir);
 	m_env->setData(&m_name,p);
-	
-	while(m_feeder->blankLine()){
-		ofs << endl;
-	}
 
-	//read other lines
-	// The second line fixes the offside line of this procedure
-	indent = m_feeder->countIndent();
-	int idt = indent;
-	// no indent -> the while loop should be avoided
-	if(idt == 0)
-		idt = -1;
-
-	while(idt >= indent){//write the script file with removal of the indent
-		m_feeder->lineResidual(&tmp);
-		ofs << tmp.substr(indent,tmp.size()-indent) << endl;
-
-		while(m_feeder->blankLine()){
-			ofs << endl;
-		}
-		idt = m_feeder->countIndent();
-	}
-
-	ofs.close();
 	m_feeder->getPos(&m_end_line, &m_end_char);
-	//m_script.push_back(tmp);
 	return true;
 }
 

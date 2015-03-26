@@ -1,0 +1,10 @@
+import PATH
+
+proc hoge = do
+	echo 'a'
+	echo 'b'
+
+
+hoge
+
+echo 'c'

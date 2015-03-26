@@ -57,7 +57,7 @@ ERROR_CHECK "TEST2.2 error"
 cat << FIN > $tmp-glue
 import PATH
 
-proc hoge =
+proc hoge = do
 	in.echo 'hoge' argv[1] argv[2] >>= rev
 
 seq 1 10 >>= xargs -n 2 >>= eachline this.hoge

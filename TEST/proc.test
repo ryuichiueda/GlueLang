@@ -44,7 +44,7 @@ OK
 FIN
 
 cat << 'FIN' > $tmp-glue
-proc hoge =
+proc hoge = do
       /bin/echo argv[1] >>= /usr/bin/rev
       /bin/echo 'OK'
 

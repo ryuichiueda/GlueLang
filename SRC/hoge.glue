@@ -1,0 +1,19 @@
+import PATH
+
+
+if false >>= true
+>>= hoge
+	echo 'aho'
+elif true
+	echo 'OK'
+
+
+
+file x = false do
+        echo 'a'
+        echo 'b'
+!> true do
+        false
+        echo 'c'
+!> true do
+        echo 'd'
