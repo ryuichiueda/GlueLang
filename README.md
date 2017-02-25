@@ -56,7 +56,10 @@ diff a b
               file b = seq 1 10
 ```
 
-Licence
-========
+# Licence
 
 MIT Licence is applied to. See LICENSE.md.
+
+# Document (in Japanese)
+
+* https://ryuichiueda.github.io/GlueLangDoc_ja/
