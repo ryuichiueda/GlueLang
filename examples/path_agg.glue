@@ -1,0 +1,5 @@
+import /bin/ as b
+import /usr/bin/ as b
+
+b.echo 'hoge'
+b.seq 1 10
