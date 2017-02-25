@@ -1,0 +1,1 @@
+/bin/echo 'a' >> /bin/echo 'b' >> /bin/echo 'c'
