@@ -5,7 +5,3 @@ proc f = do
   echo 'bbb'
 
 in.repeat 4 this.f
-
-#infinite loop
-#in.repeat this.f
-

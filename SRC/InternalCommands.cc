@@ -51,37 +51,24 @@ int InternalCommands::echo(int argc, char const** argv)
 int InternalCommands::repeat(int argc, char const** argv, Environment *e)
 {
 	char *c = NULL;
-	if(argv[1] == NULL)
-		exit(0);
+	if(argc < 2)
+		exit(1);
 
 	long rep = strtol(argv[1], &c, 10);
-	int j = 1;
+	if(*c != '\0')
+		exit(1);
 
-	string tmpdir;
-	if(*c != '\0'){ // infinite loop (example: repeat this.f )
-		rep = 1;
-		j = 0;
-		tmpdir = argv[1];
-	        argv[0] = (char *)tmpdir.c_str();
-		int k = 1;
-		while(argv[k+1] != NULL){
-			argv[k] = argv[k+1];
-			k++;
-		}
-	        argv[k] = NULL;
-	}else{ // normal loop (example: repeat 4 this.f )
-		tmpdir = argv[2];
-	        argv[0] = (char *)tmpdir.c_str();
-		int k = 1;
-		while(argv[k+2] != NULL){
-			argv[k] = argv[k+2];
-			k++;
-		}
-	        argv[k] = NULL;
+	string tmpdir = argv[2];
+	argv[0] = (char *)tmpdir.c_str();
+	int k = 1;
+	while(argv[k+2] != NULL){
+		argv[k] = argv[k+2];
+		k++;
 	}
+	argv[k] = NULL;
 
 	int es = 0;
-	for(int i=0;i<rep;i+=j){//if rep do not has a number, this becomes an infinite loop.
+	for(int i=0;i<rep;i++){
 		int pid = fork();
 		if(pid != 0){//parent proc
 		        int options = 0;

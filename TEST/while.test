@@ -28,9 +28,16 @@ proc f = do
   test tmp -ne 0
   
 in.while this.f
+echo 'OK'         #this should be executed
 FIN
+
+echo OK > $tmp-out
 
 ../glue $tmp-glue > $tmp-ans
 ERROR_CHECK "TEST1.1 error"
+
+tail -n 1 $tmp-ans	|
+diff - $tmp-out
+ERROR_CHECK "TEST1.2 error"
 
 rm -f $tmp-*

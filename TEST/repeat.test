@@ -111,7 +111,7 @@ proc f = do
   echo 'aaa'
   false
 
-in.repeat this.f #it should stop here
+in.repeat 3 this.f #it should stop here
 echo 'bbb'
 FIN
 
