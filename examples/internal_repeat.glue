@@ -1,0 +1,11 @@
+import PATH
+
+proc f = do
+  echo 'aaa'
+  echo 'bbb'
+
+in.repeat 4 this.f
+
+#infinite loop
+#in.repeat this.f
+

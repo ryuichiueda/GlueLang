@@ -21,4 +21,5 @@ string *DataProc::getFileName(void)
 void DataProc::setFileName(string *name)
 {
 	m_filename = *name;
+	m_value = *name;
 }

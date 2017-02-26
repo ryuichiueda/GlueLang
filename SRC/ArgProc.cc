@@ -15,10 +15,6 @@ bool ArgProc::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-/*
-	if(!m_feeder->str("this."))
-		return false;
-*/
 	m_feeder->str("this.");
 
 	string tmp;

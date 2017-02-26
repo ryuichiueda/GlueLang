@@ -1,0 +1,5 @@
+proc hoge = do
+  /bin/echo 'abc' >>= /usr/bin/rev
+  /bin/echo 'OK'
+
+this.hoge

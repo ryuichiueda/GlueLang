@@ -1,0 +1,5 @@
+import PATH
+
+str s = head -n 1 '/etc/hosts'
+
+echo s

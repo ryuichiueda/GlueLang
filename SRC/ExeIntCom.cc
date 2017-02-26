@@ -28,21 +28,9 @@ ExeIntCom::~ExeIntCom()
 bool ExeIntCom::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
-/*
-	if(!m_feeder->str("in.")){
-		return false;
-	}
-	//rewind
-	m_feeder->setPos(m_start_line, m_start_char);
-*/
 
 	if(!add(new ArgIntCom(m_feeder,m_env)))
 		return false;
-/*
-	// start from a command
-	if(!add(new ArgIntCom(m_feeder,m_env)))
-		return false;
-*/
 
 	if(!m_feeder->comment() && !m_feeder->atNewLine()){
 		m_feeder->blank();

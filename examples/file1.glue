@@ -1,0 +1,5 @@
+import PATH
+
+file f = head -n 1 '/etc/hosts'
+
+cat f

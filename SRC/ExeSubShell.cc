@@ -31,13 +31,6 @@ bool ExeSubShell::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-/*
-	if(!m_feeder->str("(")){
-		m_feeder->setPos(m_start_line, m_start_char);
-		return false;
-	}
-*/
-
 	string scr;
 	bool scr_exist = m_feeder->doBlock(&scr);
 	if(!scr_exist){
@@ -55,38 +48,6 @@ bool ExeSubShell::parse(void)
 	auto *p = new DataProc();
 	p->setFileName(&tmpdir);
 	m_env->setData(&m_name,p);
-	
-/*
-	while(m_feeder->blankLine()){
-		ofs << endl;
-	}
-
-	//read other lines
-	// The second line fixes the offside line of this procedure
-	int indent = m_feeder->countIndent();
-	int idt = indent;
-
-	string tmp;
-	while(! m_feeder->str(")")){
-		if(idt < indent){
-			m_error_msg = "Invalid indent";	
-			m_exit_status = 1;
-			throw this;
-		}
-		m_feeder->lineResidual(&tmp);
-		ofs << tmp.substr(indent,tmp.size()-indent) << endl;
-		//ofs << tmp << endl;
-
-		while(m_feeder->blankLine()){
-			ofs << endl;
-		}
-		//idt = m_feeder->countIndent();
-	}
-
-	ofs.close();
-	m_feeder->getPos(&m_end_line, &m_end_char);
-	//m_script.push_back(tmp);
-*/
 	return true;
 }
 

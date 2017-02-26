@@ -37,10 +37,10 @@ void Job::print(int indent_level)
 {
 }
 
-/* parse of a "and line", which is a set of pipelines
+/* parse of a job, which is a set of pipelines combined by >> or !>.
 
 	file f = command ... >>= command ... >> ...
-	command ... >> command ... >>= ...
+	command ... !> command ... >>= ...
 
 * to do:
 	to implement file redirection for standard error, like

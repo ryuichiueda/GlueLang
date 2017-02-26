@@ -143,7 +143,6 @@ int Pipeline::execWait(void)
 			throw this;
 		}
 		m_pids.push_back(pid);
-		//m_env->unsetBG(argv[i]);
 		p->m_pid = 0;
 		i++;
 	}

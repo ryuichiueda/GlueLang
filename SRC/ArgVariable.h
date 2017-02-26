@@ -18,5 +18,6 @@ public:
 	virtual bool parse(void);
 
 	bool m_is_local;
+	bool m_is_proc;
 };
 #endif

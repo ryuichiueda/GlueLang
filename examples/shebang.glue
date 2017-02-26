@@ -1,0 +1,3 @@
+#!/usr/local/bin/glue
+
+/bin/echo 'shebang'

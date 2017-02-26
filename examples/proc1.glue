@@ -1,0 +1,5 @@
+#definition
+proc f = /bin/echo 'HELLO'
+
+#execution
+this.f

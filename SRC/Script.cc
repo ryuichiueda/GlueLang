@@ -56,7 +56,7 @@ bool Script::doParse(void)
 	m_env->initTmpdir();
 
 	while(1){
-		// comments -> proc or and -> proc or and -> ...
+		// comments -> proc or job -> proc or job -> ...
 
 		while(m_feeder->comment());
 
