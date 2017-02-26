@@ -106,11 +106,10 @@ FIN
 cat << FIN > $tmp-glue
 import PATH
 
-file x = false ? do
+file x = false >> do
         echo 'a'
         echo 'b'
-!> true ? do
-        echo 'c'
+!> echo 'c'
 !> echo 'd'
 
 cat x

@@ -1,0 +1,4 @@
+import PATH
+
+false !> echo 'Echo is executed.'
+true !> echo 'Echo is not executed.'

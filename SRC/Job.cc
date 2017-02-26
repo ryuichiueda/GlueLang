@@ -80,7 +80,6 @@ bool Job::parse(void)
 		Pipeline *back2 = num >= 2 ? (Pipeline *)m_nodes[num-2] : NULL;
 
 		if(m_feeder->str(">>")){
-		}else if(m_feeder->str("?")){
 			back1->m_has_then = true;
 		}else if(m_feeder->str("!>")){
 			if(back2 != NULL && back2->m_has_then)
