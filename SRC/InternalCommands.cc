@@ -12,7 +12,7 @@ using namespace std;
 
 bool InternalCommands::exist(string *name)
 {
-	if(*name == "echo" || *name == "pid" || *name == "repeat")
+	if(*name == "echo" || *name == "pid" || *name == "repeat" || *name == "while")
 		return true;
 
 	return false;
@@ -31,6 +31,8 @@ int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,Exe *p)
 		exit( pid(c,argv,e) );
 	}else if(strncmp(argv[0],"repeat",6) == 0){
 		exit( repeat(c,argv,e) );
+	}else if(strncmp(argv[0],"while",5) == 0){
+		exit( while_(c,argv,e) );
 	}
 	return -1;
 }
@@ -104,6 +106,65 @@ int InternalCommands::repeat(int argc, char const** argv, Environment *e)
 
 			if(es != 0)
 				exit(es);
+
+			continue;
+		}
+
+		//child proc
+	        ifstream ifs(argv[0]);
+	        Feeder feeder(&ifs);
+	
+	        e->initExeProc((const char**)argv);
+	        Script s(&feeder,e);
+	
+	        s.setSilent();
+	        s.parse();
+	        s.exec();
+	}
+
+	return 0;
+}
+
+int InternalCommands::while_(int argc, char const** argv, Environment *e)
+{
+	if(argv[1] == NULL)
+		exit(0);
+
+	string tmpdir = argv[1];
+	argv[0] = (char *)tmpdir.c_str();
+	int k = 1;
+	while(argv[k+1] != NULL){
+		argv[k] = argv[k+1];
+		k++;
+	}
+	argv[k] = NULL;
+
+	int es = 0;
+	while(1){
+		int pid = fork();
+		if(pid != 0){//parent proc
+		        int options = 0;
+		        int status;
+		        int wpid = waitpid(pid,&status,options);
+
+			if(wpid != pid)
+				exit(1);
+
+			if(!WIFEXITED(status)){
+				if(WIFSIGNALED(status) && WTERMSIG(status) == 13){
+					es = 0;
+				}else{
+					es = WEXITSTATUS(status);
+				}
+			}else{
+				es = WEXITSTATUS(status);
+			}
+
+			if(e->m_v_opt)
+				cerr << "+ pid " << pid << " exit " << es << endl;
+
+			if(es != 0)
+				exit(0);
 
 			continue;
 		}
