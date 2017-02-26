@@ -1,0 +1,8 @@
+import PATH
+
+proc f = do
+  echo 'aaa'
+  echo 'bbb'
+
+file x = in.repeat 3 this.f
+head -n 3 x

@@ -8,6 +8,8 @@
 #include <string>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/types.h> 
+#include <sys/wait.h>
 using namespace std;
 
 bool InternalCommands::exist(string *name)

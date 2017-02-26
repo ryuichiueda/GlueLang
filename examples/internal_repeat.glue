@@ -1,7 +1,5 @@
-import PATH
-
 proc f = do
   echo 'aaa'
   echo 'bbb'
 
-in.repeat 4 this.f
+in.repeat 3 this.f
