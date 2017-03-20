@@ -44,7 +44,7 @@ cat << FIN > $tmp-glue
 FIN
 
 ../glue $tmp-glue "あ あ" "abc def" &> /dev/null
-[ $? -eq 1 ]
+[ $? -eq 2 ]
 ERROR_CHECK "TEST2.2 error"
 
 rm -f $tmp-*

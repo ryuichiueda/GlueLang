@@ -606,6 +606,8 @@ bool Feeder::lineResidual(string *ans)
 
 bool Feeder::doBlock(string *ans)
 {
+	return block(ans,"do");
+	/*
 	if(!str("do")){
                 return false;
 	}
@@ -628,4 +630,36 @@ bool Feeder::doBlock(string *ans)
                 idt = countIndent();
         }
 	return true;
+	*/
+}
+
+bool Feeder::block(string *ans,string op)
+{
+	if(!str(op)){
+                return false;
+	}
+
+        while(blankLine()){
+		*ans += '\n';
+        }
+
+	int indent = countIndent();
+	int idt = INT_MAX;
+        while(idt >= indent){//write the script file with removal of the indent
+		string tmp;
+                lineResidual(&tmp);
+                *ans += tmp.substr(indent,tmp.size()-indent);
+		*ans += '\n';
+
+                while(blankLine()){
+			*ans += '\n';
+                }
+                idt = countIndent();
+        }
+	return true;
+}
+
+bool Feeder::loopBlock(string *ans)
+{
+	return block(ans,"loop");
 }

@@ -26,6 +26,7 @@ private:
 	bool literalEsc(string *ans);
 	bool literalNoEsc(string *ans);
 
+	bool block(string *ans,string op);
 public:
 	Feeder(ifstream *ifs);
 	~Feeder();
@@ -52,6 +53,7 @@ public:
 	bool positiveInt(long *pos);
 	bool lineResidual(string *ans);
 	bool doBlock(string *ans);
+	bool loopBlock(string *ans);
 
 	bool str(string s);
 

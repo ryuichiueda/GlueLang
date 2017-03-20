@@ -1,0 +1,9 @@
+import PATH
+
+do
+  false       #これで次の!>に飛ぶ
+  echo 'a'    #実行されない
+!> do
+  echo 'b'    #これが実行される
+!> do
+  echo 'c'    #これは実行されない

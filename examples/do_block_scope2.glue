@@ -1,0 +1,6 @@
+import PATH
+
+str s = 'アイウエオ'
+
+do
+  echo s

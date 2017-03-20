@@ -1,0 +1,7 @@
+import PATH
+
+do
+  file f = echo 'a'  
+  mv f '/tmp/hoge'
+
+cat '/tmp/hoge'

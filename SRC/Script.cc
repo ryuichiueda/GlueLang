@@ -35,12 +35,12 @@ bool Script::parse(void)
 	catch(Element *e){
 		parseErrorMsg(e);
 		m_env->removeFiles(false);
-		exit(e->getExitStatus());
+		exit(2);
 	}catch(...){
 		cerr << "\nParse error" << endl;
 		cerr << "unknown error" << endl;
 		m_env->removeFiles(false);
-		exit(1);
+		exit(4);
 	}
 }
 
@@ -95,19 +95,22 @@ int Script::exec(void)
 		execErrorMsg(e);
 		m_env->removeFiles(false);
 		int es = e->getExitStatus();
-		if(es == 127)
-			_exit(es);
-		else
-			exit(es);
+		if(es == 127){
+			//_exit(es);
+			_exit(1);
+		}else{
+			exit(1);
+			//exit(es);
+		}
 	}catch(...){
 		cerr << "\nExecution error" << endl;
 		cerr << "unknown error" << endl;
 		m_env->removeFiles(false);
-		exit(1);
+		exit(3);
 	}
 	cerr << "unknown error (uncatched)" << endl;
 	m_env->removeFiles(false);
-	exit(1);
+	exit(3);
 }
 
 void Script::execErrorMsg(Element *e)
@@ -122,6 +125,7 @@ void Script::execErrorMsg(Element *e)
 	cerr << "\t\n";
 	cerr <<  "\tprocess_level " << e->getLevel() << endl;
 	cerr << "\texit_status " << e->getExitStatus() << endl;
+	cerr << "\tglue exit_status 1" << endl;
 	cerr << "\tpid " << getpid() << '\n' << endl;
 }
 
@@ -136,5 +140,6 @@ void Script::parseErrorMsg(Element *e)
 	cerr << '\n';
 	cerr <<  "\tprocess_level " << e->getLevel() << endl;
 	cerr << "\texit_status " << e->getExitStatus() << endl;
+	cerr << "\tglue exit_status 2" << endl;
 	cerr << "\tpid " << getpid() << '\n' << endl;
 }

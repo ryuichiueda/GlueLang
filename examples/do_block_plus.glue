@@ -1,0 +1,15 @@
+import PATH
+
+#手続きの定義・宣言
+proc fn = do
+  echo 'c' 
+
+#ファイルへの格納
+file f = do
+  echo 'a'  
+
+#文字列への格納
+str s = do
+  echo 'b'
+
+cat f >> echo s >> fn
