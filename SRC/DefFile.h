@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __TMP_FILE_H_
 #define __TMP_FILE_H_
 

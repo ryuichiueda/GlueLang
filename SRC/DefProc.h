@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __PROC_H_
 #define __PROC_H_
 

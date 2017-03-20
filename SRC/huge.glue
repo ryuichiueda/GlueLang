@@ -1,3 +1,0 @@
-import PATH
-
-false !> echo 'b' !> echo 'c'

@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __STR_DATA_H_
 #define __STR_DATA_H_
 

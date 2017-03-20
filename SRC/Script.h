@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __SCRIPT_H_
 #define __SCRIPT_H_
 

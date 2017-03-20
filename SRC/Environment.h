@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __ENVIRONMENT_H_
 #define __ENVIRONMENT_H_
 

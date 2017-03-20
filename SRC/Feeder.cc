@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #include "Feeder.h"
 #include <fstream>
 #include <iostream>

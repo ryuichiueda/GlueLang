@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #include "ExeIntCom.h"
 #include "ArgIntCom.h"
 #include "InternalCommands.h"

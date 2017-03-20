@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #include "DefStr.h"
 #include <unistd.h>
 #include <sys/types.h>

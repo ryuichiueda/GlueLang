@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __ELEMENT_H_
 #define __ELEMENT_H_
 

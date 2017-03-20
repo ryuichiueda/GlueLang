@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #include "DefFile.h"
 #include <unistd.h>
 #include <sys/types.h>

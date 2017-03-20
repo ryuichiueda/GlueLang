@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>

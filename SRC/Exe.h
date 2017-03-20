@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __COMMAND_LINE_H_
 #define __COMMAND_LINE_H_
 

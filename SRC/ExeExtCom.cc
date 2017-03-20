@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #include "ExeExtCom.h"
 #include "ArgExtCom.h"
 #include "InternalCommands.h"

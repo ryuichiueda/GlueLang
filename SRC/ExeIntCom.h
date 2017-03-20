@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __INT_COMMAND_H_
 #define __INT_COMMAND_H_
 

@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __ARG_EXT_COM_H_
 #define __ARG_EXT_COM_H_
 

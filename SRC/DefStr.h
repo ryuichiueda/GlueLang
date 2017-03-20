@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __VAR_STRING_H_
 #define __VAR_STRING_H_
 

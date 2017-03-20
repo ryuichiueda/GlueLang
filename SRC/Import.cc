@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #include "Import.h"
 #include "Feeder.h"
 #include "Environment.h"

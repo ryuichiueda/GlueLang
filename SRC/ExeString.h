@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __STRING_PUT_H_
 #define __STRING_PUT_H_
 

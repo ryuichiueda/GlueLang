@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #ifndef __ARRAY_VARIABLE_H_
 #define __ARRAY_VARIABLE_H_
 

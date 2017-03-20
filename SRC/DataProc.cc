@@ -1,3 +1,5 @@
+// Copyright 2014 Ryuichi Ueda
+// Released under the MIT License.
 #include "DataProc.h"
 #include <sys/types.h>
 #include <sys/stat.h>
