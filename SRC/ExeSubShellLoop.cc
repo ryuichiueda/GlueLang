@@ -62,7 +62,7 @@ void ExeSubShellLoop::execChild(void)
 	while(1){
 		int pid = fork();
 		if(pid < 0)
-			exit(1);
+			exit(4);
 
 		if(pid == 0){
 			vOptProc(argv[0]);
@@ -93,9 +93,11 @@ void ExeSubShellLoop::execChild(void)
 		                }
 		        }else{
 			       	m_exit_status = WEXITSTATUS(status);
-			       	if(m_exit_status == 2){
-					exit(1);
-				}else if(m_exit_status != 0){
+			       	if(m_exit_status == 0){
+					continue;
+				}else if(m_exit_status != 1){
+					exit(m_exit_status);
+				}else{
 					exit(0);
 				}
 			}

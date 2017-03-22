@@ -93,7 +93,7 @@ file abcd = /bin/cat '$tmp-in'
 FIN
 
 ../glue $tmp-glue 
-[ $? -eq 1 ]               # exit status should be one
+[ $? -eq 3 ]               # exit status should be one
 ERROR_CHECK "TEST3.1 error"
 
 ls /tmp/*-abcd               # the tmp file should not exist (exit status: linux 2, mac 1)

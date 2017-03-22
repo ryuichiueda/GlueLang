@@ -1,0 +1,9 @@
+import PATH
+ 
+loop
+  str t = date '+%s' >>= awk '{print $1%5}'
+  test t -ne 0 >> do
+    echo t
+    sleep 1
+ 
+echo 'end'

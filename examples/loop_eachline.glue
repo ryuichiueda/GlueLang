@@ -1,0 +1,5 @@
+import PATH
+
+seq 1 10 >>= xargs -n 2 >>= eachline do
+  awk '{print $1+$2}'
+  false

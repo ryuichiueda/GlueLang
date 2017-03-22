@@ -1,0 +1,35 @@
+Environment.cc:		exit(5);  //確認済み
+Exe.cc:		exit(4);          //OK
+ExeEachline.cc:			exit(m_exit_status);
+ExeEachline.cc:	exit(0);
+ExeSubShellLoop.cc:			exit(4);
+ExeSubShellLoop.cc:					exit(0);
+ExeSubShellLoop.cc:					exit(m_exit_status);
+ExeSubShellLoop.cc:					exit(0);
+InternalCommands.cc:		exit( echo(c,argv) );
+InternalCommands.cc:		exit( pid(c,argv,e) );
+InternalCommands.cc:		exit( repeat(c,argv,e) );
+InternalCommands.cc:		exit( while_(c,argv,e) );
+InternalCommands.cc:		exit(1);
+InternalCommands.cc:		exit(1);
+InternalCommands.cc:				exit(1);
+InternalCommands.cc:				exit(es);
+InternalCommands.cc:		exit(0);
+InternalCommands.cc:				exit(1);
+InternalCommands.cc:				exit(0);
+Job.cc:		exit(4);
+Job.cc:				exit(es);
+Job.cc:		exit(0);
+Script.cc:		exit(2);
+Script.cc:		exit(4);
+Script.cc:			exit(0);
+Script.cc:				//_exit(es);
+Script.cc:				_exit(1);
+Script.cc:				exit(1);
+Script.cc:				//exit(es);
+Script.cc:			exit(3);
+Script.cc:		exit(3);
+Script.cc:	exit(3);
+main.cc:		exit(1);
+main.cc:		exit(0);
+main.cc:		exit(1);//flags are invalid.

@@ -50,7 +50,7 @@ bool ArgVariable::eval(void)
 		m_evaled_text = p->m_value;
 	}catch(...){
 		m_error_msg = m_env->m_error_msg;
-		m_exit_status = 1;
+		m_exit_status = 3;
 		throw this;
 	}
 	return true;

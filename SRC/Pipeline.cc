@@ -134,7 +134,7 @@ int Pipeline::execWait(void)
 					p = (DataJob *)m_env->getData(&s);
 				}catch(...){
 					m_error_msg = "Bug of backgound process";
-					m_exit_status = 1;
+					m_exit_status = 2;
 					throw this;
 				}
 			}
@@ -143,7 +143,7 @@ int Pipeline::execWait(void)
 		}
 		if(pid < 0){
 			m_error_msg = "Unknown background process";
-			m_exit_status = 1;
+			m_exit_status = 4;
 			throw this;
 		}
 		m_pids.push_back(pid);
@@ -195,10 +195,12 @@ void Pipeline::waitCommands(int pid)
 	if(m_exit_status == 0)
 		return;
 
-	if(m_nodes.size() > 1)
+	if(m_nodes.size() > 1){
 		m_error_msg = "Pipeline error";
-	else
+	}else{
 		m_error_msg = "Command error";
+		m_command_error = true;
+	}
 
 	if(! m_if)
 		throw this;

@@ -93,7 +93,7 @@ int Exe::exec(void)
 
 	int pid = fork();
 	if(pid < 0)
-		exit(1);
+		exit(4);
 
 	if (pid == 0){//child
 		if(m_env->m_v_opt)

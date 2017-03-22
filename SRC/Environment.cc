@@ -19,7 +19,7 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 	if (getcwd(tmp,sizeof(tmp)) == NULL){
 		cerr << "Initizalization error" << endl;
 		perror ("getcwd");
-		exit(1);
+		exit(5);
 	}
 
 	m_dir = tmp;	
@@ -129,7 +129,7 @@ bool Environment::isImportPath(string *key)
 Data *Environment::getData(string *key)
 {
 	if(m_data.find(*key) == m_data.end()){
-		m_error_msg = "variable " + *key + " not found";
+		m_error_msg = "Variable " + *key + " not found";
 		throw this;
 	}
 

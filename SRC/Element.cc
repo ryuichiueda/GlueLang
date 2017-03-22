@@ -21,6 +21,8 @@ Element::Element(Feeder *f, Environment *env)
 	m_exit_status = 0;
 
 	m_job_id = 0;
+
+	m_command_error = false;
 }
 
 Element::~Element()

@@ -110,6 +110,7 @@ void ExeEachline::waitCommands(int pid)
 		return;
 
 	m_error_msg = "Command error";
+	m_command_error = true;
 
 	if(! m_if)
 		throw this;

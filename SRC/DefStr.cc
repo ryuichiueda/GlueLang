@@ -48,11 +48,11 @@ bool DefStr::parse(void)
 		m_env->setData(&m_var_name,m_data);
 	}catch(Environment *e){
 		m_error_msg = e->m_error_msg;	
-		m_exit_status = 1;
+		m_exit_status = 3;
 		throw this;
 	}catch(DataStr *e){
 		m_error_msg = e->m_error_msg;	
-		m_exit_status = 1;
+		m_exit_status = 3;
 		throw this;
 	}
 

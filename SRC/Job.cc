@@ -104,7 +104,7 @@ bool Job::parse(void)
 		m_is_background = true;
 		if(! m_feeder->variable(&m_job_name)){
 			m_error_msg = "no job name";
-			m_exit_status = 1;
+			m_exit_status = 2;
 			throw this;
 		}
 
@@ -115,7 +115,7 @@ bool Job::parse(void)
 			m_env->setData(&m_job_name,d);
 		}catch(Environment *e){
 			m_error_msg = e->m_error_msg;	
-			m_exit_status = 1;
+			m_exit_status = 2;
 			throw this;
 		}
 	}
@@ -205,7 +205,7 @@ int Job::execBackGround(void)
 {
 	int pid = fork();
 	if(pid < 0)
-		exit(1);
+		exit(4);
 
 	if (pid == 0){//child
 		if(m_env->m_v_opt)
@@ -228,7 +228,7 @@ int Job::execBackGround(void)
 		p->m_pid = pid;
 	}catch(...){
 		m_error_msg = "Bug of backgound process";
-		m_exit_status = 1;
+		m_exit_status = 2;
 		throw this;
 	}
 

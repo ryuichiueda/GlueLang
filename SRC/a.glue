@@ -1,0 +1,5 @@
+import PATH
+
+file a = echo 'a'
+file b = echo 'b'
+diff a b

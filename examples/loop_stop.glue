@@ -1,0 +1,11 @@
+import PATH
+
+loop
+  false  #これはコマンドのエラーなので処理続行
+
+echo 'a' #これは実行される
+
+loop
+  falce  #存在しないコマンドの呼び出しはglueのエラー
+
+echo 'b' #これは実行されない

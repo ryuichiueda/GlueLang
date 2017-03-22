@@ -45,14 +45,14 @@ bool ArgExtCom::parse(void)
 
  	if(! m_env->isImportPath(&m_prefix)){
 		m_error_msg = "Invalid path";
-		m_exit_status = 1;
+		m_exit_status = 2;
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		throw this;
 	}
 
 	if(!m_feeder->command(&m_text)){
 		m_error_msg = "Invalid command name";
-		m_exit_status = 1;
+		m_exit_status = 2;
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		throw this;
 	}
@@ -76,7 +76,7 @@ bool ArgExtCom::parsePrefixedCom(void)
 		return true;
 	}
 	m_error_msg = "Command " + m_text  + " not exist";
-	m_exit_status = 1;
+	m_exit_status = 2;
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	throw this;
 }
