@@ -56,7 +56,7 @@ void ExeEachline::execChild(void)
 	auto *com = (Exe *)m_nodes[0];
 	string line;
 	while (getline(cin, line)){
-		vector<string> ws;
+		//vector<string> ws;
 		line += ' ';//add a space at the end of a line
 		int from = 0;
 		for(int i=from;i<line.size();i++){

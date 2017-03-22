@@ -54,6 +54,7 @@ public:
 	bool lineResidual(string *ans);
 	bool doBlock(string *ans);
 	bool loopBlock(string *ans);
+	bool forEachBlock(string *ans);
 
 	bool str(string s);
 

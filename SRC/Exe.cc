@@ -81,7 +81,7 @@ void Exe::childPipeProc(void)
 void Exe::execErrorExit(void)
 {
 	m_error_msg =  "Command error";
-	m_exit_status = 127;
+	m_exit_status = 1;
 	throw this;
 }
 

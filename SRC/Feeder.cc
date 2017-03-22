@@ -663,3 +663,8 @@ bool Feeder::loopBlock(string *ans)
 {
 	return block(ans,"loop");
 }
+
+bool Feeder::forEachBlock(string *ans)
+{
+	return block(ans,"foreach");
+}
