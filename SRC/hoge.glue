@@ -1,7 +1,9 @@
 import PATH
 
-seq 1 10 >>= foreach
-  echo argv[1]
-  in.break
+while
+  str t = date '+%s' >>= awk '{print $1%5}'
+  test t -ne 0 >> do
+    echo t
+    sleep 1
 
-echo 'OK'
+echo 'end'

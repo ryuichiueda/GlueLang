@@ -176,6 +176,8 @@ void Pipeline::waitCommands(int pid)
 			// The exit status of the command that is suffered a sigpipe
 			// should be zero because the command itself does not anything bad. 
 			m_exit_status = 0;
+		}else if(WIFSIGNALED(status) && WTERMSIG(status) == SIGUSR1){
+			exit(0);
 		}else{
 			m_error_msg = "Irregular command termination";
 			m_exit_status = 2;
