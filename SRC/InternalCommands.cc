@@ -185,5 +185,5 @@ int InternalCommands::pid(int argc,Environment *e)
 int InternalCommands::break_(Environment *e)
 {
 	kill(e->m_pid,SIGUSR1);
-	return 0;
+	return 1;
 }
