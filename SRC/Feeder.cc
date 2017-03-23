@@ -659,9 +659,9 @@ bool Feeder::block(string *ans,string op)
 	return true;
 }
 
-bool Feeder::loopBlock(string *ans)
+bool Feeder::whileBlock(string *ans)
 {
-	return block(ans,"loop");
+	return block(ans,"while");
 }
 
 bool Feeder::forEachBlock(string *ans)

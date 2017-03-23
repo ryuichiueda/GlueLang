@@ -53,7 +53,7 @@ public:
 	bool positiveInt(long *pos);
 	bool lineResidual(string *ans);
 	bool doBlock(string *ans);
-	bool loopBlock(string *ans);
+	bool whileBlock(string *ans);
 	bool forEachBlock(string *ans);
 
 	bool str(string s);

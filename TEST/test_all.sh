@@ -21,7 +21,7 @@ bash ./where.test
 bash ./signal.test
 bash ./internal_commands.test
 bash ./background_proc.test
-bash ./loop.test
+bash ./while.test
 bash ./foreach.test
 
 echo OK

@@ -9,7 +9,7 @@
 #include "Pipeline.h"
 #include "ExeProc.h"
 #include "ExeSubShell.h"
-#include "ExeSubShellLoop.h"
+#include "ExeWhile.h"
 #include "ExeForEach.h"
 #include "ExeString.h"
 #include "ExeExtCom.h"
@@ -52,7 +52,7 @@ bool Pipeline::parse(void)
 	while(1){
 		bool res = add(new ExeSubShell(m_feeder,m_env))
 			|| add(new ExeForEach(m_feeder,m_env))
-			|| add(new ExeSubShellLoop(m_feeder,m_env))
+			|| add(new ExeWhile(m_feeder,m_env))
 			|| add(new ExeString(m_feeder,m_env))
  			//|| add(new ExeEachline(m_feeder,m_env))
 			|| add(new ExeProc(m_feeder,m_env))

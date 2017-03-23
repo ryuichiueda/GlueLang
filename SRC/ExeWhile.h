@@ -10,11 +10,11 @@ using namespace std;
 
 class Feeder;
 
-class ExeSubShellLoop : public Exe
+class ExeWhile : public Exe
 {
 public:
-	ExeSubShellLoop(Feeder *f, Environment *env);
-	virtual ~ExeSubShellLoop();
+	ExeWhile(Feeder *f, Environment *env);
+	virtual ~ExeWhile();
 	virtual bool parse(void);
 protected:
 	void execChild(void);

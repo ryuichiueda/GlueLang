@@ -1,6 +1,6 @@
 // Copyright 2017 Ryuichi Ueda
 // Released under the MIT License.
-#include "ExeSubShellLoop.h"
+#include "ExeWhile.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
@@ -20,20 +20,20 @@
 #include "DataProc.h"
 using namespace std;
 
-ExeSubShellLoop::ExeSubShellLoop(Feeder *f, Environment *env) : Exe(f,env)
+ExeWhile::ExeWhile(Feeder *f, Environment *env) : Exe(f,env)
 {
 }
 
-ExeSubShellLoop::~ExeSubShellLoop()
+ExeWhile::~ExeWhile()
 {
 }
 
-bool ExeSubShellLoop::parse(void)
+bool ExeWhile::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
 	string scr;
-	bool scr_exist = m_feeder->loopBlock(&scr);
+	bool scr_exist = m_feeder->whileBlock(&scr);
 	if(!scr_exist){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
@@ -52,7 +52,7 @@ bool ExeSubShellLoop::parse(void)
 	return true;
 }
 
-void ExeSubShellLoop::execChild(void)
+void ExeWhile::execChild(void)
 {
 	auto argv = new char* [2];
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
@@ -88,6 +88,8 @@ void ExeSubShellLoop::execChild(void)
 		        if(!WIFEXITED(status)){
 		                if(WIFSIGNALED(status) && WTERMSIG(status) == 13){//sigpipe
 					continue;
+				}else if(WIFSIGNALED(status) && WTERMSIG(status) == SIGUSR1){
+					exit(0);
 		                }else{
 					exit(0);
 		                }
