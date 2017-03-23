@@ -1,10 +1,3 @@
 import PATH
 
-while
-  str t = date '+%s' >>= awk '{print $1%5}'
-  test t -ne 0 >> do
-    echo t
-    sleep 1
-    in.break
-
-echo 'end'
+false ?> echo 'a' !> true ?> echo 'b'

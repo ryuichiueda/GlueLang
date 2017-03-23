@@ -32,6 +32,7 @@ public:
 	DefStr *m_outstr;
 
 	bool m_has_and;
+	bool m_has_then;
 	bool m_has_or;
 protected:
 	void waitCommands(int pid);

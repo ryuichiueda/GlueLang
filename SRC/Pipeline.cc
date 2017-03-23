@@ -28,6 +28,7 @@ Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 	m_outfile = NULL;
 	m_outstr = NULL;
 	m_has_and = false;
+	m_has_then = false;
 	m_has_or = false;
 }
 

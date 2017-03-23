@@ -82,8 +82,10 @@ bool Job::parse(void)
 
 		if(m_feeder->str(">>")){
 			back1->m_has_and = true;
+		}else if(m_feeder->str("?>")){
+			back1->m_has_then = true;
 		}else if(m_feeder->str("!>")){
-			if(back2 != NULL && back2->m_has_and)
+			if(back2 != NULL and ( back2->m_has_and or back2->m_has_then) )
 				back2->m_has_or = true;
 			else
 				back1->m_has_or = true;
@@ -164,6 +166,7 @@ int Job::exec(void)
 int Job::execNormal(void)
 {
 	bool skip = false; // flag to skip the next command
+	bool stop_next = false; // stop after then
 	for(int i=0;i<(int)m_nodes.size();i++){
 		if(skip){
 			skip = false;
@@ -175,12 +178,19 @@ int Job::execNormal(void)
 			m_outfile->m_data->setAppend();
 
 		int es = p->exec();
+		if(stop_next)
+			return es;
+
 		if(p->m_has_and and es != 0){
 			skip = true;
 		}else if(p->m_has_or and es == 0){
 			skip = true;
-		}else{
-			es = 0;
+		}
+		
+		if(p->m_has_then and es == 0){
+			stop_next = true;
+		}else if(p->m_has_then and es != 0){
+			skip = true;
 		}
 	}
 	return 0;
