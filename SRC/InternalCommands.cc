@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <sys/types.h> 
 #include <sys/wait.h>
+#include <signal.h>
 using namespace std;
 
 bool InternalCommands::exist(string *name)
@@ -34,11 +35,7 @@ int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,Exe *p)
 	}else if(strncmp(argv[0],"pid",3) == 0){
 		exit( pid(c,e) );
 	}else if(strncmp(argv[0],"break",5) == 0){
-		exit( break_() );
-		/*
-	}else if(strncmp(argv[0],"while",5) == 0){
-		exit( while_(c,argv,e) );
-		*/
+		exit( break_(e) );
 	}
 	return -1;
 }
@@ -185,7 +182,8 @@ int InternalCommands::pid(int argc,Environment *e)
 	return 0;
 }
 
-int InternalCommands::break_(void)
+int InternalCommands::break_(Environment *e)
 {
-	exit(128);
+	kill(e->m_pid,SIGUSR1);
+	return 0;
 }

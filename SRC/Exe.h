@@ -34,6 +34,7 @@ public:
 	int getPrevPipe(void){return m_pipe_prev;};
 
 	bool m_is_wait;
+	bool m_is_break;
 
 	char** makeArgv(void);
 protected:

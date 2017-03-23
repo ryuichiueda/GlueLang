@@ -102,6 +102,8 @@ void ExeForEach::execChild(void)
 			if(!WIFEXITED(status)){
 				if(WIFSIGNALED(status) && WTERMSIG(status) == 13){//sigpipe
 					continue;
+				}else if(WIFSIGNALED(status) && WTERMSIG(status) == SIGUSR1){
+					exit(0);
 				}else{
 					exit(0);
 				}
