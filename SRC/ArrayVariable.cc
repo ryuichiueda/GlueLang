@@ -24,7 +24,7 @@ bool ArrayVariable::parse(void)
 	}catch(Feeder *e){
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		m_error_msg = e->m_error_msg;
-		m_exit_status = 1;
+		m_exit_status = 6;
 		throw this;
 	}
 
@@ -44,7 +44,7 @@ bool ArrayVariable::eval(void)
 		m_evaled_text = *m_env->getArg(m_array_pos);
 	}catch(Environment *e){
 		m_error_msg = e->m_error_msg;
-		m_exit_status = 1;
+		m_exit_status = 3;
 		throw this;
 	}
 	return true;

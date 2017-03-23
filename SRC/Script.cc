@@ -97,7 +97,7 @@ int Script::exec(void)
 		execErrorMsg(e);
 		m_env->removeFiles(false);
 		int es = e->getExitStatus();
-		if(e->m_command_error){
+		if(es == 1){
 			if(es == 127){
 				//_exit(es);
 				//cerr << "glue exit status: 1" << endl;
@@ -105,7 +105,7 @@ int Script::exec(void)
 			}else{
 				//cerr << "glue exit status: 1" << endl;
 				exit(1);
-				//exit(es);
+			//	exit(es);
 			}
 		}else{
 			cerr << "\tglue exit_status: 3" << endl;
