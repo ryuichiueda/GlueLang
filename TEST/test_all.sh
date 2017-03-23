@@ -23,7 +23,6 @@ bash ./signal.test
 bash ./internal_commands.test
 bash ./background_proc.test
 bash ./eachline.test
-bash ./repeat.test
-bash ./while.test
+bash ./loop.test
 
 echo OK

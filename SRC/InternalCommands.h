@@ -16,8 +16,8 @@ public:
 	static bool exist(string *name);
 private:
 	static int echo(int argc, char const** argv);
-	static int repeat(int argc, char const** argv, Environment *e);
-	static int while_(int argc, char const** argv, Environment *e);
+	//static int repeat(int argc, char const** argv, Environment *e);
+	//static int while_(int argc, char const** argv, Environment *e);
 	static int pid(int argc, char const** argv,Environment *e);
 };
 

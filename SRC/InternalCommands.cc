@@ -16,7 +16,7 @@ using namespace std;
 
 bool InternalCommands::exist(string *name)
 {
-	if(*name == "echo" || *name == "pid" || *name == "repeat" || *name == "while")
+	if(*name == "echo" || *name == "pid")
 		return true;
 
 	return false;
@@ -33,10 +33,12 @@ int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,Exe *p)
 		exit( echo(c,argv) );
 	}else if(strncmp(argv[0],"pid",3) == 0){
 		exit( pid(c,argv,e) );
+		/*
 	}else if(strncmp(argv[0],"repeat",6) == 0){
 		exit( repeat(c,argv,e) );
 	}else if(strncmp(argv[0],"while",5) == 0){
 		exit( while_(c,argv,e) );
+		*/
 	}
 	return -1;
 }
@@ -52,6 +54,7 @@ int InternalCommands::echo(int argc, char const** argv)
 	return 0;
 }
 
+/*
 int InternalCommands::repeat(int argc, char const** argv, Environment *e)
 {
 	char *c = NULL;
@@ -174,6 +177,7 @@ int InternalCommands::while_(int argc, char const** argv, Environment *e)
 
 	return 0;
 }
+*/
 
 int InternalCommands::pid(int argc, char const** argv,Environment *e)
 {

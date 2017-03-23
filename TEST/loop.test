@@ -1,0 +1,64 @@
+#!/bin/bash 
+
+tmp=/tmp/$$
+scr=$(basename $0)
+cd $(dirname $0) || exit 1
+
+ERROR_CHECK(){
+	[ "$(tr -d '0 ' <<< ${PIPESTATUS[@]} )" = "" ] && return
+	rm -f $tmp-*
+	echo "$scr" "$1"
+	exit 1
+}
+
+os=linux
+[ "$(uname)" != "Linux" ] && os=mac
+
+#########################################
+# TEST1: loop and break
+#########################################
+cat << FIN > $tmp-out
+0
+OK
+FIN
+
+cat << 'FIN' > $tmp-glue
+import PATH
+
+loop
+  str s = date '+%s' >>= awk '{print $1%3}'
+  echo s
+  test s -ne 0
+
+echo 'OK'
+FIN
+
+../glue $tmp-glue | tail -n 2 > $tmp-ans
+ERROR_CHECK "TEST1.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST1.2 error"
+
+#########################################
+# TEST2: stop not loop but script at syntax error 
+#########################################
+
+cat << 'FIN' > $tmp-glue
+import PATH
+
+loop
+  str s = date '+%s' >>= awk '{print $1%3}'
+  tst s -ne 0
+
+echo 'NG'  #never come here
+FIN
+
+../glue $tmp-glue > $tmp-ans
+[ $? -eq 2 ]
+ERROR_CHECK "TEST2.1 error"
+
+echo NG | diff - $tmp-ans
+[ $? -eq 1 ]
+ERROR_CHECK "TEST2.2 error"
+
+rm -f $tmp-*
