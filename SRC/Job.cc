@@ -177,32 +177,15 @@ int Job::execNormal(void)
 			m_outfile->m_data->setAppend();
 
 		int es = p->exec();
-
-		if(p->m_has_and){
-			if(p->m_exit_status != 0){
-				skip = true;
-			}
-		}else if(p->m_has_or){
-			if(p->m_exit_status == 0){
-				skip = true;
-			}else{
-				es = 0;
-			}
-		}
-
-		/*
-
-			if(p->m_has_and){
-				if(p->m_exit_status != 0){
-					skip = true;
-				}
-			}else{
-				if(p->m_exit_status == 0)
-					return es;
-			}
-
+		//if(p->m_has_and and p->m_exit_status != 0){
+		if(p->m_has_and and es != 0){
+			skip = true;
+		//}else if(p->m_has_or and p->m_exit_status == 0){
+		}else if(p->m_has_or and es == 0){
+			skip = true;
+		}else{
 			es = 0;
-		}*/
+		}
 
 		if(m_if && es != 0)
 			return es;
