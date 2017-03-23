@@ -6,7 +6,6 @@ OS="$(uname)"
 
 bash ./simple_command.test
 bash ./variable.test
-bash ./simple_command.test
 bash ./comment.test
 bash ./file.test
 bash ./v_opt.test
@@ -24,5 +23,6 @@ bash ./internal_commands.test
 bash ./background_proc.test
 bash ./eachline.test
 bash ./loop.test
+bash ./foreach.test
 
 echo OK

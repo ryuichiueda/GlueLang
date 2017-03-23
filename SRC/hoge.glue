@@ -1,5 +1,0 @@
-import PATH
-
-seq 1 10 >>= xargs -n 3 >>= foreach
-  echo argv[1]
-  echo '-------'
