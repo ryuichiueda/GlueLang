@@ -109,6 +109,8 @@ void ExeForEach::execChild(void)
 			       	m_exit_status = WEXITSTATUS(status);
 			       	if(m_exit_status == 0){
 					continue;
+				}else if(m_exit_status == 128){
+					exit(0);
 				}else{
 					exit(m_exit_status);
 				}

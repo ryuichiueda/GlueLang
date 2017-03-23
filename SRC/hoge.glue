@@ -2,6 +2,6 @@ import PATH
 
 seq 1 10 >>= foreach
   echo argv[1]
-  false
+  in.break
 
-echo 'NG'
+echo 'OK'
