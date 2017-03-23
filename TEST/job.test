@@ -103,8 +103,8 @@ ERROR_CHECK "TEST4.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST4.2 error"
 
-rm -f $tmp-*
-exit 0
+#rm -f $tmp-*
+#exit 0
 
 #XXX: Mac and my Ubuntu 16.04 environment make this test pass.
 #However, it is not passed on Travis.
