@@ -13,7 +13,7 @@
 #include "ExeForEach.h"
 #include "ExeString.h"
 #include "ExeExtCom.h"
-#include "ExeEachline.h"
+//#include "ExeEachline.h"
 #include "ExeIntCom.h"
 #include "DefFile.h"
 #include "DefStr.h"
@@ -54,7 +54,7 @@ bool Pipeline::parse(void)
 			|| add(new ExeForEach(m_feeder,m_env))
 			|| add(new ExeSubShellLoop(m_feeder,m_env))
 			|| add(new ExeString(m_feeder,m_env))
- 			|| add(new ExeEachline(m_feeder,m_env))
+ 			//|| add(new ExeEachline(m_feeder,m_env))
 			|| add(new ExeProc(m_feeder,m_env))
 			|| add(new ExeIntCom(m_feeder,m_env))
 			|| add(new ExeExtCom(m_feeder,m_env));

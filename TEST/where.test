@@ -51,17 +51,13 @@ ERROR_CHECK "TEST1.3 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.4 error"
 
-#########################################
-# TEST2: file
-#########################################
-
 cat << FIN > $tmp-glue
 import PATH
 
 proc hoge = echo 'hoge'
 
-# OK
-seq 1 2 >>= eachline hoge
+hoge
+hoge
 
 # but after where ...
 diff local.a local.b
@@ -69,7 +65,8 @@ diff local.a local.b
 	      file b = seq 1 4
 
 # hoge goes anywhere at the second iteration
-seq 1 2 >>= eachline hoge
+hoge
+hoge
 FIN
 
 cat << FIN > $tmp-out
