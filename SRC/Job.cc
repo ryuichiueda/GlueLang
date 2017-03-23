@@ -82,12 +82,12 @@ bool Job::parse(void)
 		Pipeline *back2 = num >= 2 ? (Pipeline *)m_nodes[num-2] : NULL;
 
 		if(m_feeder->str(">>")){
-			back1->m_has_then = true;
+			back1->m_has_and = true;
 		}else if(m_feeder->str("!>")){
-			if(back2 != NULL && back2->m_has_then)
-				back2->m_has_else = true;
+			if(back2 != NULL && back2->m_has_and)
+				back2->m_has_or = true;
 			else
-				back1->m_has_else = true;
+				back1->m_has_or = true;
 		}else{
 			m_feeder->setPos(m_end_line, m_end_char);
 			break;
@@ -165,7 +165,6 @@ int Job::exec(void)
 
 int Job::execNormal(void)
 {
-	bool then_and_return = false;
 	bool skip = false;
 	for(int i=0;i<(int)m_nodes.size();i++){
 		if(skip){
@@ -178,22 +177,32 @@ int Job::execNormal(void)
 			m_outfile->m_data->setAppend();
 
 		int es = p->exec();
-		if(then_and_return)
-			return es;
 
-		if(p->m_has_else){
-			if(p->m_has_then){
-				if(p->m_exit_status == 0)
-					then_and_return = true;
-				else
+		if(p->m_has_and){
+			if(p->m_exit_status != 0){
+				skip = true;
+			}
+		}else if(p->m_has_or){
+			if(p->m_exit_status == 0){
+				skip = true;
+			}else{
+				es = 0;
+			}
+		}
+
+		/*
+
+			if(p->m_has_and){
+				if(p->m_exit_status != 0){
 					skip = true;
+				}
 			}else{
 				if(p->m_exit_status == 0)
 					return es;
 			}
 
 			es = 0;
-		}
+		}*/
 
 		if(m_if && es != 0)
 			return es;
