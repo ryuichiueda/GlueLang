@@ -189,17 +189,9 @@ void Pipeline::waitCommands(int pid)
 		cerr << "+ pid " << pid << " exit " << m_exit_status << endl;
 
 	// judged at the upper level if !> is used
-	if(m_has_or)
+	if(m_has_or || m_exit_status == 0)
 		return;
 
-	if(m_exit_status == 0)
-		return;
-
-	if(m_nodes.size() > 1){
-		m_error_msg = "Pipeline error";
-	}else{
-		m_error_msg = "Command error";
-	//	m_command_error = true;
-	}
+	m_error_msg = m_nodes.size() > 1 ? "Pipeline error" : "Command error";
 	throw this;
 }
