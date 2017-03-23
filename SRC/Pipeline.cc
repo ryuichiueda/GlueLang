@@ -27,9 +27,6 @@ Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 {
 	m_outfile = NULL;
 	m_outstr = NULL;
-
-	m_if = false;
-
 	m_has_or = false;
 }
 
@@ -203,7 +200,5 @@ void Pipeline::waitCommands(int pid)
 		m_error_msg = "Command error";
 		m_command_error = true;
 	}
-
-	if(! m_if)
-		throw this;
+	throw this;
 }

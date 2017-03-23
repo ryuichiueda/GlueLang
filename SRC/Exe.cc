@@ -26,10 +26,7 @@ Exe::Exe(Feeder *f, Environment *env) : Element(f,env)
 	m_pipe[0] = -1;
 	m_pipe[1] = -1;
 	m_pipe_prev = -1;
-
 	m_is_wait = false;
-
-	m_if = false;
 }
 
 Exe::~Exe()

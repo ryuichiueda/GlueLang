@@ -33,9 +33,6 @@ public:
 	void setPipe(int *pip,int prev);
 	int getPrevPipe(void){return m_pipe_prev;};
 
-	void setIfFlag(void){m_if = true;}
-	bool getIfFlag(void){return m_if;}
-
 	bool m_is_wait;
 
 	char** makeArgv(void);
@@ -50,8 +47,6 @@ protected:
 
 	int m_pipe[2];
 	int m_pipe_prev;
-
-	bool m_if;
 
 	void vOptProc(char const *arg);
 

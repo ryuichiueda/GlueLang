@@ -31,7 +31,6 @@ public:
 	DefFile *m_outfile;
 	DefStr *m_outstr;
 
-	bool m_if;
 	bool m_has_and;
 	bool m_has_or;
 protected:
