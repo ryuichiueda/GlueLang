@@ -97,20 +97,20 @@ int Script::exec(void)
 		execErrorMsg(e);
 		m_env->removeFiles(false);
 		int es = e->getExitStatus();
-		if(es == 1){
+		//if(es == 1){
 			if(es == 127){
 				//_exit(es);
 				//cerr << "glue exit status: 1" << endl;
 				_exit(1);
 			}else{
 				//cerr << "glue exit status: 1" << endl;
-				exit(1);
+				exit(es);
 			//	exit(es);
 			}
-		}else{
-			cerr << "\tglue exit_status: 3" << endl;
-			exit(3);
-		}
+	//	}else{
+	//		cerr << "\tglue exit_status: 3" << endl;
+		//	exit(3);
+	//	}
 	}catch(...){
 		cerr << "\nExecution error" << endl;
 		cerr << "unknown error" << endl;

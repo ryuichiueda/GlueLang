@@ -24,7 +24,7 @@ bool ArrayVariable::parse(void)
 	}catch(Feeder *e){
 		m_feeder->getPos(&m_end_line, &m_end_char);
 		m_error_msg = e->m_error_msg;
-		m_exit_status = 6;
+		m_exit_status = 3;
 		throw this;
 	}
 
