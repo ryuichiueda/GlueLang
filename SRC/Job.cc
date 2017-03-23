@@ -20,7 +20,6 @@ using namespace std;
 
 Job::Job(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_if = false;
 	m_outfile = NULL;
 	m_outstr = NULL;
 	m_where = NULL;
@@ -142,7 +141,6 @@ int Job::exec(void)
 {
 	// stdout of all commands are appended into a file
 	for(auto *n : m_nodes){
-		((Pipeline *)n)->m_if = m_if;
 		((Pipeline *)n)->m_outfile = m_outfile;
 		((Pipeline *)n)->m_outstr = m_outstr;
 	}
@@ -165,7 +163,7 @@ int Job::exec(void)
 
 int Job::execNormal(void)
 {
-	bool skip = false;
+	bool skip = false; // flag to skip the next command
 	for(int i=0;i<(int)m_nodes.size();i++){
 		if(skip){
 			skip = false;
@@ -177,18 +175,13 @@ int Job::execNormal(void)
 			m_outfile->m_data->setAppend();
 
 		int es = p->exec();
-		//if(p->m_has_and and p->m_exit_status != 0){
 		if(p->m_has_and and es != 0){
 			skip = true;
-		//}else if(p->m_has_or and p->m_exit_status == 0){
 		}else if(p->m_has_or and es == 0){
 			skip = true;
 		}else{
 			es = 0;
 		}
-
-		if(m_if && es != 0)
-			return es;
 	}
 	return 0;
 }
@@ -208,9 +201,7 @@ int Job::execBackGround(void)
 			if(m_outfile != NULL && i!=0)
 				m_outfile->m_data->setAppend();
 	
-			int es = p->exec();
-			if(m_if && es != 0)
-				exit(es);
+			p->exec();
 		}
 		exit(0);
 	}

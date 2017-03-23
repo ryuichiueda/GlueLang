@@ -26,7 +26,6 @@ public:
 	virtual int exec(void);
 	virtual bool parse(void);
 
-	bool m_if;
 protected:
 	int execNormal(void);
 	int execBackGround(void);
