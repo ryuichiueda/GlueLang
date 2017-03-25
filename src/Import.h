@@ -13,7 +13,7 @@ class Environment;
 class Import : public Element
 {
 public:
-	Import(Feeder *f, Environment *env);
+	Import(Feeder *f, Environment *env,vector<int> *scopes);;
 	virtual ~Import();
 
 	virtual bool parse(void);

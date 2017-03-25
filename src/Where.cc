@@ -15,7 +15,7 @@
 #include "Job.h"
 using namespace std;
 
-Where::Where(Feeder *f, Environment *env) : Element(f,env)
+Where::Where(Feeder *f, Environment *env,vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_local_env = NULL;
 }
@@ -46,10 +46,10 @@ bool Where::parse(void)
 	int indent = base_indent;
 	while(indent >= base_indent){
 		m_feeder->blank();
-		if(add(new DefCond(m_feeder,m_env))){
+		if(add(new DefCond(m_feeder,m_env,&m_scopes))){
 			m_conditions.push_back((DefCond *)m_nodes.back());
 			m_nodes.pop_back();
-		}else if(add(new Job(m_feeder,m_env))){
+		}else if(add(new Job(m_feeder,m_env,&m_scopes))){
 		}else{
 			m_error_msg = "Invalid where sentences";	
 			m_exit_status = 1;

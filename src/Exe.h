@@ -19,7 +19,7 @@ class Where;
 class Exe : public Element
 {
 public:
-	Exe(Feeder *f, Environment *env);
+	Exe(Feeder *f,Environment *env, vector<int> *scopes);
 	virtual ~Exe();
 	virtual bool parse(void) = 0;
 	void parseArgs(void);

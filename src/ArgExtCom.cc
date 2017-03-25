@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 using namespace std;
 
-ArgExtCom::ArgExtCom(Feeder *f,Environment *env) : Arg(f,env)
+ArgExtCom::ArgExtCom(Feeder *f,Environment *env,vector<int> *scopes) : Arg(f,env,scopes)
 {
 }
 

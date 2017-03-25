@@ -15,7 +15,7 @@ class Environment;
 class Script : public Element
 {
 public:
-	Script(Feeder *f, Environment *env);
+	Script(Feeder *f, Environment *env,vector<int> *scopes);;
 	virtual ~Script();
 	//virtual void print(int indent_level = 0);
 	bool parse(void);

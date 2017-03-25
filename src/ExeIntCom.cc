@@ -19,7 +19,7 @@
 #include "Feeder.h"
 using namespace std;
 
-ExeIntCom::ExeIntCom(Feeder *f, Environment *env) : Exe(f,env)
+ExeIntCom::ExeIntCom(Feeder *f, Environment *env,vector<int> *scopes) : Exe(f,env,scopes)
 {
 }
 
@@ -31,7 +31,7 @@ bool ExeIntCom::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	if(!add(new ArgIntCom(m_feeder,m_env)))
+	if(!add(new ArgIntCom(m_feeder,m_env,&m_scopes)))
 		return false;
 
 	if(!m_feeder->comment() && !m_feeder->atNewLine()){

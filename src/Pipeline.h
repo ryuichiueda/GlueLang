@@ -20,7 +20,7 @@ class Where;
 class Pipeline : public Element
 {
 public:
-	Pipeline(Feeder *f, Environment *env);
+	Pipeline(Feeder *f, Environment *env,vector<int> *scopes);;
 	virtual ~Pipeline();
 	virtual void print(int indent_level = 0);
 

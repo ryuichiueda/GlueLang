@@ -5,7 +5,7 @@
 #include "Environment.h"
 using namespace std;
 
-ArrayVariable::ArrayVariable(Feeder *f,Environment *env) : Arg(f,env)
+ArrayVariable::ArrayVariable(Feeder *f,Environment *env, vector<int> *scopes) : Arg(f,env,scopes)
 {
 }
 

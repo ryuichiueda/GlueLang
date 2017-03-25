@@ -14,7 +14,7 @@ class Environment;
 class Literal : public Arg
 {
 public:
-	Literal(Feeder *f,Environment *env);
+	Literal(Feeder *f,Environment *env, vector<int> *scopes);
 	virtual ~Literal();
 
 	virtual bool eval(void);

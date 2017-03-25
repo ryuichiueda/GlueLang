@@ -5,7 +5,7 @@
 #include "Environment.h"
 using namespace std;
 
-ArgProc::ArgProc(Feeder *f,Environment *env) : Arg(f,env)
+ArgProc::ArgProc(Feeder *f,Environment *env,vector<int> *scopes) : Arg(f,env,scopes)
 {
 }
 

@@ -12,7 +12,7 @@ class Envrionment;
 class DefProc : public Element
 {
 public:
-	DefProc(Feeder *f, Environment *env);
+	DefProc(Feeder *f,Environment *env, vector<int> *scopes);
 	virtual ~DefProc();
 	//const char *getStr(void);
 

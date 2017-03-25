@@ -14,7 +14,7 @@
 #include <unistd.h>
 using namespace std;
 
-Script::Script(Feeder *f, Environment *env) : Element(f,env)
+Script::Script(Feeder *f, Environment *env,vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_silent = false;
 }
@@ -53,7 +53,7 @@ bool Script::doParse(void)
 	// mainly for shebang
 	while(m_feeder->comment());
 	// import
-	while(add(new Import(m_feeder,m_env))){
+	while(add(new Import(m_feeder,m_env,&m_scopes))){
 		while(m_feeder->blankLine());
 	}
 
@@ -64,8 +64,8 @@ bool Script::doParse(void)
 
 		while(m_feeder->comment());
 
-		bool res = add(new DefProc(m_feeder,m_env))
-			|| add(new Job(m_feeder,m_env));
+		bool res = add(new DefProc(m_feeder,m_env,&m_scopes))
+			|| add(new Job(m_feeder,m_env,&m_scopes));
 
 		if(!res)
 			break;

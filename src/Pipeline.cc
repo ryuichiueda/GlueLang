@@ -23,7 +23,7 @@
 #include "DataJob.h"
 using namespace std;
 
-Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
+Pipeline::Pipeline(Feeder *f, Environment *env,vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_has_and = false;
 	m_has_then = false;
@@ -49,13 +49,13 @@ bool Pipeline::parse(void)
 
 	int comnum = 0;
 	while(1){
-		bool res = add(new ExeSubShell(m_feeder,m_env))
-			|| add(new ExeForEach(m_feeder,m_env))
-			|| add(new ExeWhile(m_feeder,m_env))
-			|| add(new ExeString(m_feeder,m_env))
-			|| add(new ExeProc(m_feeder,m_env))
-			|| add(new ExeIntCom(m_feeder,m_env))
-			|| add(new ExeExtCom(m_feeder,m_env));
+		bool res = add(new ExeSubShell(m_feeder,m_env,&m_scopes))
+			|| add(new ExeForEach(m_feeder,m_env,&m_scopes))
+			|| add(new ExeWhile(m_feeder,m_env,&m_scopes))
+			|| add(new ExeString(m_feeder,m_env,&m_scopes))
+			|| add(new ExeProc(m_feeder,m_env,&m_scopes))
+			|| add(new ExeIntCom(m_feeder,m_env,&m_scopes))
+			|| add(new ExeExtCom(m_feeder,m_env,&m_scopes));
 		if(res)
 			comnum++;
 		else
@@ -130,7 +130,7 @@ int Pipeline::execWait(void)
 			if(p == NULL){
 				try{
 					string s(argv[i]);
-					p = (DataJob *)m_env->getData(&m_available_scopes,&s);
+					p = (DataJob *)m_env->getData(&m_scopes,&s);
 				}catch(...){
 					m_error_msg = "Bug of backgound process";
 					m_exit_status = 2;

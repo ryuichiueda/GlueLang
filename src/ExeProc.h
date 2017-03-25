@@ -13,7 +13,7 @@ class Feeder;
 class ExeProc : public Exe
 {
 public:
-	ExeProc(Feeder *f, Environment *env);
+	ExeProc(Feeder *f, Environment *env, vector<int> *scopes);
 	virtual ~ExeProc();
 	virtual bool parse(void);
 protected:

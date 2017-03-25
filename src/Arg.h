@@ -13,7 +13,7 @@ class Environment;
 class Arg : public Element
 {
 public:
-	Arg(Feeder *f,Environment *env);
+	Arg(Feeder *f,Environment *env, vector<int> *scopes);
 	virtual ~Arg();
 	virtual const char *getOriginalString(void){return m_text.c_str();}
 	virtual const char *getEvaledString(void){return m_evaled_text.c_str();}

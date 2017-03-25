@@ -123,6 +123,7 @@ bool Environment::isImportPath(string *key)
 Data *Environment::getData(int scope_id,string *key)
 {
 	string k = genKey(scope_id,key);
+	//cerr << "get: " << k << endl;
 	if(m_data.find(k) == m_data.end()){
 		m_error_msg = "Variable " + *key + " not found";
 		throw this;
@@ -203,6 +204,7 @@ string Environment::genKey(int scope_id,string *key)
 void Environment::setData(int scope_id,string *key, Data *value)
 {
 	string k = genKey(scope_id,key);
+//	cerr << "set: " << k << endl;
 	if(m_data.find(k) != m_data.end()){
 		m_error_msg = *key + " already exist";
 		throw this;

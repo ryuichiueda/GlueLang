@@ -19,7 +19,7 @@ class DefStr;
 class Job : public Element
 {
 public:
-	Job(Feeder *f, Environment *env);
+	Job(Feeder *f, Environment *env,vector<int> *scopes);;
 	virtual ~Job();
 	virtual void print(int indent_level = 0);
 

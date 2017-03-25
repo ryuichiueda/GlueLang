@@ -17,7 +17,7 @@ class DataFile;
 class DefFile : public Element
 {
 public:
-	DefFile(Feeder *f, Environment *env);
+	DefFile(Feeder *f,Environment *env, vector<int> *scopes);
 	virtual ~DefFile();
 	virtual bool parse(void);
 	void connect(void);

@@ -13,7 +13,7 @@ class Envrionment;
 class DefCond : public Element
 {
 public:
-	DefCond(Feeder *f, Environment *env);
+	DefCond(Feeder *f,Environment *env, vector<int> *scopes);
 	virtual ~DefCond();
 
 	virtual bool parse(void);

@@ -69,7 +69,7 @@ int main(int argc, char const* argv[])
 	string tmp_k = "tmpdir";
 	string tmp_v = "/tmp/";
 	env.setImportPath(&tmp_k,&tmp_v);
-	Script s(&feeder,&env);
+	Script s(&feeder,&env,NULL);
 
 //////////////////////////////////////////
 //execution

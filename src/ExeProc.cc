@@ -20,7 +20,7 @@
 #include "Feeder.h"
 using namespace std;
 
-ExeProc::ExeProc(Feeder *f, Environment *env) : Exe(f,env)
+ExeProc::ExeProc(Feeder *f, Environment *env,vector<int> *scopes) : Exe(f,env,scopes)
 {
 }
 
@@ -32,7 +32,7 @@ bool ExeProc::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	if(!add(new ArgProc(m_feeder,m_env)))
+	if(!add(new ArgProc(m_feeder,m_env,&m_scopes)))
 		return false;
 
 	if(!m_feeder->comment() && !m_feeder->atNewLine()){
@@ -55,7 +55,7 @@ void ExeProc::execChild(DefFile *f, DefFile *ef, DefStr *s)
 	Feeder feeder(&ifs);
 
 	m_env->initExeProc((const char**)argv);
-	Script scr(&feeder,m_env);
+	Script scr(&feeder,m_env,NULL);
 
 	scr.parse();
 	scr.exec(f,ef,s); // exit in the exec function

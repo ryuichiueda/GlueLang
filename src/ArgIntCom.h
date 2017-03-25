@@ -13,7 +13,7 @@ class Environment;
 class ArgIntCom : public Arg
 {
 public:
-	ArgIntCom(Feeder *f,Environment *env);
+	ArgIntCom(Feeder *f,Environment *env,vector<int> *scopes);;
 	virtual ~ArgIntCom();
 
 //	virtual bool eval(void);

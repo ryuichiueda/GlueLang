@@ -17,7 +17,7 @@ bash ./argv.test
 bash ./proc.test
 bash ./blank.test
 bash ./job.test
-#bash ./where.test
+bash ./where.test
 bash ./signal.test
 bash ./internal_commands.test
 bash ./background_proc.test

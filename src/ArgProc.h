@@ -13,7 +13,7 @@ class Environment;
 class ArgProc : public Arg
 {
 public:
-	ArgProc(Feeder *f,Environment *env);
+	ArgProc(Feeder *f,Environment *env,vector<int> *scopes);;
 	virtual ~ArgProc();
 
 	virtual bool eval(void);

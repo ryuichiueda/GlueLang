@@ -61,4 +61,5 @@ echo NG | diff - $tmp-ans
 [ $? -eq 1 ]
 ERROR_CHECK "TEST2.2 error"
 
+
 rm -f $tmp-*

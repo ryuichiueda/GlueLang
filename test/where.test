@@ -18,7 +18,7 @@ os=linux
 # TEST1: file
 #########################################
 cat << FIN > $tmp-glue
-/usr/bin/diff local.a local.b
+/usr/bin/diff a b
         where file a = /bin/echo 'aaa'
               file b = /bin/echo 'aaa'
 FIN
@@ -32,7 +32,7 @@ diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
 
 cat << FIN > $tmp-glue
-/usr/bin/diff local.a local.b
+/usr/bin/diff a b
         where   file a = /bin/echo 'aaa'
                 file b = /bin/echo 'aab'
 FIN
@@ -60,7 +60,7 @@ hoge
 hoge
 
 # but after where ...
-diff local.a local.b
+diff a b
 	where file a = seq 1 4
 	      file b = seq 1 4
 
@@ -81,5 +81,38 @@ ERROR_CHECK "TEST2.1 error"
 
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST2.2 error"
+
+#########################################
+# TEST3: global vs local
+#########################################
+
+cat << 'FIN' > $tmp-glue
+import PATH
+
+file b = seq 1 4
+
+diff a b
+  where
+    file a = seq 1 5
+    file b = seq 1 5
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST3.1 error"
+
+cat << 'FIN' > $tmp-glue
+import PATH
+
+file b = seq 1 5
+
+diff a b
+  where
+    file a = seq 1 5
+    file b = seq 1 4
+FIN
+
+../glue $tmp-glue > $tmp-ans
+[ $? -ne 0 ]
+ERROR_CHECK "TEST3.2 error"
 
 rm -f $tmp-*

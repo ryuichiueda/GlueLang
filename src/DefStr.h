@@ -17,7 +17,7 @@ class DataStr;
 class DefStr : public Element
 {
 public:
-	DefStr(Feeder *f, Environment *env);
+	DefStr(Feeder *f,Environment *env, vector<int> *scopes);
 	virtual ~DefStr();
 	virtual bool parse(void);
 	void connect(void);

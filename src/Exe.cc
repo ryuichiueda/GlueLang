@@ -21,7 +21,7 @@
 #include <string.h>
 using namespace std;
 
-Exe::Exe(Feeder *f, Environment *env) : Element(f,env)
+Exe::Exe(Feeder *f, Environment *env, vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_pipe[0] = -1;
 	m_pipe[1] = -1;
@@ -37,9 +37,9 @@ void Exe::parseArgs(void)
 {
 	bool flg = true;
 	while(1){
-		flg = add(new Literal(m_feeder,m_env))
-			|| add(new ArrayVariable(m_feeder,m_env))
-			|| add(new ArgVariable(m_feeder,m_env));
+		flg = add(new Literal(m_feeder,m_env,&m_scopes))
+			|| add(new ArrayVariable(m_feeder,m_env,&m_scopes))
+			|| add(new ArgVariable(m_feeder,m_env,&m_scopes));
 
 		if(flg == false)
 			return;

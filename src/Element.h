@@ -24,9 +24,9 @@ protected:
 	int m_end_line, m_end_char;
 
 	int m_job_id;
-	vector<int> m_available_scopes;
+	vector<int> m_scopes;
 public:
-	Element(Feeder *f, Environment *env);
+	Element(Feeder *f, Environment *env, vector<int> *scopes);
 	virtual ~Element();
 	virtual bool eval(void){return true;}
 	virtual int exec(DefFile *f, DefFile *ef, DefStr *s){return 0;}

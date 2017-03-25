@@ -21,7 +21,7 @@
 #include "Feeder.h"
 using namespace std;
 
-ExeString::ExeString(Feeder *f, Environment *env) : Exe(f,env)
+ExeString::ExeString(Feeder *f, Environment *env, vector<int> *scopes) : Exe(f,env,scopes)
 {
 }
 
@@ -33,7 +33,7 @@ bool ExeString::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
-	bool res = add(new Literal(m_feeder,m_env));
+	bool res = add(new Literal(m_feeder,m_env,&m_scopes));
 
 	if(!res)
 		return false;
@@ -41,8 +41,8 @@ bool ExeString::parse(void)
 	while(res){
 		if(m_feeder->atNewLine())
 			break;
-		res = add(new Literal(m_feeder,m_env))
-			|| add(new ArgVariable(m_feeder,m_env));
+		res = add(new Literal(m_feeder,m_env,&m_scopes))
+			|| add(new ArgVariable(m_feeder,m_env,&m_scopes));
 	}
 	
 	m_feeder->getPos(&m_end_line, &m_end_char);

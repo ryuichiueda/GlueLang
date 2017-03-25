@@ -18,7 +18,7 @@
 #include "Where.h"
 using namespace std;
 
-Job::Job(Feeder *f, Environment *env) : Element(f,env)
+Job::Job(Feeder *f, Environment *env,vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_outfile = NULL;
 	m_outstr = NULL;
@@ -53,23 +53,23 @@ void Job::print(int indent_level)
 bool Job::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
-	setJobId(m_env->publishJobId());
 
 	// scanning of file name 
 	// If `file <filename> =` is found, 
 	// the DefFile object is pushed as the first element of m_nodes.
 	// This node is also given to the last command line.
-	if(add(new DefFile(m_feeder,m_env))){
+	if(add(new DefFile(m_feeder,m_env,&m_scopes))){
 		m_outfile = (DefFile *)m_nodes[0];	
 		m_nodes.pop_back();
-	}else if(add(new DefStr(m_feeder,m_env))){
+	}else if(add(new DefStr(m_feeder,m_env,&m_scopes))){
 		m_outstr = (DefStr *)m_nodes[0];	
 		m_nodes.pop_back();
 	}
 
+	setJobId(m_env->publishJobId());
 	int comnum = 0;
 	while(1){
-		if(add(new Pipeline(m_feeder,m_env)))
+		if(add(new Pipeline(m_feeder,m_env,&m_scopes)))
 			comnum++;
 		else
 			break;
@@ -128,7 +128,7 @@ bool Job::parse(void)
 		}
 	}
 
-	if(add(new Where(m_feeder,m_env))){
+	if(add(new Where(m_feeder,m_env,&m_scopes))){
 		m_where = (Where *)m_nodes.back();
 		m_nodes.pop_back();
 		// give conditions to strings
@@ -215,7 +215,7 @@ int Job::execBackGround(DefFile *f, DefFile *ef, DefStr *s)
 	}
 
 	try{
-		DataJob *p = (DataJob *)m_env->getData(&m_available_scopes,&m_job_name);
+		DataJob *p = (DataJob *)m_env->getData(&m_scopes,&m_job_name);
 		p->m_pid = pid;
 	}catch(...){
 		m_error_msg = "Bug of backgound process";

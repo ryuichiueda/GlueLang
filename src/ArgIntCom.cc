@@ -6,7 +6,7 @@
 #include "InternalCommands.h"
 using namespace std;
 
-ArgIntCom::ArgIntCom(Feeder *f,Environment *env) : Arg(f,env)
+ArgIntCom::ArgIntCom(Feeder *f,Environment *env,vector<int> *scopes) : Arg(f,env,scopes)
 {
 }
 
