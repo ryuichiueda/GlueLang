@@ -25,17 +25,13 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 	m_dir = tmp;	
 	m_pid = getpid();
 
-	string a0 = string(argv[0]);
-
-	//set args
+	//set arguments 
 	for(int i=script_pos;i<argc;i++)
 		m_args.push_back(argv[i]);
 
 	m_v_opt = false;
 	m_level = 0;
-
 	m_job_counter = 0;
-
 	m_is_local = false;
 }
 
@@ -100,19 +96,15 @@ void Environment::setImportPath(string *key, string *value)
 	if(value->at(0) == '/'){
 		path = *value;
 	}else{
-		//resolve relative path (too lazy)
-		path = m_dir + "/" + *value;
+		path = m_dir + "/" + *value; //resolve relative path (too lazy)
 	}
 	m_import_paths[*key].push_back(path);
 }
 
 vector<string> *Environment::getImportPaths(string *key)
 {
-	if(m_import_paths.find(*key) == m_import_paths.end()){
-		return NULL;
-	}
-
-	return &m_import_paths[*key];
+	auto &p = m_import_paths;
+	return p.find(*key) == p.end() ? NULL : &p[*key];
 }
 
 vector<string> *Environment::getImportPaths(const char *key)
@@ -138,11 +130,13 @@ Data *Environment::getData(string *key)
 
 bool Environment::isData(string *key)
 {
+	return m_data.find(*key) != m_data.end();
+	/*
 	if(m_data.find(*key) == m_data.end()){
 		return false;
 	}
-
 	return true;
+	*/
 }
 
 void Environment::removeFiles(bool local)
@@ -159,29 +153,6 @@ void Environment::removeFiles(bool local)
 		if(m_tmpdir + "/" != f->substr(0,m_tmpdir.size() + 1))
 			continue;
 
-/*
-		cerr << "try: " << f->c_str() << endl;
-		if(m_is_local){
-			cerr << "local" << endl;
-		}
-*/
-/*
-		if(m_is_local){
-		if(f->substr(m_tmpdir.size(),6+1) == "local."){
-			remove(f->c_str());
-			if(m_v_opt)
-				cerr << "+ pid " << getpid() << " file " << f << " deleted" << endl;
-			continue;
-		}
-		}
-*/
-/*
-		if(m_is_local){
-			cerr << "local: " << f->c_str() << endl;
-		}else{
-			cerr << "global: " << f->c_str() << endl;
-		}
-*/
 		if(f->substr(m_tmpdir.size()+1,6) != "local." && m_is_local)
 			continue;
 
