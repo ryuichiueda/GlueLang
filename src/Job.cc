@@ -82,10 +82,16 @@ bool Job::parse(void)
 
 		if(m_feeder->str(">>")){
 			back1->m_has_and = true;
+			if(back2 != NULL and back2->m_has_then){
+				m_feeder->getPos(&m_end_line, &m_end_char);
+				m_error_msg = "Invalid connection (>> is connected after ?>)";
+				m_exit_status = 6;
+				throw this;
+			}
 		}else if(m_feeder->str("?>")){
 			back1->m_has_then = true;
 		}else if(m_feeder->str("!>")){
-			if(back2 != NULL and ( back2->m_has_and or back2->m_has_then) )
+			if(back2 != NULL and back2->m_has_then)
 				back2->m_has_or = true;
 			else
 				back1->m_has_or = true;
@@ -167,30 +173,23 @@ int Job::execNormal(DefFile *f, DefFile *ef, DefStr *s)
 	bool skip = false; // flag to skip the next command
 	bool stop_next = false; // stop after then
 	for(int i=0;i<(int)m_nodes.size();i++){
-		if(skip){
+		if(skip and not stop_next){
 			skip = false;
 			continue;
 		}
 
-		auto *p = (Pipeline *)m_nodes[i];
 		if(f != NULL && i!=0)
 			f->m_data->setAppend();
 
-		int exs = p->exec(f,ef,s);
+		auto *p = (Pipeline *)m_nodes[i];
+		int es = p->exec(f,ef,s);
 		if(stop_next)
-			return exs;
+			return es;
 
-		if(p->m_has_and and exs != 0){
-			skip = true;
-		}else if(p->m_has_or and exs == 0){
-			skip = true;
-		}
-		
-		if(p->m_has_then and exs == 0){
-			stop_next = true;
-		}else if(p->m_has_then and exs != 0){
-			skip = true;
-		}
+		stop_next = p->m_has_then and es == 0;
+		skip = (p->m_has_then and es != 0)
+			or (p->m_has_and and es != 0)
+			or (p->m_has_or and es == 0);
 	}
 	return 0;
 }

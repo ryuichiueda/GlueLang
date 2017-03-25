@@ -35,13 +35,13 @@ bool Script::parse(void)
 	catch(Element *e){
 		parseErrorMsg(e);
 		m_env->removeFiles(false);
-		cerr << "\tglue exit_status: 2" << endl;
-		exit(2);
+		cerr << "\tglue exit_status: " << e->m_exit_status << endl;
+		exit(e->m_exit_status);
 	}catch(...){
 		cerr << "\nParse error" << endl;
 		cerr << "unknown error" << endl;
 		m_env->removeFiles(false);
-		cerr << "\tglue exit_status: 4" << endl;
+		cerr << "\tglue exit_status: 128" << endl;
 		exit(4);
 	}
 }
@@ -76,7 +76,7 @@ bool Script::doParse(void)
 
 	if(!m_feeder->atEnd()){
 		m_error_msg = "Unknown token";
-		m_exit_status = 1;
+		m_exit_status = 7;
 		throw this;
 	}
 
@@ -98,6 +98,8 @@ int Script::exec(DefFile *f, DefFile *ef, DefStr *s)
 		m_env->removeFiles(false);
 		int es = e->getExitStatus();
 		//if(es == 1){
+				exit(es);
+				/*
 			if(es == 127){
 				//_exit(es);
 				//cerr << "glue exit status: 1" << endl;
@@ -107,6 +109,7 @@ int Script::exec(DefFile *f, DefFile *ef, DefStr *s)
 				exit(es);
 			//	exit(es);
 			}
+			*/
 	//	}else{
 	//		cerr << "\tglue exit_status: 3" << endl;
 		//	exit(3);

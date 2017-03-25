@@ -30,13 +30,14 @@ protected:
 	int execNormal(DefFile *f, DefFile *ef, DefStr *s);
 	int execBackGround(DefFile *f, DefFile *ef, DefStr *s);
 
-	DefFile *m_outfile;
-	DefStr *m_outstr;
-
 	Where *m_where;
 	Environment *m_local_env;
 
 	string m_job_name;
 	bool m_is_background;
+
+private:
+	DefFile *m_outfile;
+	DefStr *m_outstr;
 };
 #endif
