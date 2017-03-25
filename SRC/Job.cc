@@ -139,31 +139,36 @@ bool Job::parse(void)
 	return true;
 }
 
-int Job::exec(void)
+int Job::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
+	if(m_outfile != NULL)
+		f = m_outfile;
+	if(m_outstr != NULL)
+		s = m_outstr;
 	// stdout of all commands are appended into a file
+	/*
 	for(auto *n : m_nodes){
 		((Pipeline *)n)->m_outfile = m_outfile;
 		((Pipeline *)n)->m_outstr = m_outstr;
-	}
+	}*/
 
 	cout << flush;
 
 	eval();
 
 	if(m_where != NULL){
-		m_where->exec();
+		m_where->exec(f,ef,s,es);
 		m_local_env = m_where->m_local_env;
 	}
 
 
 	if(m_is_background)
-		return execBackGround();
+		return execBackGround(f,ef,s,es);
 
-	return execNormal();
+	return execNormal(f,ef,s,es);
 }
 
-int Job::execNormal(void)
+int Job::execNormal(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
 	bool skip = false; // flag to skip the next command
 	bool stop_next = false; // stop after then
@@ -174,29 +179,29 @@ int Job::execNormal(void)
 		}
 
 		auto *p = (Pipeline *)m_nodes[i];
-		if(m_outfile != NULL && i!=0)
-			m_outfile->m_data->setAppend();
+		if(f != NULL && i!=0)
+			f->m_data->setAppend();
 
-		int es = p->exec();
+		int exs = p->exec(f,ef,s,es);
 		if(stop_next)
-			return es;
+			return exs;
 
-		if(p->m_has_and and es != 0){
+		if(p->m_has_and and exs != 0){
 			skip = true;
-		}else if(p->m_has_or and es == 0){
+		}else if(p->m_has_or and exs == 0){
 			skip = true;
 		}
 		
-		if(p->m_has_then and es == 0){
+		if(p->m_has_then and exs == 0){
 			stop_next = true;
-		}else if(p->m_has_then and es != 0){
+		}else if(p->m_has_then and exs != 0){
 			skip = true;
 		}
 	}
 	return 0;
 }
 
-int Job::execBackGround(void)
+int Job::execBackGround(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
 	int pid = fork();
 	if(pid < 0)
@@ -211,7 +216,7 @@ int Job::execBackGround(void)
 			if(m_outfile != NULL && i!=0)
 				m_outfile->m_data->setAppend();
 	
-			p->exec();
+			p->exec(f,ef,s,es);
 		}
 		exit(0);
 	}

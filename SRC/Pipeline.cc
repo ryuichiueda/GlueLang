@@ -25,8 +25,6 @@ using namespace std;
 
 Pipeline::Pipeline(Feeder *f, Environment *env) : Element(f,env)
 {
-	m_outfile = NULL;
-	m_outstr = NULL;
 	m_has_and = false;
 	m_has_then = false;
 	m_has_or = false;
@@ -55,7 +53,6 @@ bool Pipeline::parse(void)
 			|| add(new ExeForEach(m_feeder,m_env))
 			|| add(new ExeWhile(m_feeder,m_env))
 			|| add(new ExeString(m_feeder,m_env))
- 			//|| add(new ExeEachline(m_feeder,m_env))
 			|| add(new ExeProc(m_feeder,m_env))
 			|| add(new ExeIntCom(m_feeder,m_env))
 			|| add(new ExeExtCom(m_feeder,m_env));
@@ -79,10 +76,10 @@ bool Pipeline::parse(void)
 	return true;
 }
 
-int Pipeline::exec(void)
+int Pipeline::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
-	m_nodes.back()->m_outfile = m_outfile;
-	m_nodes.back()->m_outstr = m_outstr;
+	m_nodes.back()->m_outfile = f;
+	m_nodes.back()->m_outstr = s;
 
 	// When wait(1) is set in the command line,
 	// wait(1) is done in this process.
@@ -104,12 +101,15 @@ int Pipeline::exec(void)
 		}
 
 		p->setPipe(pip,prevfd);
-		m_pids.push_back( p->exec() );
+		if( n != m_nodes.back() )
+			m_pids.push_back( p->exec(NULL,NULL,NULL,NULL) );
+		else
+			m_pids.push_back( p->exec(f,ef,s,es) );
 		prevfd = p->getPrevPipe();
 	}
 
-	if(m_outstr != NULL)
-		m_outstr->readFifo();
+	if(s != NULL)
+		s->readFifo();
 
 	for(auto pid : m_pids)
 		waitCommands(pid);

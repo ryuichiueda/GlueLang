@@ -131,12 +131,6 @@ Data *Environment::getData(string *key)
 bool Environment::isData(string *key)
 {
 	return m_data.find(*key) != m_data.end();
-	/*
-	if(m_data.find(*key) == m_data.end()){
-		return false;
-	}
-	return true;
-	*/
 }
 
 void Environment::removeFiles(bool local)

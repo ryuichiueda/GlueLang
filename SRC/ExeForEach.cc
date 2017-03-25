@@ -52,7 +52,7 @@ bool ExeForEach::parse(void)
 	return true;
 }
 
-void ExeForEach::execChild(void)
+void ExeForEach::execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
 
@@ -84,11 +84,11 @@ void ExeForEach::execChild(void)
 			Feeder feeder(&ifs);
 		
 			m_env->initExeProc((const char**)argv);
-			Script s(&feeder,m_env);
+			Script scr(&feeder,m_env);
 		
-			s.setSilent();
-			s.parse();
-			s.exec(); // exit in the exec function
+			scr.setSilent();
+			scr.parse();
+			scr.exec(f,ef,s,es); // exit in the exec function
 		}else{
 			int options = 0;
 			int status;

@@ -53,7 +53,7 @@ bool ExeSubShell::parse(void)
 	return true;
 }
 
-void ExeSubShell::execChild(void)
+void ExeSubShell::execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
 	auto argv = new char* [2];
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
@@ -65,9 +65,9 @@ void ExeSubShell::execChild(void)
 	Feeder feeder(&ifs);
 
 	m_env->initExeProc((const char**)argv);
-	Script s(&feeder,m_env);
+	Script scr(&feeder,m_env);
 
-	s.setSilent();
-	s.parse();
-	s.exec(); // exit in the exec function
+	scr.setSilent();
+	scr.parse();
+	scr.exec(f,ef,s,es); // exit in the exec function
 }

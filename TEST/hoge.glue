@@ -1,0 +1,6 @@
+import PATH
+
+while
+  str s = date '+%s' >>= awk '{print $1%3}'
+  echo s
+  test s -ne 0

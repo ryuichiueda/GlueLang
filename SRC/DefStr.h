@@ -20,7 +20,7 @@ public:
 	DefStr(Feeder *f, Environment *env);
 	virtual ~DefStr();
 	virtual bool parse(void);
-	virtual int exec(void);
+	void connect(void);
 
 	bool readFifo(void);
 

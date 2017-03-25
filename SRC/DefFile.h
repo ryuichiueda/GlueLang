@@ -20,7 +20,7 @@ public:
 	DefFile(Feeder *f, Environment *env);
 	virtual ~DefFile();
 	virtual bool parse(void);
-	virtual int exec(void);
+	void connect(void);
 
 	DataFile *m_data;
 };

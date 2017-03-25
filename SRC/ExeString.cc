@@ -49,18 +49,18 @@ bool ExeString::parse(void)
 	return true;
 }
 
-void ExeString::execChild(void)
+void ExeString::execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
-	string s,tmp;
+	string str,tmp;
 	for(auto n : m_nodes){
 		tmp = ((Arg *)n)->getEvaledString();
-		s += tmp;
+		str += tmp;
 	}
 
 	const char **argv = new const char *[3];
 	string com = "echo";
 	argv[0] = (const char *)com.c_str();
-	argv[1] = (const char *)s.c_str();
+	argv[1] = (const char *)str.c_str();
 	argv[2] = NULL;
 	vOptProc(argv[0]);
 	InternalCommands::exec(argv,m_env,m_feeder,this);

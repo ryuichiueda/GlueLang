@@ -17,6 +17,6 @@ public:
 	virtual ~ExeExtCom();
 	virtual bool parse(void);
 protected:
-	void execChild(void);
+	void execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es);
 };
 #endif

@@ -82,7 +82,7 @@ void Exe::execErrorExit(void)
 	throw this;
 }
 
-int Exe::exec(void)
+int Exe::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
 	cout << flush;
 
@@ -103,12 +103,15 @@ int Exe::exec(void)
 		m_feeder->close();
 
 		//open a file or a string variable
-		if(m_outfile != NULL)
-			m_outfile->exec();
-		else if(m_outstr != NULL)
-			m_outstr->exec();
+		if(f != NULL)
+			f->connect();
+		else if(s != NULL){
+			s->connect();
+		//else if(m_outstr != NULL){
+			// m_outstr->connect();
+		}
 
-		execChild();
+		execChild(f,ef,s,es);
 		execErrorExit();
 	}
 

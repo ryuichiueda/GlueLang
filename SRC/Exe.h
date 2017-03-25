@@ -27,7 +27,7 @@ public:
 	virtual void appendArg(string a){m_add_args.push_back(a);}
 	virtual void clearAppendArg(void){m_add_args.clear();}
 
-	virtual int exec(void);
+	virtual int exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es);
 	virtual bool eval(void);
 
 	void setPipe(int *pip,int prev);
@@ -38,7 +38,7 @@ public:
 
 	char** makeArgv(void);
 protected:
-	virtual void execChild(void) = 0;
+	virtual void execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es) = 0;
 	void execErrorExit(void);
 
 	void childPipeProc(void);

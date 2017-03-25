@@ -83,12 +83,12 @@ bool Script::doParse(void)
 	return true;
 }
 
-int Script::exec(void)
+int Script::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
 	int exit_status = 0;
 	try{
 		for(auto &c : m_nodes){
-			exit_status = c->exec();
+			exit_status = c->exec(NULL,NULL,NULL,NULL);
 		}
 		m_env->removeFiles(false);
 		if(exit_status == 0)

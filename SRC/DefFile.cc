@@ -59,7 +59,7 @@ bool DefFile::parse(void)
 }
 
 // joint the redirect
-int DefFile::exec(void)
+void DefFile::connect(void)
 {
 	try{
 		m_data->openFile();
@@ -72,7 +72,5 @@ int DefFile::exec(void)
 	if(m_env->m_v_opt)
 		cerr << "+ pid " << getpid() << " file "
 		<< m_data->m_value << " created" << endl;
-
-	return 0;
 }
 

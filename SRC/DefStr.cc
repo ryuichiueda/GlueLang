@@ -60,10 +60,9 @@ bool DefStr::parse(void)
 }
 
 // joint the redirect
-int DefStr::exec(void)
+void DefStr::connect(void)
 {
 	m_data->openFifo();
-	return 0;
 }
 
 /*

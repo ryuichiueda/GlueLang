@@ -20,7 +20,7 @@ public:
 	virtual ~Where();
 	//virtual void print(int indent_level = 0);
 	bool parse(void);
-	virtual int exec(void);
+	virtual int exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es);
 	virtual bool eval(void);
 
 	DefCond* findCond(string *var);

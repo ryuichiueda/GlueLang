@@ -28,7 +28,7 @@ public:
 	Element(Feeder *f, Environment *env);
 	virtual ~Element();
 	virtual bool eval(void){return true;}
-	virtual int exec(void){return 0;}
+	virtual int exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es){return 0;}
 	virtual bool parse(void){return false;}
 
 	virtual void printOriginalString(void);

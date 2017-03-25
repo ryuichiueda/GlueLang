@@ -52,7 +52,7 @@ bool ExeWhile::parse(void)
 	return true;
 }
 
-void ExeWhile::execChild(void)
+void ExeWhile::execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
 	auto argv = new char* [2];
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
@@ -70,11 +70,11 @@ void ExeWhile::execChild(void)
 			Feeder feeder(&ifs);
 		
 			m_env->initExeProc((const char**)argv);
-			Script s(&feeder,m_env);
+			Script scr(&feeder,m_env);
 		
-			s.setSilent();
-			s.parse();
-			s.exec(); // exit in the exec function
+			scr.setSilent();
+			scr.parse();
+			scr.exec(f,ef,s,es); // exit in the exec function
 		}else{
 		        int options = 0;
 		        int status;
