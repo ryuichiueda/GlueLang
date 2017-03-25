@@ -145,12 +145,6 @@ int Job::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 		f = m_outfile;
 	if(m_outstr != NULL)
 		s = m_outstr;
-	// stdout of all commands are appended into a file
-	/*
-	for(auto *n : m_nodes){
-		((Pipeline *)n)->m_outfile = m_outfile;
-		((Pipeline *)n)->m_outstr = m_outstr;
-	}*/
 
 	cout << flush;
 
@@ -213,8 +207,8 @@ int Job::execBackGround(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 
 		for(int i=0;i<(int)m_nodes.size();i++){
 			auto *p = (Pipeline *)m_nodes[i];
-			if(m_outfile != NULL && i!=0)
-				m_outfile->m_data->setAppend();
+			if(f != NULL && i!=0)
+				f->m_data->setAppend();
 	
 			p->exec(f,ef,s,es);
 		}
