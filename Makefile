@@ -1,13 +1,13 @@
 all:
-	$(MAKE) -C SRC
+	$(MAKE) -C src
 
 clean:
-	cd SRC; make clean
+	cd src; make clean
 	rm -f ./glue
 
 test: all
-	sh -e ./TEST/test_all.sh
+	sh -e ./test/test_all.sh
 
 
 install:
-	cd SRC; make install
+	cd src; make install
