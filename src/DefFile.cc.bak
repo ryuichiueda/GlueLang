@@ -45,7 +45,7 @@ bool DefFile::parse(void)
 		m_data = new DataFile();
 		string filename = m_env->m_tmpdir + "/" + var_name;
 		m_data->setData(&filename);
-		m_env->setData(0,&var_name,m_data);
+		m_env->setData(m_job_id,&var_name,m_data);
 	}catch(Environment *e){
 		m_error_msg = e->m_error_msg;	
 		m_exit_status = 3;

@@ -1,6 +1,6 @@
 // Copyright 2017 Ryuichi Ueda
 // Released under the MIT License.
-#include "ExeWhile.h"
+#include "ExeForEach.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
@@ -20,20 +20,20 @@
 #include "DataProc.h"
 using namespace std;
 
-ExeWhile::ExeWhile(Feeder *f, Environment *env) : Exe(f,env)
+ExeForEach::ExeForEach(Feeder *f, Environment *env) : Exe(f,env)
 {
 }
 
-ExeWhile::~ExeWhile()
+ExeForEach::~ExeForEach()
 {
 }
 
-bool ExeWhile::parse(void)
+bool ExeForEach::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
 	string scr;
-	bool scr_exist = m_feeder->whileBlock(&scr);
+	bool scr_exist = m_feeder->forEachBlock(&scr);
 	if(!scr_exist){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
@@ -48,23 +48,37 @@ bool ExeWhile::parse(void)
 
 	auto *p = new DataProc();
 	p->setFileName(&tmpdir);
-	m_env->setData(0,&m_name,p);
+	m_env->setData(m_job_id,&m_name,p);
 	return true;
 }
 
-void ExeWhile::execChild(DefFile *f, DefFile *ef, DefStr *s)
+void ExeForEach::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
-	auto argv = new char* [2];
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
-	argv[0] = (char *)tmpdir.c_str();
-	argv[1] = NULL;
 
-	while(1){
+	string line;
+	while (getline(cin, line)){
+		vector<string> ws;
+		line += ' ';//add a space at the end of a line
+		int from = 0;
+		for(int i=from;i<line.size();i++){
+			if(line.at(i) == ' '){
+				ws.push_back(line.substr(from,i-from));
+				from = i + 1;
+			}
+		}
+
 		int pid = fork();
 		if(pid < 0)
 			exit(4);
 
 		if(pid == 0){//child process (procedures in the loop)
+			auto argv = new char* [ws.size()+2];
+			argv[0] = (char *)tmpdir.c_str();
+			for(size_t i=0;i<ws.size();i++)
+				argv[i+1] = (char *)(ws[i].c_str());
+			argv[ws.size()+1] = NULL;
+
 			vOptProc(argv[0]);
 			ifstream ifs(argv[0]);
 			Feeder feeder(&ifs);
@@ -76,33 +90,34 @@ void ExeWhile::execChild(DefFile *f, DefFile *ef, DefStr *s)
 			scr.parse();
 			scr.exec(f,ef,s); // exit in the exec function
 		}else{
-		        int options = 0;
-		        int status;
-		        int wpid = waitpid(pid,&status,options);
-		        if(wpid < 1){
-		                m_error_msg = "Command wait error";
-		                m_exit_status = 2;
-		                throw this;
-		        }
+			int options = 0;
+			int status;
+			int wpid = waitpid(pid,&status,options);
+			if(wpid < 1){
+				m_error_msg = "Command wait error";
+				m_exit_status = 2;
+				throw this;
+			}
 
-		        if(!WIFEXITED(status)){
-		                if(WIFSIGNALED(status) && WTERMSIG(status) == 13){//sigpipe
+			if(!WIFEXITED(status)){
+				if(WIFSIGNALED(status) && WTERMSIG(status) == 13){//sigpipe
 					continue;
 				}else if(WIFSIGNALED(status) && WTERMSIG(status) == SIGUSR1){
 					exit(0);
-		                }else{
+				}else{
 					exit(0);
-		                }
-		        }else{
+				}
+			}else{
 			       	m_exit_status = WEXITSTATUS(status);
 			       	if(m_exit_status == 0){
 					continue;
-				}else if(m_exit_status != 1){
-					exit(m_exit_status);
-				}else{
+				}else if(m_exit_status == 128){
 					exit(0);
+				}else{
+					exit(m_exit_status);
 				}
 			}
 		}
 	}
+	exit(0);
 }

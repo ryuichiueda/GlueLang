@@ -45,7 +45,7 @@ bool DefStr::parse(void)
 		string f = m_env->m_tmpdir + "/" + m_var_name;
 		m_data->setFifoName(&f);
 		m_data->createFifo();
-		m_env->setData(0,&m_var_name,m_data);
+		m_env->setData(m_job_id,&m_var_name,m_data);
 	}catch(Environment *e){
 		m_error_msg = e->m_error_msg;	
 		m_exit_status = 3;

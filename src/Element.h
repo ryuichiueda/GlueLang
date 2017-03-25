@@ -24,6 +24,7 @@ protected:
 	int m_end_line, m_end_char;
 
 	int m_job_id;
+	vector<int> m_available_scopes;
 public:
 	Element(Feeder *f, Environment *env);
 	virtual ~Element();

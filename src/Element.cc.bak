@@ -19,7 +19,6 @@ Element::Element(Feeder *f, Environment *env)
 	m_exit_status = 0;
 
 	m_job_id = 0;
-	m_available_scopes.push_back(0);
 }
 
 Element::~Element()

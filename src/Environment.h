@@ -18,12 +18,15 @@ private:
 	string m_dir;
 	map<string,Data *> m_data;
 
+	string genKey(int scope_id,string *key);
+	Data *getData(int scope_id,string *key);
+
 	int m_job_counter;
 public:
-	void setData(string *key, Data *value);
+	void setData(int scope_id,string *key, Data *value);
 
 	Environment(int argc, char const* argv[],int script_pos);
-	Environment(Environment *e);
+//	Environment(Environment *e);
 	~Environment();
 
 	// fork
@@ -32,8 +35,8 @@ public:
 	int m_level;
 
 	// manipulators for m_data
-	Data *getData(string *key);
-	bool isData(string *key);
+	Data *getData(vector<int> *scopes,string *key);
+	bool isData(int scope_id,string *key);
 	string *getArg(long pos);
 
 	// manipulators for m_import_paths
@@ -42,7 +45,7 @@ public:
 	vector<string> *getImportPaths(const char *key);
 	bool isImportPath(string *key);
 
-	void removeFiles(bool local);
+	void removeFiles(void);
 
 	void initTmpdir(void);
 
@@ -51,12 +54,10 @@ public:
 	bool m_v_opt;
 	int m_pid;
 
-	map<int, Environment *> m_local_env;
-
 	// giving job id
 	int publishJobId(void);
 
-	bool m_is_local;
+	//bool m_is_local;
 };
 
 #endif

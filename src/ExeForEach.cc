@@ -48,7 +48,7 @@ bool ExeForEach::parse(void)
 
 	auto *p = new DataProc();
 	p->setFileName(&tmpdir);
-	m_env->setData(&m_name,p);
+	m_env->setData(0,&m_name,p);
 	return true;
 }
 

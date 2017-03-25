@@ -24,7 +24,7 @@ bool ArgProc::parse(void)
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}
-	if(!m_env->isData(0,&m_evaled_text)){
+	if(!m_env->isData(m_job_id,&m_evaled_text)){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}

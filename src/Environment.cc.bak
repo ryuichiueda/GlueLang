@@ -122,23 +122,12 @@ bool Environment::isImportPath(string *key)
 
 Data *Environment::getData(int scope_id,string *key)
 {
-	string k = genKey(scope_id,key);
-	if(m_data.find(k) == m_data.end()){
+	if(m_data.find(genKey(scope_id,key)) == m_data.end()){
 		m_error_msg = "Variable " + *key + " not found";
 		throw this;
 	}
 
-	return m_data[k];
-}
-
-Data *Environment::getData(vector<int> *scopes,string *key)
-{
-	for(auto rit = scopes->rbegin(); rit != scopes->rend(); ++rit){
-		if(isData(*rit,key))
-			return getData(*rit,key);
-	}
-	m_error_msg = "Variable " + *key + " not found";
-	throw this;
+	return m_data[*key];
 }
 
 bool Environment::isData(int scope_id,string *key)
@@ -202,12 +191,11 @@ string Environment::genKey(int scope_id,string *key)
 
 void Environment::setData(int scope_id,string *key, Data *value)
 {
-	string k = genKey(scope_id,key);
-	if(m_data.find(k) != m_data.end()){
+	if(m_data.find(genKey(scope_id,key)) != m_data.end()){
 		m_error_msg = *key + " already exist";
 		throw this;
 	}
-	m_data[k] = value;
+	m_data[*key] = value;
 }
 
 int Environment::publishJobId(void)

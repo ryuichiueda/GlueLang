@@ -130,7 +130,7 @@ int Pipeline::execWait(void)
 			if(p == NULL){
 				try{
 					string s(argv[i]);
-					p = (DataJob *)m_env->getData(&m_available_scopes,&s);
+					p = (DataJob *)m_env->getData(m_job_id,&s);
 				}catch(...){
 					m_error_msg = "Bug of backgound process";
 					m_exit_status = 2;

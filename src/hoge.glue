@@ -1,0 +1,4 @@
+import PATH
+
+file f = echo 'a'
+mv f 'aa'

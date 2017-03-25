@@ -120,7 +120,7 @@ bool Job::parse(void)
 		d->setData(&m_job_name);
 
 		try{
-			m_env->setData(0,&m_job_name,d);
+			m_env->setData(m_job_id,&m_job_name,d);
 		}catch(Environment *e){
 			m_error_msg = e->m_error_msg;	
 			m_exit_status = 2;
@@ -215,7 +215,7 @@ int Job::execBackGround(DefFile *f, DefFile *ef, DefStr *s)
 	}
 
 	try{
-		DataJob *p = (DataJob *)m_env->getData(&m_available_scopes,&m_job_name);
+		DataJob *p = (DataJob *)m_env->getData(m_job_id,&m_job_name);
 		p->m_pid = pid;
 	}catch(...){
 		m_error_msg = "Bug of backgound process";
