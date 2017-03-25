@@ -105,11 +105,8 @@ int Exe::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 		//open a file or a string variable
 		if(f != NULL)
 			f->connect();
-		else if(s != NULL){
+		else if(s != NULL)
 			s->connect();
-		//else if(m_outstr != NULL){
-			// m_outstr->connect();
-		}
 
 		execChild(f,ef,s,es);
 		execErrorExit();

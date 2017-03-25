@@ -39,15 +39,11 @@ public:
 
 	string m_error_msg;
 	int m_exit_status;
-	//bool m_command_error;
 
 	string pos(void);
 	int getExitStatus(void){return m_exit_status;};
 	void printErrorPart(void);
 	int getLevel(void);
-
-	DefFile *m_outfile;
-	DefStr *m_outstr;
 
 	static int m_signal;
 };

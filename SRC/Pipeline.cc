@@ -78,9 +78,6 @@ bool Pipeline::parse(void)
 
 int Pipeline::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 {
-	m_nodes.back()->m_outfile = f;
-	m_nodes.back()->m_outstr = s;
-
 	// When wait(1) is set in the command line,
 	// wait(1) is done in this process.
 	// Wait(1) cannot be connected with other commands
@@ -101,10 +98,11 @@ int Pipeline::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 		}
 
 		p->setPipe(pip,prevfd);
+		//Only the last command is connected to the file/string
 		if( n != m_nodes.back() )
-			m_pids.push_back( p->exec(NULL,NULL,NULL,NULL) );
+			m_pids.push_back( p->exec(NULL,NULL,NULL,NULL) ); //to pipeline
 		else
-			m_pids.push_back( p->exec(f,ef,s,es) );
+			m_pids.push_back( p->exec(f,ef,s,es) ); //to file/string
 		prevfd = p->getPrevPipe();
 	}
 
