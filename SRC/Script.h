@@ -19,7 +19,7 @@ public:
 	virtual ~Script();
 	//virtual void print(int indent_level = 0);
 	bool parse(void);
-	virtual int exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es);
+	virtual int exec(DefFile *f, DefFile *ef, DefStr *s);
 	virtual bool eval(void){return true;};
 
 	void setSilent(void){m_silent = true;}

@@ -76,7 +76,7 @@ bool Pipeline::parse(void)
 	return true;
 }
 
-int Pipeline::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
+int Pipeline::exec(DefFile *f, DefFile *ef, DefStr *s)
 {
 	// When wait(1) is set in the command line,
 	// wait(1) is done in this process.
@@ -100,9 +100,9 @@ int Pipeline::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 		p->setPipe(pip,prevfd);
 		//Only the last command is connected to the file/string
 		if( n != m_nodes.back() )
-			m_pids.push_back( p->exec(NULL,NULL,NULL,NULL) ); //to pipeline
+			m_pids.push_back( p->exec(NULL,ef,NULL) ); //to pipeline
 		else
-			m_pids.push_back( p->exec(f,ef,s,es) ); //to file/string
+			m_pids.push_back( p->exec(f,ef,s) ); //to file/string
 		prevfd = p->getPrevPipe();
 	}
 

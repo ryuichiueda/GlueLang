@@ -43,7 +43,7 @@ bool ExeExtCom::parse(void)
 	return true;
 }
 
-void ExeExtCom::execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
+void ExeExtCom::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	auto argv = makeArgv();
 	vOptProc(argv[0]);

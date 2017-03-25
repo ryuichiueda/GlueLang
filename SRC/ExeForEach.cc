@@ -52,7 +52,7 @@ bool ExeForEach::parse(void)
 	return true;
 }
 
-void ExeForEach::execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
+void ExeForEach::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
 
@@ -88,7 +88,7 @@ void ExeForEach::execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 		
 			scr.setSilent();
 			scr.parse();
-			scr.exec(f,ef,s,es); // exit in the exec function
+			scr.exec(f,ef,s); // exit in the exec function
 		}else{
 			int options = 0;
 			int status;

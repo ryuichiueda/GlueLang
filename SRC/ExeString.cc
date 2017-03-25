@@ -49,7 +49,7 @@ bool ExeString::parse(void)
 	return true;
 }
 
-void ExeString::execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
+void ExeString::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	string str,tmp;
 	for(auto n : m_nodes){

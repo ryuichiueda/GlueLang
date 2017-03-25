@@ -139,7 +139,7 @@ bool Job::parse(void)
 	return true;
 }
 
-int Job::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
+int Job::exec(DefFile *f, DefFile *ef, DefStr *s)
 {
 	if(m_outfile != NULL)
 		f = m_outfile;
@@ -151,18 +151,18 @@ int Job::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 	eval();
 
 	if(m_where != NULL){
-		m_where->exec(f,ef,s,es);
+		m_where->exec(f,ef,s);
 		m_local_env = m_where->m_local_env;
 	}
 
 
 	if(m_is_background)
-		return execBackGround(f,ef,s,es);
+		return execBackGround(f,ef,s);
 
-	return execNormal(f,ef,s,es);
+	return execNormal(f,ef,s);
 }
 
-int Job::execNormal(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
+int Job::execNormal(DefFile *f, DefFile *ef, DefStr *s)
 {
 	bool skip = false; // flag to skip the next command
 	bool stop_next = false; // stop after then
@@ -176,7 +176,7 @@ int Job::execNormal(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 		if(f != NULL && i!=0)
 			f->m_data->setAppend();
 
-		int exs = p->exec(f,ef,s,es);
+		int exs = p->exec(f,ef,s);
 		if(stop_next)
 			return exs;
 
@@ -195,7 +195,7 @@ int Job::execNormal(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 	return 0;
 }
 
-int Job::execBackGround(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
+int Job::execBackGround(DefFile *f, DefFile *ef, DefStr *s)
 {
 	int pid = fork();
 	if(pid < 0)
@@ -210,7 +210,7 @@ int Job::execBackGround(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 			if(f != NULL && i!=0)
 				f->m_data->setAppend();
 	
-			p->exec(f,ef,s,es);
+			p->exec(f,ef,s);
 		}
 		exit(0);
 	}

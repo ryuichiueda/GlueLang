@@ -17,7 +17,7 @@ public:
 	virtual ~ExeForEach();
 	virtual bool parse(void);
 protected:
-	void execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es);
+	void execChild(DefFile *f, DefFile *ef, DefStr *s);
 	string m_name;
 //	vector<string> m_script;
 	string m_script_path;

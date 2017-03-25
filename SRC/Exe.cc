@@ -82,7 +82,7 @@ void Exe::execErrorExit(void)
 	throw this;
 }
 
-int Exe::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
+int Exe::exec(DefFile *f, DefFile *ef, DefStr *s)
 {
 	cout << flush;
 
@@ -108,7 +108,7 @@ int Exe::exec(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 		else if(s != NULL)
 			s->connect();
 
-		execChild(f,ef,s,es);
+		execChild(f,ef,s);
 		execErrorExit();
 	}
 

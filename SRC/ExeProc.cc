@@ -44,7 +44,7 @@ bool ExeProc::parse(void)
 	return true;
 }
 
-void ExeProc::execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
+void ExeProc::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	auto argv = makeArgv();
 	// argv[0]: script file
@@ -58,5 +58,5 @@ void ExeProc::execChild(DefFile *f, DefFile *ef, DefStr *s, DefStr *es)
 	Script scr(&feeder,m_env);
 
 	scr.parse();
-	scr.exec(f,ef,s,es); // exit in the exec function
+	scr.exec(f,ef,s); // exit in the exec function
 }
