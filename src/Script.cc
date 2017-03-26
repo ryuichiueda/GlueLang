@@ -35,15 +35,14 @@ bool Script::parse(void)
 	catch(Element *e){
 		printErrorMsg(e,"Parse error");
 		m_env->removeFiles();
-		cerr << "\tERROR: " << e->m_exit_status << endl;
-		exit(e->m_exit_status);
+		end(e->m_exit_status);
 	}catch(...){
 		cerr << "\nParse error"
 		     << "\nunknown error" << endl;
 		m_env->removeFiles();
-		cerr << "\tERROR: 128" << endl;
-		exit(128);
+		end(128);
 	}
+	return true;
 }
 
 bool Script::parseScript(void)
@@ -92,22 +91,21 @@ int Script::exec(DefFile *f, DefFile *ef, DefStr *s)
 		}
 		m_env->removeFiles();
 		if(exit_status == 0)
-			exit(0);
+			end(0);
 	}catch(Element *e){
 		printErrorMsg(e,"Execution error",m_silent);
 		m_env->removeFiles();
-		exit(e->getExitStatus());
+		end(e->getExitStatus());
 	}catch(...){
 		cerr << "\nExecution error\n"
 		     << "unknown error" << endl;
 		m_env->removeFiles();
-		cerr << "\tERROR: 3" << endl;
-		exit(3);
+		end(3);
 	}
 	cerr << "unknown error (uncatched)" << endl;
 	m_env->removeFiles();
-	cerr << "\tERROR: 3" << endl;
-	exit(3);
+	end(3);
+	return 0;
 }
 
 void Script::printErrorMsg(Element *e,string error_type, bool silent)
@@ -115,11 +113,18 @@ void Script::printErrorMsg(Element *e,string error_type, bool silent)
 	if(silent)
 		return;
 
-	cerr << "\n" << error_type << " at " << e->pos() << endl;
+	cerr << error_type << " at " << e->pos() << endl;
 	e->printErrorPart();
 	cerr << "\n\t" << e->m_error_msg
 	     << "\n\tprocess_level " << e->getLevel()
 	     << "\n\texit_status " << e->getExitStatus()
 	     << "\n\tpid " << getpid() << endl;
+}
+
+void Script::end(int exit_status)
+{
+	if(exit_status != 0 and m_env->m_level == 0)
+		cerr << "\e[31mERROR: " << exit_status << "\e[m" << endl;
+	exit(exit_status);
 }
 

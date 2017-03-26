@@ -27,5 +27,6 @@ private:
 	void printErrorMsg(Element *e,string error_type,bool silent = false);
 	bool parseScript(void);
 	bool m_silent;
+	void end(int exit_status);
 };
 #endif
