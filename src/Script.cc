@@ -30,23 +30,23 @@ Script::~Script()
 bool Script::parse(void)
 {
 	try{
-		return doParse();
+		return parseScript();
 	}
 	catch(Element *e){
-		parseErrorMsg(e);
+		printErrorMsg(e,"Parse error");
 		m_env->removeFiles();
-		cerr << "\tglue exit_status: " << e->m_exit_status << endl;
+		cerr << "\tERROR: " << e->m_exit_status << endl;
 		exit(e->m_exit_status);
 	}catch(...){
-		cerr << "\nParse error" << endl;
-		cerr << "unknown error" << endl;
+		cerr << "\nParse error"
+		     << "\nunknown error" << endl;
 		m_env->removeFiles();
-		cerr << "\tglue exit_status: 128" << endl;
-		exit(4);
+		cerr << "\tERROR: 128" << endl;
+		exit(128);
 	}
 }
 
-bool Script::doParse(void)
+bool Script::parseScript(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -94,64 +94,32 @@ int Script::exec(DefFile *f, DefFile *ef, DefStr *s)
 		if(exit_status == 0)
 			exit(0);
 	}catch(Element *e){
-		execErrorMsg(e);
+		printErrorMsg(e,"Execution error",m_silent);
 		m_env->removeFiles();
-		int es = e->getExitStatus();
-		//if(es == 1){
-				exit(es);
-				/*
-			if(es == 127){
-				//_exit(es);
-				//cerr << "glue exit status: 1" << endl;
-				_exit(1);
-			}else{
-				//cerr << "glue exit status: 1" << endl;
-				exit(es);
-			//	exit(es);
-			}
-			*/
-	//	}else{
-	//		cerr << "\tglue exit_status: 3" << endl;
-		//	exit(3);
-	//	}
+		exit(e->getExitStatus());
 	}catch(...){
-		cerr << "\nExecution error" << endl;
-		cerr << "unknown error" << endl;
+		cerr << "\nExecution error\n"
+		     << "unknown error" << endl;
 		m_env->removeFiles();
-		cerr << "\tglue exit_status: 3" << endl;
+		cerr << "\tERROR: 3" << endl;
 		exit(3);
 	}
 	cerr << "unknown error (uncatched)" << endl;
 	m_env->removeFiles();
-	cerr << "\tglue exit_status: 3" << endl;
+	cerr << "\tERROR: 3" << endl;
 	exit(3);
 }
 
-void Script::execErrorMsg(Element *e)
+void Script::printErrorMsg(Element *e,string error_type, bool silent)
 {
-	if(m_silent)
+	if(silent)
 		return;
 
-	cerr << "\nExecution error at " ;
-	cerr << e->pos() << endl;
+	cerr << "\n" << error_type << " at " << e->pos() << endl;
 	e->printErrorPart();
-	cerr << "\n\t" << e->m_error_msg << endl;
-	cerr << "\t\n";
-	cerr <<  "\tprocess_level " << e->getLevel() << endl;
-	cerr << "\texit_status " << e->getExitStatus() << endl;
-	cerr << "\tpid " << getpid() << '\n' << endl;
+	cerr << "\n\t" << e->m_error_msg
+	     << "\n\tprocess_level " << e->getLevel()
+	     << "\n\texit_status " << e->getExitStatus()
+	     << "\n\tpid " << getpid() << endl;
 }
 
-void Script::parseErrorMsg(Element *e)
-{
-	cerr << "\nParse error at " ;
-	cerr << e->pos() << endl;
-	e->printErrorPart();
-	cerr << "\n\t" << e->m_error_msg << endl;
-	cerr << "\t";
-
-	cerr << '\n';
-	cerr <<  "\tprocess_level " << e->getLevel() << endl;
-	cerr << "\texit_status " << e->getExitStatus() << endl;
-	cerr << "\tpid " << getpid() << '\n' << endl;
-}
