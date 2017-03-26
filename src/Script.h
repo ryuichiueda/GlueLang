@@ -22,7 +22,7 @@ public:
 	virtual bool eval(void){return true;};
 
 	void setSilent(void){m_silent = true;}
-protected:
+private:
 	bool tryElement(Element *n);
 	void printErrorMsg(Element *e,string error_type,bool silent = false);
 	bool parseScript(void);
