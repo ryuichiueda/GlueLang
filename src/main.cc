@@ -14,6 +14,7 @@
 #include <unistd.h>
 using namespace std;
 
+void usage(void);
 int scriptPos(int argc, char const* argv[]);
 bool setFlags(int argc, char const* argv[],Environment *e);
 
@@ -38,7 +39,7 @@ int main(int argc, char const* argv[])
 		exit(1);
 
 	if(argc <= 1)
-		exit(0);
+		usage();
 
 ///////////////////////////////////////////
 // set signals
@@ -59,12 +60,13 @@ int main(int argc, char const* argv[])
 	int script_pos = scriptPos(argc,argv);
 
 	ifstream ifs(argv[script_pos]);
-	Feeder feeder(&ifs);
 	Environment env(argc,argv,script_pos);
 
 	if(!setFlags(argc,argv,&env))
 		exit(1);//flags are invalid.
 
+	// create the feeder
+	Feeder feeder(&ifs);
 	// set tmpdir
 	string tmp_k = "tmpdir";
 	string tmp_v = "/tmp/";
@@ -96,33 +98,39 @@ int scriptPos(int argc, char const* argv[])
 	return i;
 }
 
-
+void version(void)
+{
+	cerr << "GlueLang v0.1.1 🍣 🍺\n\n"
+	     << "Copyright (C) 2017 Ryuichi Ueda\n"
+	     << "Released under the MIT License.\n"
+	     << "https://github.com/ryuichiueda/GlueLang" << endl;
+	exit(1);
+}
 
 void usage(void)
 {
-	cerr << "GlueLang (master branch)" << endl;
 	cerr << "Usage: glue [OPTION] [FILE]" << endl;
-	cerr << endl;
-	cerr << "Copyright (C) 2015 Ryuichi Ueda" << endl;
-	cerr << "GlueLang repo. <https://github.com/ryuichiueda/GlueLang>" << endl;
+	exit(1);
 }
 
 bool setFlags(int argc, char const* argv[],Environment *e)
 {
 	struct option long_opts[] = {
 		{"help",0,NULL,'h'},
-		{"usage",0,NULL,'h'},
+		{"usage",0,NULL,'u'},
+		{"version",0,NULL,'h'},
 		{"verbose",0,NULL,'v'},
 		{0,0,0,0}
 	};
 
 	int opt = 0;
 	int idx = 0;
-	while((opt = getopt_long(argc,(char *const *)argv,"hv",long_opts,&idx)) != -1){
+	while((opt = getopt_long(argc,(char *const *)argv,"uhv",long_opts,&idx)) != -1){
 		switch (opt){
-		case 'h':
+		case 'u':
 			usage();
-			return false;
+		case 'h':
+			version();
 		case 'v':
 			e->m_v_opt = true;
 			break;
