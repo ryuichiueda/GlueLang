@@ -1,8 +1,4 @@
 import PATH
 
-file b = seq 1 5
-
-diff a b !> true
-  where
-    file a = seq 1 5
-    file b = seq 1 4
+while
+  true ?> false

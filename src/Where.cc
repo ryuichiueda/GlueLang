@@ -39,10 +39,6 @@ bool Where::parse(void)
 		return false;
 	}
 
-	//m_local_env = new Environment(m_env);
-	//m_local_env->m_is_local = true;
-
-
 	int indent = base_indent;
 	while(indent >= base_indent){
 		m_feeder->blank();

@@ -4,3 +4,5 @@ diff a b !> echo 'different!!!'
   where          
     file a = seq 10
     file b = seq 9
+
+cat a

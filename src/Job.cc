@@ -81,6 +81,8 @@ bool Job::parse(void)
 		Pipeline *back1 = (Pipeline *)m_nodes.back();
 		Pipeline *back2 = num >= 2 ? (Pipeline *)m_nodes[num-2] : NULL;
 
+		back1->m_is_then = back2 != NULL and back2->m_has_then;
+
 		if(m_feeder->str(">>")){
 			back1->m_has_and = true;
 			if(back2 != NULL and back2->m_has_then){
@@ -182,9 +184,10 @@ int Job::execNormal(DefFile *f, DefFile *ef, DefStr *s)
 			f->m_data->setAppend();
 
 		auto *p = (Pipeline *)m_nodes[i];
-		int es = p->exec(f,ef,s);
-		if(stop_next)
+		int es = p->exec(f,ef,s);//Sometimes it does not come back.
+		if(stop_next){
 			return es;
+		}
 
 		stop_next = p->m_has_then and es == 0;
 		skip = (p->m_has_then and es != 0)

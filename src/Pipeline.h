@@ -31,6 +31,7 @@ public:
 	bool m_has_and;
 	bool m_has_then;
 	bool m_has_or;
+	bool m_is_then;
 protected:
 	void waitCommands(int pid);
 	vector<int> m_pids;

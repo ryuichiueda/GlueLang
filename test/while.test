@@ -61,5 +61,20 @@ echo NG | diff - $tmp-ans
 [ $? -eq 1 ]
 ERROR_CHECK "TEST2.2 error"
 
+#########################################
+# TEST3: while with then
+#########################################
+
+cat << 'FIN' > $tmp-glue
+import PATH
+
+while
+  true ?> do
+    false
+FIN
+
+../glue $tmp-glue > $tmp-ans
+[ $? -eq 8 ]
+ERROR_CHECK "TEST3 error"
 
 rm -f $tmp-*

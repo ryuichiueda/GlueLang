@@ -28,6 +28,7 @@ Pipeline::Pipeline(Feeder *f, Environment *env,vector<int> *scopes) : Element(f,
 	m_has_and = false;
 	m_has_then = false;
 	m_has_or = false;
+	m_is_then = false;
 }
 
 Pipeline::~Pipeline()
@@ -192,6 +193,12 @@ void Pipeline::waitCommands(int pid)
 	// judged at the upper level if !> is used
 	if(m_has_or || m_exit_status == 0)
 		return;
+
+	if(m_is_then and m_exit_status > 0){
+		m_error_msg = "Error at then part";
+		m_exit_status = 8;
+		throw this;
+	}
 
 	m_error_msg = m_nodes.size() > 1 ? "Pipeline error" : "Command error";
 	throw this;

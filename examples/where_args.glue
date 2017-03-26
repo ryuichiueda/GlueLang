@@ -1,6 +1,6 @@
 import PATH
 
 #passwdファイルの一番下のユーザの名前でpasswdファイルをgrepする
-grep local.re '/etc/passwd'
+grep re '/etc/passwd'
   where
     str re = tail -n 1 '/etc/passwd' >>= awk '-F:' '{print $1}'
