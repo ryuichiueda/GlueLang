@@ -8,18 +8,21 @@ Simple call
 
  This is the most simple example for calling a command. The sample files are put in the ``examples`` directory in the repository.
 
- .. code-block:: bash
+.. code-block:: bash
         :linenos:
 
-	 $ cat command.glue 
-	 /bin/echo 'abc'
-	 $ ../glue command.glue 
-	 abc
+	$ cat command.glue 
+	/bin/echo 'abc'
+	$ ../glue command.glue 
+	abc
+
+Quotation of arguments
+====================================
 
  The arguments should be quoted by the single quotation. A string without quotation is regarded as a variable.
 	
- .. code-block:: bash
-        :linenos:
+.. code-block:: bash
+	:linenos:
 	
 	$ cat command_error.glue 
 	/bin/echo abc
@@ -33,3 +36,13 @@ Simple call
 		exit_status 3
 		pid 31879
 	ERROR: 3
+
+ Exceptionally, quotations for the string that starts from ``-`` and integer variables can be omitted.
+
+.. code-block:: bash
+	:linenos:
+
+	$ cat command_no_quote.glue 
+	/bin/echo -n 10
+	$ glue ./command_no_quote.glue 
+	10$

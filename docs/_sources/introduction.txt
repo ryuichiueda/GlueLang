@@ -19,10 +19,46 @@ GlueLang
 
     * We add the following features for the shell:
 
-      * temporary files that can be created and destoryed easily
-      * firendly error messages 
+      * temporary files that can be created and destroyed easily
+      * friendly error messages 
       * structured exit status numbers
       * ...
+
+Setup
+==================================
+
+Environment
+----------------------------------
+
+GlueLang is tested on
+
+* macOS Sierra, and 
+* Ubuntu 14.04 on `Travis CI <https://travis-ci.org/ryuichiueda/GlueLang>`_.
+
+Installation
+----------------------------------
+
+ This is a procedure.
+
+.. code-block:: bash
+        :linenos:
+
+        $ git clone https://github.com/ryuichiueda/GlueLang.git
+        $ cd GlueLang
+        $ make
+        $ sudo make install
+
+And check the sushi and beer.
+
+.. code-block:: bash
+        :linenos:
+
+	$ glue -h
+	GlueLang v0.1.1 🍣 🍺
+	
+	Copyright (C) 2017 Ryuichi Ueda
+	Released under the MIT License.
+	https://github.com/ryuichiueda/GlueLang
 
 LICENSE
 ==================================

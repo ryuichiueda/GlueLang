@@ -42,43 +42,30 @@
 <div class="section" id="simple-call">
 <h2>2.1. Simple call<a class="headerlink" href="#simple-call" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>This is the most simple example for calling a command. The sample files are put in the <code class="docutils literal"><span class="pre">examples</span></code> directory in the repository.</p>
+<div>This is the most simple example for calling a command. The sample files are put in the <code class="docutils literal"><span class="pre">examples</span></code> directory in the repository.</div></blockquote>
 <div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
-4</pre></div></td><td class="code"><div class="highlight"><pre> <span class="nv">$ </span>cat command.glue
- /bin/echo <span class="s1">&#39;abc&#39;</span>
- <span class="nv">$ </span>../glue command.glue
- abc
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat command.glue
+/bin/echo <span class="s1">&#39;abc&#39;</span>
+<span class="nv">$ </span>../glue command.glue
+abc
 </pre></div>
 </td></tr></table></div>
-<p>The arguments should be quoted by the single quotation. A string without quotation is regarded as a variable.</p>
-<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat command_error.glue
-/bin/echo abc
-<span class="nv">$ </span>glue command_error.glue
-Execution error at line 1, char 11
-        line1: /bin/echo abc
-                         ^
-
-        Variable abc not found
-        process_level 0
-        exit_status 3
-        pid 31879
-ERROR: 3
+</div>
+<div class="section" id="quotation-of-arguments">
+<h2>2.2. Quotation of arguments<a class="headerlink" href="#quotation-of-arguments" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>The arguments should be quoted by the single quotation. A string without quotation is regarded as a variable.</div></blockquote>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre>$ cat command_no_quote.glue
+/bin/echo -n 10
+$ glue ./command_no_quote.glue
+10$
 </pre></div>
 </td></tr></table></div>
-</div></blockquote>
 </div>
 </div>
 
@@ -92,6 +79,7 @@ ERROR: 3
   <ul>
 <li><a class="reference internal" href="#">2. Call of commands</a><ul>
 <li><a class="reference internal" href="#simple-call">2.1. Simple call</a></li>
+<li><a class="reference internal" href="#quotation-of-arguments">2.2. Quotation of arguments</a></li>
 </ul>
 </li>
 </ul>
