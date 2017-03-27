@@ -4,6 +4,8 @@
 
 A programming language that has a strong nature to be a glue of commands.
 
+* User's manual: http://ryuichiueda.github.io/GlueLang/
+
 # Quick trial
 
 ```
