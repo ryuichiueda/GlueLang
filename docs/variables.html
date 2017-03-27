@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Variables &mdash; GlueLangDocs 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GlueLangDocs 0.0.1 documentation" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="variables">
+<h1>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h1>
+<p>&#8220;File type variables&#8221; and &#8220;string type variables&#8221; are available in GlueLang. Basically, they are immutable.</p>
+<div class="section" id="file-type-variables">
+<h2>File type variables<a class="headerlink" href="#file-type-variables" title="Permalink to this headline">¶</a></h2>
+<p>Temporary files are treated as variables in GlueLang. An example is shown below.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat file1.glue
+import PATH
+file <span class="nv">f</span> <span class="o">=</span> seq <span class="m">10</span>        <span class="c"># defining a file &quot;f&quot;</span>
+head -n <span class="m">1</span> f            <span class="c"># using &quot;f&quot; with head as a file</span>
+
+<span class="nv">$ </span>glue file1.glue
+1
+</pre></div>
+</td></tr></table></div>
+<p>This file is deleted at the end of the procedure of this script. We therefore don&#8217;t need to care the aftermath of the use of temporary files. The directory in which temporary files are placed is fixed to <code class="docutils literal"><span class="pre">/tmp/</span></code>. It should be flexible and safe in future.</p>
+<p>When you want to change a file variable to &#8220;a real file,&#8221; please use <code class="docutils literal"><span class="pre">mv(1)</span></code>. This is an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat file2.glue
+import PATH
+
+file <span class="nv">f</span> <span class="o">=</span> seq 3
+mv f <span class="s1">&#39;./a&#39;</span>
+
+<span class="nv">$ </span>glue file2.glue
+<span class="nv">$ </span>cat a
+1
+2
+3
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="string-type-variables">
+<h2>String type variables<a class="headerlink" href="#string-type-variables" title="Permalink to this headline">¶</a></h2>
+<p>A string type variable is defined with <code class="docutils literal"><span class="pre">str</span> <span class="pre">&lt;name&gt;</span></code>. Here is an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat str1.glue
+import PATH
+
+str <span class="nv">s</span> <span class="o">=</span> seq 2
+<span class="nb">echo </span>s
+<span class="nb">echo </span>s
+
+<span class="nv">$ </span>glue str1.glue
+1
+2
+1
+2
+</pre></div>
+</td></tr></table></div>
+<p>String type variables are stored on DRAM allocated to the process of glue.</p>
+</div>
+<div class="section" id="where-phrase">
+<h2>Where phrase<a class="headerlink" href="#where-phrase" title="Permalink to this headline">¶</a></h2>
+<p>When we want to use variables for one procedure, they can be concealed in a &#8220;where phrase.&#8221; In the following example, arguments for <code class="docutils literal"><span class="pre">grep(1)</span></code> are defined in a where phrase.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat where2.glue
+import PATH
+
+grep re f
+  where
+    str <span class="nv">re</span> <span class="o">=</span> <span class="nb">echo </span>1
+    file <span class="nv">f</span> <span class="o">=</span> seq <span class="m">1</span> 10
+
+<span class="nv">$ </span>glue where2.glue
+1
+10
+</pre></div>
+</td></tr></table></div>
+<p>These variables are not visible outside of the phrase. In the following script, an error occurs.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>glue where2_error.glue
+1
+10
+Execution error at line 8, char 6
+        line8: <span class="nb">echo </span>re
+                    ^
+
+        Variable re not found
+        process_level 0
+        exit_status 3
+        pid 40165
+ERROR: 3
+</pre></div>
+</td></tr></table></div>
+<p>When two variables with the identical name are defined in/out a where phrase, the inside one is referred at the command that has the where phrase. Here is an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat where_scope3.glue
+import PATH
+
+str <span class="nv">a</span> <span class="o">=</span> <span class="s1">&#39;out&#39;</span>
+
+<span class="nb">echo </span>a
+  where str <span class="nv">a</span> <span class="o">=</span> <span class="s1">&#39;in&#39;</span>
+
+<span class="nv">$ </span>glue where_scope3.glue
+in
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Variables</a><ul>
+<li><a class="reference internal" href="#file-type-variables">File type variables</a></li>
+<li><a class="reference internal" href="#string-type-variables">String type variables</a></li>
+<li><a class="reference internal" href="#where-phrase">Where phrase</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/variables.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Ryuichi Ueda.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/variables.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,8 @@
+import PATH
+
+grep re f
+  where          
+    str re = echo 1
+    file f = seq 1 10
+
+echo re

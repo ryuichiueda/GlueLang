@@ -1,0 +1,5 @@
+import PATH
+
+file f = seq 3
+mv f './a'
+
