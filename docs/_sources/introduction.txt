@@ -22,6 +22,7 @@ GlueLang
       * temporary files that can be created and destroyed easily
       * friendly error messages 
       * structured exit status numbers
+      * indifference toward the SIGPIPE signal
       * ...
 
 Setup
@@ -53,7 +54,7 @@ And check the sushi and beer.
 .. code-block:: bash
         :linenos:
 
-	$ glue -h
+	$ glue --version
 	GlueLang v0.1.1 🍣 🍺
 	
 	Copyright (C) 2017 Ryuichi Ueda

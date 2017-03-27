@@ -67,6 +67,42 @@ $ glue ./command_no_quote.glue
 </pre></div>
 </td></tr></table></div>
 </div>
+<div class="section" id="paths">
+<h2>2.3. Paths<a class="headerlink" href="#paths" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="import">
+<h3>2.3.1. Import<a class="headerlink" href="#import" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>In the default condition, GlueLang does not use PATH, which is the environment variable for pointing directories of commands. A directory should be registered with <code class="docutils literal"><span class="pre">import</span></code> sentence. The following is an simple example.</div></blockquote>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat import.glue
+import /bin/ as b
+b.ls
+</pre></div>
+</td></tr></table></div>
+<p>In this example, the path <code class="docutils literal"><span class="pre">/bin/</span></code> is referred as <code class="docutils literal"><span class="pre">b</span></code> at Line 3.</p>
+<blockquote>
+<div>We think that this way is useful</div></blockquote>
+<ul class="simple">
+<li>to write and store the scripts with a rigid manner, and</li>
+<li>to use command packages without changing PATH.</li>
+</ul>
+</div>
+<div class="section" id="import-of-all-directories-in-path">
+<h3>2.3.2. Import of all directories in PATH<a class="headerlink" href="#import-of-all-directories-in-path" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>To write a script casually, we prepare <code class="docutils literal"><span class="pre">import</span> <span class="pre">PATH</span></code>. When <code class="docutils literal"><span class="pre">import</span> <span class="pre">PATH</span></code> is written at the header part of a script, commands under the direcotries in PATH can be used without any prefix. The following is a workable script.</div></blockquote>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat import_path.glue
+import PATH
+
+ls -l
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
 </div>
 
 
@@ -80,6 +116,11 @@ $ glue ./command_no_quote.glue
 <li><a class="reference internal" href="#">2. Call of commands</a><ul>
 <li><a class="reference internal" href="#simple-call">2.1. Simple call</a></li>
 <li><a class="reference internal" href="#quotation-of-arguments">2.2. Quotation of arguments</a></li>
+<li><a class="reference internal" href="#paths">2.3. Paths</a><ul>
+<li><a class="reference internal" href="#import">2.3.1. Import</a></li>
+<li><a class="reference internal" href="#import-of-all-directories-in-path">2.3.2. Import of all directories in PATH</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

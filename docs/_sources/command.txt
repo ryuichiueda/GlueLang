@@ -46,3 +46,39 @@ Quotation of arguments
 	/bin/echo -n 10
 	$ glue ./command_no_quote.glue 
 	10$
+
+
+Paths
+====================================
+
+Import
+------------------------------------
+
+ In the default condition, GlueLang does not use PATH, which is the environment variable for pointing directories of commands. A directory should be registered with ``import`` sentence. The following is an simple example.
+
+.. code-block:: bash
+ :linenos:
+
+ $ cat import.glue 
+ import /bin/ as b
+ b.ls
+
+In this example, the path ``/bin/`` is referred as ``b`` at Line 3.
+
+ We think that this way is useful
+
+* to write and store the scripts with a rigid manner, and
+* to use command packages without changing PATH.
+
+Import of all directories in PATH
+------------------------------------
+
+ To write a script casually, we prepare ``import PATH``. When ``import PATH`` is written at the header part of a script, commands under the direcotries in PATH can be used without any prefix. The following is a workable script.
+
+.. code-block:: bash
+ :linenos:
+
+ $ cat import_path.glue 
+ import PATH
+
+ ls -l
