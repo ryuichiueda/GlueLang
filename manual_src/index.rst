@@ -21,3 +21,4 @@ Contents:
    introduction
    command
    variables
+   shebang_comment
