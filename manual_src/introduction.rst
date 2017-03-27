@@ -24,3 +24,8 @@ GlueLang
       * firendly error messages 
       * structured exit status numbers
       * ...
+
+LICENSE
+==================================
+
+distributed with MIT license

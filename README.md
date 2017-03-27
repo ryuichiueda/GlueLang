@@ -25,9 +25,9 @@ A programming language that has a strong nature to be a glue of commands.
 The examples are located in the ./exmaples/ dir.
 
 
-# Licence
+# License
 
-MIT Licence is applied to. See LICENSE.md.
+MIT License is applied to. See LICENSE.md.
 
 # Document (in Japanese)
 
