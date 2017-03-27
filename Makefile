@@ -1,5 +1,6 @@
 all:
 	$(MAKE) -C src
+	cd manual_src; make
 
 clean:
 	cd src; make clean
