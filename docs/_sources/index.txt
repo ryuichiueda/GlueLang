@@ -20,3 +20,4 @@ Contents:
 
    introduction
    command
+   variables
