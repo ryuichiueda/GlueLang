@@ -6,7 +6,7 @@ Call of commands
 Simple call
 ====================================
 
- This is the most simple example for calling a command. The sample files are put in the ``examples`` directory in the repository.
+This is the most simple example for calling a command. The sample files are put in the ``examples`` directory in the repository.
 
 .. code-block:: bash
         :linenos:
@@ -19,7 +19,7 @@ Simple call
 Quotation of arguments
 ====================================
 
- The arguments should be quoted by the single quotation. A string without quotation is regarded as a variable.
+The arguments should be quoted by the single quotation. A string without quotation is regarded as a variable.
 	
 .. code-block:: bash
 	:linenos:
@@ -37,7 +37,7 @@ Quotation of arguments
 		pid 31879
 	ERROR: 3
 
- Exceptionally, quotations for the string that starts from ``-`` and integer variables can be omitted.
+Exceptionally, quotations for the string that starts from ``-`` and integer variables can be omitted.
 
 .. code-block:: bash
 	:linenos:
@@ -54,7 +54,7 @@ Paths
 Import
 ------------------------------------
 
- In the default condition, GlueLang does not use PATH, which is the environment variable for pointing directories of commands. A directory should be registered with ``import`` sentence. The following is an simple example.
+\ In the default condition, GlueLang does not use PATH, which is the environment variable for pointing directories of commands. A directory should be registered with ``import`` sentence. The following is an simple example.
 
 .. code-block:: bash
  :linenos:
@@ -65,7 +65,7 @@ Import
 
 In this example, the path ``/bin/`` is referred as ``b`` at Line 3.
 
- We think that this way is useful
+We think that this way is useful
 
 * to write and store the scripts with a rigid manner, and
 * to use command packages without changing PATH.
@@ -73,7 +73,7 @@ In this example, the path ``/bin/`` is referred as ``b`` at Line 3.
 Import of all directories in PATH
 ------------------------------------
 
- To write a script casually, we prepare ``import PATH``. When ``import PATH`` is written at the header part of a script, commands under the direcotries in PATH can be used without any prefix. The following is a workable script.
+To write a script casually, we prepare ``import PATH``. When ``import PATH`` is written at the header part of a script, commands under the direcotries in PATH can be used without any prefix. The following is a workable script.
 
 .. code-block:: bash
  :linenos:

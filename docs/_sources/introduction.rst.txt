@@ -5,7 +5,7 @@ Introduction
 GlueLang
 ==================================
 
- GlueLang is a shell scripting language not for interaction but scripting. In GlueLang, we try realizing following things:
+GlueLang is a shell scripting language not for interaction but scripting. In GlueLang, we try realizing following things:
 
 *  to clear the role of shell
 

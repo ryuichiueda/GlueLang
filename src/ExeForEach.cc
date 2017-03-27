@@ -61,7 +61,7 @@ void ExeForEach::execChild(DefFile *f, DefFile *ef, DefStr *s)
 		vector<string> ws;
 		line += ' ';//add a space at the end of a line
 		int from = 0;
-		for(int i=from;i<line.size();i++){
+		for(size_t i=from;i<line.size();i++){
 			if(line.at(i) == ' '){
 				ws.push_back(line.substr(from,i-from));
 				from = i + 1;
