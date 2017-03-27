@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>1. Introduction &mdash; GlueLangDocs 0.0.1 documentation</title>
+    <title>2. Call of commands &mdash; GlueLangDocs 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,8 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="GlueLangDocs 0.0.1 documentation" href="index.html" />
-    <link rel="next" title="2. Call of commands" href="command.html" />
-    <link rel="prev" title="GlueLang User’s Manual" href="index.html" />
+    <link rel="prev" title="1. Introduction" href="introduction.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -38,42 +37,48 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="introduction">
-<h1>1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="gluelang">
-<h2>1.1. GlueLang<a class="headerlink" href="#gluelang" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="call-of-commands">
+<h1>2. Call of commands<a class="headerlink" href="#call-of-commands" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="simple-call">
+<h2>2.1. Simple call<a class="headerlink" href="#simple-call" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div>GlueLang is a shell scripting language not for interaction but scripting. In GlueLang, we try realizing following things:</div></blockquote>
-<ul>
-<li><p class="first">to clear the role of shell</p>
-<blockquote>
-<div><ul class="simple">
-<li>We think that shell scripting languages exist for description of process handling.
-It is not for implementing program in a process. However, existing shells
-look like imitations of programming languages for single process programming.
-We think that various gimmicks in shell scripting languages for imitation confuse beginner
-Unix and Linux users.</li>
-</ul>
+<div><p>This is the most simple example for calling a command. The sample files are put in the <code class="docutils literal"><span class="pre">examples</span></code> directory in the repository.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre> <span class="nv">$ </span>cat command.glue
+ /bin/echo <span class="s1">&#39;abc&#39;</span>
+ <span class="nv">$ </span>../glue command.glue
+ abc
+</pre></div>
+</td></tr></table></div>
+<p>The arguments should be quoted by the single quotation. A string without quotation is regarded as a variable.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat command_error.glue
+/bin/echo abc
+<span class="nv">$ </span>glue command_error.glue
+Execution error at line 1, char 11
+        line1: /bin/echo abc
+                         ^
+
+        Variable abc not found
+        process_level 0
+        exit_status 3
+        pid 31879
+ERROR: 3
+</pre></div>
+</td></tr></table></div>
 </div></blockquote>
-</li>
-<li><p class="first">to be convenient</p>
-<blockquote>
-<div><ul class="simple">
-<li>We add the following features for the shell:<ul>
-<li>temporary files that can be created and destoryed easily</li>
-<li>firendly error messages</li>
-<li>structured exit status numbers</li>
-<li>...</li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
-</div>
-<div class="section" id="license">
-<h2>1.2. LICENSE<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
-<p>GlueLang is distributed with MIT license.</p>
 </div>
 </div>
 
@@ -85,9 +90,8 @@ Unix and Linux users.</li>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">1. Introduction</a><ul>
-<li><a class="reference internal" href="#gluelang">1.1. GlueLang</a></li>
-<li><a class="reference internal" href="#license">1.2. LICENSE</a></li>
+<li><a class="reference internal" href="#">2. Call of commands</a><ul>
+<li><a class="reference internal" href="#simple-call">2.1. Simple call</a></li>
 </ul>
 </li>
 </ul>
@@ -95,15 +99,14 @@ Unix and Linux users.</li>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">GlueLang User&#8217;s Manual</a></li>
-      <li>Next: <a href="command.html" title="next chapter">2. Call of commands</a></li>
+      <li>Previous: <a href="introduction.html" title="previous chapter">1. Introduction</a></li>
   </ul></li>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/introduction.txt"
+      <li><a href="_sources/command.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -132,7 +135,7 @@ Unix and Linux users.</li>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
       |
-      <a href="_sources/introduction.txt"
+      <a href="_sources/command.txt"
           rel="nofollow">Page source</a>
     </div>
 
