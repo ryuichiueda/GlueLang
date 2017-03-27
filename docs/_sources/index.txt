@@ -10,7 +10,7 @@ Ryuichi Ueda, Chiba Institute of Technology
 
 * code repository: https://github.com/ryuichiueda/GlueLang
 * manual in Japanese: https://github.com/ryuichiueda/GlueLangDoc_ja
-* repository of this docs: https://github.com/ryuichiueda/GlueLang/manual_src
+* repository of this docs: https://github.com/ryuichiueda/GlueLang/tree/master/manual_src
 
 Contents:
 
