@@ -1,0 +1,2 @@
+import PATH
+echo 'abc' >>= rev

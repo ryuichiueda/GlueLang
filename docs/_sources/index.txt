@@ -22,3 +22,4 @@ Contents:
    command
    variables
    shebang_comment
+   connection

@@ -1,0 +1,8 @@
+import PATH
+
+echo 'efg'
+>>= rev
+
+echo 'hij' >>=
+rev
+
