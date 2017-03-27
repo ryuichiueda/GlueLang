@@ -194,6 +194,9 @@ void Pipeline::waitCommands(int pid)
 	if(m_has_or || m_exit_status == 0)
 		return;
 
+	if(m_has_and and m_exit_status == 1)
+		return;
+
 	if(m_is_then and m_exit_status > 0){
 		m_error_msg = "Error at then part";
 		m_exit_status = 8;

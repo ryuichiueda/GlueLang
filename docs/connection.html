@@ -84,7 +84,22 @@ jih
 </td></tr></table></div>
 </div>
 <div class="section" id="and">
-<h2>5.2. AND<a class="headerlink" href="#and" title="Permalink to this headline">¶</a></h2>
+<h2>5.2. And<a class="headerlink" href="#and" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">&amp;&amp;</span></code> in B shells is represented by <code class="docutils literal"><span class="pre">&gt;&gt;</span></code> in GlueLang.</div></blockquote>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat and.glue
+/bin/echo <span class="s1">&#39;a&#39;</span> &gt;&gt; /bin/echo <span class="s1">&#39;b&#39;</span> &gt;&gt; /bin/echo <span class="s1">&#39;c&#39;</span>
+<span class="nv">$ </span>glue ./and.glue
+a
+b
+c
+</pre></div>
+</td></tr></table></div>
 </div>
 </div>
 
@@ -98,7 +113,7 @@ jih
   <ul>
 <li><a class="reference internal" href="#">5. Connections of commands</a><ul>
 <li><a class="reference internal" href="#pipeline">5.1. Pipeline</a></li>
-<li><a class="reference internal" href="#and">5.2. AND</a></li>
+<li><a class="reference internal" href="#and">5.2. And</a></li>
 </ul>
 </li>
 </ul>

@@ -1,0 +1,2 @@
+import PATH
+echo 'a' >> false >> echo 'c'

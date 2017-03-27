@@ -124,4 +124,22 @@ ERROR_CHECK "TEST4.3 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST4.4 error"
 
+#########################################
+# TEST5: exit in the mid command
+#########################################
+cat << FIN > $tmp-out
+a
+FIN
+
+cat << FIN > $tmp-glue
+import PATH
+echo 'a' >> false >> echo 'c'
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST5.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST5.2 error"
+
 rm -f $tmp-*

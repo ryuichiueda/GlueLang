@@ -35,6 +35,19 @@ We can give a pipeline some returns as follows.
 	gfe
 	jih
 
-AND
+And
 =============================
+
+ ``&&`` in B shells is represented by ``>>`` in GlueLang.
+
+.. code-block:: bash
+        :linenos:
+
+	$ cat and.glue 
+	/bin/echo 'a' >> /bin/echo 'b' >> /bin/echo 'c'
+	$ glue ./and.glue 
+	a
+	b
+	c
+
 
