@@ -1,0 +1,7 @@
+import PATH
+
+proc hoge = do
+  /bin/echo argv[1] >>= /usr/bin/rev
+  /bin/echo argv[2]
+
+this.hoge 'abc' 'def'
