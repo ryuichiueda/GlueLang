@@ -23,3 +23,4 @@ Contents:
    variables
    shebang_comment
    connection
+   block
