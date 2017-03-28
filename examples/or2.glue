@@ -1,3 +1,6 @@
 import PATH
+
+true >> echo 'if' !> echo 'else'
 false >> echo 'if' !> echo 'else'
+false >> false !> echo 'else'
 

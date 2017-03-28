@@ -1,0 +1,9 @@
+import PATH
+
+true ?> do
+  echo 'if'
+!> true ?> do
+  echo 'else'
+!> do
+  echo 'otherwise'
+

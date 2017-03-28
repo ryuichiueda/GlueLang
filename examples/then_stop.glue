@@ -1,0 +1,7 @@
+import PATH
+
+false ?> true
+echo 'ok'
+
+true ?> false
+echo 'do not come here'

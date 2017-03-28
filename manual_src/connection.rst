@@ -2,6 +2,8 @@
 Connections of commands
 =============================
 
+ Connection of commands is the most important task in those of GlueLang. In GlueLang, Haskell like symbols are used for connecting commands. Some types of conditional branching are represented by the combination of the symbols. Keywords like ``if, then, else`` are not used since they look like commands.
+
 Pipeline
 =============================
 
@@ -35,10 +37,10 @@ We can give a pipeline some returns as follows.
 	gfe
 	jih
 
-And
+And (>>)
 =============================
 
- ``&&`` in B shells is represented by ``>>`` in GlueLang.
+``&&`` in B shells is represented by ``>>`` in GlueLang.
 
 .. code-block:: bash
         :linenos:
@@ -50,4 +52,128 @@ And
 	b
 	c
 
+In the following case,  ``echo 'c'`` is not executed because ``false`` returns an error.
 
+
+.. code-block:: bash
+        :linenos:
+
+	$ cat and2.glue 
+	import PATH
+	echo 'a' >> false >> echo 'c'
+	$ glue and2.glue 
+	a
+
+GlueLang can distinguish command errors and the others. A script stops immediately at an error that is not a command error. The following is an example.
+
+.. code-block:: bash
+        :linenos:
+	
+	$ cat and2_error.glue 
+	import PATH
+	
+	echo 'a' >> aaaa >> echo 'c'
+	echo 'never come here'
+	$ glue and2_error.glue 
+	Parse error at line 3, char 13
+		line3: echo 'a' >> aaaa >> echo 'c'
+		                   ^
+	
+		Command aaaa not exist
+		process_level 0
+		exit_status 2
+		pid 46505
+	ERROR: 2
+	
+Or (!>)
+=============================
+
+``||`` in B shells are represented by ``!>``. Here is an example.
+
+.. code-block:: bash
+        :linenos:
+
+	$ cat or.glue 
+	import PATH
+	
+	false !> echo 'Echo is executed.'
+	true !> echo 'Echo is not executed.'
+	$ glue or.glue 
+	Echo is executed.
+
+When ``!>`` is combined with ``>>``, some types of conditional branching can be reprsented. We here give three cases as examples.
+
+.. code-block:: bash
+        :linenos:
+
+	$ cat or2.glue 
+	import PATH
+	
+	true >> echo 'if' !> echo 'else'    # case 1
+	false >> echo 'if' !> echo 'else'   # case 2
+	false >> false !> echo 'else'       # case 3
+	
+	$ glue or2.glue 
+	if
+	else
+	else
+
+In the case 1, ``echo 'else'`` is skipped because ``echo 'if'`` returns 0. In the case2, ``echo 'if'`` is skipped because ``false`` returns a command error. The error of ``false`` is carried to ``!>`` and ``echo 'else'`` runs. In the case 3, the second ``false`` is not executed and the first ``false`` invokes ``echo 'else'`` as the case 2.
+
+Then (?>)
+=============================
+
+Composition of if then else
+-----------------------------
+
+When two commands are connected with ``?>``, the right command runs only when the left command returns 0. When the right command returns any error, the script stops. We can implement "if-then-else" rules by combinations of ``>>, !>`` and ``?>`` as the following way.
+
+.. code-block:: bash
+        :linenos:
+
+	$ cat if_then_else.glue 
+	import PATH
+	
+	true ?> echo 'if' !>
+	true ?> echo 'else' !>
+	echo 'otherwise'
+	
+	false ?> echo 'if' !>
+	true ?> echo 'else' !>
+	echo 'otherwise'
+	
+	false ?> echo 'if' !>
+	false ?> echo 'else' !>
+	echo 'otherwise'
+	
+	$ glue if_then_else.glue 
+	if
+	else
+	otherwise
+
+The clunky shape of this if-then-else can be a little bit relieved by "do blocks," which are explained later. We give an example.
+	
+.. code-block:: bash
+        :linenos:
+
+	$ glue if_then_else2.glue 
+	if
+	$ cat if_then_else2.glue 
+	import PATH
+	
+	true ?> do
+	  echo 'if'
+	!> true ?> do
+	  echo 'else'
+	!> do
+	  echo 'otherwise'
+	
+	$ glue if_then_else2.glue 
+	if
+	
+However, do blocks enhance computational costs.
+
+Rule of ``?>`` at errors
+-----------------------------
+
+When the command at the right side of ``?>`` returns any error, the script stops immediately.

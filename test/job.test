@@ -142,4 +142,27 @@ ERROR_CHECK "TEST5.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST5.2 error"
 
+#########################################
+# TEST6: if then
+#########################################
+cat << FIN > $tmp-out
+ok
+ok
+FIN
+
+cat << FIN > $tmp-glue
+import PATH
+
+false ?> true
+echo 'ok'
+false ?> false
+echo 'ok'
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST6.1 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST6.2 error"
+
 rm -f $tmp-*

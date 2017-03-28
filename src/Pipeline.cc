@@ -194,7 +194,7 @@ void Pipeline::waitCommands(int pid)
 	if(m_has_or || m_exit_status == 0)
 		return;
 
-	if(m_has_and and m_exit_status == 1)
+	if((m_has_and or m_has_then) and m_exit_status == 1)
 		return;
 
 	if(m_is_then and m_exit_status > 0){
