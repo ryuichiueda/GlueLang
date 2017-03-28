@@ -176,4 +176,30 @@ However, do blocks enhance computational costs.
 Rule of ``?>`` at errors
 -----------------------------
 
-When the command at the right side of ``?>`` returns any error, the script stops immediately.
+When the command at the right side of ``?>`` returns any error, the script stops immediately. In the following example, ``false`` at the second if-then connection stops the script.
+
+.. code-block:: bash
+        :linenos:
+
+	$ cat then_stop.glue 
+	import PATH
+	
+	false ?> true
+	echo 'ok'
+	
+	true ?> false
+	echo 'do not come here'
+
+	$ glue then_stop.glue 
+	ok
+	Execution error at line 6, char 9
+		line6: true ?> false
+		               ^
+	
+		Error at then part
+		process_level 0
+		exit_status 8
+		pid 51633
+	ERROR: 8
+
+As shown in the output, the glue command gives 8 as the exit status when it stops by the right side of ``?>``.
