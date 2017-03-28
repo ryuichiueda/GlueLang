@@ -10,7 +10,7 @@ A programming language that has a strong nature to be a glue of commands.
 
 ```
 ~/GIT/GlueLang$ make
-~/GIT/GlueLang$ ./glue TEST/pipeline.glue 
+~/GIT/GlueLang$ ./glue examples/pipeline.glue
 5
 4
 3
