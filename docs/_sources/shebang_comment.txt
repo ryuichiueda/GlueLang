@@ -1,6 +1,6 @@
-===============================
-Shebang and comments
-===============================
+===================================
+Shebang, comments, and Arguments
+===================================
 
 Shebang
 ===============================
@@ -46,3 +46,36 @@ The words after ``#`` are regarded as comments.
 * bug
 
   * Comments in a pipeline or a job are not treated as comments, and yield errors in the current implementation.
+
+
+Arguments
+===============================
+
+The glue command receives arguments from the command line.
+
+.. code-block:: bash
+        :linenos:
+
+	$ cat args1.glue 
+	/bin/echo argv[1] argv[2]
+	$ glue ./args1.glue abc def
+	abc def
+
+At a short of arguments, an error occurs.
+
+
+.. code-block:: bash
+        :linenos:
+
+	$ glue ./args1.glue a
+	Execution error at line 1, char 19
+		line1: /bin/echo argv[1] argv[2]
+		                         ^
+	
+		Array index out of range (pos: 2)
+		process_level 0
+		exit_status 3
+		pid 76075
+	ERROR: 3
+	
+		

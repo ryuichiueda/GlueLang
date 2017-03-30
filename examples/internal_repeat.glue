@@ -1,5 +1,0 @@
-proc f = do
-  echo 'aaa'
-  echo 'bbb'
-
-in.repeat 3 this.f

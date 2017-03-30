@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Shebang and comments &mdash; GlueLangDocs 0.0.1 documentation</title>
+    <title>4. Shebang, comments, and Arguments &mdash; GlueLangDocs 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -38,8 +38,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="shebang-and-comments">
-<h1>4. Shebang and comments<a class="headerlink" href="#shebang-and-comments" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="shebang-comments-and-arguments">
+<h1>4. Shebang, comments, and Arguments<a class="headerlink" href="#shebang-comments-and-arguments" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="shebang">
 <h2>4.1. Shebang<a class="headerlink" href="#shebang" title="Permalink to this headline">¶</a></h2>
 <p>When the glue command is installed in a directory, a script has a shebang as follows.</p>
@@ -90,6 +90,41 @@ a#aa
 </li>
 </ul>
 </div>
+<div class="section" id="arguments">
+<h2>4.3. Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h2>
+<p>The glue command receives arguments from the command line.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat args1.glue
+/bin/echo argv<span class="o">[</span>1<span class="o">]</span> argv<span class="o">[</span>2<span class="o">]</span>
+<span class="nv">$ </span>glue ./args1.glue abc def
+abc def
+</pre></div>
+</td></tr></table></div>
+<p>At a short of arguments, an error occurs.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>glue ./args1.glue a
+Execution error at line 1, char 19
+        line1: /bin/echo argv<span class="o">[</span>1<span class="o">]</span> argv<span class="o">[</span>2<span class="o">]</span>
+                                 ^
+
+        Array index out of range <span class="o">(</span>pos: 2<span class="o">)</span>
+        process_level 0
+        exit_status 3
+        pid 76075
+ERROR: 3
+</pre></div>
+</td></tr></table></div>
+</div>
 </div>
 
 
@@ -100,9 +135,10 @@ a#aa
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">4. Shebang and comments</a><ul>
+<li><a class="reference internal" href="#">4. Shebang, comments, and Arguments</a><ul>
 <li><a class="reference internal" href="#shebang">4.1. Shebang</a></li>
 <li><a class="reference internal" href="#comments">4.2. Comments</a></li>
+<li><a class="reference internal" href="#arguments">4.3. Arguments</a></li>
 </ul>
 </li>
 </ul>
