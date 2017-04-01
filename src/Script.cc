@@ -95,7 +95,10 @@ int Script::exec(DefFile *f, DefFile *ef, DefStr *s)
 	}catch(Element *e){
 		printErrorMsg(e,"Execution error",m_silent);
 		m_env->removeFiles();
-		end(e->getExitStatus());
+		if(e->m_command_error)
+			end(1);
+		else
+			end(e->getExitStatus());
 	}catch(...){
 		cerr << "\nExecution error\n"
 		     << "unknown error" << endl;

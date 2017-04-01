@@ -204,5 +204,6 @@ void Pipeline::waitCommands(int pid)
 	}
 
 	m_error_msg = m_nodes.size() > 1 ? "Pipeline error" : "Command error";
+	m_command_error = true;
 	throw this;
 }

@@ -17,6 +17,7 @@ Element::Element(Feeder *f, Environment *env, vector<int> *scopes)
 	m_start_line = m_start_char = -1000;
 	m_end_line = m_end_char = -1000;
 	m_exit_status = 0;
+	m_command_error = false;
 
 	if(scopes == NULL){
 		m_job_id = 0;

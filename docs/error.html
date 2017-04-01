@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>8. Toward errors &mdash; GlueLangDocs 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GlueLangDocs 0.0.1 documentation" href="index.html" />
+    <link rel="prev" title="7. Background processes" href="job.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="toward-errors">
+<h1>8. Toward errors<a class="headerlink" href="#toward-errors" title="Permalink to this headline">¶</a></h1>
+<p>We think that conventional shells have poor functions toward errors. GlueLang will be enpowered to have strong error handling features. As such the feature, GlueLang does not return the exit status given by the last command differently from bash or sh. This nature will help us to detect the cause of errors.</p>
+<div class="section" id="exit-statuses">
+<h2>8.1. Exit statuses<a class="headerlink" href="#exit-statuses" title="Permalink to this headline">¶</a></h2>
+<p>The following table shows the list of exit statuses.</p>
+<table border="1" class="docutils" id="id1">
+<caption><span class="caption-text">Exit statuses</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="67%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Statuses</th>
+<th class="head">Numbers</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>A command gives non-zero exit status.</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>A command cannot be found from the shell.</td>
+<td>2</td>
+</tr>
+<tr class="row-even"><td>An argument is used without definition.</td>
+<td>3</td>
+</tr>
+<tr class="row-odd"><td>The folk system call causes an error.</td>
+<td>4</td>
+</tr>
+<tr class="row-even"><td>The current directory is not obtained.</td>
+<td>5</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&gt;&gt;</span></code> is connected after <code class="docutils literal"><span class="pre">?&gt;</span></code></td>
+<td>6</td>
+</tr>
+<tr class="row-even"><td>An unknown token is written in the script.</td>
+<td>7</td>
+</tr>
+<tr class="row-odd"><td>An error occured in a then (<code class="docutils literal"><span class="pre">?&gt;</span></code>) part.</td>
+<td>8</td>
+</tr>
+<tr class="row-even"><td>Unknown parse error.</td>
+<td>128</td>
+</tr>
+<tr class="row-odd"><td>End by a signal (not implemented yet)</td>
+<td>128 + the signal number</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="error-messages">
+<h2>8.2. Error messages<a class="headerlink" href="#error-messages" title="Permalink to this headline">¶</a></h2>
+<p>When an error occurs, the script stop immediately and gives a message. Here is an example.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat simple_error.glue
+import PATH
+
+diff
+
+<span class="nv">$ </span>glue ./simple_error.glue
+<span class="o">(</span>snip<span class="o">)</span>
+Execution error at line 3, char 1
+        line3: diff
+               ^
+
+        Command error
+        process_level 0
+        exit_status 2
+        pid 90120
+ERROR: 2
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8. Toward errors</a><ul>
+<li><a class="reference internal" href="#exit-statuses">8.1. Exit statuses</a></li>
+<li><a class="reference internal" href="#error-messages">8.2. Error messages</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="job.html" title="previous chapter">7. Background processes</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/error.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Ryuichi Ueda.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/error.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

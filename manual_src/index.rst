@@ -25,3 +25,4 @@ Contents:
    connection
    block
    job
+   error

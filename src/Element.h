@@ -40,6 +40,7 @@ public:
 
 	string m_error_msg;
 	int m_exit_status;
+	bool m_command_error; //It becomes true when a command returns an error.
 
 	string pos(void);
 	int getExitStatus(void){return m_exit_status;};
