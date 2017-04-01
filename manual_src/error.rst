@@ -40,16 +40,12 @@ The following table shows the list of exit statuses.
 Error messages
 ========================================
 
-When an error occurs, the script stop immediately and gives a message. Here is an example.
+When an error occurs, the script stop immediately and gives a message form the standard error. Here is an example.
 
 .. code-block:: bash
+	:linenos:
 
-	$ cat simple_error.glue 
-	import PATH
-
-	diff
-
-	$ glue ./simple_error.glue
+	$ glue simple_error.glue
 	(snip)
 	Execution error at line 3, char 1
 		line3: diff
@@ -58,6 +54,41 @@ When an error occurs, the script stop immediately and gives a message. Here is a
 		Command error
 		process_level 0
 		exit_status 2
-		pid 90120
-	ERROR: 2
+		pid 95348
+	ERROR: 1
+	
+In the message, we can see the part where the error occurs, the cause of the error, the level of shells (how deep is the subshell is invoked), the exit status from the command or something that causes the error, and the process id. Finally, the script gives the exit status of the script with a red string.
+
+When some subshells are invoked, the error message is given by each subshell. This is an example.
+
+.. code-block:: bash
+	:linenos:
+
+	$ cat error_nest.glue 
+	import PATH
+	
+	proc f = diff
+	
+	this.f
+	
+	$ glue error_nest.glue 
+	/usr/bin/diff: missing operand after `/usr/bin/diff'
+	/usr/bin/diff: Try `/usr/bin/diff --help' for more information.
+	Execution error at line 1, char 1
+		line1: diff
+		       ^
+	
+		Command error
+		process_level 1
+		exit_status 2
+		pid 95768
+	Execution error at line 5, char 1
+		line5: this.f
+		       ^
+	
+		Command error
+		process_level 0
+		exit_status 1
+		pid 95767
+	ERROR: 1
 	

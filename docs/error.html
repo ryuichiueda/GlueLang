@@ -90,13 +90,18 @@
 </div>
 <div class="section" id="error-messages">
 <h2>8.2. Error messages<a class="headerlink" href="#error-messages" title="Permalink to this headline">¶</a></h2>
-<p>When an error occurs, the script stop immediately and gives a message. Here is an example.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat simple_error.glue
-import PATH
-
-diff
-
-<span class="nv">$ </span>glue ./simple_error.glue
+<p>When an error occurs, the script stop immediately and gives a message form the standard error. Here is an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>glue simple_error.glue
 <span class="o">(</span>snip<span class="o">)</span>
 Execution error at line 3, char 1
         line3: diff
@@ -105,10 +110,67 @@ Execution error at line 3, char 1
         Command error
         process_level 0
         exit_status 2
-        pid 90120
-ERROR: 2
+        pid 95348
+ERROR: 1
 </pre></div>
-</div>
+</td></tr></table></div>
+<p>In the message, we can see the part where the error occurs, the cause of the error, the level of shells (how deep is the subshell is invoked), the exit status from the command or something that causes the error, and the process id. Finally, the script gives the exit status of the script with a red string.</p>
+<p>When some subshells are invoked, the error message is given by each subshell. This is an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat error_nest.glue
+import PATH
+
+proc <span class="nv">f</span> <span class="o">=</span> diff
+
+this.f
+
+<span class="nv">$ </span>glue error_nest.glue
+/usr/bin/diff: missing operand after <span class="sb">`</span>/usr/bin/diff<span class="s1">&#39;</span>
+<span class="s1">/usr/bin/diff: Try `/usr/bin/diff --help&#39;</span> <span class="k">for</span> more information.
+Execution error at line 1, char 1
+        line1: diff
+               ^
+
+        Command error
+        process_level 1
+        exit_status 2
+        pid 95768
+Execution error at line 5, char 1
+        line5: this.f
+               ^
+
+        Command error
+        process_level 0
+        exit_status 1
+        pid 95767
+ERROR: 1
+</pre></div>
+</td></tr></table></div>
 </div>
 </div>
 
