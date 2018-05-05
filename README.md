@@ -29,7 +29,9 @@ The examples are located in the ./exmaples/ dir.
 
 MIT License is applied to. See LICENSE.md.
 
-# Document (in Japanese)
+# Document
 
-* User manual: https://ryuichiueda.github.io/GlueLangDoc_ja/
-* Language Reference: https://ryuichiueda.github.io/GlueLangArch_ja/
+* English: http://ryuichiueda.github.io/GlueLang/
+* Japanese: https://ryuichiueda.github.io/GlueLangDoc_ja/
+
+<!-- * Language Reference: https://ryuichiueda.github.io/GlueLangArch_ja/ -->
