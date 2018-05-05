@@ -9,6 +9,8 @@ language: cpp
 # - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - g++-5
       - gcc-5
