@@ -1,4 +1,4 @@
-CXX = g++-5
+CXX = g++
 TARGET = glue
 BINDIR	= /usr/local/bin
 CXXFLAGS = -Wall -O2 --static -std=c++14

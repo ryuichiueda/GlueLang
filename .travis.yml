@@ -17,7 +17,7 @@ addons:
 
 before_script:
  - make clean
- - make
+ - make CXX=g++-5
 
 script: 
  - sh -e ./test/test_all.sh
