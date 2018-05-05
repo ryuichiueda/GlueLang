@@ -17,11 +17,7 @@ using namespace std;
 
 bool InternalCommands::exist(string *name)
 {
-	if(*name == "echo" || *name == "pid" || *name == "break")
-		return true;
-
-	return false;
-
+	return *name == "echo" || *name == "pid" || *name == "ppid" || *name == "break";
 }
 
 int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,Exe *p)
@@ -34,6 +30,8 @@ int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,Exe *p)
 		exit( echo(c,argv) );
 	}else if(strncmp(argv[0],"pid",3) == 0){
 		exit( pid(c,e) );
+	}else if(strncmp(argv[0],"ppid",4) == 0){
+		exit( ppid(c,e) );
 	}else if(strncmp(argv[0],"break",5) == 0){
 		exit( break_(e) );
 	}
@@ -179,6 +177,12 @@ int InternalCommands::while_(int argc, char const** argv, Environment *e)
 int InternalCommands::pid(int argc,Environment *e)
 {
 	cout << e->m_pid << endl;
+	return 0;
+}
+
+int InternalCommands::ppid(int argc,Environment *e)
+{
+	cout << e->m_ppid << endl;
 	return 0;
 }
 

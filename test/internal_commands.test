@@ -54,4 +54,22 @@ sleep 4
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST2 error"
 
+#########################################
+# TEST3: ppid
+#########################################
+
+cat << FIN > $tmp-glue
+import PATH
+in.ppid
+sleep 3
+FIN
+
+../glue $tmp-glue > $tmp-ans &
+sleep 1
+echo $$	> $tmp-out
+sleep 4
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST3 error"
+
 rm -f $tmp-*

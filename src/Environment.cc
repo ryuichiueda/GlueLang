@@ -24,6 +24,7 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 
 	m_dir = tmp;	
 	m_pid = getpid();
+	m_ppid = getppid();
 
 	//set arguments 
 	for(int i=script_pos;i<argc;i++)

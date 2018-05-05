@@ -53,6 +53,7 @@ public:
 	string m_tmpdir;
 	bool m_v_opt;
 	int m_pid;
+	int m_ppid;
 
 	// giving job id
 	int publishJobId(void);
