@@ -46,7 +46,7 @@ import PATH
 
 sleep 2 >> echo 'abc' >>= rev &a
 echo 'b'
-in.wait a
+wait a
 echo 'c'
 FIN
 
@@ -72,7 +72,7 @@ import PATH
 echo 'abc' >>= grep '1' &a
 sleep 5
 echo 'b'
-in.wait a
+wait a
 echo 'c'
 FIN
 
@@ -97,7 +97,7 @@ import PATH
 sleep 1 >> echo 'abc' &a
 sleep 2 >> echo 'def' &b
 echo 'x'
-in.wait a b
+wait a b
 echo 'y'
 FIN
 

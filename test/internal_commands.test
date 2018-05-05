@@ -33,6 +33,24 @@ ERROR_CHECK "TEST1.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST1.2 error"
 
+# omission of in.
+
+cat << FIN > $tmp-glue
+import PATH
+/bin/echo -n 'hoge'
+echo -n 'hoge'
+FIN
+
+cat << FIN > $tmp-out
+hoge-n hoge
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST1.3 error"
+
+diff $tmp-out $tmp-ans
+ERROR_CHECK "TEST1.4 error"
+
 #########################################
 # TEST2: pid
 #########################################
@@ -60,7 +78,7 @@ ERROR_CHECK "TEST2 error"
 
 cat << FIN > $tmp-glue
 import PATH
-in.ppid
+ppid
 sleep 3
 FIN
 

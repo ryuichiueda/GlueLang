@@ -113,7 +113,7 @@ rm -Rf /tmp/glue*
 cat << FIN > $tmp-glue
 import PATH
 cat & a
-in.wait a
+wait a
 FIN
 
 ../glue $tmp-glue &

@@ -1,2 +1,7 @@
 import PATH
-diff
+
+str a = '45 * 49' >>= bc
+
+/bin/echo -n a
+
+ppid
