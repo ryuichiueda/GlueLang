@@ -13,7 +13,7 @@ class Feeder;
 class ExeIntCom : public Exe
 {
 public:
-	ExeIntCom(Feeder *f, Environment *env);
+	ExeIntCom(Feeder *f, Environment *env,vector<int> *scopes);
 	virtual ~ExeIntCom();
 	virtual bool parse(void);
 protected:

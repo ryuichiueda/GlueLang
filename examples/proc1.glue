@@ -1,5 +1,5 @@
-#definition
-proc f = /bin/echo 'HELLO'
+import PATH
 
-#execution
+proc f = echo 'HELLO' >> echo 'HELLO' >>= rev
+
 this.f

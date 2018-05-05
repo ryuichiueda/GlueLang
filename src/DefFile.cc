@@ -11,7 +11,7 @@
 #include "DataFile.h"
 using namespace std;
 
-DefFile::DefFile(Feeder *f, Environment *env) : Element(f,env)
+DefFile::DefFile(Feeder *f,Environment *env, vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_data = NULL;
 }
@@ -30,9 +30,9 @@ bool DefFile::parse(void)
 			&& m_feeder->variable(&var_name) 
 			&& m_feeder->str("=");
 
-	if(m_env->m_is_local){
+	/*if(m_env->m_is_local){
 		var_name = "local." + var_name;	
-	}
+	}*/
 
 	if(!res){
 		m_feeder->setPos(m_start_line, m_start_char);
@@ -43,9 +43,9 @@ bool DefFile::parse(void)
 
 	try{
 		m_data = new DataFile();
-		string filename = m_env->m_tmpdir + "/" + var_name;
+		string filename = m_env->m_tmpdir + "/" + var_name + "-" + to_string(m_scopes.back());
 		m_data->setData(&filename);
-		m_env->setData(&var_name,m_data);
+		m_env->setData(m_scopes.back(),&var_name,m_data);
 	}catch(Environment *e){
 		m_error_msg = e->m_error_msg;	
 		m_exit_status = 3;

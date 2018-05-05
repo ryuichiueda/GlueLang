@@ -20,7 +20,7 @@
 #include "DataProc.h"
 using namespace std;
 
-ExeWhile::ExeWhile(Feeder *f, Environment *env) : Exe(f,env)
+ExeWhile::ExeWhile(Feeder *f, Environment *env,vector<int> *scopes) : Exe(f,env,scopes)
 {
 }
 
@@ -48,7 +48,7 @@ bool ExeWhile::parse(void)
 
 	auto *p = new DataProc();
 	p->setFileName(&tmpdir);
-	m_env->setData(&m_name,p);
+	m_env->setData(m_scopes.back(),&m_name,p);
 	return true;
 }
 
@@ -70,7 +70,7 @@ void ExeWhile::execChild(DefFile *f, DefFile *ef, DefStr *s)
 			Feeder feeder(&ifs);
 		
 			m_env->initExeProc((const char**)argv);
-			Script scr(&feeder,m_env);
+			Script scr(&feeder,m_env,NULL);
 		
 			scr.setSilent();
 			scr.parse();

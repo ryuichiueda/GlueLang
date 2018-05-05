@@ -6,7 +6,7 @@
 #include "Environment.h"
 using namespace std;
 
-Literal::Literal(Feeder *f,Environment *env) : Arg(f,env)
+Literal::Literal(Feeder *f,Environment *env,vector<int> *scopes) : Arg(f,env,scopes)
 {
 }
 

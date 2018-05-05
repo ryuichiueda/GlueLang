@@ -13,7 +13,7 @@ class Feeder;
 class ExeForEach : public Exe
 {
 public:
-	ExeForEach(Feeder *f, Environment *env);
+	ExeForEach(Feeder *f, Environment *env,vector<int> *scopes);
 	virtual ~ExeForEach();
 	virtual bool parse(void);
 protected:

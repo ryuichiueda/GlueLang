@@ -1,0 +1,5 @@
+import /bin/ as b
+import /usr/bin/ as ub
+
+b.ls
+ub.seq 4

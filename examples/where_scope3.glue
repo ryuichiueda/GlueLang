@@ -1,0 +1,6 @@
+import PATH
+
+str a = 'out'
+
+echo a
+  where str a = 'in'

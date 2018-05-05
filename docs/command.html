@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. Call of commands &mdash; GlueLangDocs 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GlueLangDocs 0.0.1 documentation" href="index.html" />
+    <link rel="next" title="3. Variables" href="variables.html" />
+    <link rel="prev" title="1. Introduction" href="introduction.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="call-of-commands">
+<h1>2. Call of commands<a class="headerlink" href="#call-of-commands" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="simple-call">
+<h2>2.1. Simple call<a class="headerlink" href="#simple-call" title="Permalink to this headline">¶</a></h2>
+<p>This is the most simple example for calling a command. The sample files are put in the <code class="docutils literal"><span class="pre">examples</span></code> directory in the repository.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat command.glue
+/bin/echo <span class="s1">&#39;abc&#39;</span>
+<span class="nv">$ </span>../glue command.glue
+abc
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="quotation-of-arguments">
+<h2>2.2. Quotation of arguments<a class="headerlink" href="#quotation-of-arguments" title="Permalink to this headline">¶</a></h2>
+<p>The arguments should be quoted by the single quotation. A string without quotation is regarded as a variable.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat command_error.glue
+/bin/echo abc
+<span class="nv">$ </span>glue command_error.glue
+Execution error at line 1, char 11
+        line1: /bin/echo abc
+                         ^
+
+        Variable abc not found
+        process_level 0
+        exit_status 3
+        pid 31879
+ERROR: 3
+</pre></div>
+</td></tr></table></div>
+<p>Exceptionally, quotations for the string that starts from <code class="docutils literal"><span class="pre">-</span></code> and integer variables can be omitted.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre>$ cat command_no_quote.glue
+/bin/echo -n 10
+$ glue ./command_no_quote.glue
+10$
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="paths">
+<h2>2.3. Paths<a class="headerlink" href="#paths" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="import">
+<h3>2.3.1. Import<a class="headerlink" href="#import" title="Permalink to this headline">¶</a></h3>
+<p>In the default condition, GlueLang does not use PATH, which is the environment variable for pointing directories of commands. A directory should be registered with <code class="docutils literal"><span class="pre">import</span></code> sentence. The following is an simple example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat import.glue
+import /bin/ as b
+b.ls
+</pre></div>
+</td></tr></table></div>
+<p>In this example, the path <code class="docutils literal"><span class="pre">/bin/</span></code> is referred as <code class="docutils literal"><span class="pre">b</span></code> at Line 3.</p>
+<p>We think that this way is useful</p>
+<ul class="simple">
+<li>to write and store the scripts with a rigid manner, and</li>
+<li>to use command packages without changing PATH.</li>
+</ul>
+</div>
+<div class="section" id="import-of-all-directories-in-path">
+<h3>2.3.2. Import of all directories in PATH<a class="headerlink" href="#import-of-all-directories-in-path" title="Permalink to this headline">¶</a></h3>
+<p>To write a script casually, we prepare <code class="docutils literal"><span class="pre">import</span> <span class="pre">PATH</span></code>. When <code class="docutils literal"><span class="pre">import</span> <span class="pre">PATH</span></code> is written at the header part of a script, commands under the direcotries in PATH can be used without any prefix. The following is a workable script.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat import_path.glue
+import PATH
+
+ls -l
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. Call of commands</a><ul>
+<li><a class="reference internal" href="#simple-call">2.1. Simple call</a></li>
+<li><a class="reference internal" href="#quotation-of-arguments">2.2. Quotation of arguments</a></li>
+<li><a class="reference internal" href="#paths">2.3. Paths</a><ul>
+<li><a class="reference internal" href="#import">2.3.1. Import</a></li>
+<li><a class="reference internal" href="#import-of-all-directories-in-path">2.3.2. Import of all directories in PATH</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="introduction.html" title="previous chapter">1. Introduction</a></li>
+      <li>Next: <a href="variables.html" title="next chapter">3. Variables</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/command.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Ryuichi Ueda.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/command.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

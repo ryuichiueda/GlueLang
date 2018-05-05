@@ -6,7 +6,7 @@
 #include "DataProc.h"
 using namespace std;
 
-ArgVariable::ArgVariable(Feeder *f,Environment *env) : Arg(f,env)
+ArgVariable::ArgVariable(Feeder *f,Environment *env, vector<int> *scopes) : Arg(f,env,scopes)
 {
 	m_is_local = false;
 	m_is_proc = false;
@@ -42,11 +42,11 @@ bool ArgVariable::eval(void)
 {
 	try{
 		Data *p;
-		if(m_is_local){
-			p = m_env->m_local_env[m_job_id]->getData(&m_text);
-		}else{
-			p = m_env->getData(&m_text);
-		}
+		//if(m_is_local){
+		//	p = m_env->m_local_env[m_job_id]->getData(&m_text);
+		//}else{
+			p = m_env->getData(&m_scopes,&m_text);
+		//}
 		m_evaled_text = p->m_value;
 	}catch(...){
 		m_error_msg = m_env->m_error_msg;

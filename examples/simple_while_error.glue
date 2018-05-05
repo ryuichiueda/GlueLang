@@ -1,0 +1,9 @@
+import PATH
+ 
+while
+  str t = date '+%s' >>= awk '{print $1%5}'
+  ech t          # There is no ech command!!!
+  test t -ne 0
+  sleep 1
+ 
+echo 'never come here'

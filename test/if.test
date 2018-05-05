@@ -63,7 +63,7 @@ diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST2.2 error"
 
 #########################################
-# TEST3: if then else
+# TEST3: not connection
 #########################################
 
 cat << FIN > $tmp-out
@@ -95,31 +95,65 @@ diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST3.2 error"
 
 #########################################
-# TEST4: connection by ?
+# TEST4: if then else
 #########################################
-
-cat << FIN > $tmp-out
-c
-c
-FIN
 
 cat << FIN > $tmp-glue
 import PATH
 
-file x = false >> do
-        echo 'a'
-        echo 'b'
+false ?> echo 'a'
+!> false ?> echo 'b'
 !> echo 'c'
-!> echo 'd'
-
-cat x
-cat x
 FIN
 
 ../glue $tmp-glue > $tmp-ans
 ERROR_CHECK "TEST4.1 error"
 
-diff $tmp-out $tmp-ans
+echo c | diff - $tmp-ans
 ERROR_CHECK "TEST4.2 error"
+
+cat << FIN > $tmp-glue
+import PATH
+
+false ?> echo 'a'
+!> true ?> echo 'b'
+!> echo 'c'
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST4.3 error"
+
+echo b | diff $tmp-ans -
+ERROR_CHECK "TEST4.4 error"
+
+cat << FIN > $tmp-glue
+import PATH
+
+false ?> echo 'a'
+!> false ?> echo 'b'
+!> echo 'c'
+FIN
+
+../glue $tmp-glue > $tmp-ans
+ERROR_CHECK "TEST4.4 error"
+
+echo c | diff $tmp-ans -
+ERROR_CHECK "TEST4.5 error"
+
+#########################################
+# TEST5: if then and (error)
+#########################################
+
+cat << FIN > $tmp-glue
+import PATH
+
+false ?> echo 'a'
+>> false ?> echo 'b'
+!> echo 'c'
+FIN
+
+../glue $tmp-glue > $tmp-ans
+[ $? -eq 6 ]
+ERROR_CHECK "TEST5 error"
 
 rm -f $tmp-*

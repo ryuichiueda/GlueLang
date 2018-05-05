@@ -1,27 +1,13 @@
-# for mac
-# in the case of linux, true and false commands exist in /bin/
-# so it should be replaced.
+import PATH
 
-{
-	/bin/echo 'OK'
-} !> {
-	/bin/echo 'a'
-	/bin/echo 'no'
-} !> {
-	/bin/echo 'ow'
-}
+true ?> echo 'if' !>
+true ?> echo 'else' !>
+echo 'otherwise'
 
-{
-	/usr/bin/false
-	/bin/echo 'NG'
-} !> {
-	/bin/echo 'a'
-	/bin/echo 'OK'
-}
+false ?> echo 'if' !>
+true ?> echo 'else' !>
+echo 'otherwise'
 
-{
-	/usr/bin/false
-	/bin/echo 'NG'
-} !> {
-	/bin/echo 'OK'
-}
+false ?> echo 'if' !>
+false ?> echo 'else' !>
+echo 'otherwise'

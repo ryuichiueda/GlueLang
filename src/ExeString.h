@@ -13,7 +13,7 @@ class Feeder;
 class ExeString : public Exe
 {
 public:
-	ExeString(Feeder *f, Environment *env);
+	ExeString(Feeder *f,Environment *env, vector<int> *scopes);
 	virtual ~ExeString();
 	virtual bool parse(void);
 protected:

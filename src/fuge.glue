@@ -1,8 +1,0 @@
-import PATH
-
-loop
-  str s = date '+%s' >>= wk '{print $1%2}'
-  echo s
-  test s '==' 1
-
-echo 'a'

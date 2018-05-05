@@ -12,7 +12,8 @@
 #include <unistd.h>
 using namespace std;
 
-DefProc::DefProc(Feeder *f, Environment *env) : Element(f,env)
+DefProc::DefProc(Feeder *f,Environment *env, vector<int> *scopes)
+	: Element(f,env,scopes)
 {
 }
 
@@ -55,7 +56,7 @@ bool DefProc::parse(void)
 
 	auto *p = new DataProc();
 	p->setFileName(&tmpdir);
-	m_env->setData(&m_name,p);
+	m_env->setData(m_scopes.back(),&m_name,p);
 
 	m_feeder->getPos(&m_end_line, &m_end_char);
 	return true;

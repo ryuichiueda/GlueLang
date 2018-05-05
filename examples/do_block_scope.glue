@@ -3,4 +3,4 @@ import PATH
 do
   file f = echo 'a'  
 
-cat f    #エラーが起きる
+cat f    # error

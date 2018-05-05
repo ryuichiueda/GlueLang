@@ -1,0 +1,487 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. Blocks and procedures &mdash; GlueLangDocs 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GlueLangDocs 0.0.1 documentation" href="index.html" />
+    <link rel="next" title="7. Background processes" href="job.html" />
+    <link rel="prev" title="5. Connections of commands" href="connection.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="blocks-and-procedures">
+<h1>6. Blocks and procedures<a class="headerlink" href="#blocks-and-procedures" title="Permalink to this headline">¶</a></h1>
+<p>To create a block is another way for combining commands. Blocks are also used for implementing loops. Procedures are derived from the concept of blocks.</p>
+<div class="section" id="do-blocks">
+<h2>6.1. Do blocks<a class="headerlink" href="#do-blocks" title="Permalink to this headline">¶</a></h2>
+<p>A do block combines multiple commands. Here is an example though it does not give any effect on the procedure.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat do_block.glue
+import PATH
+
+<span class="k">do</span>
+  <span class="nb">echo</span> <span class="s1">&#39;a&#39;</span>
+  <span class="nb">echo</span> <span class="s1">&#39;b&#39;</span>
+<span class="nv">$ </span>glue do_block.glue
+a
+b
+</pre></div>
+</td></tr></table></div>
+<p>This <code class="docutils literal"><span class="pre">do</span></code> is regarded as a command that includes the two echoes, which are written with two space indents. The indents must be aligned as done in Python. We recommend two space indents for GlueLang.</p>
+<p>Since a do block is regarded as one command, the following procedure consists.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat do_block_pipe.glue
+import PATH
+
+<span class="k">do</span>
+  <span class="nb">echo</span> <span class="s1">&#39;a&#39;</span>
+  <span class="nb">echo</span> <span class="s1">&#39;b&#39;</span>
+
+&gt;&gt;<span class="o">=</span> cat -n
+<span class="nv">$ </span>glue do_block_pipe.glue
+     <span class="m">1</span>  a
+     <span class="m">2</span>  b
+</pre></div>
+</td></tr></table></div>
+<p>A do block can receive data through a pipe. We give an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat do_block_pipe2.glue
+import PATH
+
+seq <span class="m">3</span> &gt;&gt;<span class="o">=</span> <span class="k">do</span>
+  <span class="nb">echo</span> <span class="s1">&#39;+++&#39;</span>
+  cat
+  <span class="nb">echo</span> <span class="s1">&#39;+++&#39;</span>
+uedamb:examples ueda<span class="nv">$ </span>glue do_block_pipe2.glue
++++
+1
+2
+3
++++
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="while-blocks">
+<h2>6.2. While blocks<a class="headerlink" href="#while-blocks" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="simple-use">
+<h3>6.2.1. Simple use<a class="headerlink" href="#simple-use" title="Permalink to this headline">¶</a></h3>
+<p>Implementation of while blocks are derived from that of do blocks. In a while block, commands in the block are repeated until a command gives a non-zero exit status. In the case of the following example, the indented commands are repeated while the string <code class="docutils literal"><span class="pre">t</span></code> is not zero.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat simple_while.glue
+import PATH
+
+<span class="k">while</span>
+  str <span class="nv">t</span> <span class="o">=</span> date <span class="s1">&#39;+%s&#39;</span> &gt;&gt;<span class="o">=</span> awk <span class="s1">&#39;{print $1%5}&#39;</span>
+  <span class="nb">echo </span>t
+  <span class="nb">test </span>t -ne 0
+  sleep 1
+
+<span class="nb">echo</span> <span class="s1">&#39;end&#39;</span>
+
+<span class="nv">$ </span>glue simple_while.glue
+1
+2
+3
+4
+0
+end
+</pre></div>
+</td></tr></table></div>
+<p>When an error that is not a command error occurs, not the while loop but the script stops immediately. The following is a case where the command <code class="docutils literal"><span class="pre">ech</span></code> is not found.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat simple_while_error.glue
+import PATH
+
+<span class="k">while</span>
+  str <span class="nv">t</span> <span class="o">=</span> date <span class="s1">&#39;+%s&#39;</span> &gt;&gt;<span class="o">=</span> awk <span class="s1">&#39;{print $1%5}&#39;</span>
+  ech t          <span class="c"># There is no ech command!!!</span>
+  <span class="nb">test </span>t -ne 0
+  sleep 1
+
+<span class="nb">echo</span> <span class="s1">&#39;never come here&#39;</span>
+
+<span class="nv">$ </span>glue simple_while_error.glue
+Parse error at line 2, char 1
+        line2: ech t          <span class="c"># There is no ech command!!!</span>
+               ^
+
+        Command ech not exist
+<span class="c">###snip###</span>
+ERROR: 2
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="combination-with">
+<h3>6.2.2. Combination with <code class="docutils literal"><span class="pre">?&gt;</span></code><a class="headerlink" href="#combination-with" title="Permalink to this headline">¶</a></h3>
+<p>When a use of <code class="docutils literal"><span class="pre">?&gt;</span></code> in a while block makes it possible to implement B shell like while loops. This is an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat while_do.glue
+import PATH
+
+<span class="k">while</span>
+  str <span class="nv">t</span> <span class="o">=</span> date <span class="s1">&#39;+%s&#39;</span> &gt;&gt;<span class="o">=</span> awk <span class="s1">&#39;{print $1%5}&#39;</span>
+  <span class="nb">test </span>t -ne <span class="m">0</span> !&gt; <span class="nb">break</span> ?&gt; <span class="k">do</span>
+    <span class="nb">echo </span>t
+    sleep 1
+
+<span class="nb">echo</span> <span class="s1">&#39;end&#39;</span>
+
+<span class="nv">$ </span>glue while_do.glue
+2
+3
+4
+end
+</pre></div>
+</td></tr></table></div>
+<p>The commands before <code class="docutils literal"><span class="pre">!&gt;</span></code> are regarded as conditions for continuing this while loop. The <code class="docutils literal"><span class="pre">break</span></code> in this example is an internal command. This command is used for breaking <code class="docutils literal"><span class="pre">while</span></code> or <code class="docutils literal"><span class="pre">foreach</span></code>.</p>
+<ul class="simple">
+<li>memo: <code class="docutils literal"><span class="pre">!&gt;</span> <span class="pre">break</span> <span class="pre">?&gt;</span></code> should be reduced into one symbol (<code class="docutils literal"><span class="pre">&lt;?&gt;</span></code> for example).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="foreach-blocks">
+<h2>6.3. Foreach blocks<a class="headerlink" href="#foreach-blocks" title="Permalink to this headline">¶</a></h2>
+<p>In sh or bash, <code class="docutils literal"><span class="pre">while</span></code> also receives date via pipeline. In GlueLang, this feature is implemented as <code class="docutils literal"><span class="pre">foreach</span></code>. Here is an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat foreach_simple.glue
+import PATH
+
+seq <span class="m">1</span> <span class="m">3</span> &gt;&gt;<span class="o">=</span> foreach
+  <span class="nb">echo</span> <span class="s1">&#39;@&#39;</span> argv<span class="o">[</span>1<span class="o">]</span>
+
+<span class="nv">$ </span>glue foreach_simple.glue
+@ 1
+@ 2
+@ 3
+</pre></div>
+</td></tr></table></div>
+<p>Each line (1, 2, and 3 in this case) is read to the foreach block one by one. In the block, <code class="docutils literal"><span class="pre">i</span></code> th word of the input line can be referred as <code class="docutils literal"><span class="pre">argv[i]</span></code>.</p>
+</div>
+<div class="section" id="procedures">
+<h2>6.4. Procedures<a class="headerlink" href="#procedures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="procedure-definition-with-do-block">
+<h3>6.4.1. Procedure definition with do block<a class="headerlink" href="#procedure-definition-with-do-block" title="Permalink to this headline">¶</a></h3>
+<p>We can define a procedure by using a do block. As in the following example, we put <code class="docutils literal"><span class="pre">proc</span> <span class="pre">&lt;name&gt;</span> <span class="pre">=</span></code> before a do block for definition of a procedure. To call a procedure, we need to put a prefix <code class="docutils literal"><span class="pre">this.</span></code> to the name of the procedure.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat proc2.glue
+proc <span class="nv">hoge</span> <span class="o">=</span> <span class="k">do</span>
+  /bin/echo <span class="s1">&#39;abc&#39;</span> &gt;&gt;<span class="o">=</span> /usr/bin/rev
+  /bin/echo <span class="s1">&#39;OK&#39;</span>
+
+this.hoge
+
+<span class="nv">$ </span>glue proc2.glue
+cba
+OK
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="arguments">
+<h3>6.4.2. Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h3>
+<p>As done in the foreach blocks, <code class="docutils literal"><span class="pre">argv[i]</span></code> can be used in a procedure for refering arguments given by the procedure. We give an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat proc_args.glue
+import PATH
+
+proc <span class="nv">hoge</span> <span class="o">=</span> <span class="k">do</span>
+  /bin/echo argv<span class="o">[</span>1<span class="o">]</span> &gt;&gt;<span class="o">=</span> /usr/bin/rev
+  /bin/echo argv<span class="o">[</span>2<span class="o">]</span>
+
+this.hoge <span class="s1">&#39;abc&#39;</span> <span class="s1">&#39;def&#39;</span>
+
+<span class="nv">$ </span>glue proc_args.glue
+cba
+def
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="procedure-definition-without-do-block">
+<h3>6.4.3. Procedure definition without do block<a class="headerlink" href="#procedure-definition-without-do-block" title="Permalink to this headline">¶</a></h3>
+<p>A sequence of commands can be directory substituted into a procedure without do block. We show an example below.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat proc1.glue
+import PATH
+
+proc <span class="nv">f</span> <span class="o">=</span> <span class="nb">echo</span> <span class="s1">&#39;HELLO&#39;</span> &gt;&gt; <span class="nb">echo</span> <span class="s1">&#39;HELLO&#39;</span> &gt;&gt;<span class="o">=</span> rev
+this.f
+
+<span class="nv">$ </span>glue proc1.glue
+HELLO
+OLLEH
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="scope">
+<h2>6.5. Scope<a class="headerlink" href="#scope" title="Permalink to this headline">¶</a></h2>
+<p>Blocks and procedures are executed in subshells, which are generated by the fork system call. After the system call, a subshell inherits all resources from the main process. Therefore, all variables in the main process can be used in the subshell. Inversely, variables defined in the subshell cannot be used in the main process. In the following example, <code class="docutils literal"><span class="pre">f</span></code> cannot be used in the main process.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat do_block_scope.glue
+import PATH
+
+<span class="k">do</span>
+  file <span class="nv">f</span> <span class="o">=</span> <span class="nb">echo</span> <span class="s1">&#39;a&#39;</span>
+
+cat f    <span class="c"># error</span>
+
+<span class="nv">$ </span>glue do_block_scope.glue
+Execution error at line 6, char 5
+        line6: cat f    <span class="c"># error</span>
+                   ^
+
+        Variable f not found
+        process_level 0
+        exit_status 3
+        pid 57712
+ERROR: 3
+</pre></div>
+</td></tr></table></div>
+<p>To use the data in a subshell, a <code class="docutils literal"><span class="pre">cp</span></code> or <code class="docutils literal"><span class="pre">mv</span></code> is useful. This is a workable example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat do_block_scope3.glue
+import PATH
+
+<span class="k">do</span>
+  file <span class="nv">f</span> <span class="o">=</span> <span class="nb">echo</span> <span class="s1">&#39;a&#39;</span>
+  mv f <span class="s1">&#39;/tmp/hoge&#39;</span>
+
+cat <span class="s1">&#39;/tmp/hoge&#39;</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">6. Blocks and procedures</a><ul>
+<li><a class="reference internal" href="#do-blocks">6.1. Do blocks</a></li>
+<li><a class="reference internal" href="#while-blocks">6.2. While blocks</a><ul>
+<li><a class="reference internal" href="#simple-use">6.2.1. Simple use</a></li>
+<li><a class="reference internal" href="#combination-with">6.2.2. Combination with <code class="docutils literal"><span class="pre">?&gt;</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#foreach-blocks">6.3. Foreach blocks</a></li>
+<li><a class="reference internal" href="#procedures">6.4. Procedures</a><ul>
+<li><a class="reference internal" href="#procedure-definition-with-do-block">6.4.1. Procedure definition with do block</a></li>
+<li><a class="reference internal" href="#arguments">6.4.2. Arguments</a></li>
+<li><a class="reference internal" href="#procedure-definition-without-do-block">6.4.3. Procedure definition without do block</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#scope">6.5. Scope</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="connection.html" title="previous chapter">5. Connections of commands</a></li>
+      <li>Next: <a href="job.html" title="next chapter">7. Background processes</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/block.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Ryuichi Ueda.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/block.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -13,7 +13,7 @@ class Feeder;
 class ExeSubShell : public Exe
 {
 public:
-	ExeSubShell(Feeder *f, Environment *env);
+	ExeSubShell(Feeder *f, Environment *env,vector<int> *scopes);;
 	virtual ~ExeSubShell();
 	virtual bool parse(void);
 protected:

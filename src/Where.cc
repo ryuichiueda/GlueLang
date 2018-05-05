@@ -15,7 +15,7 @@
 #include "Job.h"
 using namespace std;
 
-Where::Where(Feeder *f, Environment *env) : Element(f,env)
+Where::Where(Feeder *f, Environment *env,vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_local_env = NULL;
 }
@@ -39,21 +39,13 @@ bool Where::parse(void)
 		return false;
 	}
 
-	m_local_env = new Environment(m_env);
-	m_local_env->m_is_local = true;
-
-/*
-	cerr << "global: " << m_env << endl;
-	cerr << "local: " << m_local_env << endl;
-*/
-
 	int indent = base_indent;
 	while(indent >= base_indent){
 		m_feeder->blank();
-		if(add(new DefCond(m_feeder,m_local_env))){
+		if(add(new DefCond(m_feeder,m_env,&m_scopes))){
 			m_conditions.push_back((DefCond *)m_nodes.back());
 			m_nodes.pop_back();
-		}else if(add(new Job(m_feeder,m_local_env))){
+		}else if(add(new Job(m_feeder,m_env,&m_scopes))){
 		}else{
 			m_error_msg = "Invalid where sentences";	
 			m_exit_status = 1;
@@ -75,7 +67,7 @@ bool Where::parse(void)
 
 int Where::exec(DefFile *f, DefFile *ef, DefStr *s)
 {
-	m_env->m_local_env[m_job_id] = m_local_env;
+	//m_env->m_local_env[m_job_id] = m_local_env;
 	for(auto n : m_nodes)
 		n->exec(f,ef,s);
 

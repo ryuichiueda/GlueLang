@@ -1,0 +1,6 @@
+import PATH
+
+seq 3 >>= do
+  echo '+++'
+  cat
+  echo '+++'

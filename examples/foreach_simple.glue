@@ -1,19 +1,4 @@
 import PATH 
 
-#一つずつ数字をforeachに入力
 seq 1 3 >>= foreach
   echo '@' argv[1]
-
-#2列でforeachに入力
-seq 1 4 >>= xargs -n 2 >>= foreach
-  str f1 = echo argv[1]
-  str f2 = echo argv[2]
-  echo f1 f2
-
-
-#2列でforeachに入力
-seq 1 4 >>= xargs -n 2 >>= foreach
-  echo local.f1 local.f2
-    where
-      str f1 = echo argv[1]
-      str f2 = echo argv[2]

@@ -1,3 +1,3 @@
-/bin/echo 'aaa' #コメント
-/bin/echo 'a#aa' #引数の中の#はコメント扱いされません。
+/bin/echo 'aaa' #This is a comment.
+/bin/echo 'a#aa' #The # in the literal is just a #.
 

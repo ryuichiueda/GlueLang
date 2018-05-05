@@ -1,9 +1,9 @@
 import PATH
  
-loop
+while
   str t = date '+%s' >>= awk '{print $1%5}'
-  echo t
-  test t -ne 0
-  sleep 1
+  test t -ne 0 !> break ?> do
+    ech t
+    sleep 1
  
 echo 'end'

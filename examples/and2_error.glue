@@ -1,0 +1,4 @@
+import PATH
+
+echo 'a' >> aaaa >> echo 'c'
+echo 'never come here'

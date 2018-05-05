@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 using namespace std;
 
-DefCond::DefCond(Feeder *f, Environment *env) : Element(f,env)
+DefCond::DefCond(Feeder *f,Environment *env, vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_upper_byte = -1;
 }

@@ -53,7 +53,7 @@ cat << FIN > $tmp-glue
 FIN
 
 ../glue $tmp-glue > /dev/null
-[ "$?" = 2 ]
+[ "$?" = 7 ]
 ERROR_CHECK "TEST2 error"
 
 #########################################

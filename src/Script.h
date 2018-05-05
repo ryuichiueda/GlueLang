@@ -15,19 +15,18 @@ class Environment;
 class Script : public Element
 {
 public:
-	Script(Feeder *f, Environment *env);
+	Script(Feeder *f, Environment *env,vector<int> *scopes);;
 	virtual ~Script();
-	//virtual void print(int indent_level = 0);
 	bool parse(void);
 	virtual int exec(DefFile *f, DefFile *ef, DefStr *s);
 	virtual bool eval(void){return true;};
 
 	void setSilent(void){m_silent = true;}
-protected:
+private:
 	bool tryElement(Element *n);
-	void parseErrorMsg(Element *e);
-	void execErrorMsg(Element *e);
-	bool doParse(void);
+	void printErrorMsg(Element *e,string error_type,bool silent = false);
+	bool parseScript(void);
 	bool m_silent;
+	void end(int exit_status);
 };
 #endif

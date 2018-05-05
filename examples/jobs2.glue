@@ -1,0 +1,8 @@
+import PATH
+
+sleep 3 >> echo 'a' >>= sed 's/./&&/' & a
+sleep 2 >> echo 'b' >>= sed 's/./&&/' & b
+sleep 1 >> echo 'c' >>= sed 's/./&&/' & c
+
+in.wait a b c
+echo 'd'

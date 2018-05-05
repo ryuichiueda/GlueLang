@@ -6,7 +6,7 @@
 #include <string.h>
 using namespace std;
 
-Import::Import(Feeder *f, Environment *env) : Element(f,env)
+Import::Import(Feeder *f, Environment *env,vector<int> *scopes) : Element(f,env,scopes)
 {
 }
 

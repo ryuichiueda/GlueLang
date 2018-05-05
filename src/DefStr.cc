@@ -13,7 +13,8 @@
 #include <fstream>
 using namespace std;
 
-DefStr::DefStr(Feeder *f, Environment *env) : Element(f,env)
+DefStr::DefStr(Feeder *f, Environment *env, vector<int> *scopes)
+	: Element(f,env,scopes)
 {
 	m_condition = NULL;
 	m_data = NULL;
@@ -42,10 +43,10 @@ bool DefStr::parse(void)
 
 	try{
 		m_data = new DataStr();
-		string f = m_env->m_tmpdir + "/" + m_var_name;
+		string f = m_env->m_tmpdir + "/" + m_var_name + "-" + to_string(m_scopes.back());
 		m_data->setFifoName(&f);
 		m_data->createFifo();
-		m_env->setData(&m_var_name,m_data);
+		m_env->setData(m_scopes.back(),&m_var_name,m_data);
 	}catch(Environment *e){
 		m_error_msg = e->m_error_msg;	
 		m_exit_status = 3;

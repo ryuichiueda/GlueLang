@@ -20,7 +20,7 @@ class Where;
 class Pipeline : public Element
 {
 public:
-	Pipeline(Feeder *f, Environment *env);
+	Pipeline(Feeder *f, Environment *env,vector<int> *scopes);;
 	virtual ~Pipeline();
 	virtual void print(int indent_level = 0);
 
@@ -31,6 +31,7 @@ public:
 	bool m_has_and;
 	bool m_has_then;
 	bool m_has_or;
+	bool m_is_then;
 protected:
 	void waitCommands(int pid);
 	vector<int> m_pids;

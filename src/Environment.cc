@@ -31,10 +31,11 @@ Environment::Environment(int argc, char const* argv[],int script_pos)
 
 	m_v_opt = false;
 	m_level = 0;
-	m_job_counter = 0;
-	m_is_local = false;
+	//m_job_counter = 0;
+	//m_is_local = false;
 }
 
+/*
 Environment::Environment(Environment *e)
 {
 	m_args = e->m_args; //args of this command
@@ -47,8 +48,9 @@ Environment::Environment(Environment *e)
 	m_v_opt = e->m_v_opt;
 	m_level = e->m_level;
 
-	m_job_counter = e->m_job_counter;
+	//m_job_counter = e->m_job_counter;
 }
+*/
 
 Environment::~Environment()
 {
@@ -118,26 +120,40 @@ bool Environment::isImportPath(string *key)
 	return m_import_paths.find(*key) != m_import_paths.end();
 }
 
-Data *Environment::getData(string *key)
+Data *Environment::getData(int scope_id,string *key)
 {
-	if(m_data.find(*key) == m_data.end()){
+	string k = genKey(scope_id,key);
+	//cerr << "get: " << k << endl;
+	if(m_data.find(k) == m_data.end()){
 		m_error_msg = "Variable " + *key + " not found";
 		throw this;
 	}
 
-	return m_data[*key];
+	return m_data[k];
 }
 
-bool Environment::isData(string *key)
+Data *Environment::getData(vector<int> *scopes,string *key)
 {
-	return m_data.find(*key) != m_data.end();
+	for(auto rit = scopes->rbegin(); rit != scopes->rend(); ++rit){
+		if(isData(*rit,key))
+			return getData(*rit,key);
+	}
+	m_error_msg = "Variable " + *key + " not found";
+	throw this;
 }
 
-void Environment::removeFiles(bool local)
+bool Environment::isData(int scope_id,string *key)
 {
+	return m_data.find(genKey(scope_id,key)) != m_data.end();
+}
+
+void Environment::removeFiles(void)
+{
+	/*
 	for(auto le : m_local_env){
 		le.second->removeFiles(true);
 	}
+	*/
 
 	for(auto d : m_data){
 		string *f = d.second->getFileName();
@@ -147,8 +163,8 @@ void Environment::removeFiles(bool local)
 		if(m_tmpdir + "/" != f->substr(0,m_tmpdir.size() + 1))
 			continue;
 
-		if(f->substr(m_tmpdir.size()+1,6) != "local." && m_is_local)
-			continue;
+		//if(f->substr(m_tmpdir.size()+1,6) != "local." && m_is_local)
+		//	continue;
 
 		remove(f->c_str());
 		if(m_v_opt)
@@ -156,7 +172,7 @@ void Environment::removeFiles(bool local)
 	}
 	
 
-	if(!local){
+//	if(!local){
 		struct stat buf;
 		while(stat(m_tmpdir.c_str(), &buf) == 0){
 			if(remove(m_tmpdir.c_str()) != 0){
@@ -164,7 +180,7 @@ void Environment::removeFiles(bool local)
 				sleep(1);
 			}
 		}
-	}
+//	}
 
 	if(Element::m_signal != 0)
 		kill(0,Element::m_signal);
@@ -180,13 +196,20 @@ string *Environment::getArg(long pos)
 	return &m_args[pos];
 }
 
-void Environment::setData(string *key, Data *value)
+string Environment::genKey(int scope_id,string *key)
 {
-	if(m_data.find(*key) != m_data.end()){
+	return to_string(scope_id) + ":" + *key;
+}
+
+void Environment::setData(int scope_id,string *key, Data *value)
+{
+	string k = genKey(scope_id,key);
+//	cerr << "set: " << k << endl;
+	if(m_data.find(k) != m_data.end()){
 		m_error_msg = *key + " already exist";
 		throw this;
 	}
-	m_data[*key] = value;
+	m_data[k] = value;
 }
 
 int Environment::publishJobId(void)

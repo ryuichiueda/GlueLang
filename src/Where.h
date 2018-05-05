@@ -16,7 +16,7 @@ class DefCond;
 class Where : public Element
 {
 public:
-	Where(Feeder *f, Environment *env);
+	Where(Feeder *f, Environment *env,vector<int> *scopes);;
 	virtual ~Where();
 	//virtual void print(int indent_level = 0);
 	bool parse(void);

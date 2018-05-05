@@ -14,7 +14,7 @@
 #include <unistd.h>
 using namespace std;
 
-Script::Script(Feeder *f, Environment *env) : Element(f,env)
+Script::Script(Feeder *f, Environment *env,vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_silent = false;
 }
@@ -30,30 +30,29 @@ Script::~Script()
 bool Script::parse(void)
 {
 	try{
-		return doParse();
+		return parseScript();
 	}
 	catch(Element *e){
-		parseErrorMsg(e);
-		m_env->removeFiles(false);
-		cerr << "\tglue exit_status: 2" << endl;
-		exit(2);
+		printErrorMsg(e,"Parse error");
+		m_env->removeFiles();
+		end(e->m_exit_status);
 	}catch(...){
-		cerr << "\nParse error" << endl;
-		cerr << "unknown error" << endl;
-		m_env->removeFiles(false);
-		cerr << "\tglue exit_status: 4" << endl;
-		exit(4);
+		cerr << "\nParse error"
+		     << "\nunknown error" << endl;
+		m_env->removeFiles();
+		end(128);
 	}
+	return true;
 }
 
-bool Script::doParse(void)
+bool Script::parseScript(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
 	// mainly for shebang
 	while(m_feeder->comment());
 	// import
-	while(add(new Import(m_feeder,m_env))){
+	while(add(new Import(m_feeder,m_env,&m_scopes))){
 		while(m_feeder->blankLine());
 	}
 
@@ -64,8 +63,8 @@ bool Script::doParse(void)
 
 		while(m_feeder->comment());
 
-		bool res = add(new DefProc(m_feeder,m_env))
-			|| add(new Job(m_feeder,m_env));
+		bool res = add(new DefProc(m_feeder,m_env,&m_scopes))
+			|| add(new Job(m_feeder,m_env,&m_scopes));
 
 		if(!res)
 			break;
@@ -76,7 +75,7 @@ bool Script::doParse(void)
 
 	if(!m_feeder->atEnd()){
 		m_error_msg = "Unknown token";
-		m_exit_status = 1;
+		m_exit_status = 7;
 		throw this;
 	}
 
@@ -90,65 +89,45 @@ int Script::exec(DefFile *f, DefFile *ef, DefStr *s)
 		for(auto &c : m_nodes){
 			exit_status = c->exec(NULL,NULL,NULL);
 		}
-		m_env->removeFiles(false);
+		m_env->removeFiles();
 		if(exit_status == 0)
-			exit(0);
+			end(0);
 	}catch(Element *e){
-		execErrorMsg(e);
-		m_env->removeFiles(false);
-		int es = e->getExitStatus();
-		//if(es == 1){
-			if(es == 127){
-				//_exit(es);
-				//cerr << "glue exit status: 1" << endl;
-				_exit(1);
-			}else{
-				//cerr << "glue exit status: 1" << endl;
-				exit(es);
-			//	exit(es);
-			}
-	//	}else{
-	//		cerr << "\tglue exit_status: 3" << endl;
-		//	exit(3);
-	//	}
+		printErrorMsg(e,"Execution error",m_silent);
+		m_env->removeFiles();
+		if(e->m_command_error)
+			end(1);
+		else
+			end(e->getExitStatus());
 	}catch(...){
-		cerr << "\nExecution error" << endl;
-		cerr << "unknown error" << endl;
-		m_env->removeFiles(false);
-		cerr << "\tglue exit_status: 3" << endl;
-		exit(3);
+		cerr << "\nExecution error\n"
+		     << "unknown error" << endl;
+		m_env->removeFiles();
+		end(3);
 	}
 	cerr << "unknown error (uncatched)" << endl;
-	m_env->removeFiles(false);
-	cerr << "\tglue exit_status: 3" << endl;
-	exit(3);
+	m_env->removeFiles();
+	end(3);
+	return 0;
 }
 
-void Script::execErrorMsg(Element *e)
+void Script::printErrorMsg(Element *e,string error_type, bool silent)
 {
-	if(m_silent)
+	if(silent)
 		return;
 
-	cerr << "\nExecution error at " ;
-	cerr << e->pos() << endl;
+	cerr << error_type << " at " << e->pos() << endl;
 	e->printErrorPart();
-	cerr << "\n\t" << e->m_error_msg << endl;
-	cerr << "\t\n";
-	cerr <<  "\tprocess_level " << e->getLevel() << endl;
-	cerr << "\texit_status " << e->getExitStatus() << endl;
-	cerr << "\tpid " << getpid() << '\n' << endl;
+	cerr << "\n\t" << e->m_error_msg
+	     << "\n\tprocess_level " << e->getLevel()
+	     << "\n\texit_status " << e->getExitStatus()
+	     << "\n\tpid " << getpid() << endl;
 }
 
-void Script::parseErrorMsg(Element *e)
+void Script::end(int exit_status)
 {
-	cerr << "\nParse error at " ;
-	cerr << e->pos() << endl;
-	e->printErrorPart();
-	cerr << "\n\t" << e->m_error_msg << endl;
-	cerr << "\t";
-
-	cerr << '\n';
-	cerr <<  "\tprocess_level " << e->getLevel() << endl;
-	cerr << "\texit_status " << e->getExitStatus() << endl;
-	cerr << "\tpid " << getpid() << '\n' << endl;
+	if(exit_status != 0 and m_env->m_level == 0)
+		cerr << "\e[31mERROR: " << exit_status << "\e[m" << endl;
+	exit(exit_status);
 }
+

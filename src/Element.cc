@@ -9,7 +9,7 @@ using namespace std;
 
 int Element::m_signal = 0;
 
-Element::Element(Feeder *f, Environment *env)
+Element::Element(Feeder *f, Environment *env, vector<int> *scopes)
 {
 	m_feeder = f;	
 	m_env = env;
@@ -17,8 +17,14 @@ Element::Element(Feeder *f, Environment *env)
 	m_start_line = m_start_char = -1000;
 	m_end_line = m_end_char = -1000;
 	m_exit_status = 0;
+	m_command_error = false;
 
-	m_job_id = 0;
+	if(scopes == NULL){
+		m_job_id = 0;
+		m_scopes.push_back(0);
+	}else{
+		m_scopes = *scopes;
+	}
 }
 
 Element::~Element()
@@ -59,6 +65,7 @@ int Element::getLevel(void)
 void Element::setJobId(int id)
 {
 	m_job_id = id;
+	m_scopes.push_back(id);
 	for(auto &n : m_nodes){
 		n->m_job_id = id;
 		n->setJobId(id);

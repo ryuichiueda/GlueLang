@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. Connections of commands &mdash; GlueLangDocs 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GlueLangDocs 0.0.1 documentation" href="index.html" />
+    <link rel="next" title="6. Blocks and procedures" href="block.html" />
+    <link rel="prev" title="4. Shebang, comments, and Arguments" href="shebang_comment.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="connections-of-commands">
+<h1>5. Connections of commands<a class="headerlink" href="#connections-of-commands" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div>Connection of commands is the most important task in those of GlueLang. In GlueLang, Haskell like symbols are used for connecting commands. Some types of conditional branching are represented by the combination of the symbols. Keywords like <code class="docutils literal"><span class="pre">if,</span> <span class="pre">then,</span> <span class="pre">else</span></code> are not used since they look like commands.</div></blockquote>
+<div class="section" id="pipeline">
+<h2>5.1. Pipeline<a class="headerlink" href="#pipeline" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>The symbol of a pipe is <code class="docutils literal"><span class="pre">&gt;&gt;=</span></code> in GlueLang. Though <code class="docutils literal"><span class="pre">|</span></code> which is used in conventional shells is easier to be typed than <code class="docutils literal"><span class="pre">&gt;&gt;=</span></code>, we thing that it is inconspicuous. Moreover, the role of pipelines on shells is similar to a sequence of functions connected by <code class="docutils literal"><span class="pre">&gt;&gt;=</span></code> in Haskell. This is an example.</div></blockquote>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat pipeline2.glue
+import PATH
+<span class="nb">echo</span> <span class="s1">&#39;abc&#39;</span> &gt;&gt;<span class="o">=</span> rev
+
+<span class="nv">$ </span>glue pipeline2.glue
+cba
+</pre></div>
+</td></tr></table></div>
+<p>We can give a pipeline some returns as follows.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat pipeline2_fold.glue
+import PATH
+
+<span class="nb">echo</span> <span class="s1">&#39;efg&#39;</span>
+&gt;&gt;<span class="o">=</span> rev
+
+<span class="nb">echo</span> <span class="s1">&#39;hij&#39;</span> &gt;&gt;<span class="o">=</span>
+rev
+
+<span class="nv">$ </span>glue pipeline2_fold.glue
+gfe
+jih
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="and">
+<h2>5.2. And (&gt;&gt;)<a class="headerlink" href="#and" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">&amp;&amp;</span></code> in B shells is represented by <code class="docutils literal"><span class="pre">&gt;&gt;</span></code> in GlueLang.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat and.glue
+/bin/echo <span class="s1">&#39;a&#39;</span> &gt;&gt; /bin/echo <span class="s1">&#39;b&#39;</span> &gt;&gt; /bin/echo <span class="s1">&#39;c&#39;</span>
+<span class="nv">$ </span>glue ./and.glue
+a
+b
+c
+</pre></div>
+</td></tr></table></div>
+<p>In the following case,  <code class="docutils literal"><span class="pre">echo</span> <span class="pre">'c'</span></code> is not executed because <code class="docutils literal"><span class="pre">false</span></code> returns an error.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat and2.glue
+import PATH
+<span class="nb">echo</span> <span class="s1">&#39;a&#39;</span> &gt;&gt; <span class="nb">false</span> &gt;&gt; <span class="nb">echo</span> <span class="s1">&#39;c&#39;</span>
+<span class="nv">$ </span>glue and2.glue
+a
+</pre></div>
+</td></tr></table></div>
+<p>GlueLang can distinguish command errors and the others. A script stops immediately at an error that is not a command error. The following is an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat and2_error.glue
+import PATH
+
+<span class="nb">echo</span> <span class="s1">&#39;a&#39;</span> &gt;&gt; aaaa &gt;&gt; <span class="nb">echo</span> <span class="s1">&#39;c&#39;</span>
+<span class="nb">echo</span> <span class="s1">&#39;never come here&#39;</span>
+<span class="nv">$ </span>glue and2_error.glue
+Parse error at line 3, char 13
+        line3: <span class="nb">echo</span> <span class="s1">&#39;a&#39;</span> &gt;&gt; aaaa &gt;&gt; <span class="nb">echo</span> <span class="s1">&#39;c&#39;</span>
+                           ^
+
+        Command aaaa not exist
+        process_level 0
+        exit_status 2
+        pid 46505
+ERROR: 2
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="or">
+<h2>5.3. Or (!&gt;)<a class="headerlink" href="#or" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">||</span></code> in B shells are represented by <code class="docutils literal"><span class="pre">!&gt;</span></code>. Here is an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat or.glue
+import PATH
+
+<span class="nb">false</span> !&gt; <span class="nb">echo</span> <span class="s1">&#39;Echo is executed.&#39;</span>
+<span class="nb">true</span> !&gt; <span class="nb">echo</span> <span class="s1">&#39;Echo is not executed.&#39;</span>
+<span class="nv">$ </span>glue or.glue
+Echo is executed.
+</pre></div>
+</td></tr></table></div>
+<p>When <code class="docutils literal"><span class="pre">!&gt;</span></code> is combined with <code class="docutils literal"><span class="pre">&gt;&gt;</span></code>, some types of conditional branching can be reprsented. We here give three cases as examples.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat or2.glue
+import PATH
+
+<span class="nb">true</span> &gt;&gt; <span class="nb">echo</span> <span class="s1">&#39;if&#39;</span> !&gt; <span class="nb">echo</span> <span class="s1">&#39;else&#39;</span>    <span class="c"># case 1</span>
+<span class="nb">false</span> &gt;&gt; <span class="nb">echo</span> <span class="s1">&#39;if&#39;</span> !&gt; <span class="nb">echo</span> <span class="s1">&#39;else&#39;</span>   <span class="c"># case 2</span>
+<span class="nb">false</span> &gt;&gt; <span class="nb">false</span> !&gt; <span class="nb">echo</span> <span class="s1">&#39;else&#39;</span>       <span class="c"># case 3</span>
+
+<span class="nv">$ </span>glue or2.glue
+<span class="k">if</span>
+<span class="k">else</span>
+<span class="k">else</span>
+</pre></div>
+</td></tr></table></div>
+<p>In the case 1, <code class="docutils literal"><span class="pre">echo</span> <span class="pre">'else'</span></code> is skipped because <code class="docutils literal"><span class="pre">echo</span> <span class="pre">'if'</span></code> returns 0. In the case2, <code class="docutils literal"><span class="pre">echo</span> <span class="pre">'if'</span></code> is skipped because <code class="docutils literal"><span class="pre">false</span></code> returns a command error. The error of <code class="docutils literal"><span class="pre">false</span></code> is carried to <code class="docutils literal"><span class="pre">!&gt;</span></code> and <code class="docutils literal"><span class="pre">echo</span> <span class="pre">'else'</span></code> runs. In the case 3, the second <code class="docutils literal"><span class="pre">false</span></code> is not executed and the first <code class="docutils literal"><span class="pre">false</span></code> invokes <code class="docutils literal"><span class="pre">echo</span> <span class="pre">'else'</span></code> as the case 2.</p>
+</div>
+<div class="section" id="then">
+<h2>5.4. Then (?&gt;)<a class="headerlink" href="#then" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="composition-of-if-then-else">
+<h3>5.4.1. Composition of if then else<a class="headerlink" href="#composition-of-if-then-else" title="Permalink to this headline">¶</a></h3>
+<p>When two commands are connected with <code class="docutils literal"><span class="pre">?&gt;</span></code>, the right command runs only when the left command returns 0. When the right command returns any error, the script stops. We can implement &#8220;if-then-else&#8221; rules by combinations of <code class="docutils literal"><span class="pre">&gt;&gt;,</span> <span class="pre">!&gt;</span></code> and <code class="docutils literal"><span class="pre">?&gt;</span></code> as the following way.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat if_then_else.glue
+import PATH
+
+<span class="nb">true</span> ?&gt; <span class="nb">echo</span> <span class="s1">&#39;if&#39;</span> !&gt;
+<span class="nb">true</span> ?&gt; <span class="nb">echo</span> <span class="s1">&#39;else&#39;</span> !&gt;
+<span class="nb">echo</span> <span class="s1">&#39;otherwise&#39;</span>
+
+<span class="nb">false</span> ?&gt; <span class="nb">echo</span> <span class="s1">&#39;if&#39;</span> !&gt;
+<span class="nb">true</span> ?&gt; <span class="nb">echo</span> <span class="s1">&#39;else&#39;</span> !&gt;
+<span class="nb">echo</span> <span class="s1">&#39;otherwise&#39;</span>
+
+<span class="nb">false</span> ?&gt; <span class="nb">echo</span> <span class="s1">&#39;if&#39;</span> !&gt;
+<span class="nb">false</span> ?&gt; <span class="nb">echo</span> <span class="s1">&#39;else&#39;</span> !&gt;
+<span class="nb">echo</span> <span class="s1">&#39;otherwise&#39;</span>
+
+<span class="nv">$ </span>glue if_then_else.glue
+<span class="k">if</span>
+<span class="k">else</span>
+otherwise
+</pre></div>
+</td></tr></table></div>
+<p>The clunky shape of this if-then-else can be a little bit relieved by &#8220;do blocks,&#8221; which are explained later. We give an example.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>glue if_then_else2.glue
+<span class="k">if</span>
+<span class="nv">$ </span>cat if_then_else2.glue
+import PATH
+
+<span class="nb">true</span> ?&gt; <span class="k">do</span>
+  <span class="nb">echo</span> <span class="s1">&#39;if&#39;</span>
+!&gt; <span class="nb">true</span> ?&gt; <span class="k">do</span>
+  <span class="nb">echo</span> <span class="s1">&#39;else&#39;</span>
+!&gt; <span class="k">do</span>
+  <span class="nb">echo</span> <span class="s1">&#39;otherwise&#39;</span>
+
+<span class="nv">$ </span>glue if_then_else2.glue
+<span class="k">if</span>
+</pre></div>
+</td></tr></table></div>
+<p>However, do blocks enhance computational costs.</p>
+</div>
+<div class="section" id="rule-of-at-errors">
+<h3>5.4.2. Rule of <code class="docutils literal"><span class="pre">?&gt;</span></code> at errors<a class="headerlink" href="#rule-of-at-errors" title="Permalink to this headline">¶</a></h3>
+<p>When the command at the right side of <code class="docutils literal"><span class="pre">?&gt;</span></code> returns any error, the script stops immediately. In the following example, <code class="docutils literal"><span class="pre">false</span></code> at the second if-then connection stops the script.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>cat then_stop.glue
+import PATH
+
+<span class="nb">false</span> ?&gt; <span class="nb">true</span>
+<span class="nb">echo</span> <span class="s1">&#39;ok&#39;</span>
+
+<span class="nb">true</span> ?&gt; <span class="nb">false</span>
+<span class="nb">echo</span> <span class="s1">&#39;do not come here&#39;</span>
+
+<span class="nv">$ </span>glue then_stop.glue
+ok
+Execution error at line 6, char 9
+        line6: <span class="nb">true</span> ?&gt; <span class="nb">false</span>
+                       ^
+
+        Error at <span class="k">then</span> part
+        process_level 0
+        exit_status 8
+        pid 51633
+ERROR: 8
+</pre></div>
+</td></tr></table></div>
+<p>As shown in the output, the glue command gives 8 as the exit status when it stops by the right side of <code class="docutils literal"><span class="pre">?&gt;</span></code>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. Connections of commands</a><ul>
+<li><a class="reference internal" href="#pipeline">5.1. Pipeline</a></li>
+<li><a class="reference internal" href="#and">5.2. And (&gt;&gt;)</a></li>
+<li><a class="reference internal" href="#or">5.3. Or (!&gt;)</a></li>
+<li><a class="reference internal" href="#then">5.4. Then (?&gt;)</a><ul>
+<li><a class="reference internal" href="#composition-of-if-then-else">5.4.1. Composition of if then else</a></li>
+<li><a class="reference internal" href="#rule-of-at-errors">5.4.2. Rule of <code class="docutils literal"><span class="pre">?&gt;</span></code> at errors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="shebang_comment.html" title="previous chapter">4. Shebang, comments, and Arguments</a></li>
+      <li>Next: <a href="block.html" title="next chapter">6. Blocks and procedures</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/connection.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Ryuichi Ueda.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/connection.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

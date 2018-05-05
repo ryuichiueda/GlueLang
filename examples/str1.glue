@@ -1,5 +1,5 @@
 import PATH
 
-str s = head -n 1 '/etc/hosts'
-
+str s = seq 2
+echo s
 echo s

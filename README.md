@@ -4,17 +4,19 @@
 
 A programming language that has a strong nature to be a glue of commands.
 
+* User's manual: http://ryuichiueda.github.io/GlueLang/
+
 # Quick trial
 
 ```
 ~/GIT/GlueLang$ make
-~/GIT/GlueLang$ ./glue TEST/pipeline.glue 
+~/GIT/GlueLang$ ./glue examples/pipeline.glue
 5
 4
 3
 2
 1
-~/GIT/GlueLang$ cat TEST/pipeline.glue 
+~/GIT/GlueLang$ cat examples/pipeline.glue 
 /usr/bin/seq '1' '5' >>= /usr/bin/tac
 ```
 
@@ -23,9 +25,9 @@ A programming language that has a strong nature to be a glue of commands.
 The examples are located in the ./exmaples/ dir.
 
 
-# Licence
+# License
 
-MIT Licence is applied to. See LICENSE.md.
+MIT License is applied to. See LICENSE.md.
 
 # Document
 

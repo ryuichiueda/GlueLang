@@ -18,7 +18,7 @@
 #include "Where.h"
 using namespace std;
 
-Job::Job(Feeder *f, Environment *env) : Element(f,env)
+Job::Job(Feeder *f, Environment *env,vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_outfile = NULL;
 	m_outstr = NULL;
@@ -58,17 +58,18 @@ bool Job::parse(void)
 	// If `file <filename> =` is found, 
 	// the DefFile object is pushed as the first element of m_nodes.
 	// This node is also given to the last command line.
-	if(add(new DefFile(m_feeder,m_env))){
+	if(add(new DefFile(m_feeder,m_env,&m_scopes))){
 		m_outfile = (DefFile *)m_nodes[0];	
 		m_nodes.pop_back();
-	}else if(add(new DefStr(m_feeder,m_env))){
+	}else if(add(new DefStr(m_feeder,m_env,&m_scopes))){
 		m_outstr = (DefStr *)m_nodes[0];	
 		m_nodes.pop_back();
 	}
 
+	setJobId(m_env->publishJobId());
 	int comnum = 0;
 	while(1){
-		if(add(new Pipeline(m_feeder,m_env)))
+		if(add(new Pipeline(m_feeder,m_env,&m_scopes)))
 			comnum++;
 		else
 			break;
@@ -80,12 +81,20 @@ bool Job::parse(void)
 		Pipeline *back1 = (Pipeline *)m_nodes.back();
 		Pipeline *back2 = num >= 2 ? (Pipeline *)m_nodes[num-2] : NULL;
 
+		back1->m_is_then = back2 != NULL and back2->m_has_then;
+
 		if(m_feeder->str(">>")){
 			back1->m_has_and = true;
+			if(back2 != NULL and back2->m_has_then){
+				m_feeder->getPos(&m_end_line, &m_end_char);
+				m_error_msg = "Invalid connection (>> is connected after ?>)";
+				m_exit_status = 6;
+				throw this;
+			}
 		}else if(m_feeder->str("?>")){
 			back1->m_has_then = true;
 		}else if(m_feeder->str("!>")){
-			if(back2 != NULL and ( back2->m_has_and or back2->m_has_then) )
+			if(back2 != NULL and back2->m_has_then)
 				back2->m_has_or = true;
 			else
 				back1->m_has_or = true;
@@ -113,7 +122,7 @@ bool Job::parse(void)
 		d->setData(&m_job_name);
 
 		try{
-			m_env->setData(&m_job_name,d);
+			m_env->setData(0,&m_job_name,d);
 		}catch(Environment *e){
 			m_error_msg = e->m_error_msg;	
 			m_exit_status = 2;
@@ -121,8 +130,7 @@ bool Job::parse(void)
 		}
 	}
 
-	setJobId(m_env->publishJobId());
-	if(add(new Where(m_feeder,m_env))){
+	if(add(new Where(m_feeder,m_env,&m_scopes))){
 		m_where = (Where *)m_nodes.back();
 		m_nodes.pop_back();
 		// give conditions to strings
@@ -167,30 +175,24 @@ int Job::execNormal(DefFile *f, DefFile *ef, DefStr *s)
 	bool skip = false; // flag to skip the next command
 	bool stop_next = false; // stop after then
 	for(int i=0;i<(int)m_nodes.size();i++){
-		if(skip){
+		if(skip and not stop_next){
 			skip = false;
 			continue;
 		}
 
-		auto *p = (Pipeline *)m_nodes[i];
 		if(f != NULL && i!=0)
 			f->m_data->setAppend();
 
-		int exs = p->exec(f,ef,s);
-		if(stop_next)
-			return exs;
+		auto *p = (Pipeline *)m_nodes[i];
+		int es = p->exec(f,ef,s);//Sometimes it does not come back.
+		if(stop_next){
+			return es;
+		}
 
-		if(p->m_has_and and exs != 0){
-			skip = true;
-		}else if(p->m_has_or and exs == 0){
-			skip = true;
-		}
-		
-		if(p->m_has_then and exs == 0){
-			stop_next = true;
-		}else if(p->m_has_then and exs != 0){
-			skip = true;
-		}
+		stop_next = p->m_has_then and es == 0;
+		skip = (p->m_has_then and es != 0)
+			or (p->m_has_and and es != 0)
+			or (p->m_has_or and es == 0);
 	}
 	return 0;
 }
@@ -216,7 +218,7 @@ int Job::execBackGround(DefFile *f, DefFile *ef, DefStr *s)
 	}
 
 	try{
-		DataJob *p = (DataJob *)m_env->getData(&m_job_name);
+		DataJob *p = (DataJob *)m_env->getData(&m_scopes,&m_job_name);
 		p->m_pid = pid;
 	}catch(...){
 		m_error_msg = "Bug of backgound process";

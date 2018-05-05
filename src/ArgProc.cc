@@ -5,7 +5,7 @@
 #include "Environment.h"
 using namespace std;
 
-ArgProc::ArgProc(Feeder *f,Environment *env) : Arg(f,env)
+ArgProc::ArgProc(Feeder *f,Environment *env,vector<int> *scopes) : Arg(f,env,scopes)
 {
 }
 
@@ -24,7 +24,7 @@ bool ArgProc::parse(void)
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}
-	if(!m_env->isData(&m_evaled_text)){
+	if(!m_env->isData(0,&m_evaled_text)){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}

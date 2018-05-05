@@ -13,7 +13,7 @@ class Feeder;
 class ExeWhile : public Exe
 {
 public:
-	ExeWhile(Feeder *f, Environment *env);
+	ExeWhile(Feeder *f, Environment *env,vector<int> *scopes);;
 	virtual ~ExeWhile();
 	virtual bool parse(void);
 protected:

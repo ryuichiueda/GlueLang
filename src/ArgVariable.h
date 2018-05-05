@@ -13,7 +13,7 @@ class Environment;
 class ArgVariable : public Arg
 {
 public:
-	ArgVariable(Feeder *f,Environment *env);
+	ArgVariable(Feeder *f,Environment *env, vector<int> *scopes);
 	virtual ~ArgVariable();
 
 	virtual bool eval(void);
