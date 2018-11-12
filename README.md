@@ -22,7 +22,7 @@ A programming language that has a strong nature to be a glue of commands.
 
 # Language Specification
 
-The examples are located in the ./exmaples/ dir.
+The examples are located in the ./examples/ dir.
 
 
 # License
