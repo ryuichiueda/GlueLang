@@ -1,3 +1,4 @@
 * to add to set LANG as an import declaration
 * to enable to use files on if-phrases
 * to write a tutorial
+* to make a literal have its methods or types (e.g.: '1 + 1'.calc, '0.4'_float)
