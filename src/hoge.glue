@@ -1,7 +1,4 @@
 import PATH
 
-str a = '45 * 49' >>= bc
-
-/bin/echo -n a
-
-#ppid
+file a,b = ls 'aaa' >>= ls 'bbb' !> true
+cat b

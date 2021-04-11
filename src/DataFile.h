@@ -15,6 +15,7 @@ public:
 	virtual string *getFileName(void);
 
 	void openFile(void);
+	void openErrorFile(void);
 	void setAppend(void);
 private:
 	bool m_append_mode;

@@ -23,5 +23,6 @@ public:
 	void connect(void);
 
 	DataFile *m_data;
+	DataFile *m_error;
 };
 #endif

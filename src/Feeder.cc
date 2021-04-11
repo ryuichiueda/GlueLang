@@ -233,7 +233,7 @@ bool Feeder::variable(string *ans)
 
 	for(;i < (int)p->length();i++){
 		char c = p->at(i);
-		if(strchr("> #[",c))
+		if(strchr("> #[,",c))
 			break;
 
 		if(! isAlphabet(c) && ! isNum(c) && c != '_' && c != '-')
