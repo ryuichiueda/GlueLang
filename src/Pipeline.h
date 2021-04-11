@@ -24,7 +24,7 @@ public:
 	virtual ~Pipeline();
 	virtual void print(int indent_level = 0);
 
-	virtual int exec(DefFile *f, DefFile *ef, DefStr *s);
+	virtual int exec(DefFile *f, DefStr *s);
 	virtual bool parse(void);
 	int execWait(void);
 

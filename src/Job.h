@@ -23,12 +23,12 @@ public:
 	virtual ~Job();
 	virtual void print(int indent_level = 0);
 
-	virtual int exec(DefFile *f, DefFile *ef, DefStr *s);
+	virtual int exec(DefFile *f, DefStr *s);
 	virtual bool parse(void);
 
 protected:
-	int execNormal(DefFile *f, DefFile *ef, DefStr *s);
-	int execBackGround(DefFile *f, DefFile *ef, DefStr *s);
+	int execNormal(DefFile *f, DefStr *s);
+	int execBackGround(DefFile *f, DefStr *s);
 
 	Where *m_where;
 	Environment *m_local_env;

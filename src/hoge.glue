@@ -1,4 +1,4 @@
 import PATH
 
 file a,b = ls 'aaa' >>= ls 'bbb' !> true
-cat b
+#cat b

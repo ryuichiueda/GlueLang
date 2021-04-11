@@ -65,11 +65,11 @@ bool Where::parse(void)
 	return true;
 }
 
-int Where::exec(DefFile *f, DefFile *ef, DefStr *s)
+int Where::exec(DefFile *f, DefStr *s)
 {
 	//m_env->m_local_env[m_job_id] = m_local_env;
 	for(auto n : m_nodes)
-		n->exec(f,ef,s);
+		n->exec(f,s);
 
 	return 0;
 }

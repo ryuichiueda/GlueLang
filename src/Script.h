@@ -18,7 +18,7 @@ public:
 	Script(Feeder *f, Environment *env,vector<int> *scopes);;
 	virtual ~Script();
 	bool parse(void);
-	virtual int exec(DefFile *f, DefFile *ef, DefStr *s);
+	virtual int exec(DefFile *f, DefStr *s);
 	virtual bool eval(void){return true;};
 
 	void setSilent(void){m_silent = true;}

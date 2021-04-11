@@ -52,7 +52,7 @@ bool ExeWhile::parse(void)
 	return true;
 }
 
-void ExeWhile::execChild(DefFile *f, DefFile *ef, DefStr *s)
+void ExeWhile::execChild(DefFile *f, DefStr *s)
 {
 	auto argv = new char* [2];
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
@@ -74,7 +74,7 @@ void ExeWhile::execChild(DefFile *f, DefFile *ef, DefStr *s)
 		
 			scr.setSilent();
 			scr.parse();
-			scr.exec(f,ef,s); // exit in the exec function
+			scr.exec(f,s); // exit in the exec function
 		}else{
 		        int options = 0;
 		        int status;

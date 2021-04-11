@@ -29,7 +29,7 @@ public:
 	Element(Feeder *f, Environment *env, vector<int> *scopes);
 	virtual ~Element();
 	virtual bool eval(void){return true;}
-	virtual int exec(DefFile *f, DefFile *ef, DefStr *s){return 0;}
+	virtual int exec(DefFile *f, DefStr *s){return 0;}
 	virtual bool parse(void){return false;}
 
 	virtual void printOriginalString(void);

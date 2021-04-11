@@ -150,12 +150,6 @@ bool Environment::isData(int scope_id,string *key)
 
 void Environment::removeFiles(void)
 {
-	/*
-	for(auto le : m_local_env){
-		le.second->removeFiles(true);
-	}
-	*/
-
 	for(auto d : m_data){
 		string *f = d.second->getFileName();
 		if(f == NULL)
@@ -163,9 +157,6 @@ void Environment::removeFiles(void)
 
 		if(m_tmpdir + "/" != f->substr(0,m_tmpdir.size() + 1))
 			continue;
-
-		//if(f->substr(m_tmpdir.size()+1,6) != "local." && m_is_local)
-		//	continue;
 
 		remove(f->c_str());
 		if(m_v_opt)

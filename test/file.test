@@ -101,3 +101,19 @@ ls /tmp/*-abcd               # the tmp file should not exist (exit status: linux
 ERROR_CHECK "TEST3.2 error"
 
 rm -f $tmp-*
+
+#########################################
+# TEST4: error redirection
+#########################################
+
+#cat << FIN > $tmp-glue
+#import PATH
+#file a,b = ls 'aaa' >>= ls 'bbb' !> true
+#file -,c = ls 'aaa' >>= ls 'bbb' !> true
+#file d,- = ls '/etc/passwd'
+#file -,- = ls '/etc/passwd'
+#
+#head a b c d
+#FIN
+#
+#../glue $tmp-glue 
