@@ -116,6 +116,17 @@ vector<string> *Environment::getImportPaths(const char *key)
 	return getImportPaths(&tmp);
 }
 
+string Environment::getImportPaths(void)
+{
+	string ans = "PATH=";
+	for (const auto& [key, paths] : m_import_paths){
+		for(auto &s : paths)
+			ans += s + ":";
+	}
+	ans.pop_back();
+	return ans;
+}
+
 bool Environment::isImportPath(string *key)
 {
 	return m_import_paths.find(*key) != m_import_paths.end();

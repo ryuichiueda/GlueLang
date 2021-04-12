@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include "Feeder.h"
+#include "string.h"
 using namespace std;
 
 ExeExtCom::ExeExtCom(Feeder *f, Environment *env, vector<int> *scopes) : Exe(f,env,scopes)
@@ -49,8 +50,13 @@ void ExeExtCom::execChild(DefFile *f, DefFile *ef, DefStr *s)
 	vOptProc(argv[0]);
 	char *str = getenv("PATH");
 	auto env = new const char* [2];
-	env[0] = str;
+	//extern char **environ;
+	string path = m_env->getImportPaths();
+	char *tmp = new char[path.size() + 1];
+	char_traits<char>::copy(tmp, path.c_str(), path.size() + 1);
+	env[0] = (const char *)tmp;
 	env[1] = NULL;
 	execve(argv[0],(char **)argv,(char **)env);
+	//execve(argv[0],(char **)argv, environ);
 }
 

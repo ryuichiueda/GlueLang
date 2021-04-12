@@ -52,6 +52,8 @@ cat << FIN > $tmp-out
 FIN
 
 cat << FIN > $tmp-glue
+import PATH
+
 str tmp = /usr/bin/seq '1' '3' >>= /usr/bin/xargs
 /bin/echo tmp
 /bin/echo tmp

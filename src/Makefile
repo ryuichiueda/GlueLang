@@ -1,7 +1,7 @@
 CXX = g++
 TARGET = glue
 BINDIR	= /usr/local/bin
-CXXFLAGS = -Wall -O2 --static -std=c++14
+CXXFLAGS = -Wall -O2 --static -std=c++17
 LDFLAGS = -lm
 SRCS := $(wildcard *.cc)
 OBJS := $(SRCS:.cc=.o)
