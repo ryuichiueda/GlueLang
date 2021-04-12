@@ -4,6 +4,8 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
+    packages:
+      - g++-9
 
 before_script:
  - make clean
