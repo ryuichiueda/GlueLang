@@ -4,13 +4,10 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-    packages:
-      - g++-5
-      - gcc-5
 
 before_script:
  - make clean
- - make CXX=g++-5
+ - make
 
 script: 
  - sh -e ./test/test_all.sh
