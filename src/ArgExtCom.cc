@@ -41,15 +41,24 @@ bool ArgExtCom::parse(void)
 		m_prefix = "";
 		return parsePrefixedCom();
 	}
-	//hereafter, a command name with a prefix
 
+	//When the path is not found, "." is regarded as a part of the command's name
  	if(! m_env->isImportPath(&m_prefix)){
-		m_error_msg = "Invalid path";
-		m_exit_status = 2;
-		m_feeder->getPos(&m_end_line, &m_end_char);
-		throw this;
+		m_text = m_prefix + ".";
+		m_prefix = "";
+
+		string tmp;
+		while(m_feeder->smallCapsWithNum(&tmp)){
+			m_text = m_text + tmp;
+ 			if(!m_feeder->str("."))
+				break;
+
+			m_text += ".";
+		}
+		return parsePrefixedCom();
 	}
 
+	//hereafter, a command name with a prefix
 	if(!m_feeder->command(&m_text)){
 		m_error_msg = "Invalid command name";
 		m_exit_status = 2;
