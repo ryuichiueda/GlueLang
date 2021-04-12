@@ -44,12 +44,12 @@ public:
 	bool arrayElem(string *name,long *pos);
 	bool comment(void);
 	//bool declare(string *ans, string reserved);
-	bool command(string *ans);
+	//bool command(string *ans);
 	bool blank(void);
 	bool blankLine(void);
 	bool path(string *ans);
-	bool smallCaps(string *ans);
-	bool smallCapsWithNum(string *ans);
+	//bool smallCaps(string *ans);
+	bool fileNameSegment(string *ans);
 	bool positiveInt(long *pos);
 	bool lineResidual(string *ans);
 	bool doBlock(string *ans);

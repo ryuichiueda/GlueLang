@@ -63,7 +63,7 @@ bool Import::parsePATH(void)
 bool Import::parseAs(void)
 {
 
-	if(! m_feeder->smallCaps(&m_prefix)){
+	if(! m_feeder->fileNameSegment(&m_prefix)){
 		m_feeder->setPos(m_start_line, m_start_char);
 		return false;
 	}

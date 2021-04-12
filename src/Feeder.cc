@@ -41,7 +41,7 @@ void Feeder::close(void)
 	m_ifs = NULL;
 }
 
-bool Feeder::command(string *ans)
+bool Feeder::path(string *ans)
 {
 	if(outOfRange())
 		return false;
@@ -66,6 +66,7 @@ bool Feeder::command(string *ans)
 	return true;
 }
 
+/*
 bool Feeder::smallCaps(string *ans)
 {
 	if(outOfRange())
@@ -87,39 +88,29 @@ bool Feeder::smallCaps(string *ans)
 	checkEol(p);
 	return true;
 }
+*/
 
-bool Feeder::smallCapsWithNum(string *ans)
+bool Feeder::fileNameSegment(string *ans)
 {
 	if(outOfRange())
 		return false;
 
 	string *p = &m_lines[m_cur_line];
-
 	int i = m_cur_char;
-	//bool first = true;
-	bool only_num = true;
 	for(;i < (int)p->length();i++){
-		/*
-		if(first){
-			if( p->at(i) >= 'a' && p->at(i) <= 'z'){
-				first = false;
-				continue;
-			}
-			break;
-		}else{
-		*/
-			if( p->at(i) >= 'a' && p->at(i) <= 'z'){
-				only_num = false;
-				continue;
-			}if( p->at(i) >= '0' && p->at(i) <= '9'){
-				continue;
-			}
+		if( p->at(i) >= '@' && p->at(i) <= 'Z')
+			continue;
+		if( p->at(i) == '_' || p->at(i) == '-')
+			continue;
+		if( p->at(i) >= 'a' && p->at(i) <= 'z')
+			continue;
+		if( p->at(i) >= '0' && p->at(i) <= '9')
+			continue;
 
-			break;
-		//}
+		break;
 	}
 
-	if(i == m_cur_char || only_num)
+	if(i == m_cur_char)
 		return false;
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
@@ -168,6 +159,7 @@ bool Feeder::blank(void)
 	return true;
 }
 
+/*
 bool Feeder::path(string *ans)
 {
 	if(command(ans)){
@@ -176,6 +168,7 @@ bool Feeder::path(string *ans)
 	}
 	return false;
 }
+*/
 
 bool Feeder::arrayElem(string *name,long *pos)
 {

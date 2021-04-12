@@ -24,9 +24,9 @@ bool ArgExtCom::parse(void)
 	// a non small captal letter)
 	
 	// fullpath command
-	if( ! m_feeder->smallCapsWithNum(&m_prefix)){
+	if( ! m_feeder->fileNameSegment(&m_prefix)){
 		m_feeder->getPos(&m_end_line, &m_end_char);
-		bool res = m_feeder->command(&m_text);
+		bool res = m_feeder->path(&m_text);
 
 		if(res)
 			m_evaled_text = m_text;
@@ -48,7 +48,7 @@ bool ArgExtCom::parse(void)
 		m_prefix = "";
 
 		string tmp;
-		while(m_feeder->smallCapsWithNum(&tmp)){
+		while(m_feeder->fileNameSegment(&tmp)){
 			m_text = m_text + tmp;
  			if(!m_feeder->str("."))
 				break;
@@ -59,7 +59,7 @@ bool ArgExtCom::parse(void)
 	}
 
 	//hereafter, a command name with a prefix
-	if(!m_feeder->command(&m_text)){
+	if(!m_feeder->path(&m_text)){
 		m_error_msg = "Invalid command name";
 		m_exit_status = 2;
 		m_feeder->getPos(&m_end_line, &m_end_char);
