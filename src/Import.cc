@@ -70,6 +70,8 @@ bool Import::parseAs(void)
 
 	//evaluate beforehand
 	try{
+		if(m_path.back() != '/')
+			m_path += '/';
 		m_env->setImportPath(&m_prefix,&m_path);
 	}
 	catch(...){

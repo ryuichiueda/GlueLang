@@ -1,7 +1,2 @@
-import PATH
-
-str a = '45 * 49' >>= bc
-
-/bin/echo -n a
-
-#ppid
+import /usr/bin as b
+b.date
