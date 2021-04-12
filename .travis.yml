@@ -5,12 +5,12 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - g++-5
-      - gcc-5
+      - g++-9
+      - gcc-9
 
 before_script:
  - make clean
- - make CXX=g++-5
+ - make CXX=g++-9
 
 script: 
  - sh -e ./test/test_all.sh
