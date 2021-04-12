@@ -96,8 +96,10 @@ bool Feeder::smallCapsWithNum(string *ans)
 	string *p = &m_lines[m_cur_line];
 
 	int i = m_cur_char;
-	bool first = true;
+	//bool first = true;
+	bool only_num = true;
 	for(;i < (int)p->length();i++){
+		/*
 		if(first){
 			if( p->at(i) >= 'a' && p->at(i) <= 'z'){
 				first = false;
@@ -105,16 +107,19 @@ bool Feeder::smallCapsWithNum(string *ans)
 			}
 			break;
 		}else{
-			if( p->at(i) >= 'a' && p->at(i) <= 'z')
+		*/
+			if( p->at(i) >= 'a' && p->at(i) <= 'z'){
+				only_num = false;
 				continue;
-			if( p->at(i) >= '0' && p->at(i) <= '9')
+			}if( p->at(i) >= '0' && p->at(i) <= '9'){
 				continue;
+			}
 
 			break;
-		}
+		//}
 	}
 
-	if(i == m_cur_char)
+	if(i == m_cur_char || only_num)
 		return false;
 
 	*ans = string(p->c_str()+m_cur_char,i-m_cur_char);
