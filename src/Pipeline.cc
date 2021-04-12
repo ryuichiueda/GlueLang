@@ -53,10 +53,10 @@ bool Pipeline::parse(void)
 		bool res = add(new ExeSubShell(m_feeder,m_env,&m_scopes))
 			|| add(new ExeForEach(m_feeder,m_env,&m_scopes))
 			|| add(new ExeWhile(m_feeder,m_env,&m_scopes))
-			|| add(new ExeString(m_feeder,m_env,&m_scopes))
 			|| add(new ExeProc(m_feeder,m_env,&m_scopes))
 			|| add(new ExeIntCom(m_feeder,m_env,&m_scopes))
-			|| add(new ExeExtCom(m_feeder,m_env,&m_scopes));
+			|| add(new ExeExtCom(m_feeder,m_env,&m_scopes))
+			|| add(new ExeString(m_feeder,m_env,&m_scopes));
 		if(res)
 			comnum++;
 		else
