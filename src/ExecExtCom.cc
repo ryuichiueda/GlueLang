@@ -49,7 +49,7 @@ void ExecExtCom::execChild(DefFile *f, DefFile *ef, DefStr *s)
 	auto argv = makeArgv();
 	vOptProc(argv[0]);
 	auto env = new const char* [2];
-	string path = m_env->getImportPaths();
+	string path = m_env->getPATH();
 	char *tmp = new char[path.size() + 1];
 	char_traits<char>::copy(tmp, path.c_str(), path.size() + 1);
 	env[0] = (const char *)tmp;

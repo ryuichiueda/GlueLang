@@ -1,2 +1,3 @@
-import /usr/bin as b
-b.date
+import PATH
+
+bash -c 'echo $PATH'

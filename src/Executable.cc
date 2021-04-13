@@ -140,7 +140,7 @@ char** Executable::makeArgv(void)
 
 bool Executable::eval(void)
 {
-	for(auto s : m_nodes){
+	for(auto &s : m_nodes){
 		if(s->eval())
 			continue;
 

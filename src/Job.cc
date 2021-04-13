@@ -42,13 +42,6 @@ void Job::print(int indent_level)
 
 	file f = command ... >>= command ... >> ...
 	command ... !> command ... >>= ...
-
-* to do:
-	to implement file redirection for standard error, like
-	file f1 f2 = command ... 
-
-	The way of writting for redirection of standard error
-	toward one command line will be an issue.
 */
 bool Job::parse(void)
 {

@@ -116,12 +116,11 @@ vector<string> *Environment::getImportPaths(const char *key)
 	return getImportPaths(&tmp);
 }
 
-string Environment::getImportPaths(void)
+string Environment::getPATH(void)
 {
 	string ans = "PATH=";
-	for (const auto& [key, paths] : m_import_paths){
-		for(auto &s : paths)
-			ans += s + ":";
+	for(auto &path : m_import_paths[""]){
+		ans += path + ":";
 	}
 	ans.pop_back();
 	return ans;

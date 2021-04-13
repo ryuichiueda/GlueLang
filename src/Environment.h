@@ -43,7 +43,7 @@ public:
 	void setImportPath(string *key, string *value);
 	vector<string> *getImportPaths(string *key);
 	vector<string> *getImportPaths(const char *key);
-	string getImportPaths(void);
+	string getPATH(void);
 	bool isImportPath(string *key);
 
 	void removeFiles(void);
