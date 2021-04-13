@@ -6,7 +6,6 @@
 #include "Data.h"
 
 class Data;
-class DefCond;
 
 class DataStr : public Data
 {
@@ -17,7 +16,7 @@ public:
 
 	void createFifo(void);
 	void openFifo(void);
-	void readFifo(DefCond *c);
+	void readFifo(void);
 
 	void setFifoName(string *name);
 protected:

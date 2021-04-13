@@ -7,7 +7,6 @@
 #include "Pipeline.h"
 #include "Executable.h"
 #include "Environment.h"
-#include "DefCond.h"
 #include <sys/types.h> 
 #include <sys/stat.h> 
 #include <unistd.h>
@@ -42,10 +41,7 @@ bool Where::parse(void)
 	int indent = base_indent;
 	while(indent >= base_indent){
 		m_feeder->blank();
-		if(add(new DefCond(m_feeder,m_env,&m_scopes))){
-			m_conditions.push_back((DefCond *)m_nodes.back());
-			m_nodes.pop_back();
-		}else if(add(new Job(m_feeder,m_env,&m_scopes))){
+		if(add(new Job(m_feeder,m_env,&m_scopes))){
 		}else{
 			m_error_msg = "Invalid where sentences";	
 			m_exit_status = 1;
@@ -82,11 +78,3 @@ bool Where::eval(void)
 	return true;
 }
 
-DefCond* Where::findCond(string *var)
-{
-	for(auto c : m_conditions){
-		if(c->m_name == *var)
-			return c;	
-	}
-	return NULL;
-}

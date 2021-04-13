@@ -8,7 +8,6 @@
 #include <signal.h>
 #include "Feeder.h"
 #include "Environment.h"
-#include "DefCond.h"
 #include "DataStr.h"
 #include <fstream>
 using namespace std;
@@ -16,7 +15,6 @@ using namespace std;
 DefStr::DefStr(Feeder *f, Environment *env, vector<int> *scopes)
 	: Element(f,env,scopes)
 {
-	m_condition = NULL;
 	m_data = NULL;
 }
 
@@ -76,7 +74,7 @@ void DefStr::connect(void)
 bool DefStr::readFifo(void)
 {
 	try{
-		m_data->readFifo(m_condition);
+		m_data->readFifo();
 	}catch(DataStr *e){
 		m_error_msg = e->m_error_msg;
 		m_exit_status = 3;

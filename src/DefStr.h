@@ -11,7 +11,6 @@ using namespace std;
 class Element;
 class Feeder;
 class Environment;
-class DefCond;
 class DataStr;
 
 class DefStr : public Element
@@ -24,7 +23,6 @@ public:
 
 	bool readFifo(void);
 
-	DefCond* m_condition;
 	string m_var_name;
 protected:
 	DataStr *m_data;

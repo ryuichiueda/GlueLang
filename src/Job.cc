@@ -126,10 +126,6 @@ bool Job::parse(void)
 	if(add(new Where(m_feeder,m_env,&m_scopes))){
 		m_where = (Where *)m_nodes.back();
 		m_nodes.pop_back();
-		// give conditions to strings
-		if(m_outstr != NULL){
-			m_outstr->m_condition = m_where->findCond(&m_outstr->m_var_name);
-		}
 
 	}
 	if(m_outstr != NULL)	m_outstr->setJobId(m_job_id);

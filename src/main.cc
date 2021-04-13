@@ -100,7 +100,7 @@ int scriptPos(int argc, char const* argv[])
 
 void version(void)
 {
-	cerr << "GlueLang v0.2.6 🌸🌸🌸🌸🌸🌸\n\n"
+	cerr << "GlueLang v0.3.0 🌸n\n"
 	     << "Copyright (C) 2021 Ryuichi Ueda\n"
 	     << "Released under the MIT License.\n"
 	     << "https://github.com/ryuichiueda/GlueLang" << endl;

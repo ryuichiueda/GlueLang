@@ -11,7 +11,6 @@ using namespace std;
 class Element;
 class Feeder;
 class Environment;
-class DefCond;
 
 class Where : public Element
 {
@@ -23,9 +22,6 @@ public:
 	virtual int exec(DefFile *f, DefFile *ef, DefStr *s);
 	virtual bool eval(void);
 
-	DefCond* findCond(string *var);
 	Environment *m_local_env;
-protected:
-	vector<DefCond *> m_conditions;
 };
 #endif

@@ -5,7 +5,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "DefCond.h"
 #include <fstream>
 using namespace std;
 
@@ -44,7 +43,7 @@ void DataStr::openFifo(void)
 	}
 }
 
-void DataStr::readFifo(DefCond *c)
+void DataStr::readFifo(void)
 {
 	ifstream ifs(m_filename.c_str());
 	string tmp;
@@ -60,13 +59,6 @@ void DataStr::readFifo(DefCond *c)
 			isfirst = false;
 		}else
 			value += "\n" + tmp;
-
-		if(c != NULL){
-			if(c->m_upper_byte <= (int)value.size()){
-				m_error_msg = "Over length";
-				throw this;
-			}
-		}
 	}
 
 	m_is_set = true;
