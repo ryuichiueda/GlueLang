@@ -61,7 +61,7 @@ Environment::~Environment()
 	}
 }
 
-void Environment::initExeProc(char const* argv[])
+void Environment::initExecProc(char const* argv[])
 {
 	m_pid = getpid();
 	//set args

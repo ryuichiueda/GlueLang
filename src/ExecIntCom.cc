@@ -1,6 +1,6 @@
 // Copyright 2014 Ryuichi Ueda
 // Released under the MIT License.
-#include "ExeIntCom.h"
+#include "ExecIntCom.h"
 #include "ArgIntCom.h"
 #include "InternalCommands.h"
 #include "Environment.h"
@@ -19,15 +19,15 @@
 #include "Feeder.h"
 using namespace std;
 
-ExeIntCom::ExeIntCom(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
+ExecIntCom::ExecIntCom(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 
-ExeIntCom::~ExeIntCom()
+ExecIntCom::~ExecIntCom()
 {
 }
 
-bool ExeIntCom::parse(void)
+bool ExecIntCom::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -48,7 +48,7 @@ bool ExeIntCom::parse(void)
 	return true;
 }
 
-void ExeIntCom::execChild(DefFile *f, DefFile *ef, DefStr *s)
+void ExecIntCom::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	auto argv = makeArgv();
 	vOptProc(argv[0]);

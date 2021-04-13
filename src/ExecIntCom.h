@@ -1,7 +1,7 @@
 // Copyright 2014 Ryuichi Ueda
 // Released under the MIT License.
-#ifndef __STRING_PUT_H_
-#define __STRING_PUT_H_
+#ifndef __INT_COMMAND_H_
+#define __INT_COMMAND_H_
 
 #include "Executable.h"
 #include <iostream>
@@ -10,11 +10,11 @@ using namespace std;
 
 class Feeder;
 
-class ExeString : public Executable
+class ExecIntCom : public Executable
 {
 public:
-	ExeString(Feeder *f,Environment *env, vector<int> *scopes);
-	virtual ~ExeString();
+	ExecIntCom(Feeder *f, Environment *env,vector<int> *scopes);
+	virtual ~ExecIntCom();
 	virtual bool parse(void);
 protected:
 	void execChild(DefFile *f, DefFile *ef, DefStr *s);

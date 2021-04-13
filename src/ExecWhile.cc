@@ -1,6 +1,6 @@
 // Copyright 2017 Ryuichi Ueda
 // Released under the MIT License.
-#include "ExeWhile.h"
+#include "ExecWhile.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
@@ -20,15 +20,15 @@
 #include "DataProc.h"
 using namespace std;
 
-ExeWhile::ExeWhile(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
+ExecWhile::ExecWhile(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 
-ExeWhile::~ExeWhile()
+ExecWhile::~ExecWhile()
 {
 }
 
-bool ExeWhile::parse(void)
+bool ExecWhile::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -52,7 +52,7 @@ bool ExeWhile::parse(void)
 	return true;
 }
 
-void ExeWhile::execChild(DefFile *f, DefFile *ef, DefStr *s)
+void ExecWhile::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	auto argv = new char* [2];
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
@@ -69,7 +69,7 @@ void ExeWhile::execChild(DefFile *f, DefFile *ef, DefStr *s)
 			ifstream ifs(argv[0]);
 			Feeder feeder(&ifs);
 		
-			m_env->initExeProc((const char**)argv);
+			m_env->initExecProc((const char**)argv);
 			Script scr(&feeder,m_env,NULL);
 		
 			scr.setSilent();

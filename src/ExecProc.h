@@ -10,11 +10,11 @@ using namespace std;
 
 class Feeder;
 
-class ExeProc : public Executable
+class ExecProc : public Executable
 {
 public:
-	ExeProc(Feeder *f, Environment *env, vector<int> *scopes);
-	virtual ~ExeProc();
+	ExecProc(Feeder *f, Environment *env, vector<int> *scopes);
+	virtual ~ExecProc();
 	virtual bool parse(void);
 protected:
 	void execChild(DefFile *f, DefFile *ef, DefStr *s);

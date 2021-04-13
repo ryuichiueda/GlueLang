@@ -1,6 +1,6 @@
 // Copyright 2014 Ryuichi Ueda
 // Released under the MIT License.
-#include "ExeString.h"
+#include "ExecString.h"
 //#include "ArgCommand.h"
 #include "InternalCommands.h"
 #include "Environment.h"
@@ -21,15 +21,15 @@
 #include "Feeder.h"
 using namespace std;
 
-ExeString::ExeString(Feeder *f, Environment *env, vector<int> *scopes) : Executable(f,env,scopes)
+ExecString::ExecString(Feeder *f, Environment *env, vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 
-ExeString::~ExeString()
+ExecString::~ExecString()
 {
 }
 
-bool ExeString::parse(void)
+bool ExecString::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -49,7 +49,7 @@ bool ExeString::parse(void)
 	return true;
 }
 
-void ExeString::execChild(DefFile *f, DefFile *ef, DefStr *s)
+void ExecString::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	string str,tmp;
 	for(auto n : m_nodes){

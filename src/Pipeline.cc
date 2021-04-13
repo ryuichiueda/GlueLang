@@ -7,14 +7,14 @@
 #include <signal.h>
 #include <unistd.h>
 #include "Pipeline.h"
-#include "ExeProc.h"
-#include "ExeSubShell.h"
-#include "ExeWhile.h"
-#include "ExeForEach.h"
-#include "ExeString.h"
-#include "ExeExtCom.h"
-//#include "ExeEachline.h"
-#include "ExeIntCom.h"
+#include "ExecProc.h"
+#include "ExecSubShell.h"
+#include "ExecWhile.h"
+#include "ExecForEach.h"
+#include "ExecString.h"
+#include "ExecExtCom.h"
+//#include "ExecEachline.h"
+#include "ExecIntCom.h"
 #include "DefFile.h"
 #include "DefStr.h"
 #include "Arg.h"
@@ -50,13 +50,13 @@ bool Pipeline::parse(void)
 
 	int comnum = 0;
 	while(1){
-		bool res = add(new ExeSubShell(m_feeder,m_env,&m_scopes))
-			|| add(new ExeForEach(m_feeder,m_env,&m_scopes))
-			|| add(new ExeWhile(m_feeder,m_env,&m_scopes))
-			|| add(new ExeProc(m_feeder,m_env,&m_scopes))
-			|| add(new ExeIntCom(m_feeder,m_env,&m_scopes))
-			|| add(new ExeExtCom(m_feeder,m_env,&m_scopes))
-			|| add(new ExeString(m_feeder,m_env,&m_scopes));
+		bool res = add(new ExecSubShell(m_feeder,m_env,&m_scopes))
+			|| add(new ExecForEach(m_feeder,m_env,&m_scopes))
+			|| add(new ExecWhile(m_feeder,m_env,&m_scopes))
+			|| add(new ExecProc(m_feeder,m_env,&m_scopes))
+			|| add(new ExecIntCom(m_feeder,m_env,&m_scopes))
+			|| add(new ExecExtCom(m_feeder,m_env,&m_scopes))
+			|| add(new ExecString(m_feeder,m_env,&m_scopes));
 		if(res)
 			comnum++;
 		else

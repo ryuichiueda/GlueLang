@@ -1,6 +1,6 @@
 // Copyright 2014 Ryuichi Ueda
 // Released under the MIT License.
-#include "ExeProc.h"
+#include "ExecProc.h"
 //#include "ArgCommand.h"
 #include "InternalCommands.h"
 #include "Environment.h"
@@ -20,15 +20,15 @@
 #include "Feeder.h"
 using namespace std;
 
-ExeProc::ExeProc(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
+ExecProc::ExecProc(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 
-ExeProc::~ExeProc()
+ExecProc::~ExecProc()
 {
 }
 
-bool ExeProc::parse(void)
+bool ExecProc::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -44,7 +44,7 @@ bool ExeProc::parse(void)
 	return true;
 }
 
-void ExeProc::execChild(DefFile *f, DefFile *ef, DefStr *s)
+void ExecProc::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	auto argv = makeArgv();
 	// argv[0]: script file
@@ -54,7 +54,7 @@ void ExeProc::execChild(DefFile *f, DefFile *ef, DefStr *s)
 	ifstream ifs(argv[0]);
 	Feeder feeder(&ifs);
 
-	m_env->initExeProc((const char**)argv);
+	m_env->initExecProc((const char**)argv);
 	Script scr(&feeder,m_env,NULL);
 
 	scr.parse();

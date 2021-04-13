@@ -103,7 +103,7 @@ int InternalCommands::repeat(int argc, char const** argv, Environment *e)
 	        ifstream ifs(argv[0]);
 	        Feeder feeder(&ifs);
 	
-	        e->initExeProc((const char**)argv);
+	        e->initExecProc((const char**)argv);
 	        Script s(&feeder,e);
 	
 	        s.setSilent();
@@ -162,7 +162,7 @@ int InternalCommands::while_(int argc, char const** argv, Environment *e)
 	        ifstream ifs(argv[0]);
 	        Feeder feeder(&ifs);
 	
-	        e->initExeProc((const char**)argv);
+	        e->initExecProc((const char**)argv);
 	        Script s(&feeder,e);
 	
 	        s.setSilent();

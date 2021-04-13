@@ -1,7 +1,7 @@
 // Copyright 2014 Ryuichi Ueda
 // Released under the MIT License.
-#ifndef __SUB_SHELL_H_
-#define __SUB_SHELL_H_
+#ifndef __EXT_COMMAND_H_
+#define __EXT_COMMAND_H_
 
 #include "Executable.h"
 #include <iostream>
@@ -10,16 +10,13 @@ using namespace std;
 
 class Feeder;
 
-class ExeSubShell : public Executable
+class ExecExtCom : public Executable
 {
 public:
-	ExeSubShell(Feeder *f, Environment *env,vector<int> *scopes);;
-	virtual ~ExeSubShell();
+	ExecExtCom(Feeder *f, Environment *env, vector<int> *scopes);
+	virtual ~ExecExtCom();
 	virtual bool parse(void);
 protected:
 	void execChild(DefFile *f, DefFile *ef, DefStr *s);
-	string m_name;
-//	vector<string> m_script;
-	string m_script_path;
 };
 #endif

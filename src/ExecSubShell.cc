@@ -1,6 +1,6 @@
 // Copyright 2014 Ryuichi Ueda
 // Released under the MIT License.
-#include "ExeSubShell.h"
+#include "ExecSubShell.h"
 //#include "ArgCommand.h"
 #include "InternalCommands.h"
 #include "Environment.h"
@@ -21,15 +21,15 @@
 #include "DataProc.h"
 using namespace std;
 
-ExeSubShell::ExeSubShell(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
+ExecSubShell::ExecSubShell(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 
-ExeSubShell::~ExeSubShell()
+ExecSubShell::~ExecSubShell()
 {
 }
 
-bool ExeSubShell::parse(void)
+bool ExecSubShell::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -53,7 +53,7 @@ bool ExeSubShell::parse(void)
 	return true;
 }
 
-void ExeSubShell::execChild(DefFile *f, DefFile *ef, DefStr *s)
+void ExecSubShell::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	auto argv = new char* [2];
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
@@ -64,7 +64,7 @@ void ExeSubShell::execChild(DefFile *f, DefFile *ef, DefStr *s)
 	ifstream ifs(argv[0]);
 	Feeder feeder(&ifs);
 
-	m_env->initExeProc((const char**)argv);
+	m_env->initExecProc((const char**)argv);
 	Script scr(&feeder,m_env,NULL);
 
 	scr.setSilent();

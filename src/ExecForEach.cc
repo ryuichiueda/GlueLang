@@ -1,6 +1,6 @@
 // Copyright 2017 Ryuichi Ueda
 // Released under the MIT License.
-#include "ExeForEach.h"
+#include "ExecForEach.h"
 #include "InternalCommands.h"
 #include "Environment.h"
 #include "Script.h"
@@ -20,15 +20,15 @@
 #include "DataProc.h"
 using namespace std;
 
-ExeForEach::ExeForEach(Feeder *f, Environment *env, vector<int> *scopes) : Executable(f,env,scopes)
+ExecForEach::ExecForEach(Feeder *f, Environment *env, vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 
-ExeForEach::~ExeForEach()
+ExecForEach::~ExecForEach()
 {
 }
 
-bool ExeForEach::parse(void)
+bool ExecForEach::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -52,7 +52,7 @@ bool ExeForEach::parse(void)
 	return true;
 }
 
-void ExeForEach::execChild(DefFile *f, DefFile *ef, DefStr *s)
+void ExecForEach::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
 
@@ -83,7 +83,7 @@ void ExeForEach::execChild(DefFile *f, DefFile *ef, DefStr *s)
 			ifstream ifs(argv[0]);
 			Feeder feeder(&ifs);
 		
-			m_env->initExeProc((const char**)argv);
+			m_env->initExecProc((const char**)argv);
 			Script scr(&feeder,m_env,NULL);
 		
 			scr.setSilent();

@@ -30,7 +30,7 @@ public:
 	~Environment();
 
 	// fork
-	void initExeProc(char const* argv[]);
+	void initExecProc(char const* argv[]);
 	int getLevel(void){return m_level;}
 	int m_level;
 

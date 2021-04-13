@@ -1,7 +1,7 @@
 // Copyright 2017 Ryuichi Ueda
 // Released under the MIT License.
-#ifndef __SUB_SHELL_LOOP_H_
-#define __SUB_SHELL_LOOP_H_
+#ifndef __SUB_FOR_EACH_H_
+#define __SUB_FOR_EACH_H_
 
 #include "Executable.h"
 #include <iostream>
@@ -10,11 +10,11 @@ using namespace std;
 
 class Feeder;
 
-class ExeWhile : public Executable
+class ExecForEach : public Executable
 {
 public:
-	ExeWhile(Feeder *f, Environment *env,vector<int> *scopes);;
-	virtual ~ExeWhile();
+	ExecForEach(Feeder *f, Environment *env,vector<int> *scopes);
+	virtual ~ExecForEach();
 	virtual bool parse(void);
 protected:
 	void execChild(DefFile *f, DefFile *ef, DefStr *s);

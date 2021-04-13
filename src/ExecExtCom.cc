@@ -1,6 +1,6 @@
 // Copyright 2014 Ryuichi Ueda
 // Released under the MIT License.
-#include "ExeExtCom.h"
+#include "ExecExtCom.h"
 #include "ArgExtCom.h"
 #include "InternalCommands.h"
 #include "Environment.h"
@@ -20,15 +20,15 @@
 #include "string.h"
 using namespace std;
 
-ExeExtCom::ExeExtCom(Feeder *f, Environment *env, vector<int> *scopes) : Executable(f,env,scopes)
+ExecExtCom::ExecExtCom(Feeder *f, Environment *env, vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 
-ExeExtCom::~ExeExtCom()
+ExecExtCom::~ExecExtCom()
 {
 }
 
-bool ExeExtCom::parse(void)
+bool ExecExtCom::parse(void)
 {
 	m_feeder->getPos(&m_start_line, &m_start_char);
 
@@ -44,19 +44,16 @@ bool ExeExtCom::parse(void)
 	return true;
 }
 
-void ExeExtCom::execChild(DefFile *f, DefFile *ef, DefStr *s)
+void ExecExtCom::execChild(DefFile *f, DefFile *ef, DefStr *s)
 {
 	auto argv = makeArgv();
 	vOptProc(argv[0]);
-	char *str = getenv("PATH");
 	auto env = new const char* [2];
-	//extern char **environ;
 	string path = m_env->getImportPaths();
 	char *tmp = new char[path.size() + 1];
 	char_traits<char>::copy(tmp, path.c_str(), path.size() + 1);
 	env[0] = (const char *)tmp;
 	env[1] = NULL;
 	execve(argv[0],(char **)argv,(char **)env);
-	//execve(argv[0],(char **)argv, environ);
 }
 
