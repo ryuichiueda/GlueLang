@@ -82,15 +82,15 @@ int Pipeline::exec(DefFile *f, DefFile *ef, DefStr *s)
 	// When wait(1) is set in the command line,
 	// wait(1) is done in this process.
 	// Wait(1) cannot be connected with other commands
-	//auto *cl = (Exe *)m_nodes[0];
-	if(((Exe *)m_nodes[0])->m_is_wait)
+	//auto *cl = (Executable *)m_nodes[0];
+	if(((Executable *)m_nodes[0])->m_is_wait)
 		return execWait();
 
 	int pip[2];
 	int prevfd = -1;
 
 	for(auto *n : m_nodes){
-		auto *p = (Exe *)n;
+		auto *p = (Executable *)n;
 		pip[1] = -1;
 		if ( p != m_nodes.back() && pipe(pip) < 0) {
 			close(prevfd);
@@ -118,7 +118,7 @@ int Pipeline::exec(DefFile *f, DefFile *ef, DefStr *s)
 
 int Pipeline::execWait(void)
 {
-	auto *c = (Exe *)m_nodes[0];
+	auto *c = (Executable *)m_nodes[0];
 	c->eval();
 	auto argv = c->makeArgv();
 	

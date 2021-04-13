@@ -20,7 +20,7 @@
 #include "Feeder.h"
 using namespace std;
 
-ExeProc::ExeProc(Feeder *f, Environment *env,vector<int> *scopes) : Exe(f,env,scopes)
+ExeProc::ExeProc(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 

@@ -2,7 +2,7 @@
 // Released under the MIT License.
 #include "InternalCommands.h"
 #include "Environment.h"
-#include "Exe.h"
+#include "Executable.h"
 #include "Feeder.h"
 #include "Script.h"
 #include <iostream>
@@ -20,7 +20,7 @@ bool InternalCommands::exist(string *name)
 	return *name == "echo" || *name == "pid" || *name == "ppid" || *name == "break";
 }
 
-int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,Exe *p)
+int InternalCommands::exec(char const** argv,Environment *e,Feeder *f,Executable *p)
 {
 	int c = 0;
 	while(argv[c] != NULL){

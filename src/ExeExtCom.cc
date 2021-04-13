@@ -20,7 +20,7 @@
 #include "string.h"
 using namespace std;
 
-ExeExtCom::ExeExtCom(Feeder *f, Environment *env, vector<int> *scopes) : Exe(f,env,scopes)
+ExeExtCom::ExeExtCom(Feeder *f, Environment *env, vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 

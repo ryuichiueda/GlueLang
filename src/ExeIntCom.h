@@ -3,14 +3,14 @@
 #ifndef __INT_COMMAND_H_
 #define __INT_COMMAND_H_
 
-#include "Exe.h"
+#include "Executable.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
 class Feeder;
 
-class ExeIntCom : public Exe
+class ExeIntCom : public Executable
 {
 public:
 	ExeIntCom(Feeder *f, Environment *env,vector<int> *scopes);

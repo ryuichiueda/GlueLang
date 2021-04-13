@@ -3,14 +3,14 @@
 #ifndef __EXEPROC_H_
 #define __EXEPROC_H_
 
-#include "Exe.h"
+#include "Executable.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
 class Feeder;
 
-class ExeProc : public Exe
+class ExeProc : public Executable
 {
 public:
 	ExeProc(Feeder *f, Environment *env, vector<int> *scopes);

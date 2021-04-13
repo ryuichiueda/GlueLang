@@ -20,7 +20,7 @@
 #include "DataProc.h"
 using namespace std;
 
-ExeForEach::ExeForEach(Feeder *f, Environment *env, vector<int> *scopes) : Exe(f,env,scopes)
+ExeForEach::ExeForEach(Feeder *f, Environment *env, vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 

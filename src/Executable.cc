@@ -1,6 +1,6 @@
 // Copyright 2014 Ryuichi Ueda
 // Released under the MIT License.
-#include "Exe.h"
+#include "Executable.h"
 #include "Environment.h"
 #include "Script.h"
 #include "ArrayVariable.h"
@@ -21,7 +21,7 @@
 #include <string.h>
 using namespace std;
 
-Exe::Exe(Feeder *f, Environment *env, vector<int> *scopes) : Element(f,env,scopes)
+Executable::Executable(Feeder *f, Environment *env, vector<int> *scopes) : Element(f,env,scopes)
 {
 	m_pipe[0] = -1;
 	m_pipe[1] = -1;
@@ -29,11 +29,11 @@ Exe::Exe(Feeder *f, Environment *env, vector<int> *scopes) : Element(f,env,scope
 	m_is_wait = false;
 }
 
-Exe::~Exe()
+Executable::~Executable()
 {
 }
 
-void Exe::parseArgs(void)
+void Executable::parseArgs(void)
 {
 	bool flg = true;
 	while(1){
@@ -51,7 +51,7 @@ void Exe::parseArgs(void)
 	}
 }
 
-void Exe::parentPipeProc(void)
+void Executable::parentPipeProc(void)
 {
 	if(m_pipe_prev >= 0)
 		close(m_pipe_prev);
@@ -60,7 +60,7 @@ void Exe::parentPipeProc(void)
 	close(m_pipe[1]);
 }
 
-void Exe::childPipeProc(void)
+void Executable::childPipeProc(void)
 {
 	if(m_pipe[1] >= 0)
 		close(m_pipe[0]);
@@ -75,14 +75,14 @@ void Exe::childPipeProc(void)
 	}
 }
 
-void Exe::execErrorExit(void)
+void Executable::execErrorExit(void)
 {
 	m_error_msg =  "Command error";
 	m_exit_status = 1;
 	throw this;
 }
 
-int Exe::exec(DefFile *f, DefFile *ef, DefStr *s)
+int Executable::exec(DefFile *f, DefFile *ef, DefStr *s)
 {
 	cout << flush;
 
@@ -117,7 +117,7 @@ int Exe::exec(DefFile *f, DefFile *ef, DefStr *s)
 	return pid;
 }
 
-char** Exe::makeArgv(void)
+char** Executable::makeArgv(void)
 {
 	auto argv = new char* [m_nodes.size() + 1 + m_add_args.size()];
 	
@@ -138,7 +138,7 @@ char** Exe::makeArgv(void)
 	return argv;
 }
 
-bool Exe::eval(void)
+bool Executable::eval(void)
 {
 	for(auto s : m_nodes){
 		if(s->eval())
@@ -150,14 +150,14 @@ bool Exe::eval(void)
 	return true;
 }
 
-void Exe::setPipe(int *pip,int prev)
+void Executable::setPipe(int *pip,int prev)
 {
 	m_pipe[0] = pip[0];
 	m_pipe[1] = pip[1];
 	m_pipe_prev = prev;
 }
 
-void Exe::vOptProc(char const* arg)
+void Executable::vOptProc(char const* arg)
 {
 	if(!m_env->m_v_opt)
 		return;

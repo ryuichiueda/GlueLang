@@ -16,11 +16,11 @@ class DefStr;
 class Environment;
 class Where;
 
-class Exe : public Element
+class Executable : public Element
 {
 public:
-	Exe(Feeder *f,Environment *env, vector<int> *scopes);
-	virtual ~Exe();
+	Executable(Feeder *f,Environment *env, vector<int> *scopes);
+	virtual ~Executable();
 	virtual bool parse(void) = 0;
 	void parseArgs(void);
 

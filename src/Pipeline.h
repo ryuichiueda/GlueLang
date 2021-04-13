@@ -12,7 +12,7 @@ class Element;
 class Feeder;
 class Environment;
 class Arg;
-class Exe;
+class Executable;
 class DefFile;
 class DefStr;
 class Where;

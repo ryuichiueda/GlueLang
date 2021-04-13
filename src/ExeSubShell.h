@@ -3,14 +3,14 @@
 #ifndef __SUB_SHELL_H_
 #define __SUB_SHELL_H_
 
-#include "Exe.h"
+#include "Executable.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
 class Feeder;
 
-class ExeSubShell : public Exe
+class ExeSubShell : public Executable
 {
 public:
 	ExeSubShell(Feeder *f, Environment *env,vector<int> *scopes);;

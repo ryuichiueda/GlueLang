@@ -3,14 +3,14 @@
 #ifndef __SUB_FOR_EACH_H_
 #define __SUB_FOR_EACH_H_
 
-#include "Exe.h"
+#include "Executable.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
 class Feeder;
 
-class ExeForEach : public Exe
+class ExeForEach : public Executable
 {
 public:
 	ExeForEach(Feeder *f, Environment *env,vector<int> *scopes);

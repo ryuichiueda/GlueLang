@@ -21,7 +21,7 @@
 #include "DataProc.h"
 using namespace std;
 
-ExeSubShell::ExeSubShell(Feeder *f, Environment *env,vector<int> *scopes) : Exe(f,env,scopes)
+ExeSubShell::ExeSubShell(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 

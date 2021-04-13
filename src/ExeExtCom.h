@@ -3,14 +3,14 @@
 #ifndef __EXT_COMMAND_H_
 #define __EXT_COMMAND_H_
 
-#include "Exe.h"
+#include "Executable.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
 class Feeder;
 
-class ExeExtCom : public Exe
+class ExeExtCom : public Executable
 {
 public:
 	ExeExtCom(Feeder *f, Environment *env, vector<int> *scopes);

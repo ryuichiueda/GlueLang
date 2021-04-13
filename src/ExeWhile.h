@@ -3,14 +3,14 @@
 #ifndef __SUB_SHELL_LOOP_H_
 #define __SUB_SHELL_LOOP_H_
 
-#include "Exe.h"
+#include "Executable.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 
 class Feeder;
 
-class ExeWhile : public Exe
+class ExeWhile : public Executable
 {
 public:
 	ExeWhile(Feeder *f, Environment *env,vector<int> *scopes);;

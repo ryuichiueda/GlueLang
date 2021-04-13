@@ -19,7 +19,7 @@
 #include "Feeder.h"
 using namespace std;
 
-ExeIntCom::ExeIntCom(Feeder *f, Environment *env,vector<int> *scopes) : Exe(f,env,scopes)
+ExeIntCom::ExeIntCom(Feeder *f, Environment *env,vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 

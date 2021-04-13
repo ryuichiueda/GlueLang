@@ -21,7 +21,7 @@
 #include "Feeder.h"
 using namespace std;
 
-ExeString::ExeString(Feeder *f, Environment *env, vector<int> *scopes) : Exe(f,env,scopes)
+ExeString::ExeString(Feeder *f, Environment *env, vector<int> *scopes) : Executable(f,env,scopes)
 {
 }
 

@@ -8,11 +8,11 @@ using namespace std;
 
 class Environment;
 class Feeder;
-class Exe;
+class Executable;
 
 class InternalCommands{
 public:
-	static int exec(char const** argv,Environment *e,Feeder *f,Exe *p);
+	static int exec(char const** argv,Environment *e,Feeder *f,Executable *p);
 	static bool exist(string *name);
 private:
 	static int echo(int argc, char const** argv);
