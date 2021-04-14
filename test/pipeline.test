@@ -139,25 +139,25 @@ ERROR_CHECK "TEST4.1 error"
 diff $tmp-out $tmp-ans
 ERROR_CHECK "TEST4.2 error"
 
-#########################################
-# TEST5: start from a string
-#########################################
-
-cat << FIN > $tmp-glue
-import PATH
-'abc
-def' >>= rev
-FIN
-
-cat << FIN > $tmp-out
-cba
-fed
-FIN
-
-../glue $tmp-glue > $tmp-ans
-ERROR_CHECK "TEST5.1 error"
-
-diff $tmp-out $tmp-ans
-ERROR_CHECK "TEST5.2 error"
+##########################################
+## TEST5: start from a string
+##########################################
+#
+#cat << FIN > $tmp-glue
+#import PATH
+#'abc
+#def' >>= rev
+#FIN
+#
+#cat << FIN > $tmp-out
+#cba
+#fed
+#FIN
+#
+#../glue $tmp-glue > $tmp-ans
+#ERROR_CHECK "TEST5.1 error"
+#
+#diff $tmp-out $tmp-ans
+#ERROR_CHECK "TEST5.2 error"
 
 rm -f $tmp-*

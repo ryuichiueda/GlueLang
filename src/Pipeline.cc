@@ -11,7 +11,7 @@
 #include "ExecSubShell.h"
 #include "ExecWhile.h"
 #include "ExecForEach.h"
-#include "ExecString.h"
+//#include "ExecString.h"
 #include "ExecExtCom.h"
 //#include "ExecEachline.h"
 #include "ExecIntCom.h"
@@ -55,8 +55,8 @@ bool Pipeline::parse(void)
 			|| add(new ExecWhile(m_feeder,m_env,&m_scopes))
 			|| add(new ExecProc(m_feeder,m_env,&m_scopes))
 			|| add(new ExecIntCom(m_feeder,m_env,&m_scopes))
-			|| add(new ExecExtCom(m_feeder,m_env,&m_scopes))
-			|| add(new ExecString(m_feeder,m_env,&m_scopes));
+			|| add(new ExecExtCom(m_feeder,m_env,&m_scopes));
+	//		|| add(new ExecString(m_feeder,m_env,&m_scopes));
 		if(res)
 			comnum++;
 		else

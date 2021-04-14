@@ -49,19 +49,19 @@ bool ExecString::parse(void)
 	return true;
 }
 
-void ExecString::execChild(DefFile *f, DefFile *ef, DefStr *s)
-{
-	string str,tmp;
-	for(auto n : m_nodes){
-		tmp = ((Arg *)n)->getEvaledString();
-		str += tmp;
-	}
-
-	const char **argv = new const char *[3];
-	string com = "echo";
-	argv[0] = (const char *)com.c_str();
-	argv[1] = (const char *)str.c_str();
-	argv[2] = NULL;
-	vOptProc(argv[0]);
-	InternalCommands::exec(argv,m_env,m_feeder,this);
-}
+//void ExecString::execChild(DefFile *f, DefFile *ef, DefStr *s)
+//{
+//	string str,tmp;
+//	for(auto n : m_nodes){
+//		tmp = ((Arg *)n)->getEvaledString();
+//		str += tmp;
+//	}
+//
+//	const char **argv = new const char *[3];
+//	string com = "echo";
+//	argv[0] = (const char *)com.c_str();
+//	argv[1] = (const char *)str.c_str();
+//	argv[2] = NULL;
+//	vOptProc(argv[0]);
+//	InternalCommands::exec(argv,m_env,m_feeder,this);
+//}

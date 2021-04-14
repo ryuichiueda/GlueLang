@@ -16,7 +16,7 @@ public:
 	ExecString(Feeder *f,Environment *env, vector<int> *scopes);
 	virtual ~ExecString();
 	virtual bool parse(void);
-protected:
-	void execChild(DefFile *f, DefFile *ef, DefStr *s);
+//protected:
+//	void execChild(DefFile *f, DefFile *ef, DefStr *s);
 };
 #endif
