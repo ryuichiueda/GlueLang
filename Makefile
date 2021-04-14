@@ -1,12 +1,14 @@
 all:
 	$(MAKE) -C src
+	$(MAKE) -C utils
 
 clean:
-	cd src; make clean
-	rm -f ./glue
+	$(MAKE) clean -C src
+	$(MAKE) clean -C utils
 
 test: all
 	sh -e ./test/test_all.sh
 
 install:
-	cd src; make install
+	$(MAKE) install -C src
+	$(MAKE) install -C utils

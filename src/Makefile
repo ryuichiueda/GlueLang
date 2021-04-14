@@ -13,6 +13,7 @@ $(TARGET): $(OBJS)
 .PHONY: clean
 clean:
 	rm -f $(TARGET) $(OBJS)
+	rm -f $(TARGET)
 
 install: $(TARGET)
 	cp $(CURDIR)/$(TARGET) $(BINDIR)/$(TARGET)
