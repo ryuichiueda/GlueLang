@@ -8,5 +8,5 @@ test: all
 	sh -e ./test/test_all.sh
 
 install:
-	mkdir -p ~/.glue/bin/
+	mkdir -p ${HOME}/.glue/bin/
 	$(MAKE) install -C src

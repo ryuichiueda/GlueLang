@@ -1,6 +1,6 @@
 CXX = g++
 TARGET = glue
-BINDIR	= ~/.glue/bin/
+BINDIR	= ${HOME}/.glue/bin/
 CXXFLAGS = -Wall -O2 --static -std=c++17
 LDFLAGS = -lm
 SRCS := $(wildcard *.cc)
