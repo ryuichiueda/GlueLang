@@ -16,7 +16,7 @@ clean:
 	rm -f $(TARGET)
 
 install: $(TARGET)
-	cp $(CURDIR)/$(TARGET) $(BINDIR)/$(TARGET)
+	install -m 755 $(CURDIR)/$(TARGET) $(BINDIR)/$(TARGET)
 
 uninstall:
 	rm $(BINDIR)/$(TARGET) 
