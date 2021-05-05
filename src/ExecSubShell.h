@@ -17,7 +17,7 @@ public:
 	virtual ~ExecSubShell();
 	virtual bool parse(void);
 protected:
-	void execChild(DefFile *f, DefFile *ef, DefStr *s);
+	void execChild(DefFile *f,  DefStr *s);
 	string m_name;
 //	vector<string> m_script;
 	string m_script_path;

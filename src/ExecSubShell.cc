@@ -53,7 +53,7 @@ bool ExecSubShell::parse(void)
 	return true;
 }
 
-void ExecSubShell::execChild(DefFile *f, DefFile *ef, DefStr *s)
+void ExecSubShell::execChild(DefFile *f,  DefStr *s)
 {
 	auto argv = new char* [2];
 	string tmpdir = m_env->m_tmpdir + "/" + m_name;
@@ -69,5 +69,5 @@ void ExecSubShell::execChild(DefFile *f, DefFile *ef, DefStr *s)
 
 	scr.setSilent();
 	scr.parse();
-	scr.exec(f,ef,s); // exit in the exec function
+	scr.exec(f,s); // exit in the exec function
 }

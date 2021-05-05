@@ -77,7 +77,7 @@ int main(int argc, char const* argv[])
 //execution
 //////////////////////////////////////////
 	s.parse();
-	s.exec(NULL,NULL,NULL);
+	s.exec(NULL,NULL);
 	//do not write something here because
 	//a subshell cannot execute this part.
 }
