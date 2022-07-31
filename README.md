@@ -38,4 +38,11 @@ MIT License is applied to. See LICENSE.md.
 * English: http://ryuichiueda.github.io/GlueLang/
 * Japanese: https://ryuichiueda.github.io/GlueLangDoc_ja/
 
+# Contributors
+
+See CONTRIBUTORS.
+
+
+© 2014-2022 Ryuichi Ueda
+
 <!-- * Language Reference: https://ryuichiueda.github.io/GlueLangArch_ja/ -->
